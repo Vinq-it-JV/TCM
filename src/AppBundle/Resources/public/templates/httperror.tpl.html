@@ -1,0 +1,49 @@
+<div class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" ng-class="{'http-modal':modalOptions.wide === true}">
+        <div class="modal-content noselect">
+            <div class="modal-header">
+                <button type="button" class="close" ng-click="$hide();modalOptions.onCancel();">&times;</button>
+                <h4 class="modal-title">{{ 'HTTP.ERROR' | translate }}</h4>
+            </div>
+            <div class="modal-body error-back">
+                <div class="row container-fluid">
+                	<div class="row">
+                		<div class="col-lg-4">
+                            <b>{{ 'HTTP.ERROR_MESSAGE' | translate }}:</b>
+                        </div>                    
+                        <div class="col-lg-6">
+                            <div class="form-inline">
+								{{ modalOptions.bodyText.message | limitTo:75 }}...                                
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                        	<button class="btn btn-default btn-xs pull-right" ng-click="modalOptions.bodyText.details=!modalOptions.bodyText.details" bs-tooltip data-title="{{ 'TOOLTIP.DETAILS' | translate }}"><i class="fa fa-info-circle"></i></button>
+                        </div>
+                	</div>
+                	<div class="row" ng-show="modalOptions.bodyText.details">
+                        <div class="col-lg-12 form-control-static">
+							<div ng-switch on="modalOptions.bodyText.type">
+				            	<div ng-switch-when="data">
+									<textarea class="form-control textarea-no-resize" rows="5" ng-model="modalOptions.bodyText.content"></textarea>
+								</div>
+								<div ng-switch-when="html">
+									<div class="row http-container">
+										<div class="col-lg-12" ng-bind-html="modalOptions.bodyText.content"></div>
+									</div>
+								</div>							
+							</div>
+						</div>
+					</div>                	
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="modal-buttons pull-right">
+				        <button type="button" class="btn btn-primary" ng-click="$hide();modalOptions.onCancel();">{{ 'CLOSE' | translate }}</button>
+				        <button type="button" class="btn btn-primary" ng-click="$hide();modalOptions.onExecute();" ng-show="modalOptions.actionButtonText.length">{{ modalOptions.actionButtonText }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

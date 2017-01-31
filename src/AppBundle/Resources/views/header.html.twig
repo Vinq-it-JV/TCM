@@ -1,0 +1,32 @@
+<div class="navbar navbar-default navbar-fixed-top">
+    <div role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="" ng-click="">TCM</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="" ng-click="" ng-cloak>{{ ng.translate('HEADER.USERS') }}</a></li>
+                    <li><a href="" ng-click="" ng-cloak>{{ ng.translate('HEADER.LOCATIONS') }}</a></li>
+                    <li><a href="" ng-click="" ng-cloak>{{ ng.translate('HEADER.NOTIFICATIONS') }}</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <a href="#" data-toggle="dropdown">
+                            <i class="icon-book icon-white"></i><div class="inline" ng-cloak>{{ '{{ AUTH.user().name }}' }} <b class="caret"></b></div>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{{ path('logout') }}" ng-cloak> {{ ng.translate('AUTH.LOGOUT') }} </a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {% block meta %}
+            <meta charset="UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+        {% endblock %}
+        <title>
+            {% block title %}
+                TCM
+            {% endblock %}
+        </title>
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.png') }}" />
+        {% block stylesheets %}
+            <link href="{{ asset('bundles/app/css/style.css') }}" type="text/css" rel="stylesheet"/>
+        {% endblock %}
+        {% block javascripts %}
+            <script type='text/javascript'>
+                var translationPrefix = "{{ asset('bundles/app/translations/') }}";
+                var templatePrefix = "{{ asset('bundles/app/templates/') }}";
+            </script>
+
+            <script src="{{ asset('bundles/app/js/jquery/jquery-2.2.3.min.js') }}"></script>
+            <script src="{{ asset('bundles/app/js/angular/angular.js') }}"></script>
+            <script src="{{ asset('bundles/app/js/app/tcmApp.js') }}"></script>
+            <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+
+            <script src="{{ asset('bundles/app/js/angular-cookies/angular-cookies.min.js') }}"></script>
+            <script src="{{ asset('bundles/app/js/angular-storage/angular-local-storage.min.js') }}"></script>
+            <script src="{{ asset('bundles/app/js/angular-animate/animate.min.js') }}"></script>
+
+            <script src="{{ asset('bundles/app/js/angular-strap/angular-strap.min.js') }}"></script>
+            <script src="{{ asset('bundles/app/js/angular-strap/angular-strap.tpl.min.js') }}"></script>
+            <script src="{{ asset('bundles/app/js/bootstrap/bootstrap.min.js') }}"></script>
+
+            <script src="{{ asset('bundles/app/js/angular-translate/angular-translate.min.js') }}"></script>
+            <script src="{{ asset('bundles/app/js/angular-translate/angular-translate-storage-cookie.min.js') }}"></script>
+            <script src="{{ asset('bundles/app/js/angular-translate/angular-translate-storage-local.min.js') }}"></script>
+            <script src="{{ asset('bundles/app/js/angular-translate/angular-translate-loader-static-files.min.js') }}"></script>
+            <script src="{{ asset('bundles/app/js/angular-sanitize/angular-sanitize.min.js') }}"></script>
+            <script src="{{ asset('bundles/app/js/angular-busy/angular-busy.min.js') }}"></script>
+            <script src="{{ asset('bundles/app/js/angular-resource/angular-resource.min.js') }}"></script>
+            <script src="{{ asset('bundles/app/js/angular-ui-router/angular-ui-router.min.js') }}"></script>
+            <script src="{{ asset('bundles/app/js/angular-validation/angular-validation.min.js') }}"></script>
+
+            <script src="{{ asset('bundles/app/js/smart-table/smart-table.min.js') }}"></script>
+            <script src="{{ asset('bundles/app/js/semantic/semantic.min.js') }}"></script>
+
+            <script src="/js/fos_js_routes.js"></script>
+
+            <script src="http://code.angularjs.org/1.0.8/i18n/angular-locale_en.js"></script>
+
+            <script src="{{ asset('bundles/app/js/app/controllers/appCtrl.js') }}"></script>
+            <script src="{{ asset('bundles/app/js/app/controllers/userCtrl.js') }}"></script>
+            <script src="{{ asset('bundles/app/js/app/services/backend.js') }}"></script>
+            <script src="{{ asset('bundles/app/js/app/services/http.js') }}"></script>
+            <script src="{{ asset('bundles/app/js/app/services/modal.js') }}"></script>
+            <script src="{{ asset('bundles/app/js/app/services/pages.js') }}"></script>
+            <script src="{{ asset('bundles/app/js/app/services/user.js') }}"></script>
+
+            <script src="{{ asset('bundles/app/js/app/datasets/languages.js') }}"></script>
+            <script src="{{ asset('bundles/app/js/app/datasets/roles.js') }}"></script>
+            <script src="{{ asset('bundles/app/js/app/datasets/users.js') }}"></script>
+
+            <script src="{{ asset('bundles/app/js/app/directives/focus.js') }}"></script>
+            <script src="{{ asset('bundles/app/js/app/directives/persist.js') }}"></script>
+        {% endblock %}
+    </head>
+
+    {% macro translate(text, params) %}
+        {{ '{{ \'' ~ text ~ '\' | translate: \'' ~ params ~ '\' }}' }}
+    {% endmacro %}
+
+    {% import _self as ng %}
+
+    <div cg-busy="{promise:BE.promise(),message:BE.waitText(),minDuration:1000,delay:BE.getLoaderDelay()}"></div>
+
+    {% block body %}
+        <body id="top" style="height: inherit" ng-app="tcmApp" ng-controller="appCtrl" data-ng-init="init()">
+            <div ng-controller="userCtrl" style="height: inherit">
+
+                {% block header %}
+                {% endblock %}
+
+                {% block page %}
+                {% endblock %}
+
+                {% block footer %}
+                {% endblock %}
+
+            </div>
+        </body>
+    {% endblock %}
+</html>

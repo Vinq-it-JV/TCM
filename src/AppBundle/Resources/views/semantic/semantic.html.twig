@@ -1,0 +1,130 @@
+{% extends 'base.html.twig' %}
+
+{% block page %}
+
+<div class="container">
+
+    <button class="ui button" ng-click="showProfile()">
+        Vissie = goed!
+    </button>
+
+
+    <div class="ui modal">
+        <i class="close icon"></i>
+        <div class="header">
+            Profile Picture
+        </div>
+        <div class="image content">
+            <div class="ui medium image">
+                <img src="/images/avatar/large/chris.jpg">
+            </div>
+            <div class="description">
+                <div class="ui header">We've auto-chosen a profile image for you.</div>
+                <p>We've grabbed the following image from the <a href="https://www.gravatar.com" target="_blank">gravatar</a> image associated with your registered e-mail address.</p>
+                <p>Is it okay to use this photo?</p>
+            </div>
+        </div>
+        <div class="actions">
+            <div class="ui black deny button">
+                Nope
+            </div>
+            <div class="ui positive right labeled icon button">
+                Yep, that's me
+                <i class="checkmark icon"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="ui card">
+        <div class="image">
+        </div>
+        <div class="content">
+            <a class="header">Kristy</a>
+            <div class="meta">
+                <span class="date">Joined in 2013</span>
+            </div>
+            <div class="description">
+                Kristy is an art director living in New York.
+            </div>
+        </div>
+        <div class="extra content">
+            <a>
+                <i class="user icon"></i>
+                22 Friends
+            </a>
+        </div>
+    </div>
+
+    <div class="ui form">
+        <div class="grouped fields">
+            <label>Outbound Throughput</label>
+            <div class="field">
+                <div class="ui slider checkbox">
+                    <input type="radio" name="throughput" checked="checked">
+                    <label>20 mbps max</label>
+                </div>
+            </div>
+            <div class="field">
+                <div class="ui slider checkbox">
+                    <input type="radio" name="throughput">
+                    <label>10mbps max</label>
+                </div>
+            </div>
+            <div class="field">
+                <div class="ui slider checkbox">
+                    <input type="radio" name="throughput">
+                    <label>5mbps max</label>
+                </div>
+            </div>
+            <div class="field">
+                <div class="ui slider checkbox checked">
+                    <input type="radio" name="throughput">
+                    <label>Unmetered</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="ui checkbox">
+        <input type="checkbox">
+        <label></label>
+    </div>
+
+    <div class="ui left floated compact segment">
+        <div class="ui fitted checkbox">
+            <input id="fun" type="checkbox">
+            <label></label>
+        </div>
+    </div>
+    <div class="ui left floated compact segment">
+        <div class="ui fitted slider checkbox">
+            <input type="checkbox">
+            <label></label>
+        </div>
+    </div>
+    <div class="ui left floated compact segment">
+        <div class="ui fitted toggle checkbox">
+            <input type="checkbox">
+            <label></label>
+        </div>
+    </div>
+
+    <br>
+
+    <div class="ui icon input">
+        <i class="search icon"></i>
+        <input type="text" placeholder="Search...">
+    </div>
+
+    <br>
+
+    <div class="ui progress">
+        <div class="bar">
+            <div class="progress"></div>
+        </div>
+        <div class="label">Uploading Files</div>
+    </div>
+</div>
+
+{% endblock %}
+

@@ -1,0 +1,12 @@
+# Portal home / dashboard
+tcm_home:
+    path:     /
+    defaults: { _controller: AppBundle:Page:index }
+    options:
+        expose: true
+
+semantic_test:
+    path:     /semantic
+    defaults: { _controller: AppBundle:Page:semantic }
+    options:
+        expose: true

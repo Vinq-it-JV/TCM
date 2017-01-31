@@ -1,0 +1,45 @@
+{
+    "CLOSE": "Sluiten",
+    "HOME": "Home",
+    "INFO": "Info",
+    "MENU": "Menu",
+    "PLEASE_WAIT": "Even wachten...",
+    "USER": {
+        "LABEL": "Gebruiker",
+        "WELCOME": "Welkom"
+    },
+    "AUTH": {
+        "USERNAME": "Gebruikersnaam",
+        "PASSWORD": "Wachwoord",
+        "EMAIL": "Email",
+        "BIRTHDATE": "Geboortedatum",
+        "LOGIN": "Inloggen",
+        "LOGOUT": "Uitloggen",
+        "REGISTER": "Registreren",
+        "USER_REGISTERED": "Uw registratie is voltooid. Er is een email verstuurd met daarin de activatiegegevens. Dank voor uw interesse.",
+        "USERNAME_EXISTS": "Gebruikersnaam bestaat al.",
+        "INVALID_AGE": "Je bent niet oud genoeg, minimale leeftijd is 18.",
+        "INVALID_USER_PASS": "Ongeldige gebruikersnaam / wachtwoord.",
+        "METHOD_REQUIRES_SESSION": "Authenticatie methode vereist sessie.",
+        "SESSION_TIMEOUT": "Sessietijd verlopen.",
+        "FORGOT_USERPASS": "Gebruikersnaam / wachtwoord vergeten ?",
+        "REQUEST_CREDENTIALS": "Aanvragen gegevens.",
+        "UNKNOWN_EMAIL": "Onbekend email adres.",
+        "NO_USER_ROLES": "Gebruiker heeft geen rollen.",
+        "USER_NOT_ACTIAVED": "Gebruiker is niet geactiverd.",
+        "USER_LOCKED_OUT": "Gebruiker is geblokkeerd, probeer later.",
+        "EMAIL_CREDENTIALS_SENT": "Uw gegevens zijn naar uw email adres gestuurd.",
+        "EBC_LOGIN": "Login met EBC"
+    },
+    "LNG": {
+        "ENGLISH": "Engels",
+        "DUTCH": "Nederlands"
+    },
+    "TOOLTIP": {
+        "DETAILS": "Toon details"
+    },
+    "HTTP": {
+        "ERROR": "HTTP fout",
+        "ERROR_MESSAGE": "Foutbericht"
+    }
+}

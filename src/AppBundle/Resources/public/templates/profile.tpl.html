@@ -1,0 +1,104 @@
+<div class="modal" tabindex="-1" role="dialog">
+
+		<div class="ui modal show">
+			<i class="close icon"></i>
+			<div class="header">
+				Profile Picture
+			</div>
+			<div class="image content">
+				<div class="ui medium image">
+					<img src="/images/avatar/large/chris.jpg">
+				</div>
+				<div class="description">
+					<div class="ui header">We've auto-chosen a profile image for you.</div>
+					<p>We've grabbed the following image from the <a href="https://www.gravatar.com" target="_blank">gravatar</a> image associated with your registered e-mail address.</p>
+					<p>Is it okay to use this photo?</p>
+				</div>
+			</div>
+			<div class="actions">
+				<div class="ui black deny button">
+					Nope
+				</div>
+				<div class="ui positive right labeled icon button">
+					Yep, that's me
+					<i class="checkmark icon"></i>
+				</div>
+			</div>
+		</div>
+
+<!--
+
+
+
+    <div class="modal-dialog" ng-class="{'wide-modal':modalOptions.wide === true}">
+        <div class="modal-content noselect">
+            <div class="modal-header">
+                <button type="button" class="close" ng-click="$hide();modalOptions.onCancel();">&times;</button>
+                <h4 class="modal-title">{{ modalOptions.headerText}}</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="container-fluid">
+                        <div class="col-md-12 panel-body">
+                            <form name="profielForm" novalidate class="form-horizontal">
+	                            <div class="row">
+	                            	<div class="col-lg-4 control-label-left"><b>
+	                            		{{ 'BEHEER.NAAM' | translate }}</b>	
+	                            	</div>
+	                            	<div class="col-lg-8 control-label-left">
+										{{ modalOptions.parentScope.AUTH.gebruiker().naam }}										
+	                            	</div>
+	                            </div>
+	                            <div class="row">
+	                            	<div class="col-lg-4 control-label-left"><b>
+	                            		{{ 'BEHEER.AFDELING' | translate }}</b>	
+	                            	</div>
+	                            	<div class="col-lg-8 control-label-left">
+										{{ modalOptions.parentScope.AUTH.gebruiker().afdeling || 'ONBEKEND' | translate }}										
+	                            	</div>
+	                            </div>
+	                            <div class="row">
+	                            	<div class="col-lg-4 control-label-left"><b>
+	                            		{{ 'BEHEER.KAMERNUMMER' | translate }}</b>	
+	                            	</div>
+	                            	<div class="col-lg-8 control-label-left">
+										{{ modalOptions.parentScope.AUTH.gebruiker().kamernummer || 'ONBEKEND' | translate }}										
+	                            	</div>
+	                            </div>
+	                            <div class="row">
+	                            	<div class="col-lg-4 control-label-left"><b>
+	                            		{{ 'BEHEER.TELEFOONNUMMER' | translate }}</b>	
+	                            	</div>
+	                            	<div class="col-lg-8 control-label-left">
+										{{ modalOptions.parentScope.AUTH.gebruiker().telefoon || 'ONBEKEND' | translate }}										
+	                            	</div>
+	                            </div>
+	                            <div class="row">
+	                            	<div class="col-lg-4 control-label-left"><b>
+	                            		{{ 'BEHEER.EMAIL' | translate }}</b>	
+	                            	</div>
+	                            	<div class="col-lg-8 control-label-left">
+										{{ modalOptions.parentScope.AUTH.gebruiker().email || 'ONBEKEND' | translate }}										
+	                            	</div>
+	                            </div>
+                            </form>                        
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">                                  
+                        <div id="formError" class="validation text-danger"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="modal-buttons pull-right">
+                        <button type="button" class="btn btn-primary" data-ng-click="$hide();modalOptions.onExecute();">{{modalOptions.actionButtonText}}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+-->
+</div>

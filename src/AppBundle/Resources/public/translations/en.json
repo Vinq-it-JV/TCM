@@ -1,0 +1,53 @@
+{
+    "CLOSE": "Close",
+    "HOME": "Home",
+    "INFO": "Info",
+    "MENU": "Menu",
+    "PLEASE_WAIT": "Please wait...",
+    "SHOW_DETAILS": "Show details",
+    "LOCATIONS": "Locations",
+    "NOTIFICATIONS": "Notifications",
+    "USERS": "Users",
+    "USER": {
+        "LABEL": "User",
+        "WELCOME": "Welcome"
+    },
+    "HEADER": {
+        "USERS": "Users",
+        "LOCATIONS": "Locations",
+        "NOTIFICATIONS": "Notifications"
+    },
+    "AUTH": {
+        "USERNAME": "Username",
+        "PASSWORD": "Password",
+        "EMAIL": "Email",
+        "BIRTHDATE": "Birthdate",
+        "LOGIN": "Login",
+        "LOGOUT": "Logout",
+        "REGISTER": "Register",
+        "USER_REGISTERED": "You registration is completed. An email has been sent with the activation data. Thank you for your interest.",
+        "INVALID_AGE": "You are not old enough, minimum age is 18.",
+        "USERNAME_EXISTS": "Username already exists.",
+        "INVALID_USER_PASS": "Invalid username / password",
+        "METHOD_REQUIRES_SESSION": "Authentication method requires session.",
+        "SESSION_TIMEOUT": "Session has timed out.",
+        "FORGOT_USERPASS": "Forgot username / password ?",
+        "REQUEST_CREDENTIALS": "Request credentials.",
+        "UNKNOWN_EMAIL": "Unknown email address.",
+        "NO_USER_ROLES": "User has no roles.",
+        "USER_NOT_ACTIAVED": "User is not activated.",
+        "USER_LOCKED_OUT": "User is locked out, please try later.",
+        "EMAIL_CREDENTIALS_SENT": "Your credentials have been sent to your email address."
+    },
+    "LNG": {
+        "ENGLISH": "English",
+        "DUTCH": "Dutch"
+    },
+    "TOOLTIP": {
+        "DETAILS": "Show details"
+    },
+    "HTTP": {
+        "ERROR": "HTTP error",
+        "ERROR_MESSAGE": "Error message"
+    }
+}
