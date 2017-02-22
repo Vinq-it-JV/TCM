@@ -1,0 +1,20 @@
+email:
+  credentials:
+    label: 'Credentials'
+    from: 'Administration of '
+    subject: 'Your credentials'
+    header: 'Your credentials for login @'
+    text1: 'You are reveiving this email because you are registered at %Domain%.<br><br>We have generated a new password, which you can use to login.'
+    text2: 'When logged in you can change the password in your profile to your own password.<br><br>If you have any questions please contact our support team at <a href="mailto:support@%Domain%?SUBJECT:Credential request for:%Username%">Contact Support</a><br><br><b>Please use your username in the subject otherwise your request will not be handled!</b>'
+    username: 'Username'
+    password: 'Password'
+
+  password:
+    label: 'Password'
+    from: 'Administration of '
+    subject: 'Your new password'
+    header: 'Your new password for login @'
+    text1: 'You are reveiving this email because you changed your password for %Domain%.<br><br>Please keep this password safe, we do not store this!'
+    text2: 'Please make sure you use a secure password that can not be guessed by anyone.<br><br>If you have any questions please contact our support team at <a href="mailto:support@%Domain%?SUBJECT:Password support for:%Username%">Contact Support</a><br><br><b>Please use your username in the subject otherwise your request will not be handled!</b>'
+    username: 'Username'
+    password: 'New password'

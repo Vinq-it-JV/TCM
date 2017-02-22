@@ -19,9 +19,10 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown">
                         <a href="#" data-toggle="dropdown">
-                            <i class="icon-book icon-white"></i><div class="inline" ng-cloak>{{ '{{ AUTH.user().name }}' }} <b class="caret"></b></div>
+                            <i class="icon-book icon-white"></i><div class="inline" ng-cloak>{{ '{{ AUTH.user().Name }}' }} <b class="caret"></b></div>
                         </a>
                         <ul class="dropdown-menu">
+                            <li><a href="" ng-click="showProfile()" ng-cloak> {{ ng.translate('USER.PROFILE') }} </a></li>
                             <li><a href="{{ path('logout') }}" ng-cloak> {{ ng.translate('AUTH.LOGOUT') }} </a></li>
                         </ul>
                     </li>

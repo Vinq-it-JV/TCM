@@ -1,0 +1,7 @@
+services:
+    page_controller:
+        class: AdministrationBundle\Controller\PageController
+
+    class_helper:
+        class: AdministrationBundle\Services\ClassHelper
+        arguments: []

@@ -40,12 +40,11 @@ class UserRoleTableMap extends TableMap
         $this->setPhpName('UserRole');
         $this->setClassname('UserBundle\\Model\\UserRole');
         $this->setPackage('src.UserBundle.Model');
-        $this->setUseIdGenerator(true);
+        $this->setUseIdGenerator(false);
         $this->setIsCrossRef(true);
         // columns
-        $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
-        $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'user', 'id', false, null, null);
-        $this->addForeignKey('role_id', 'RoleId', 'INTEGER', 'role', 'id', false, null, null);
+        $this->addForeignPrimaryKey('user_id', 'UserId', 'INTEGER' , 'user', 'id', true, null, null);
+        $this->addForeignPrimaryKey('role_id', 'RoleId', 'INTEGER' , 'role', 'id', true, null, null);
         // validators
     } // initialize()
 

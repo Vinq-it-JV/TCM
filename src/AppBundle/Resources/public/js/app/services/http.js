@@ -134,6 +134,28 @@ angular
 		return result;
 	};
 
+	var doDelete = function(deletedata, cb_Success, cb_Fail) {
+		var result;
+
+		if (error_state)
+			return;
+
+		buildHeader(cb_Fail);
+		result = $http.delete(deletedata.url, message_header);
+
+		result.success(function(data, status, headers, config) {
+			if (cb_Success)
+				cb_Success(data);
+		});
+
+		result.error(function(data, status, headers, config) {
+			checkStatus(status);
+			if (cb_Fail)
+				cb_Fail(data);
+		});
+		return result;
+	};
+
 	return {
 		post : function(data, cb_Success, cb_Fail) {
 			return doPost(data, cb_Success, cb_Fail);
@@ -144,6 +166,9 @@ angular
 		get : function(data, cb_Success, cb_Fail) {
 			return doGet(data, cb_Success, cb_Fail);
 		},
+        delete : function(data, cb_Success, cb_Fail) {
+            return doDelete(data, cb_Success, cb_Fail);
+        },
 		error_state : function () {
 			return error_state;
 		},

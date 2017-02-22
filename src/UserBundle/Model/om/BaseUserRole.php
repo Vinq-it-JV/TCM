@@ -41,12 +41,6 @@ abstract class BaseUserRole extends BaseObject implements Persistent
     protected $startCopy = false;
 
     /**
-     * The value for the id field.
-     * @var        int
-     */
-    protected $id;
-
-    /**
      * The value for the user_id field.
      * @var        int
      */
@@ -89,17 +83,6 @@ abstract class BaseUserRole extends BaseObject implements Persistent
     protected $alreadyInClearAllReferencesDeep = false;
 
     /**
-     * Get the [id] column value.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-
-        return $this->id;
-    }
-
-    /**
      * Get the [user_id] column value.
      *
      * @return int
@@ -120,27 +103,6 @@ abstract class BaseUserRole extends BaseObject implements Persistent
 
         return $this->role_id;
     }
-
-    /**
-     * Set the value of [id] column.
-     *
-     * @param  int $v new value
-     * @return UserRole The current object (for fluent API support)
-     */
-    public function setId($v)
-    {
-        if ($v !== null && is_numeric($v)) {
-            $v = (int) $v;
-        }
-
-        if ($this->id !== $v) {
-            $this->id = $v;
-            $this->modifiedColumns[] = UserRolePeer::ID;
-        }
-
-
-        return $this;
-    } // setId()
 
     /**
      * Set the value of [user_id] column.
@@ -224,9 +186,8 @@ abstract class BaseUserRole extends BaseObject implements Persistent
     {
         try {
 
-            $this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
-            $this->user_id = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
-            $this->role_id = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
+            $this->user_id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
+            $this->role_id = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -236,7 +197,7 @@ abstract class BaseUserRole extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 3; // 3 = UserRolePeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 2; // 2 = UserRolePeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating UserRole object", $e);
@@ -469,15 +430,8 @@ abstract class BaseUserRole extends BaseObject implements Persistent
         $modifiedColumns = array();
         $index = 0;
 
-        $this->modifiedColumns[] = UserRolePeer::ID;
-        if (null !== $this->id) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key (' . UserRolePeer::ID . ')');
-        }
 
          // check the columns in natural order for more readable SQL queries
-        if ($this->isColumnModified(UserRolePeer::ID)) {
-            $modifiedColumns[':p' . $index++]  = '`id`';
-        }
         if ($this->isColumnModified(UserRolePeer::USER_ID)) {
             $modifiedColumns[':p' . $index++]  = '`user_id`';
         }
@@ -495,9 +449,6 @@ abstract class BaseUserRole extends BaseObject implements Persistent
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case '`id`':
-                        $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
-                        break;
                     case '`user_id`':
                         $stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
                         break;
@@ -511,13 +462,6 @@ abstract class BaseUserRole extends BaseObject implements Persistent
             Propel::log($e->getMessage(), Propel::LOG_ERR);
             throw new PropelException(sprintf('Unable to execute INSERT statement [%s]', $sql), $e);
         }
-
-        try {
-            $pk = $con->lastInsertId();
-        } catch (Exception $e) {
-            throw new PropelException('Unable to get autoincrement id.', $e);
-        }
-        $this->setId($pk);
 
         $this->setNew(false);
     }
@@ -657,12 +601,9 @@ abstract class BaseUserRole extends BaseObject implements Persistent
     {
         switch ($pos) {
             case 0:
-                return $this->getId();
-                break;
-            case 1:
                 return $this->getUserId();
                 break;
-            case 2:
+            case 1:
                 return $this->getRoleId();
                 break;
             default:
@@ -688,15 +629,14 @@ abstract class BaseUserRole extends BaseObject implements Persistent
      */
     public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
     {
-        if (isset($alreadyDumpedObjects['UserRole'][$this->getPrimaryKey()])) {
+        if (isset($alreadyDumpedObjects['UserRole'][serialize($this->getPrimaryKey())])) {
             return '*RECURSION*';
         }
-        $alreadyDumpedObjects['UserRole'][$this->getPrimaryKey()] = true;
+        $alreadyDumpedObjects['UserRole'][serialize($this->getPrimaryKey())] = true;
         $keys = UserRolePeer::getFieldNames($keyType);
         $result = array(
-            $keys[0] => $this->getId(),
-            $keys[1] => $this->getUserId(),
-            $keys[2] => $this->getRoleId(),
+            $keys[0] => $this->getUserId(),
+            $keys[1] => $this->getRoleId(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -745,12 +685,9 @@ abstract class BaseUserRole extends BaseObject implements Persistent
     {
         switch ($pos) {
             case 0:
-                $this->setId($value);
-                break;
-            case 1:
                 $this->setUserId($value);
                 break;
-            case 2:
+            case 1:
                 $this->setRoleId($value);
                 break;
         } // switch()
@@ -777,9 +714,8 @@ abstract class BaseUserRole extends BaseObject implements Persistent
     {
         $keys = UserRolePeer::getFieldNames($keyType);
 
-        if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
-        if (array_key_exists($keys[1], $arr)) $this->setUserId($arr[$keys[1]]);
-        if (array_key_exists($keys[2], $arr)) $this->setRoleId($arr[$keys[2]]);
+        if (array_key_exists($keys[0], $arr)) $this->setUserId($arr[$keys[0]]);
+        if (array_key_exists($keys[1], $arr)) $this->setRoleId($arr[$keys[1]]);
     }
 
     /**
@@ -791,7 +727,6 @@ abstract class BaseUserRole extends BaseObject implements Persistent
     {
         $criteria = new Criteria(UserRolePeer::DATABASE_NAME);
 
-        if ($this->isColumnModified(UserRolePeer::ID)) $criteria->add(UserRolePeer::ID, $this->id);
         if ($this->isColumnModified(UserRolePeer::USER_ID)) $criteria->add(UserRolePeer::USER_ID, $this->user_id);
         if ($this->isColumnModified(UserRolePeer::ROLE_ID)) $criteria->add(UserRolePeer::ROLE_ID, $this->role_id);
 
@@ -809,29 +744,36 @@ abstract class BaseUserRole extends BaseObject implements Persistent
     public function buildPkeyCriteria()
     {
         $criteria = new Criteria(UserRolePeer::DATABASE_NAME);
-        $criteria->add(UserRolePeer::ID, $this->id);
+        $criteria->add(UserRolePeer::USER_ID, $this->user_id);
+        $criteria->add(UserRolePeer::ROLE_ID, $this->role_id);
 
         return $criteria;
     }
 
     /**
-     * Returns the primary key for this object (row).
-     * @return int
+     * Returns the composite primary key for this object.
+     * The array elements will be in same order as specified in XML.
+     * @return array
      */
     public function getPrimaryKey()
     {
-        return $this->getId();
+        $pks = array();
+        $pks[0] = $this->getUserId();
+        $pks[1] = $this->getRoleId();
+
+        return $pks;
     }
 
     /**
-     * Generic method to set the primary key (id column).
+     * Set the [composite] primary key.
      *
-     * @param  int $key Primary key.
+     * @param array $keys The elements of the composite key (order must match the order in XML file).
      * @return void
      */
-    public function setPrimaryKey($key)
+    public function setPrimaryKey($keys)
     {
-        $this->setId($key);
+        $this->setUserId($keys[0]);
+        $this->setRoleId($keys[1]);
     }
 
     /**
@@ -841,7 +783,7 @@ abstract class BaseUserRole extends BaseObject implements Persistent
     public function isPrimaryKeyNull()
     {
 
-        return null === $this->getId();
+        return (null === $this->getUserId()) && (null === $this->getRoleId());
     }
 
     /**
@@ -873,7 +815,6 @@ abstract class BaseUserRole extends BaseObject implements Persistent
 
         if ($makeNew) {
             $copyObj->setNew(true);
-            $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
         }
     }
 
@@ -1026,7 +967,6 @@ abstract class BaseUserRole extends BaseObject implements Persistent
      */
     public function clear()
     {
-        $this->id = null;
         $this->user_id = null;
         $this->role_id = null;
         $this->alreadyInSave = false;

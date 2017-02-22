@@ -1,0 +1,338 @@
+<form class="form-horizontal" method="post" name="userForm"
+      action="{{ url('administration_user_save', { 'userid' : user.Id }) }}" novalidate>
+    <div class="panel-body">
+        <div class="well" ng-form="userDataForm">
+            {# User information block #}
+            <input name="Id" type="hidden" value="{{ user.Id }}"/>
+            <div class="form-group">
+                <label class="control-label col-md-2"
+                       ng-cloak>{{ ng.translate('USER.USERNAME') }}</label>
+                <div class="col-md-6">
+                    <input class="form-control input-sm" name="Username" type="text"
+                           ng-model="users.user().Username" validation="min_len:3|alpha_num|required" no-enter/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-2"
+                       ng-cloak>{{ ng.translate('USER.FIRST_NAME') }}</label>
+                <div class="col-md-6">
+                    <input class="form-control input-sm" name="Firstname" type="text"
+                           ng-model="users.user().Firstname" no-enter/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-2"
+                       ng-cloak>{{ ng.translate('USER.MIDDLE_NAME') }}</label>
+                <div class="col-md-4">
+                    <input class="form-control input-sm" name="Middlename" type="text"
+                           ng-model="users.user().Middlename" no-enter/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-2"
+                       ng-cloak>{{ ng.translate('USER.LAST_NAME') }}</label>
+                <div class="col-md-6">
+                    <input class="form-control input-sm" name="Lastname" type="text"
+                           ng-model="users.user().Lastname" no-enter/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-2"
+                       ng-cloak>{{ ng.translate('USER.BIRTH_DATE') }}</label>
+                <div class="col-md-2">
+                    <input class="form-control input-sm" name="BirthDate"
+                           ng-model="users.user().BirthDate.date" bs-datepicker
+                           data-date-format="dd-MM-yyyy"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-2"
+                       ng-cloak>{{ ng.translate('USER.GENDER') }}</label>
+                <div class="col-md-2">
+                    <select class="form-control input-sm" name="Gender"
+                            ng-model="users.user().Gender"
+                            ng-options="gender as (gender.Name | translate) for gender in users.lists().gender track by gender.Id"
+                            ng-cloak>
+                        <option value="" selected
+                                hidden>{{ ng.translate('SELECT') }}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-2"
+                       ng-cloak>{{ ng.translate('USER.TITLE') }}</label>
+                <div class="col-md-2">
+                    <select class="form-control input-sm" name="Title"
+                            ng-model="users.user().Title"
+                            ng-options="title as (title.Name | translate) for title in users.lists().title track by title.Id"
+                            ng-cloak>
+                        <option value="" selected
+                                hidden>{{ ng.translate('SELECT') }}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-2 col-xs-12"
+                       ng-cloak>{{ ng.translate('USER.LANGUAGE') }}</label>
+                <div class="col-md-10 col-xs-12">
+                    <div class="row">
+                        <div class="col-md-3 col-xs-8">
+                            <select class="form-control input-sm"
+                                    name="Language" ng-model="users.user().Language"
+                                    ng-options="language as (language.Name | translate) for language in users.lists().countries track by language.Id"
+                                    ng-cloak
+                                    validation="required" ng-cloak>
+                                <option value="" selected
+                                        hidden>{{ ng.translate('SELECT') }}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr/>
+
+        {# Emails block #}
+        <div class="well">
+            <div class="form-group">
+                <label class="control-label col-md-2 col-xs-12"
+                       ng-cloak>{{ ng.translate('USER.EMAIL') }}</label>
+                {% verbatim %}
+                <div class="col-md-10 col-xs-12">
+                    <div ng-repeat="email in users.user().Emails track by $index">
+                        <div class="form-group">
+                            <div class="col-md-4 col-xs-8">
+                                <input class="form-control input-sm" name="emails[{{ email.Id }}][Email]"
+                                       ng-model="email.Email" no-enter/>
+                            </div>
+                            <button type="button" class="btn btn-sm btn-danger"
+                                    ng-click="deleteEmail($index)"><i class="fa fa-remove"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-form="emailForm">
+                        <div class="col-md-4 col-xs-8">
+                            <input class="form-control input-sm" ng-model="users.email().Email"
+                                   name="email" placeholder="{{ 'USER.EMAIL' | translate }}"
+                                   validation="email|{{!users.emails().length ? 'required': ''}}" no-enter ng-cloak/>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-success"
+                                ng-click="users.addEmail()"
+                                ng-disabled="emailForm.$invalid||!users.email().Email.length"><i
+                                class="fa fa-plus"></i></button>
+                    </div>
+                </div>
+                {% endverbatim %}
+            </div>
+        </div>
+        <hr/>
+
+        {# Phone numbers block #}
+        <div class="well">
+            <div class="form-group">
+                <label class="control-label col-md-2 col-xs-12"
+                       ng-cloak>{{ ng.translate('USER.PHONE') }}</label>
+                {% verbatim %}
+                <div class="col-md-10 col-xs-12">
+                    <div ng-repeat="phone in users.user().Phones track by $index">
+                        <div class="form-group">
+                            <div class="col-md-4 col-xs-8">
+                                <input class="form-control input-sm" name="phones[{{ phone.Id }}][PhoneNumber]"
+                                       ng-model="phone.PhoneNumber" no-enter/>
+                            </div>
+                            <button type="button" class="btn btn-sm btn-danger"
+                                    ng-click="deletePhone($index)"><i class="fa fa-remove"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-form="phoneForm">
+                        <div class="col-md-4 col-xs-8">
+                            <input class="form-control input-sm"
+                                   ng-model="users.phone().PhoneNumber" name="phone"
+                                   placeholder="{{ 'USER.PHONE' | translate }}"
+                                   validation="phone_international" no-enter ng-cloak/>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-success"
+                                ng-click="users.addPhone()"
+                                ng-disabled="phoneForm.$invalid||!users.phone().PhoneNumber.length">
+                            <i class="fa fa-plus"></i></button>
+                    </div>
+                </div>
+                {% endverbatim %}
+            </div>
+        </div>
+
+        {# Addresses block #}
+        <h5 ng-cloak>
+            <i class="fa fa-envelope"></i> {{ ng.translate('USER.ADDRESSES') }}
+        </h5>
+        <hr/>
+        {% verbatim %}
+        <div ng-repeat="address in users.user().Addresses track by $index">
+            <hr ng-hide="$first"/>
+            <div class="well">
+                <div ng-form="addressForm">
+                    <div class="form-group">
+                        <label class="control-label col-md-2"
+                               ng-cloak>{{ 'USER.ADDRESS_TYPE' | translate }}</label>
+                        <div class="col-md-10 col-xs-12">
+                            <div class="row">
+                                <div class="col-md-3 col-xs-8">
+                                    <select class="form-control input-sm"
+                                            name="addresses[{{ address.Id }}][Type]" ng-model="address.Type"
+                                            ng-options="type as (type.Name | translate) for type in users.lists().address_type track by type.Id" ng-cloak
+                                            validation="required">
+                                        <option value="" selected
+                                                hidden ng-cloak>{{ 'SELECT' | translate }}</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-9 col-xs-4">
+                                    <div class="form-group pull-right">
+                                        <button type="button" class="btn btn-sm btn-success"
+                                                ng-click="users.addAddress()" ng-disabled="addressForm.$invalid"
+                                                ng-hide="!$last"><i class="fa fa-plus"></i></button>
+                                        <button type="button" class="btn btn-sm btn-danger"
+                                                ng-click="deleteAddress($index)"><i
+                                                class="fa fa-remove"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-2 col-xs-12"
+                               ng-cloak>{{ 'USER.STREET' | translate }}</label>
+                        <div class="col-md-10 col-xs-12">
+                            <div class="row">
+                                <div class="col-md-6 col-xs-9">
+                                    <input class="form-control input-sm"
+                                           name="addresses[{{ address.Id }}][StreetName]"
+                                           ng-model="address.StreetName" validation="required" no-enter/>
+                                </div>
+                                <div class="col-md-2 col-xs-3">
+                                    <input class="form-control input-sm"
+                                           name="addresses[{{ address.Id }}][HouseNumber]"
+                                           ng-model="address.HouseNumber"
+                                           validation="required" no-enter/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-2 col-xs-12"
+                               ng-cloak>{{ 'USER.POSTAL_CODE' | translate }}</label>
+                        <div class="col-md-10 col-xs-12">
+                            <div class="row">
+                                <div class="col-md-3 col-xs-6">
+                                    <input class="form-control input-sm"
+                                           name="addresses[{{ address.Id }}][PostalCode]"
+                                           ng-model="address.PostalCode" validation="required" no-enter/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-2 col-xs-12"
+                               ng-cloak>{{ 'USER.CITY' | translate }}</label>
+                        <div class="col-md-10 col-xs-12">
+                            <div class="row">
+                                <div class="col-md-4 col-xs-10">
+                                    <input class="form-control input-sm"
+                                           name="addresses[{{ address.Id }}][City]" ng-model="address.City"
+                                           validation="required" no-enter/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-2 col-xs-12"
+                               ng-cloak>{{ 'USER.COUNTRY' | translate }}</label>
+                        <div class="col-md-10 col-xs-12">
+                            <div class="row">
+                                <div class="col-md-3 col-xs-8">
+                                    <select class="form-control input-sm"
+                                            name="addresses[{{ address.Id }}][Country]" ng-model="address.Country"
+                                            ng-options="country as (country.Name | translate) for country in users.lists().countries track by country.CountryCode"
+                                            validation="required">
+                                        <option value="" selected
+                                                hidden ng-cloak>{{ 'SELECT' | translate }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-2 col-xs-12"
+                               ng-cloak>{{ 'USER.MAP_URL' | translate }}</label>
+                        <div class="col-md-10 col-xs-12">
+                            <div class="row">
+                                <div class="col-md-12 col-xs-12">
+                                    <input class="form-control input-sm"
+                                           name="addresses[{{ address.Id }}][MapUrl]"
+                                           ng-model="address.MapUrl" no-enter/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endverbatim %}
+
+        {# Add address block #}
+        {% verbatim %}
+        <div ng-show="!users.user().Addresses||!users.user().Addresses.length">
+            <div class="well">
+                <div class="form-group">
+                    <label class="control-label col-md-2 col-xs-12"
+                           ng-cloak>{{ 'USER.ADDRESS' | translate }}</label>
+                    <div class="col-md-3">
+                        <button type="button" class="btn btn-sm btn-success"
+                                ng-click="users.addAddress()"><i class="fa fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endverbatim %}
+
+        {# Roles block #}
+        <h5 ng-cloak>
+            <i class="fa fa-user-plus"></i> {{ ng.translate('USER.ROLES') }}
+        </h5>
+        <hr/>
+        {% verbatim %}
+        <div class="well">
+            <div class="form-group">
+                <label class="control-label col-md-2 col-xs-12"
+                       ng-cloak>{{ 'USER.ROLES' | translate }}</label>
+                <div class="col-md-10 col-xs-12">
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12">
+                            <ui-select multiple ng-model="users.user().Roles" on-remove="ctrl.removed($item, $model)" ng-disabled="ctrl.disabled" close-on-select="false" class="form-control">
+                                <ui-select-match placeholder="{{ 'SELECT' | translate }}" ui-lock-choice="$item.Name == 'ROLE_USER'"><div class="{{ $item.Style }}" ng-cloak>{{ $item.Description | translate }}</div><input name="roles[{{ $item.Id }}]" value="{{ $item.Name }}" hidden/></ui-select-match>
+                                <ui-select-choices repeat="role as role in users.lists().roles" ui-disable-choice="item.disabled" ng-cloak>
+                                    {{ role.Description | translate }}
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endverbatim %}
+    </div>
+
+    {# Submit form block #}
+    <div class="panel-footer">
+        <div class="row">
+            <div class="col-md-12">
+                <a href="{{ path('administration_users') }}" class="btn btn-sm btn-default pull-left"
+                   ng-click="BE.showLoader(true)"><i class="fa fa-close" ng-cloak></i> {{ ng.translate('CANCEL') }}</a>
+                <button type="submit" class="btn btn-sm btn-success pull-right" ng-click="BE.showLoader(true)"
+                        ng-disabled="userForm.$invalid||!users.emails().length"><i class="fa fa-floppy-o" ng-cloak></i> {{ ng.translate('SAVE') }}
+                </button>
+            </div>
+        </div>
+    </div>
+</form>

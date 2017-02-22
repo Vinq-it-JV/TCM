@@ -8,14 +8,96 @@
     "LOCATIONS": "Locations",
     "NOTIFICATIONS": "Notifications",
     "USERS": "Users",
+    "ACTION": "Action",
+    "SEARCH": "Search",
+    "ADD": "Add",
+    "SELECT": "Select...",
+    "CANCEL": "Cancel",
+    "DELETE": "Delete",
+    "SAVE": "Save",
+    "ROLE": {
+        "USER": "User",
+        "ADMIN": "Admin",
+        "SUPER_ADMIN": "Super admin"
+    },
+    "GENDER": {
+        "MALE": "Male",
+        "MALE_SHORT": "M",
+        "FEMALE": "Female",
+        "FEMALE_SHORT": "F",
+        "OTHER": "Other",
+        "OTHER_SHORT": "O"
+    },
+    "TITLE": {
+        "MISTER": "Mister",
+        "MISTER_SHORT": "Mr.",
+        "MISSES": "Misses",
+        "MISSES_SHORT": "Mrs.",
+        "MISS": "Miss",
+        "MISS_SHORT": "Ms."
+    },
+    "COUNTRY": {
+        "NL_NAME": "Netherlands",
+        "BE_NAME": "Belgium",
+        "FR_NAME": "France",
+        "DE_NAME": "Germany",
+        "ES_NAME": "Spain",
+        "IT_NAME": "Italy",
+        "PT_NAME": "Portugal",
+        "GB_NAME": "United kingdom"
+    },
+    "ADDRESS_TYPE": {
+        "POST": {
+            "NAME": "Post",
+            "DESCRIPTION": "This is a post address."
+        },
+        "VISIT": {
+            "NAME": "Visit",
+            "DESCRIPTION": "This is a visit address."
+        },
+        "INVOICE": {
+          "NAME": "Invoice",
+          "DESCRIPTION": "This is an invoice address."
+        }
+    },
     "USER": {
         "LABEL": "User",
-        "WELCOME": "Welcome"
+        "WELCOME": "Welcome",
+        "PROFILE": "Profile",
+        "NAME": "Name",
+        "USERNAME": "Username",
+        "FIRST_NAME": "First name",
+        "MIDDLE_NAME": "Middle name",
+        "LAST_NAME": "Last name",
+        "BIRTH_DATE": "Birth date",
+        "GENDER": "Gender",
+        "TITLE": "Title",
+        "EMAIL": "Email",
+        "PHONE": "Phone number",
+        "ADDRESS": "Address",
+        "ADDRESS_TYPE": "Address type",
+        "ADDRESSES": "Addresses",
+        "STREET": "Street",
+        "POSTAL_CODE": "Postal code",
+        "CITY": "City",
+        "COUNTRY": "Country",
+        "MAP_URL": "Map URL",
+        "ROLES": "Roles",
+        "LANGUAGE": "Language"
     },
     "HEADER": {
         "USERS": "Users",
         "LOCATIONS": "Locations",
         "NOTIFICATIONS": "Notifications"
+    },
+    "ADMINISTRATION": {
+        "LABEL": "Administration"
+    },
+    "QUESTION": {
+        "DELETE_EMAIL": "Delete email address?",
+        "DELETE_PHONE": "Delete phone number?",
+        "DELETE_ADDRESS": "Delete address?",
+        "DELETE_USER": "Delete user?"
     },
     "AUTH": {
         "USERNAME": "Username",
@@ -37,7 +119,8 @@
         "NO_USER_ROLES": "User has no roles.",
         "USER_NOT_ACTIAVED": "User is not activated.",
         "USER_LOCKED_OUT": "User is locked out, please try later.",
-        "EMAIL_CREDENTIALS_SENT": "Your credentials have been sent to your email address."
+        "EMAIL_CREDENTIALS_SENT": "Your credentials have been sent to your email address.",
+        "ROLES": "Roles"
     },
     "LNG": {
         "ENGLISH": "English",
@@ -49,5 +132,10 @@
     "HTTP": {
         "ERROR": "HTTP error",
         "ERROR_MESSAGE": "Error message"
+    },
+    "PROFILE": {
+        "INFO": "Info",
+        "PASSWORD": "Password",
+        "CONFIRM": "Confirm"
     }
 }

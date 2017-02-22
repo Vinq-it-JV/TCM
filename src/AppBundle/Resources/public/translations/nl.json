@@ -3,37 +3,128 @@
     "HOME": "Home",
     "INFO": "Info",
     "MENU": "Menu",
-    "PLEASE_WAIT": "Even wachten...",
+    "PLEASE_WAIT": "Wachten a.u.b...",
+    "SHOW_DETAILS": "Toon details",
+    "LOCATIONS": "Locaties",
+    "NOTIFICATIONS": "Notificaties",
+    "USERS": "Gebruikers",
+    "ACTION": "Actie",
+    "SEARCH": "Zoeken",
+    "ADD": "Toevoegen",
+    "SELECT": "Selecteer...",
+    "CANCEL": "Annuleren",
+    "DELETE": "Verwijderen",
+    "SAVE": "Opslaan",
+    "ROLE": {
+        "USER": "Gebruiker",
+        "ADMIN": "Admin",
+        "SUPER_ADMIN": "Super admin"
+    },
+    "GENDER": {
+        "MALE": "Man",
+        "MALE_SHORT": "M",
+        "FEMALE": "Vrouw",
+        "FEMALE_SHORT": "V",
+        "OTHER": "Anders",
+        "OTHER_SHORT": "A"
+    },
+    "TITLE": {
+        "MISTER": "Meneer",
+        "MISTER_SHORT": "Dhr.",
+        "MISSES": "Mevrouw",
+        "MISSES_SHORT": "Mvr.",
+        "MISS": "Mevrouw",
+        "MISS_SHORT": "Mvr."
+    },
+    "COUNTRY": {
+        "NL_NAME": "Nederland",
+        "BE_NAME": "Belgie",
+        "FR_NAME": "Frankrijk",
+        "DE_NAME": "Duitsland",
+        "ES_NAME": "Spanje",
+        "IT_NAME": "Italie",
+        "PT_NAME": "Portugal",
+        "GB_NAME": "Verenigd koninkrijk"
+    },
+    "ADDRESS_TYPE": {
+        "POST": {
+            "NAME": "Post",
+            "DESCRIPTION": "Dit is een postadres."
+        },
+        "VISIT": {
+            "NAME": "Bezoek",
+            "DESCRIPTION": "Dit is een bezoekadres."
+        },
+        "INVOICE": {
+            "NAME": "Factuur",
+            "DESCRIPTION": "Dit is een factuuradres."
+        }
+    },
     "USER": {
         "LABEL": "Gebruiker",
-        "WELCOME": "Welkom"
+        "WELCOME": "Welkom",
+        "PROFILE": "Profiel",
+        "NAME": "Naam",
+        "USERNAME": "Gebruikersnaam",
+        "FIRST_NAME": "Voornaam",
+        "MIDDLE_NAME": "Tussenvoegsel",
+        "LAST_NAME": "Achternaam",
+        "BIRTH_DATE": "Geboortedatum",
+        "GENDER": "Geslacht",
+        "TITLE": "Titel",
+        "EMAIL": "Email",
+        "PHONE": "Telefoonnummer",
+        "ADDRESS": "Adres",
+        "ADDRESS_TYPE": "Adres type",
+        "ADDRESSES": "Adressen",
+        "STREET": "Straat",
+        "POSTAL_CODE": "Postcode",
+        "CITY": "Stad",
+        "COUNTRY": "Land",
+        "MAP_URL": "Kaart URL",
+        "ROLES": "Rollen",
+        "LANGUAGE": "Taal"
+    },
+    "HEADER": {
+        "USERS": "Gebruikers",
+        "LOCATIONS": "Locaties",
+        "NOTIFICATIONS": "Notificaties"
+    },
+    "ADMINISTRATION": {
+        "LABEL": "Administratie"
+    },
+    "QUESTION": {
+        "DELETE_EMAIL": "Email adres verwijderen?",
+        "DELETE_PHONE": "Telefoonnummer verwijderen?",
+        "DELETE_ADDRESS": "Adres verwijderen?",
+        "DELETE_USER": "Gebruiker verwijderen?"
     },
     "AUTH": {
         "USERNAME": "Gebruikersnaam",
-        "PASSWORD": "Wachwoord",
+        "PASSWORD": "Wachtwoord",
         "EMAIL": "Email",
         "BIRTHDATE": "Geboortedatum",
         "LOGIN": "Inloggen",
         "LOGOUT": "Uitloggen",
         "REGISTER": "Registreren",
-        "USER_REGISTERED": "Uw registratie is voltooid. Er is een email verstuurd met daarin de activatiegegevens. Dank voor uw interesse.",
-        "USERNAME_EXISTS": "Gebruikersnaam bestaat al.",
-        "INVALID_AGE": "Je bent niet oud genoeg, minimale leeftijd is 18.",
-        "INVALID_USER_PASS": "Ongeldige gebruikersnaam / wachtwoord.",
-        "METHOD_REQUIRES_SESSION": "Authenticatie methode vereist sessie.",
-        "SESSION_TIMEOUT": "Sessietijd verlopen.",
-        "FORGOT_USERPASS": "Gebruikersnaam / wachtwoord vergeten ?",
-        "REQUEST_CREDENTIALS": "Aanvragen gegevens.",
-        "UNKNOWN_EMAIL": "Onbekend email adres.",
-        "NO_USER_ROLES": "Gebruiker heeft geen rollen.",
-        "USER_NOT_ACTIAVED": "Gebruiker is niet geactiverd.",
-        "USER_LOCKED_OUT": "Gebruiker is geblokkeerd, probeer later.",
-        "EMAIL_CREDENTIALS_SENT": "Uw gegevens zijn naar uw email adres gestuurd.",
-        "EBC_LOGIN": "Login met EBC"
+        "USER_REGISTERED": "You registration is completed. An email has been sent with the activation data. Thank you for your interest.",
+        "INVALID_AGE": "You are not old enough, minimum age is 18.",
+        "USERNAME_EXISTS": "Username already exists.",
+        "INVALID_USER_PASS": "Invalid username / password",
+        "METHOD_REQUIRES_SESSION": "Authentication method requires session.",
+        "SESSION_TIMEOUT": "Sessie is verlopen.",
+        "FORGOT_USERPASS": "Forgot username / password ?",
+        "REQUEST_CREDENTIALS": "Request credentials.",
+        "UNKNOWN_EMAIL": "Unknown email address.",
+        "NO_USER_ROLES": "User has no roles.",
+        "USER_NOT_ACTIAVED": "User is not activated.",
+        "USER_LOCKED_OUT": "User is locked out, please try later.",
+        "EMAIL_CREDENTIALS_SENT": "Your credentials have been sent to your email address.",
+        "ROLES": "Rollen"
     },
     "LNG": {
-        "ENGLISH": "Engels",
-        "DUTCH": "Nederlands"
+        "ENGLISH": "English",
+        "DUTCH": "Dutch"
     },
     "TOOLTIP": {
         "DETAILS": "Toon details"
@@ -41,5 +132,10 @@
     "HTTP": {
         "ERROR": "HTTP fout",
         "ERROR_MESSAGE": "Foutbericht"
+    },
+    "PROFILE": {
+        "INFO": "Info",
+        "PASSWORD": "Wachtwoord",
+        "CONFIRM": "Bevestig"
     }
 }

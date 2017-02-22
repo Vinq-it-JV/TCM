@@ -14,13 +14,12 @@ angular
         
     var d_users = [];
     var d_user = [];
+    var d_template = [];
+    var d_lists = [];
 
-    var e_user = {  'Username' : '',
-                    'Firstname' : '',
-                    'Lastname': '',
-                    'Email': '',
-                    'Usersname': '',
-                    'Roles': '' };
+    var d_email = {};
+    var d_phone = {};
+    var d_address = {};
 
     var d_roles = DS_Roles;
     var d_rolesavailable = [];
@@ -28,7 +27,7 @@ angular
     function recordOnIndex (record_id)
     {
         for (index in d_users)
-            if (d_users[index].Username == record_id)
+            if (d_users[index].Id == record_id)
                 return index;
         return -1;
     }
@@ -60,9 +59,65 @@ angular
         {
             return d_users;
         },
+        usersCollection: function ()
+        {
+            return d_usersCollection;
+        },
+        templateSet: function (template)
+        {
+            d_template = template;
+            this.clrEmail();
+            this.clrPhone();
+            this.clrAddress();
+        },
+        template: function ()
+        {
+            return d_template;
+        },
+        listsSet: function (lists)
+        {
+            d_lists = lists;
+        },
+        lists: function ()
+        {
+            return d_lists;
+        },
         user: function ()
         {
             return d_user;
+        },
+        email: function ()
+        {
+            return d_email;
+        },
+        emails: function ()
+        {
+            if (!d_user.hasOwnProperty('Emails'))
+                return [];
+            return d_user.Emails;
+        },
+        phone: function ()
+        {
+            return d_phone;
+        },
+        address: function ()
+        {
+            return d_address;
+        },
+        clrEmail: function ()
+        {
+            if (d_template.hasOwnProperty('email'))
+                d_email = angular.copy(d_template.email);
+        },
+        clrPhone: function ()
+        {
+            if (d_template.hasOwnProperty('phone'))
+                d_phone = angular.copy(d_template.phone);
+        },
+        clrAddress: function ()
+        {
+            if (d_template.hasOwnProperty('address'))
+                d_address = angular.copy(d_template.address);
         },
         getRecord: function (record_id)
         {
@@ -87,7 +142,7 @@ angular
         },
         clrRecord: function ()
         {
-            d_user = angular.copy(e_user);
+            d_user = angular.copy(d_template.user);
             return d_user;
         },
         delRecord: function (record_id)
@@ -103,20 +158,63 @@ angular
             d_user = angular.copy(record_data);
             return d_user;
         },
-        isValidObject: function (object)
+        addEmail: function ()
         {
-            return isValidObject(object);
+            if (!d_user.hasOwnProperty('Emails'))
+                d_user.Emails = [];
+
+            d_email.Id = moment().unix();
+            d_email.New = true;
+            d_user.Emails.push(d_email);
+
+            this.clrEmail();
         },
-        createUsername: function ()
+        addPhone: function ()
         {
-            if (typeof d_user.Email == 'undefined')
-                return;
-            if (!d_user.Email.length)
-                return;
-            var atpos = d_user.Email.indexOf('@');
-            if (atpos >= 0)
-                return d_user.Username = d_user.Email.substring(0, atpos);
-            return '';
+            if (!d_user.hasOwnProperty('Phones'))
+                d_user.Phones = [];
+
+            d_phone.Id = moment().unix();
+            d_phone.New = true;
+            d_user.Phones.push(d_phone);
+
+            this.clrPhone();
+        },
+        addAddress: function ()
+        {
+            if (!d_user.hasOwnProperty('Addresses'))
+                d_user.Addresses = [];
+
+            d_address.Id = moment().unix();
+            d_address.Type = 1;
+            d_address.New = true;
+            d_user.Addresses.push(d_address);
+
+            this.clrAddress();
+        },
+        deleteEmail: function (id)
+        {
+            var emailId = d_user.Emails[id].Id;
+            if (d_user.Emails[id].hasOwnProperty('New'))
+                emailId = 0;
+            d_user.Emails.splice(id);
+            return emailId;
+        },
+        deletePhone: function (id)
+        {
+            var phoneId = d_user.Phones[id].Id;
+            if (d_user.Phones[id].hasOwnProperty('New'))
+                phoneId = 0;
+            d_user.Phones.splice(id);
+            return phoneId;
+        },
+        deleteAddress: function (id)
+        {
+            var addressId = d_user.Addresses[id].Id;
+            if (d_user.Addresses[id].hasOwnProperty('New'))
+                addressId = 0;
+            d_user.Addresses.splice(id);
+            return addressId;
         },
         roles: function ()
         {
@@ -163,6 +261,10 @@ angular
                 roleText += roles[index].Description;
             }
             return roleText;
+        },
+        isValidObject: function (object)
+        {
+            return isValidObject(object);
         }
     };
 }]);

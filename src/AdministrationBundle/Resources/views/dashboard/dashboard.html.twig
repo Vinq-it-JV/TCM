@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block contents %}
+    {% if app.user %}
+
+            {% block header %}
+                {%  include 'AdministrationBundle::header.html.twig' %}
+            {%  endblock %}
+
+            {% block page %}
+            {% endblock %}
+
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

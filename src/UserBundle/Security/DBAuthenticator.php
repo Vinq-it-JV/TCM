@@ -56,7 +56,7 @@ class DBAuthenticator implements SimpleFormAuthenticatorInterface
                 $user,
                 $user->getPassword(),
                 $providerKey,
-                $user->getRoles()
+                $user->getRolesArray()
             );
         }
 

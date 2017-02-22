@@ -32,6 +32,9 @@ angular
 		get : function(getdata, cb_Success, cb_Fail) {
 			loadingPromise = Http.get(getdata, cb_Success, cb_Fail);
 		},
+        delete : function(deletedata, cb_Success, cb_Fail) {
+            loadingPromise = Http.delete(deletedata, cb_Success, cb_Fail);
+        },
         setResult : function (data)
         {
             message = angular.copy(data.message);

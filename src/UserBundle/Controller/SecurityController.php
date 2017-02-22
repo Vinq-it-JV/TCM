@@ -35,64 +35,44 @@ class SecurityController extends Controller
     public function loginStatusAction()
     {
         $userdata = [];
-        $userdata['loggedin'] = false;
-        $userdata['name'] = "USER.WELCOME";
-        $userdata['roles'] = "";
 
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
         if (is_object($user))
         {
-            $userdata['loggedin'] = true;
-            $userdata['username'] = $user->getUsername();
-            if (method_exists($user, "getEmail"))
-            {
-                $userdata['email'] = $user->getEmail();
-                $userdata['name'] = $user->getName();
-                $userdata['firstname'] = $user->getFirstname();
-                $userdata['lastname'] = $user->getLastname();
+            $dbuser = UserQuery::create()
+                ->findOneByUsername($user->getUsername());
 
-                $dbuser = UserQuery::create()
-                    ->findPk($user->getUsername());
-
-                if ($dbuser)
-                {
-                    $userdata['language'] = $dbuser->getLanguage();
-                }
-            }
-            else
+            if (!empty($dbuser))
             {
-                $userdata['name'] = $user->getUsername();
+                $userdata = $dbuser->getUserDataArray();
+                $userdata['user']['IsLoggedin'] = true;
             }
-            $userdata['roles'] = $user->getRoles();
         }
 
         return JsonResult::create()
-            ->setContents(array('contents' => $userdata))
+            ->setContents($userdata)
             ->make();
     }
 
     public function changePasswordAction(Request $request)
     {
-        $passworddata = json_decode($request->getContent(), true);
-        //$username = $this->getUser()->getusername();
-        sleep(10);
-        //$user = UserQuery::create()
-        //    ->findOneByUsername($username);
-
-        /*
-        if ($user)
+        $passworddata = (object)json_decode($request->getContent(), true);
+        $user = $this->getUser();
+        if (!empty($user))
         {
+            $password = $passworddata->password;
             $encoder = $this->container->get('security.password_encoder');
-            $encoded = $encoder->encodePassword($user, $passworddata['password']);
+            $encoded = $encoder->encodePassword($user, $password);
             $user->setPassword($encoded);
             $user->save();
+
+            $this->sendCredentialsEmail($user, $password);
 
             return JsonResult::create()
                 ->setMessage('PASSWORD_CHANGED')
                 ->make();
         }
-        */
         return JsonResult::create()
             ->setMessage('PASSWORD_NOT_CHANGED')
             ->setErrorcode(JsonResult::WARNING)
@@ -118,4 +98,34 @@ class SecurityController extends Controller
         }
         return $message;
     }
+
+    /**
+     * sendCredentialsEmail($user, $password)
+     * @param $user
+     * @param $password
+     * @return bool
+     */
+    protected function sendCredentialsEmail($user, $password)
+    {
+        $translator = $this->container->get('translator');
+        $templating = $this->container->get('templating');
+        $mailer = $this->container->get('mailer');
+        $domain = $this->container->getParameter('domain_name');
+
+        $translator->setLocale(strtolower($user->getLanguageCode()));
+
+        $email = $user->getEmails()->getFirst();
+        if (empty($email))
+            return false;
+
+        $mail = \Swift_Message::newInstance()
+            ->setTo($email->getEmail(), $user->getUsername())
+            ->setFrom('noreply@' . $domain, $translator->trans('email.password.from') . $domain)
+            ->setSubject($translator->trans('email.password.subject'))
+            ->setBody($templating->render('UserBundle:email:password.html.twig', array('User' => $user, 'Password' => $password, 'Domain' => $domain)), 'text/html');
+
+        $mailer->send($mail);
+        return true;
+    }
+
 }

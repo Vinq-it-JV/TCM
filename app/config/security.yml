@@ -40,5 +40,6 @@ security:
         - {path: ^/login, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - {path: ^/tcm, roles: [ROLE_ADMIN, ROLE_SUPER_ADMIN, ROLE_VIP_USER, ROLE_USER] }
         - {path: ^/logout, role: IS_AUTHENTICATED_FULLY }
+        - {path: ^/administration, roles: [ROLE_ADMIN, ROLE_SUPER_ADMIN] }
 
     access_denied_url: /login

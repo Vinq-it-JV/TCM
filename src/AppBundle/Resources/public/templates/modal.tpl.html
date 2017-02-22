@@ -8,8 +8,8 @@
 			<div class="modal-body" ng-bind="modalOptions.bodyText" ng-cloak>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-default" ng-click="$hide();modalOptions.onCancel();">{{ modalOptions.closeButtonText }}</button>
-				<button type="button" class="btn btn-primary" ng-click="$hide();modalOptions.onExecute();" ng-show="modalOptions.actionButtonText.length">{{ modalOptions.actionButtonText }}</button>
+				<button type="button" class="btn btn-sm btn-default pull-left" ng-click="$hide();modalOptions.onCancel();">{{ modalOptions.closeButtonText }}</button>
+				<button type="button" class="btn btn-sm btn-primary pull-right" ng-click="$hide();modalOptions.onExecute();" ng-show="modalOptions.actionButtonText.length">{{ modalOptions.actionButtonText }}</button>
 			</div>
 		</div>
 	</div>

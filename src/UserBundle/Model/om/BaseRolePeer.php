@@ -29,13 +29,13 @@ abstract class BaseRolePeer
     const TM_CLASS = 'UserBundle\\Model\\map\\RoleTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 5;
+    const NUM_COLUMNS = 6;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 5;
+    const NUM_HYDRATE_COLUMNS = 6;
 
     /** the column name for the id field */
     const ID = 'role.id';
@@ -45,6 +45,9 @@ abstract class BaseRolePeer
 
     /** the column name for the description field */
     const DESCRIPTION = 'role.description';
+
+    /** the column name for the style field */
+    const STYLE = 'role.style';
 
     /** the column name for the created_at field */
     const CREATED_AT = 'role.created_at';
@@ -71,12 +74,12 @@ abstract class BaseRolePeer
      * e.g. RolePeer::$fieldNames[RolePeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'Name', 'Description', 'CreatedAt', 'UpdatedAt', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'name', 'description', 'createdAt', 'updatedAt', ),
-        BasePeer::TYPE_COLNAME => array (RolePeer::ID, RolePeer::NAME, RolePeer::DESCRIPTION, RolePeer::CREATED_AT, RolePeer::UPDATED_AT, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'NAME', 'DESCRIPTION', 'CREATED_AT', 'UPDATED_AT', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'name', 'description', 'created_at', 'updated_at', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
+        BasePeer::TYPE_PHPNAME => array ('Id', 'Name', 'Description', 'Style', 'CreatedAt', 'UpdatedAt', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'name', 'description', 'style', 'createdAt', 'updatedAt', ),
+        BasePeer::TYPE_COLNAME => array (RolePeer::ID, RolePeer::NAME, RolePeer::DESCRIPTION, RolePeer::STYLE, RolePeer::CREATED_AT, RolePeer::UPDATED_AT, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'NAME', 'DESCRIPTION', 'STYLE', 'CREATED_AT', 'UPDATED_AT', ),
+        BasePeer::TYPE_FIELDNAME => array ('id', 'name', 'description', 'style', 'created_at', 'updated_at', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
     );
 
     /**
@@ -86,12 +89,12 @@ abstract class BaseRolePeer
      * e.g. RolePeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Name' => 1, 'Description' => 2, 'CreatedAt' => 3, 'UpdatedAt' => 4, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'name' => 1, 'description' => 2, 'createdAt' => 3, 'updatedAt' => 4, ),
-        BasePeer::TYPE_COLNAME => array (RolePeer::ID => 0, RolePeer::NAME => 1, RolePeer::DESCRIPTION => 2, RolePeer::CREATED_AT => 3, RolePeer::UPDATED_AT => 4, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'NAME' => 1, 'DESCRIPTION' => 2, 'CREATED_AT' => 3, 'UPDATED_AT' => 4, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'name' => 1, 'description' => 2, 'created_at' => 3, 'updated_at' => 4, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
+        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Name' => 1, 'Description' => 2, 'Style' => 3, 'CreatedAt' => 4, 'UpdatedAt' => 5, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'name' => 1, 'description' => 2, 'style' => 3, 'createdAt' => 4, 'updatedAt' => 5, ),
+        BasePeer::TYPE_COLNAME => array (RolePeer::ID => 0, RolePeer::NAME => 1, RolePeer::DESCRIPTION => 2, RolePeer::STYLE => 3, RolePeer::CREATED_AT => 4, RolePeer::UPDATED_AT => 5, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'NAME' => 1, 'DESCRIPTION' => 2, 'STYLE' => 3, 'CREATED_AT' => 4, 'UPDATED_AT' => 5, ),
+        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'name' => 1, 'description' => 2, 'style' => 3, 'created_at' => 4, 'updated_at' => 5, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
     );
 
     /**
@@ -168,12 +171,14 @@ abstract class BaseRolePeer
             $criteria->addSelectColumn(RolePeer::ID);
             $criteria->addSelectColumn(RolePeer::NAME);
             $criteria->addSelectColumn(RolePeer::DESCRIPTION);
+            $criteria->addSelectColumn(RolePeer::STYLE);
             $criteria->addSelectColumn(RolePeer::CREATED_AT);
             $criteria->addSelectColumn(RolePeer::UPDATED_AT);
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.name');
             $criteria->addSelectColumn($alias . '.description');
+            $criteria->addSelectColumn($alias . '.style');
             $criteria->addSelectColumn($alias . '.created_at');
             $criteria->addSelectColumn($alias . '.updated_at');
         }

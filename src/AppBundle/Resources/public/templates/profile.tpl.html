@@ -1,104 +1,82 @@
 <div class="modal" tabindex="-1" role="dialog">
-
-		<div class="ui modal show">
-			<i class="close icon"></i>
-			<div class="header">
-				Profile Picture
-			</div>
-			<div class="image content">
-				<div class="ui medium image">
-					<img src="/images/avatar/large/chris.jpg">
-				</div>
-				<div class="description">
-					<div class="ui header">We've auto-chosen a profile image for you.</div>
-					<p>We've grabbed the following image from the <a href="https://www.gravatar.com" target="_blank">gravatar</a> image associated with your registered e-mail address.</p>
-					<p>Is it okay to use this photo?</p>
-				</div>
-			</div>
-			<div class="actions">
-				<div class="ui black deny button">
-					Nope
-				</div>
-				<div class="ui positive right labeled icon button">
-					Yep, that's me
-					<i class="checkmark icon"></i>
-				</div>
-			</div>
-		</div>
-
-<!--
-
-
-
     <div class="modal-dialog" ng-class="{'wide-modal':modalOptions.wide === true}">
         <div class="modal-content noselect">
             <div class="modal-header">
                 <button type="button" class="close" ng-click="$hide();modalOptions.onCancel();">&times;</button>
-                <h4 class="modal-title">{{ modalOptions.headerText}}</h4>
+                <h5 class="modal-title" ng-cloak>{{ modalOptions.headerText }}</h5>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" ng-cloak>
                 <div class="row">
-                    <div class="container-fluid">
-                        <div class="col-md-12 panel-body">
-                            <form name="profielForm" novalidate class="form-horizontal">
-	                            <div class="row">
-	                            	<div class="col-lg-4 control-label-left"><b>
-	                            		{{ 'BEHEER.NAAM' | translate }}</b>	
-	                            	</div>
-	                            	<div class="col-lg-8 control-label-left">
-										{{ modalOptions.parentScope.AUTH.gebruiker().naam }}										
-	                            	</div>
-	                            </div>
-	                            <div class="row">
-	                            	<div class="col-lg-4 control-label-left"><b>
-	                            		{{ 'BEHEER.AFDELING' | translate }}</b>	
-	                            	</div>
-	                            	<div class="col-lg-8 control-label-left">
-										{{ modalOptions.parentScope.AUTH.gebruiker().afdeling || 'ONBEKEND' | translate }}										
-	                            	</div>
-	                            </div>
-	                            <div class="row">
-	                            	<div class="col-lg-4 control-label-left"><b>
-	                            		{{ 'BEHEER.KAMERNUMMER' | translate }}</b>	
-	                            	</div>
-	                            	<div class="col-lg-8 control-label-left">
-										{{ modalOptions.parentScope.AUTH.gebruiker().kamernummer || 'ONBEKEND' | translate }}										
-	                            	</div>
-	                            </div>
-	                            <div class="row">
-	                            	<div class="col-lg-4 control-label-left"><b>
-	                            		{{ 'BEHEER.TELEFOONNUMMER' | translate }}</b>	
-	                            	</div>
-	                            	<div class="col-lg-8 control-label-left">
-										{{ modalOptions.parentScope.AUTH.gebruiker().telefoon || 'ONBEKEND' | translate }}										
-	                            	</div>
-	                            </div>
-	                            <div class="row">
-	                            	<div class="col-lg-4 control-label-left"><b>
-	                            		{{ 'BEHEER.EMAIL' | translate }}</b>	
-	                            	</div>
-	                            	<div class="col-lg-8 control-label-left">
-										{{ modalOptions.parentScope.AUTH.gebruiker().email || 'ONBEKEND' | translate }}										
-	                            	</div>
-	                            </div>
-                            </form>                        
+                    <div class="col-md-2 hidden-xs">
+                        <div class="user-profile text-center">
+                            <i class="glyphicon glyphicon-user"></i>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-12">                                  
-                        <div id="formError" class="validation text-danger"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <div class="row">
-                    <div class="modal-buttons pull-right">
-                        <button type="button" class="btn btn-primary" data-ng-click="$hide();modalOptions.onExecute();">{{modalOptions.actionButtonText}}</button>
+                    <div class="col-md-10 col-xs-12">
+                        <div class="container-fluid">
+                            <div bs-tabs class="cursor-pointer">
+                                <div data-title="{{ 'PROFILE.INFO' | translate }}" name="Info" bs-pane>
+                                    <div class="profile-well">
+                                        <h4>{{ modalOptions.parentScope.AUTH.user().Username }}</h4>
+                                        <div class="separator-line"></div>
+                                        <div>{{ modalOptions.parentScope.AUTH.user().Name }}</div>
+                                        <div>{{ modalOptions.parentScope.AUTH.user().Gender.Name | translate }}</div>
+                                        <div>{{ modalOptions.parentScope.AUTH.user().BirthDate.date | GMT |
+                                            date:'dd-MM-yyyy'
+                                            }}
+                                        </div>
+                                        <div class="row">
+                                            <div class="btn"
+                                                 ng-repeat="role in modalOptions.parentScope.AUTH.user().Roles">
+                                                <div class="{{ role.Style }}">{{ role.Description | translate }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="separator-line"></div>
+                                        <div ng-repeat="email in modalOptions.parentScope.AUTH.user().Emails">
+                                            {{ email.Email }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div data-title="{{ 'PROFILE.PASSWORD' | translate }}" name="Password" bs-pane>
+                                    <form class="form-horizontal" method="post" name="passwordForm"
+                                          ng-submit="modalOptions.parentScope.changePassword()" novalidate>
+                                        <div class="profile-well">
+                                            <div class="form-group">
+                                                <label class="control-label col-md-4"
+                                                       ng-cloak>{{ 'PROFILE.PASSWORD' | translate }}</label>
+                                                <div class="col-md-8">
+                                                    <input class="form-control input-sm" name="Password" type="password"
+                                                           ng-model="modalOptions.parentScope.AUTH.user().password"
+                                                           validation="min_len:6|alpha_num|required"/>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-4"
+                                                       ng-cloak>{{ 'PROFILE.CONFIRM' | translate }}</label>
+                                                <div class="col-md-8">
+                                                    <input class="form-control input-sm" name="PasswordConfirm"
+                                                           type="password"
+                                                           ng-model="modalOptions.parentScope.AUTH.user().pconfirm"
+                                                           validation="match:modalOptions.parentScope.AUTH.user().password,{{'PROFILE.PASSWORD'|translate}}|required"/>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-md-12">
+                                                    <button class="btn btn-success btn-sm pull-right" type="submit"
+                                                            ng-disabled="passwordForm.$invalid"><i
+                                                            class="fa fa-floppy-o"></i> {{ 'SAVE' | translate}}
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
--->
+</div>
 </div>

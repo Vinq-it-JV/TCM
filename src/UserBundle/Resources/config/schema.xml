@@ -4,35 +4,141 @@
         <column name='id' type='integer' primaryKey='true' autoIncrement='true' />
         <column name='username' type='varchar' size='255' />
         <column name='firstname' type='varchar' size='255' />
+        <column name='middlename' type='varchar' size='255'/>
         <column name='lastname' type='varchar' size='255'/>
-        <column name='email' type='varchar' size='255'/>
+        <column name='gender' type='integer' />
+        <column name='title' type='integer' />
+        <column name='birth_date' type='timestamp' />
         <column name='password' type='varchar' size='255'/>
         <column name='secret' type='varchar' size='255'/>
         <column name='logins' type='integer' default='3'/>
-        <column name='language' type='varchar' size='5' default='en'/>
+        <column name='country' type='integer' />
+        <column name='language' type='integer' />
         <column name='is_enabled' type='boolean' default='true'/>
         <column name='is_external' type='boolean' default='false'/>
         <column name='is_locked' type='boolean' default='false'/>
         <column name='is_expired' type='boolean' default='false'/>
         <behavior name="timestampable" />
+        <foreign-key foreignTable='user_gender'>
+            <reference local='gender' foreign='id'/>
+        </foreign-key>
+        <foreign-key foreignTable='user_title'>
+            <reference local='title' foreign='id'/>
+        </foreign-key>
+        <foreign-key foreignTable='countries'>
+            <reference local='country' foreign='id'/>
+        </foreign-key>
+        <foreign-key foreignTable='countries'>
+            <reference local='language' foreign='id'/>
+        </foreign-key>
     </table>
 
     <table name='role'>
         <column name='id' type='integer' primaryKey='true' autoIncrement='true'/>
         <column name='name' type='varchar' size='255' />
         <column name='description' type='varchar' size='255' />
+        <column name='style' type='varchar' size='255' />
         <behavior name="timestampable" />
     </table>
 
     <table name='user_role' isCrossRef="true">
-        <column name='id' type='integer' autoIncrement='true' primaryKey='true' />
-        <column name='user_id' type='integer' />
-        <column name='role_id' type='integer' />
-        <foreign-key foreignTable='user' onDelete="CASCADE">
+        <column name='user_id' type='integer' primaryKey='true'/>
+        <column name='role_id' type='integer' primaryKey='true'/>
+        <foreign-key foreignTable='user' onDelete='CASCADE'>
             <reference local='user_id' foreign='id'/>
         </foreign-key>
         <foreign-key foreignTable='role'>
             <reference local='role_id' foreign='id'/>
         </foreign-key>
     </table>
+
+    <table name='user_address' isCrossRef="true">
+        <column name='user_id' type='integer' primaryKey='true'/>
+        <column name='address_id' type='integer' primaryKey='true'/>
+        <foreign-key foreignTable='user' onDelete='CASCADE'>
+            <reference local='user_id' foreign='id'/>
+        </foreign-key>
+        <foreign-key foreignTable='address' onDelete='CASCADE'>
+            <reference local='address_id' foreign='id' />
+        </foreign-key>
+    </table>
+
+    <table name='user_email' isCrossRef="true">
+        <column name='user_id' type='integer' primaryKey='true'/>
+        <column name='email_id' type='integer' primaryKey='true'/>
+        <foreign-key foreignTable='user' onDelete='CASCADE'>
+            <reference local='user_id' foreign='id' />
+        </foreign-key>
+        <foreign-key foreignTable='email' onDelete='CASCADE'>
+            <reference local='email_id' foreign='id' />
+        </foreign-key>
+    </table>
+
+    <table name='user_phone' isCrossRef="true">
+        <column name='user_id' type='integer' primaryKey='true'/>
+        <column name='phone_id' type='integer' primaryKey='true'/>
+        <foreign-key foreignTable='user' onDelete='CASCADE'>
+            <reference local='user_id' foreign='id' />
+        </foreign-key>
+        <foreign-key foreignTable='phone' onDelete='CASCADE'>
+            <reference local='phone_id' foreign='id' />
+        </foreign-key>
+    </table>
+
+    <table name='user_gender'>
+        <column name='id' type='integer' primaryKey='true' autoIncrement='true'/>
+        <column name='name_short' type='varchar' size='25' />
+        <column name='name' type='varchar' size='255' />
+    </table>
+
+    <table name='user_title'>
+        <column name='id' type='integer' primaryKey='true' autoIncrement='true' />
+        <column name='name_short' type='varchar' size='25' />
+        <column name='name' type='varchar' size='255' />
+    </table>
+
+    <table name='address_type'>
+        <column name='id' type='integer' primaryKey='true' autoIncrement='true' />
+        <column name='name' type='varchar' size='255' />
+        <column name='description' type='varchar' size='255' />
+    </table>
+
+    <table name='address'>
+        <column name='id' type='integer' primaryKey='true' autoIncrement='true' />
+        <column name='type' type='integer' />
+        <column name='street_name' type='varchar' size='255' />
+        <column name='house_number' type='varchar' size='25' />
+        <column name='extra_info' type='varchar' size='255' />
+        <column name='postal_code' type='varchar' size='25' />
+        <column name='city' type='varchar' size='255' />
+        <column name='country' type='integer' />
+        <column name='map_url' type='varchar' size='255' />
+        <behavior name="timestampable" />
+        <foreign-key foreignTable='countries'>
+            <reference local='country' foreign='id'/>
+        </foreign-key>
+    </table>
+
+    <table name='countries'>
+        <column name='id' type='integer' primaryKey='true' autoIncrement='true' />
+        <column name='name' type='varchar' size='255' />
+        <column name='country_code' type='varchar' size='25' />
+        <column name='language_code' type='varchar' size='25' />
+        <column name='flag' type='varchar' size='25' />
+    </table>
+
+    <table name='email'>
+        <column name='id' type='integer' primaryKey='true' autoIncrement='true'/>
+        <column name='email' type='varchar' size='255' />
+        <column name='description' type='varchar' size='255' />
+        <behavior name="timestampable" />
+    </table>
+
+    <table name='phone'>
+        <column name='id' type='integer' primaryKey='true' autoIncrement='true'/>
+        <column name='phone_number' type='varchar' size='255' />
+        <column name='description' type='varchar' size='255' />
+        <behavior name="timestampable" />
+    </table>
+
 </database>

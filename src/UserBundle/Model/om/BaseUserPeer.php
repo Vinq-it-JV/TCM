@@ -9,9 +9,15 @@ use \PDOStatement;
 use \Propel;
 use \PropelException;
 use \PropelPDO;
+use UserBundle\Model\CountriesPeer;
 use UserBundle\Model\User;
+use UserBundle\Model\UserAddressPeer;
+use UserBundle\Model\UserEmailPeer;
+use UserBundle\Model\UserGenderPeer;
 use UserBundle\Model\UserPeer;
+use UserBundle\Model\UserPhonePeer;
 use UserBundle\Model\UserRolePeer;
+use UserBundle\Model\UserTitlePeer;
 use UserBundle\Model\map\UserTableMap;
 
 abstract class BaseUserPeer
@@ -30,13 +36,13 @@ abstract class BaseUserPeer
     const TM_CLASS = 'UserBundle\\Model\\map\\UserTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 15;
+    const NUM_COLUMNS = 19;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 15;
+    const NUM_HYDRATE_COLUMNS = 19;
 
     /** the column name for the id field */
     const ID = 'user.id';
@@ -47,11 +53,20 @@ abstract class BaseUserPeer
     /** the column name for the firstname field */
     const FIRSTNAME = 'user.firstname';
 
+    /** the column name for the middlename field */
+    const MIDDLENAME = 'user.middlename';
+
     /** the column name for the lastname field */
     const LASTNAME = 'user.lastname';
 
-    /** the column name for the email field */
-    const EMAIL = 'user.email';
+    /** the column name for the gender field */
+    const GENDER = 'user.gender';
+
+    /** the column name for the title field */
+    const TITLE = 'user.title';
+
+    /** the column name for the birth_date field */
+    const BIRTH_DATE = 'user.birth_date';
 
     /** the column name for the password field */
     const PASSWORD = 'user.password';
@@ -61,6 +76,9 @@ abstract class BaseUserPeer
 
     /** the column name for the logins field */
     const LOGINS = 'user.logins';
+
+    /** the column name for the country field */
+    const COUNTRY = 'user.country';
 
     /** the column name for the language field */
     const LANGUAGE = 'user.language';
@@ -102,12 +120,12 @@ abstract class BaseUserPeer
      * e.g. UserPeer::$fieldNames[UserPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'Username', 'Firstname', 'Lastname', 'Email', 'Password', 'Secret', 'Logins', 'Language', 'IsEnabled', 'IsExternal', 'IsLocked', 'IsExpired', 'CreatedAt', 'UpdatedAt', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'username', 'firstname', 'lastname', 'email', 'password', 'secret', 'logins', 'language', 'isEnabled', 'isExternal', 'isLocked', 'isExpired', 'createdAt', 'updatedAt', ),
-        BasePeer::TYPE_COLNAME => array (UserPeer::ID, UserPeer::USERNAME, UserPeer::FIRSTNAME, UserPeer::LASTNAME, UserPeer::EMAIL, UserPeer::PASSWORD, UserPeer::SECRET, UserPeer::LOGINS, UserPeer::LANGUAGE, UserPeer::IS_ENABLED, UserPeer::IS_EXTERNAL, UserPeer::IS_LOCKED, UserPeer::IS_EXPIRED, UserPeer::CREATED_AT, UserPeer::UPDATED_AT, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'USERNAME', 'FIRSTNAME', 'LASTNAME', 'EMAIL', 'PASSWORD', 'SECRET', 'LOGINS', 'LANGUAGE', 'IS_ENABLED', 'IS_EXTERNAL', 'IS_LOCKED', 'IS_EXPIRED', 'CREATED_AT', 'UPDATED_AT', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'username', 'firstname', 'lastname', 'email', 'password', 'secret', 'logins', 'language', 'is_enabled', 'is_external', 'is_locked', 'is_expired', 'created_at', 'updated_at', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, )
+        BasePeer::TYPE_PHPNAME => array ('Id', 'Username', 'Firstname', 'Middlename', 'Lastname', 'Gender', 'Title', 'BirthDate', 'Password', 'Secret', 'Logins', 'Country', 'Language', 'IsEnabled', 'IsExternal', 'IsLocked', 'IsExpired', 'CreatedAt', 'UpdatedAt', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'username', 'firstname', 'middlename', 'lastname', 'gender', 'title', 'birthDate', 'password', 'secret', 'logins', 'country', 'language', 'isEnabled', 'isExternal', 'isLocked', 'isExpired', 'createdAt', 'updatedAt', ),
+        BasePeer::TYPE_COLNAME => array (UserPeer::ID, UserPeer::USERNAME, UserPeer::FIRSTNAME, UserPeer::MIDDLENAME, UserPeer::LASTNAME, UserPeer::GENDER, UserPeer::TITLE, UserPeer::BIRTH_DATE, UserPeer::PASSWORD, UserPeer::SECRET, UserPeer::LOGINS, UserPeer::COUNTRY, UserPeer::LANGUAGE, UserPeer::IS_ENABLED, UserPeer::IS_EXTERNAL, UserPeer::IS_LOCKED, UserPeer::IS_EXPIRED, UserPeer::CREATED_AT, UserPeer::UPDATED_AT, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'USERNAME', 'FIRSTNAME', 'MIDDLENAME', 'LASTNAME', 'GENDER', 'TITLE', 'BIRTH_DATE', 'PASSWORD', 'SECRET', 'LOGINS', 'COUNTRY', 'LANGUAGE', 'IS_ENABLED', 'IS_EXTERNAL', 'IS_LOCKED', 'IS_EXPIRED', 'CREATED_AT', 'UPDATED_AT', ),
+        BasePeer::TYPE_FIELDNAME => array ('id', 'username', 'firstname', 'middlename', 'lastname', 'gender', 'title', 'birth_date', 'password', 'secret', 'logins', 'country', 'language', 'is_enabled', 'is_external', 'is_locked', 'is_expired', 'created_at', 'updated_at', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, )
     );
 
     /**
@@ -117,12 +135,12 @@ abstract class BaseUserPeer
      * e.g. UserPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Username' => 1, 'Firstname' => 2, 'Lastname' => 3, 'Email' => 4, 'Password' => 5, 'Secret' => 6, 'Logins' => 7, 'Language' => 8, 'IsEnabled' => 9, 'IsExternal' => 10, 'IsLocked' => 11, 'IsExpired' => 12, 'CreatedAt' => 13, 'UpdatedAt' => 14, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'username' => 1, 'firstname' => 2, 'lastname' => 3, 'email' => 4, 'password' => 5, 'secret' => 6, 'logins' => 7, 'language' => 8, 'isEnabled' => 9, 'isExternal' => 10, 'isLocked' => 11, 'isExpired' => 12, 'createdAt' => 13, 'updatedAt' => 14, ),
-        BasePeer::TYPE_COLNAME => array (UserPeer::ID => 0, UserPeer::USERNAME => 1, UserPeer::FIRSTNAME => 2, UserPeer::LASTNAME => 3, UserPeer::EMAIL => 4, UserPeer::PASSWORD => 5, UserPeer::SECRET => 6, UserPeer::LOGINS => 7, UserPeer::LANGUAGE => 8, UserPeer::IS_ENABLED => 9, UserPeer::IS_EXTERNAL => 10, UserPeer::IS_LOCKED => 11, UserPeer::IS_EXPIRED => 12, UserPeer::CREATED_AT => 13, UserPeer::UPDATED_AT => 14, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'USERNAME' => 1, 'FIRSTNAME' => 2, 'LASTNAME' => 3, 'EMAIL' => 4, 'PASSWORD' => 5, 'SECRET' => 6, 'LOGINS' => 7, 'LANGUAGE' => 8, 'IS_ENABLED' => 9, 'IS_EXTERNAL' => 10, 'IS_LOCKED' => 11, 'IS_EXPIRED' => 12, 'CREATED_AT' => 13, 'UPDATED_AT' => 14, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'username' => 1, 'firstname' => 2, 'lastname' => 3, 'email' => 4, 'password' => 5, 'secret' => 6, 'logins' => 7, 'language' => 8, 'is_enabled' => 9, 'is_external' => 10, 'is_locked' => 11, 'is_expired' => 12, 'created_at' => 13, 'updated_at' => 14, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, )
+        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Username' => 1, 'Firstname' => 2, 'Middlename' => 3, 'Lastname' => 4, 'Gender' => 5, 'Title' => 6, 'BirthDate' => 7, 'Password' => 8, 'Secret' => 9, 'Logins' => 10, 'Country' => 11, 'Language' => 12, 'IsEnabled' => 13, 'IsExternal' => 14, 'IsLocked' => 15, 'IsExpired' => 16, 'CreatedAt' => 17, 'UpdatedAt' => 18, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'username' => 1, 'firstname' => 2, 'middlename' => 3, 'lastname' => 4, 'gender' => 5, 'title' => 6, 'birthDate' => 7, 'password' => 8, 'secret' => 9, 'logins' => 10, 'country' => 11, 'language' => 12, 'isEnabled' => 13, 'isExternal' => 14, 'isLocked' => 15, 'isExpired' => 16, 'createdAt' => 17, 'updatedAt' => 18, ),
+        BasePeer::TYPE_COLNAME => array (UserPeer::ID => 0, UserPeer::USERNAME => 1, UserPeer::FIRSTNAME => 2, UserPeer::MIDDLENAME => 3, UserPeer::LASTNAME => 4, UserPeer::GENDER => 5, UserPeer::TITLE => 6, UserPeer::BIRTH_DATE => 7, UserPeer::PASSWORD => 8, UserPeer::SECRET => 9, UserPeer::LOGINS => 10, UserPeer::COUNTRY => 11, UserPeer::LANGUAGE => 12, UserPeer::IS_ENABLED => 13, UserPeer::IS_EXTERNAL => 14, UserPeer::IS_LOCKED => 15, UserPeer::IS_EXPIRED => 16, UserPeer::CREATED_AT => 17, UserPeer::UPDATED_AT => 18, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'USERNAME' => 1, 'FIRSTNAME' => 2, 'MIDDLENAME' => 3, 'LASTNAME' => 4, 'GENDER' => 5, 'TITLE' => 6, 'BIRTH_DATE' => 7, 'PASSWORD' => 8, 'SECRET' => 9, 'LOGINS' => 10, 'COUNTRY' => 11, 'LANGUAGE' => 12, 'IS_ENABLED' => 13, 'IS_EXTERNAL' => 14, 'IS_LOCKED' => 15, 'IS_EXPIRED' => 16, 'CREATED_AT' => 17, 'UPDATED_AT' => 18, ),
+        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'username' => 1, 'firstname' => 2, 'middlename' => 3, 'lastname' => 4, 'gender' => 5, 'title' => 6, 'birth_date' => 7, 'password' => 8, 'secret' => 9, 'logins' => 10, 'country' => 11, 'language' => 12, 'is_enabled' => 13, 'is_external' => 14, 'is_locked' => 15, 'is_expired' => 16, 'created_at' => 17, 'updated_at' => 18, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, )
     );
 
     /**
@@ -199,11 +217,15 @@ abstract class BaseUserPeer
             $criteria->addSelectColumn(UserPeer::ID);
             $criteria->addSelectColumn(UserPeer::USERNAME);
             $criteria->addSelectColumn(UserPeer::FIRSTNAME);
+            $criteria->addSelectColumn(UserPeer::MIDDLENAME);
             $criteria->addSelectColumn(UserPeer::LASTNAME);
-            $criteria->addSelectColumn(UserPeer::EMAIL);
+            $criteria->addSelectColumn(UserPeer::GENDER);
+            $criteria->addSelectColumn(UserPeer::TITLE);
+            $criteria->addSelectColumn(UserPeer::BIRTH_DATE);
             $criteria->addSelectColumn(UserPeer::PASSWORD);
             $criteria->addSelectColumn(UserPeer::SECRET);
             $criteria->addSelectColumn(UserPeer::LOGINS);
+            $criteria->addSelectColumn(UserPeer::COUNTRY);
             $criteria->addSelectColumn(UserPeer::LANGUAGE);
             $criteria->addSelectColumn(UserPeer::IS_ENABLED);
             $criteria->addSelectColumn(UserPeer::IS_EXTERNAL);
@@ -215,11 +237,15 @@ abstract class BaseUserPeer
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.username');
             $criteria->addSelectColumn($alias . '.firstname');
+            $criteria->addSelectColumn($alias . '.middlename');
             $criteria->addSelectColumn($alias . '.lastname');
-            $criteria->addSelectColumn($alias . '.email');
+            $criteria->addSelectColumn($alias . '.gender');
+            $criteria->addSelectColumn($alias . '.title');
+            $criteria->addSelectColumn($alias . '.birth_date');
             $criteria->addSelectColumn($alias . '.password');
             $criteria->addSelectColumn($alias . '.secret');
             $criteria->addSelectColumn($alias . '.logins');
+            $criteria->addSelectColumn($alias . '.country');
             $criteria->addSelectColumn($alias . '.language');
             $criteria->addSelectColumn($alias . '.is_enabled');
             $criteria->addSelectColumn($alias . '.is_external');
@@ -434,6 +460,15 @@ abstract class BaseUserPeer
         // Invalidate objects in UserRolePeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         UserRolePeer::clearInstancePool();
+        // Invalidate objects in UserAddressPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        UserAddressPeer::clearInstancePool();
+        // Invalidate objects in UserEmailPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        UserEmailPeer::clearInstancePool();
+        // Invalidate objects in UserPhonePeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        UserPhonePeer::clearInstancePool();
     }
 
     /**
@@ -528,6 +563,1329 @@ abstract class BaseUserPeer
         }
 
         return array($obj, $col);
+    }
+
+
+    /**
+     * Returns the number of rows matching criteria, joining the related UserGender table
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinUserGender(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(UserPeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            UserPeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
+
+        // Set the correct dbName
+        $criteria->setDbName(UserPeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(UserPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(UserPeer::GENDER, UserGenderPeer::ID, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
+    }
+
+
+    /**
+     * Returns the number of rows matching criteria, joining the related UserTitle table
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinUserTitle(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(UserPeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            UserPeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
+
+        // Set the correct dbName
+        $criteria->setDbName(UserPeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(UserPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(UserPeer::TITLE, UserTitlePeer::ID, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
+    }
+
+
+    /**
+     * Returns the number of rows matching criteria, joining the related CountriesRelatedByCountry table
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinCountriesRelatedByCountry(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(UserPeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            UserPeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
+
+        // Set the correct dbName
+        $criteria->setDbName(UserPeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(UserPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(UserPeer::COUNTRY, CountriesPeer::ID, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
+    }
+
+
+    /**
+     * Returns the number of rows matching criteria, joining the related CountriesRelatedByLanguage table
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinCountriesRelatedByLanguage(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(UserPeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            UserPeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
+
+        // Set the correct dbName
+        $criteria->setDbName(UserPeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(UserPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(UserPeer::LANGUAGE, CountriesPeer::ID, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
+    }
+
+
+    /**
+     * Selects a collection of User objects pre-filled with their UserGender objects.
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of User objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinUserGender(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(UserPeer::DATABASE_NAME);
+        }
+
+        UserPeer::addSelectColumns($criteria);
+        $startcol = UserPeer::NUM_HYDRATE_COLUMNS;
+        UserGenderPeer::addSelectColumns($criteria);
+
+        $criteria->addJoin(UserPeer::GENDER, UserGenderPeer::ID, $join_behavior);
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = UserPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = UserPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+
+                $cls = UserPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                UserPeer::addInstanceToPool($obj1, $key1);
+            } // if $obj1 already loaded
+
+            $key2 = UserGenderPeer::getPrimaryKeyHashFromRow($row, $startcol);
+            if ($key2 !== null) {
+                $obj2 = UserGenderPeer::getInstanceFromPool($key2);
+                if (!$obj2) {
+
+                    $cls = UserGenderPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol);
+                    UserGenderPeer::addInstanceToPool($obj2, $key2);
+                } // if obj2 already loaded
+
+                // Add the $obj1 (User) to $obj2 (UserGender)
+                $obj2->addUser($obj1);
+
+            } // if joined row was not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
+
+    /**
+     * Selects a collection of User objects pre-filled with their UserTitle objects.
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of User objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinUserTitle(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(UserPeer::DATABASE_NAME);
+        }
+
+        UserPeer::addSelectColumns($criteria);
+        $startcol = UserPeer::NUM_HYDRATE_COLUMNS;
+        UserTitlePeer::addSelectColumns($criteria);
+
+        $criteria->addJoin(UserPeer::TITLE, UserTitlePeer::ID, $join_behavior);
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = UserPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = UserPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+
+                $cls = UserPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                UserPeer::addInstanceToPool($obj1, $key1);
+            } // if $obj1 already loaded
+
+            $key2 = UserTitlePeer::getPrimaryKeyHashFromRow($row, $startcol);
+            if ($key2 !== null) {
+                $obj2 = UserTitlePeer::getInstanceFromPool($key2);
+                if (!$obj2) {
+
+                    $cls = UserTitlePeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol);
+                    UserTitlePeer::addInstanceToPool($obj2, $key2);
+                } // if obj2 already loaded
+
+                // Add the $obj1 (User) to $obj2 (UserTitle)
+                $obj2->addUser($obj1);
+
+            } // if joined row was not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
+
+    /**
+     * Selects a collection of User objects pre-filled with their Countries objects.
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of User objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinCountriesRelatedByCountry(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(UserPeer::DATABASE_NAME);
+        }
+
+        UserPeer::addSelectColumns($criteria);
+        $startcol = UserPeer::NUM_HYDRATE_COLUMNS;
+        CountriesPeer::addSelectColumns($criteria);
+
+        $criteria->addJoin(UserPeer::COUNTRY, CountriesPeer::ID, $join_behavior);
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = UserPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = UserPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+
+                $cls = UserPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                UserPeer::addInstanceToPool($obj1, $key1);
+            } // if $obj1 already loaded
+
+            $key2 = CountriesPeer::getPrimaryKeyHashFromRow($row, $startcol);
+            if ($key2 !== null) {
+                $obj2 = CountriesPeer::getInstanceFromPool($key2);
+                if (!$obj2) {
+
+                    $cls = CountriesPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol);
+                    CountriesPeer::addInstanceToPool($obj2, $key2);
+                } // if obj2 already loaded
+
+                // Add the $obj1 (User) to $obj2 (Countries)
+                $obj2->addUserRelatedByCountry($obj1);
+
+            } // if joined row was not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
+
+    /**
+     * Selects a collection of User objects pre-filled with their Countries objects.
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of User objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinCountriesRelatedByLanguage(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(UserPeer::DATABASE_NAME);
+        }
+
+        UserPeer::addSelectColumns($criteria);
+        $startcol = UserPeer::NUM_HYDRATE_COLUMNS;
+        CountriesPeer::addSelectColumns($criteria);
+
+        $criteria->addJoin(UserPeer::LANGUAGE, CountriesPeer::ID, $join_behavior);
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = UserPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = UserPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+
+                $cls = UserPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                UserPeer::addInstanceToPool($obj1, $key1);
+            } // if $obj1 already loaded
+
+            $key2 = CountriesPeer::getPrimaryKeyHashFromRow($row, $startcol);
+            if ($key2 !== null) {
+                $obj2 = CountriesPeer::getInstanceFromPool($key2);
+                if (!$obj2) {
+
+                    $cls = CountriesPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol);
+                    CountriesPeer::addInstanceToPool($obj2, $key2);
+                } // if obj2 already loaded
+
+                // Add the $obj1 (User) to $obj2 (Countries)
+                $obj2->addUserRelatedByLanguage($obj1);
+
+            } // if joined row was not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
+
+    /**
+     * Returns the number of rows matching criteria, joining all related tables
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinAll(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(UserPeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            UserPeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
+
+        // Set the correct dbName
+        $criteria->setDbName(UserPeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(UserPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(UserPeer::GENDER, UserGenderPeer::ID, $join_behavior);
+
+        $criteria->addJoin(UserPeer::TITLE, UserTitlePeer::ID, $join_behavior);
+
+        $criteria->addJoin(UserPeer::COUNTRY, CountriesPeer::ID, $join_behavior);
+
+        $criteria->addJoin(UserPeer::LANGUAGE, CountriesPeer::ID, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
+    }
+
+    /**
+     * Selects a collection of User objects pre-filled with all related objects.
+     *
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of User objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinAll(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(UserPeer::DATABASE_NAME);
+        }
+
+        UserPeer::addSelectColumns($criteria);
+        $startcol2 = UserPeer::NUM_HYDRATE_COLUMNS;
+
+        UserGenderPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + UserGenderPeer::NUM_HYDRATE_COLUMNS;
+
+        UserTitlePeer::addSelectColumns($criteria);
+        $startcol4 = $startcol3 + UserTitlePeer::NUM_HYDRATE_COLUMNS;
+
+        CountriesPeer::addSelectColumns($criteria);
+        $startcol5 = $startcol4 + CountriesPeer::NUM_HYDRATE_COLUMNS;
+
+        CountriesPeer::addSelectColumns($criteria);
+        $startcol6 = $startcol5 + CountriesPeer::NUM_HYDRATE_COLUMNS;
+
+        $criteria->addJoin(UserPeer::GENDER, UserGenderPeer::ID, $join_behavior);
+
+        $criteria->addJoin(UserPeer::TITLE, UserTitlePeer::ID, $join_behavior);
+
+        $criteria->addJoin(UserPeer::COUNTRY, CountriesPeer::ID, $join_behavior);
+
+        $criteria->addJoin(UserPeer::LANGUAGE, CountriesPeer::ID, $join_behavior);
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = UserPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = UserPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+                $cls = UserPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                UserPeer::addInstanceToPool($obj1, $key1);
+            } // if obj1 already loaded
+
+            // Add objects for joined UserGender rows
+
+            $key2 = UserGenderPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+            if ($key2 !== null) {
+                $obj2 = UserGenderPeer::getInstanceFromPool($key2);
+                if (!$obj2) {
+
+                    $cls = UserGenderPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol2);
+                    UserGenderPeer::addInstanceToPool($obj2, $key2);
+                } // if obj2 loaded
+
+                // Add the $obj1 (User) to the collection in $obj2 (UserGender)
+                $obj2->addUser($obj1);
+            } // if joined row not null
+
+            // Add objects for joined UserTitle rows
+
+            $key3 = UserTitlePeer::getPrimaryKeyHashFromRow($row, $startcol3);
+            if ($key3 !== null) {
+                $obj3 = UserTitlePeer::getInstanceFromPool($key3);
+                if (!$obj3) {
+
+                    $cls = UserTitlePeer::getOMClass();
+
+                    $obj3 = new $cls();
+                    $obj3->hydrate($row, $startcol3);
+                    UserTitlePeer::addInstanceToPool($obj3, $key3);
+                } // if obj3 loaded
+
+                // Add the $obj1 (User) to the collection in $obj3 (UserTitle)
+                $obj3->addUser($obj1);
+            } // if joined row not null
+
+            // Add objects for joined Countries rows
+
+            $key4 = CountriesPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+            if ($key4 !== null) {
+                $obj4 = CountriesPeer::getInstanceFromPool($key4);
+                if (!$obj4) {
+
+                    $cls = CountriesPeer::getOMClass();
+
+                    $obj4 = new $cls();
+                    $obj4->hydrate($row, $startcol4);
+                    CountriesPeer::addInstanceToPool($obj4, $key4);
+                } // if obj4 loaded
+
+                // Add the $obj1 (User) to the collection in $obj4 (Countries)
+                $obj4->addUserRelatedByCountry($obj1);
+            } // if joined row not null
+
+            // Add objects for joined Countries rows
+
+            $key5 = CountriesPeer::getPrimaryKeyHashFromRow($row, $startcol5);
+            if ($key5 !== null) {
+                $obj5 = CountriesPeer::getInstanceFromPool($key5);
+                if (!$obj5) {
+
+                    $cls = CountriesPeer::getOMClass();
+
+                    $obj5 = new $cls();
+                    $obj5->hydrate($row, $startcol5);
+                    CountriesPeer::addInstanceToPool($obj5, $key5);
+                } // if obj5 loaded
+
+                // Add the $obj1 (User) to the collection in $obj5 (Countries)
+                $obj5->addUserRelatedByLanguage($obj1);
+            } // if joined row not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
+
+    /**
+     * Returns the number of rows matching criteria, joining the related UserGender table
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinAllExceptUserGender(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(UserPeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            UserPeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY should not affect count
+
+        // Set the correct dbName
+        $criteria->setDbName(UserPeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(UserPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(UserPeer::TITLE, UserTitlePeer::ID, $join_behavior);
+
+        $criteria->addJoin(UserPeer::COUNTRY, CountriesPeer::ID, $join_behavior);
+
+        $criteria->addJoin(UserPeer::LANGUAGE, CountriesPeer::ID, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
+    }
+
+
+    /**
+     * Returns the number of rows matching criteria, joining the related UserTitle table
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinAllExceptUserTitle(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(UserPeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            UserPeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY should not affect count
+
+        // Set the correct dbName
+        $criteria->setDbName(UserPeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(UserPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(UserPeer::GENDER, UserGenderPeer::ID, $join_behavior);
+
+        $criteria->addJoin(UserPeer::COUNTRY, CountriesPeer::ID, $join_behavior);
+
+        $criteria->addJoin(UserPeer::LANGUAGE, CountriesPeer::ID, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
+    }
+
+
+    /**
+     * Returns the number of rows matching criteria, joining the related CountriesRelatedByCountry table
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinAllExceptCountriesRelatedByCountry(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(UserPeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            UserPeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY should not affect count
+
+        // Set the correct dbName
+        $criteria->setDbName(UserPeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(UserPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(UserPeer::GENDER, UserGenderPeer::ID, $join_behavior);
+
+        $criteria->addJoin(UserPeer::TITLE, UserTitlePeer::ID, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
+    }
+
+
+    /**
+     * Returns the number of rows matching criteria, joining the related CountriesRelatedByLanguage table
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinAllExceptCountriesRelatedByLanguage(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(UserPeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            UserPeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY should not affect count
+
+        // Set the correct dbName
+        $criteria->setDbName(UserPeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(UserPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(UserPeer::GENDER, UserGenderPeer::ID, $join_behavior);
+
+        $criteria->addJoin(UserPeer::TITLE, UserTitlePeer::ID, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
+    }
+
+
+    /**
+     * Selects a collection of User objects pre-filled with all related objects except UserGender.
+     *
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of User objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinAllExceptUserGender(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        // $criteria->getDbName() will return the same object if not set to another value
+        // so == check is okay and faster
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(UserPeer::DATABASE_NAME);
+        }
+
+        UserPeer::addSelectColumns($criteria);
+        $startcol2 = UserPeer::NUM_HYDRATE_COLUMNS;
+
+        UserTitlePeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + UserTitlePeer::NUM_HYDRATE_COLUMNS;
+
+        CountriesPeer::addSelectColumns($criteria);
+        $startcol4 = $startcol3 + CountriesPeer::NUM_HYDRATE_COLUMNS;
+
+        CountriesPeer::addSelectColumns($criteria);
+        $startcol5 = $startcol4 + CountriesPeer::NUM_HYDRATE_COLUMNS;
+
+        $criteria->addJoin(UserPeer::TITLE, UserTitlePeer::ID, $join_behavior);
+
+        $criteria->addJoin(UserPeer::COUNTRY, CountriesPeer::ID, $join_behavior);
+
+        $criteria->addJoin(UserPeer::LANGUAGE, CountriesPeer::ID, $join_behavior);
+
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = UserPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = UserPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+                $cls = UserPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                UserPeer::addInstanceToPool($obj1, $key1);
+            } // if obj1 already loaded
+
+                // Add objects for joined UserTitle rows
+
+                $key2 = UserTitlePeer::getPrimaryKeyHashFromRow($row, $startcol2);
+                if ($key2 !== null) {
+                    $obj2 = UserTitlePeer::getInstanceFromPool($key2);
+                    if (!$obj2) {
+
+                        $cls = UserTitlePeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol2);
+                    UserTitlePeer::addInstanceToPool($obj2, $key2);
+                } // if $obj2 already loaded
+
+                // Add the $obj1 (User) to the collection in $obj2 (UserTitle)
+                $obj2->addUser($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Countries rows
+
+                $key3 = CountriesPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+                if ($key3 !== null) {
+                    $obj3 = CountriesPeer::getInstanceFromPool($key3);
+                    if (!$obj3) {
+
+                        $cls = CountriesPeer::getOMClass();
+
+                    $obj3 = new $cls();
+                    $obj3->hydrate($row, $startcol3);
+                    CountriesPeer::addInstanceToPool($obj3, $key3);
+                } // if $obj3 already loaded
+
+                // Add the $obj1 (User) to the collection in $obj3 (Countries)
+                $obj3->addUserRelatedByCountry($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Countries rows
+
+                $key4 = CountriesPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+                if ($key4 !== null) {
+                    $obj4 = CountriesPeer::getInstanceFromPool($key4);
+                    if (!$obj4) {
+
+                        $cls = CountriesPeer::getOMClass();
+
+                    $obj4 = new $cls();
+                    $obj4->hydrate($row, $startcol4);
+                    CountriesPeer::addInstanceToPool($obj4, $key4);
+                } // if $obj4 already loaded
+
+                // Add the $obj1 (User) to the collection in $obj4 (Countries)
+                $obj4->addUserRelatedByLanguage($obj1);
+
+            } // if joined row is not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
+
+    /**
+     * Selects a collection of User objects pre-filled with all related objects except UserTitle.
+     *
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of User objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinAllExceptUserTitle(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        // $criteria->getDbName() will return the same object if not set to another value
+        // so == check is okay and faster
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(UserPeer::DATABASE_NAME);
+        }
+
+        UserPeer::addSelectColumns($criteria);
+        $startcol2 = UserPeer::NUM_HYDRATE_COLUMNS;
+
+        UserGenderPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + UserGenderPeer::NUM_HYDRATE_COLUMNS;
+
+        CountriesPeer::addSelectColumns($criteria);
+        $startcol4 = $startcol3 + CountriesPeer::NUM_HYDRATE_COLUMNS;
+
+        CountriesPeer::addSelectColumns($criteria);
+        $startcol5 = $startcol4 + CountriesPeer::NUM_HYDRATE_COLUMNS;
+
+        $criteria->addJoin(UserPeer::GENDER, UserGenderPeer::ID, $join_behavior);
+
+        $criteria->addJoin(UserPeer::COUNTRY, CountriesPeer::ID, $join_behavior);
+
+        $criteria->addJoin(UserPeer::LANGUAGE, CountriesPeer::ID, $join_behavior);
+
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = UserPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = UserPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+                $cls = UserPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                UserPeer::addInstanceToPool($obj1, $key1);
+            } // if obj1 already loaded
+
+                // Add objects for joined UserGender rows
+
+                $key2 = UserGenderPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+                if ($key2 !== null) {
+                    $obj2 = UserGenderPeer::getInstanceFromPool($key2);
+                    if (!$obj2) {
+
+                        $cls = UserGenderPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol2);
+                    UserGenderPeer::addInstanceToPool($obj2, $key2);
+                } // if $obj2 already loaded
+
+                // Add the $obj1 (User) to the collection in $obj2 (UserGender)
+                $obj2->addUser($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Countries rows
+
+                $key3 = CountriesPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+                if ($key3 !== null) {
+                    $obj3 = CountriesPeer::getInstanceFromPool($key3);
+                    if (!$obj3) {
+
+                        $cls = CountriesPeer::getOMClass();
+
+                    $obj3 = new $cls();
+                    $obj3->hydrate($row, $startcol3);
+                    CountriesPeer::addInstanceToPool($obj3, $key3);
+                } // if $obj3 already loaded
+
+                // Add the $obj1 (User) to the collection in $obj3 (Countries)
+                $obj3->addUserRelatedByCountry($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Countries rows
+
+                $key4 = CountriesPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+                if ($key4 !== null) {
+                    $obj4 = CountriesPeer::getInstanceFromPool($key4);
+                    if (!$obj4) {
+
+                        $cls = CountriesPeer::getOMClass();
+
+                    $obj4 = new $cls();
+                    $obj4->hydrate($row, $startcol4);
+                    CountriesPeer::addInstanceToPool($obj4, $key4);
+                } // if $obj4 already loaded
+
+                // Add the $obj1 (User) to the collection in $obj4 (Countries)
+                $obj4->addUserRelatedByLanguage($obj1);
+
+            } // if joined row is not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
+
+    /**
+     * Selects a collection of User objects pre-filled with all related objects except CountriesRelatedByCountry.
+     *
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of User objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinAllExceptCountriesRelatedByCountry(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        // $criteria->getDbName() will return the same object if not set to another value
+        // so == check is okay and faster
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(UserPeer::DATABASE_NAME);
+        }
+
+        UserPeer::addSelectColumns($criteria);
+        $startcol2 = UserPeer::NUM_HYDRATE_COLUMNS;
+
+        UserGenderPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + UserGenderPeer::NUM_HYDRATE_COLUMNS;
+
+        UserTitlePeer::addSelectColumns($criteria);
+        $startcol4 = $startcol3 + UserTitlePeer::NUM_HYDRATE_COLUMNS;
+
+        $criteria->addJoin(UserPeer::GENDER, UserGenderPeer::ID, $join_behavior);
+
+        $criteria->addJoin(UserPeer::TITLE, UserTitlePeer::ID, $join_behavior);
+
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = UserPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = UserPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+                $cls = UserPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                UserPeer::addInstanceToPool($obj1, $key1);
+            } // if obj1 already loaded
+
+                // Add objects for joined UserGender rows
+
+                $key2 = UserGenderPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+                if ($key2 !== null) {
+                    $obj2 = UserGenderPeer::getInstanceFromPool($key2);
+                    if (!$obj2) {
+
+                        $cls = UserGenderPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol2);
+                    UserGenderPeer::addInstanceToPool($obj2, $key2);
+                } // if $obj2 already loaded
+
+                // Add the $obj1 (User) to the collection in $obj2 (UserGender)
+                $obj2->addUser($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined UserTitle rows
+
+                $key3 = UserTitlePeer::getPrimaryKeyHashFromRow($row, $startcol3);
+                if ($key3 !== null) {
+                    $obj3 = UserTitlePeer::getInstanceFromPool($key3);
+                    if (!$obj3) {
+
+                        $cls = UserTitlePeer::getOMClass();
+
+                    $obj3 = new $cls();
+                    $obj3->hydrate($row, $startcol3);
+                    UserTitlePeer::addInstanceToPool($obj3, $key3);
+                } // if $obj3 already loaded
+
+                // Add the $obj1 (User) to the collection in $obj3 (UserTitle)
+                $obj3->addUser($obj1);
+
+            } // if joined row is not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
+
+    /**
+     * Selects a collection of User objects pre-filled with all related objects except CountriesRelatedByLanguage.
+     *
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of User objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinAllExceptCountriesRelatedByLanguage(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        // $criteria->getDbName() will return the same object if not set to another value
+        // so == check is okay and faster
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(UserPeer::DATABASE_NAME);
+        }
+
+        UserPeer::addSelectColumns($criteria);
+        $startcol2 = UserPeer::NUM_HYDRATE_COLUMNS;
+
+        UserGenderPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + UserGenderPeer::NUM_HYDRATE_COLUMNS;
+
+        UserTitlePeer::addSelectColumns($criteria);
+        $startcol4 = $startcol3 + UserTitlePeer::NUM_HYDRATE_COLUMNS;
+
+        $criteria->addJoin(UserPeer::GENDER, UserGenderPeer::ID, $join_behavior);
+
+        $criteria->addJoin(UserPeer::TITLE, UserTitlePeer::ID, $join_behavior);
+
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = UserPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = UserPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+                $cls = UserPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                UserPeer::addInstanceToPool($obj1, $key1);
+            } // if obj1 already loaded
+
+                // Add objects for joined UserGender rows
+
+                $key2 = UserGenderPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+                if ($key2 !== null) {
+                    $obj2 = UserGenderPeer::getInstanceFromPool($key2);
+                    if (!$obj2) {
+
+                        $cls = UserGenderPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol2);
+                    UserGenderPeer::addInstanceToPool($obj2, $key2);
+                } // if $obj2 already loaded
+
+                // Add the $obj1 (User) to the collection in $obj2 (UserGender)
+                $obj2->addUser($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined UserTitle rows
+
+                $key3 = UserTitlePeer::getPrimaryKeyHashFromRow($row, $startcol3);
+                if ($key3 !== null) {
+                    $obj3 = UserTitlePeer::getInstanceFromPool($key3);
+                    if (!$obj3) {
+
+                        $cls = UserTitlePeer::getOMClass();
+
+                    $obj3 = new $cls();
+                    $obj3->hydrate($row, $startcol3);
+                    UserTitlePeer::addInstanceToPool($obj3, $key3);
+                } // if $obj3 already loaded
+
+                // Add the $obj1 (User) to the collection in $obj3 (UserTitle)
+                $obj3->addUser($obj1);
+
+            } // if joined row is not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
     }
 
     /**
@@ -773,6 +2131,24 @@ abstract class BaseUserPeer
 
             $criteria->add(UserRolePeer::USER_ID, $obj->getId());
             $affectedRows += UserRolePeer::doDelete($criteria, $con);
+
+            // delete related UserAddress objects
+            $criteria = new Criteria(UserAddressPeer::DATABASE_NAME);
+
+            $criteria->add(UserAddressPeer::USER_ID, $obj->getId());
+            $affectedRows += UserAddressPeer::doDelete($criteria, $con);
+
+            // delete related UserEmail objects
+            $criteria = new Criteria(UserEmailPeer::DATABASE_NAME);
+
+            $criteria->add(UserEmailPeer::USER_ID, $obj->getId());
+            $affectedRows += UserEmailPeer::doDelete($criteria, $con);
+
+            // delete related UserPhone objects
+            $criteria = new Criteria(UserPhonePeer::DATABASE_NAME);
+
+            $criteria->add(UserPhonePeer::USER_ID, $obj->getId());
+            $affectedRows += UserPhonePeer::doDelete($criteria, $con);
         }
 
         return $affectedRows;

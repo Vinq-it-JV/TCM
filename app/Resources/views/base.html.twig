@@ -14,7 +14,7 @@
         {% block stylesheets %}
             <link href="{{ asset('bundles/app/css/style.css') }}" type="text/css" rel="stylesheet"/>
         {% endblock %}
-        {% block javascripts %}
+        {% block global_javascripts %}
             <script type='text/javascript'>
                 var translationPrefix = "{{ asset('bundles/app/translations/') }}";
                 var templatePrefix = "{{ asset('bundles/app/templates/') }}";
@@ -42,9 +42,10 @@
             <script src="{{ asset('bundles/app/js/angular-resource/angular-resource.min.js') }}"></script>
             <script src="{{ asset('bundles/app/js/angular-ui-router/angular-ui-router.min.js') }}"></script>
             <script src="{{ asset('bundles/app/js/angular-validation/angular-validation.min.js') }}"></script>
+            <script src="{{ asset('bundles/app/js/angular-select/select.min.js') }}"></script>
 
-            <script src="{{ asset('bundles/app/js/smart-table/smart-table.min.js') }}"></script>
-            <script src="{{ asset('bundles/app/js/semantic/semantic.min.js') }}"></script>
+            <script src="{{ asset('bundles/app/js/moment/moment-with-locales.min.js') }}"></script>
+            <script src="{{ asset('bundles/app/js/smart-table/smart-table.js') }}"></script>
 
             <script src="/js/fos_js_routes.js"></script>
 
@@ -58,12 +59,15 @@
             <script src="{{ asset('bundles/app/js/app/services/pages.js') }}"></script>
             <script src="{{ asset('bundles/app/js/app/services/user.js') }}"></script>
 
+            <script src="{{ asset('bundles/app/js/app/filters/gmt.js') }}"></script>
+
             <script src="{{ asset('bundles/app/js/app/datasets/languages.js') }}"></script>
             <script src="{{ asset('bundles/app/js/app/datasets/roles.js') }}"></script>
-            <script src="{{ asset('bundles/app/js/app/datasets/users.js') }}"></script>
 
             <script src="{{ asset('bundles/app/js/app/directives/focus.js') }}"></script>
             <script src="{{ asset('bundles/app/js/app/directives/persist.js') }}"></script>
+            <script src="{{ asset('bundles/app/js/app/directives/st-ratio.js') }}"></script>
+            <script src="{{ asset('bundles/app/js/app/directives/no-enter.js') }}"></script>
         {% endblock %}
     </head>
 
@@ -77,7 +81,7 @@
 
     {% block body %}
         <body id="top" style="height: inherit" ng-app="tcmApp" ng-controller="appCtrl" data-ng-init="init()">
-            <div ng-controller="userCtrl" style="height: inherit">
+            {% block contents %}
 
                 {% block header %}
                 {% endblock %}
@@ -88,7 +92,10 @@
                 {% block footer %}
                 {% endblock %}
 
-            </div>
+            {% endblock %}
         </body>
+    {% endblock %}
+
+    {% block javascripts %}
     {% endblock %}
 </html>

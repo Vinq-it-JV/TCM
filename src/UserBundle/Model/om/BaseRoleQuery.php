@@ -22,12 +22,14 @@ use UserBundle\Model\UserRole;
  * @method RoleQuery orderById($order = Criteria::ASC) Order by the id column
  * @method RoleQuery orderByName($order = Criteria::ASC) Order by the name column
  * @method RoleQuery orderByDescription($order = Criteria::ASC) Order by the description column
+ * @method RoleQuery orderByStyle($order = Criteria::ASC) Order by the style column
  * @method RoleQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
  * @method RoleQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
  *
  * @method RoleQuery groupById() Group by the id column
  * @method RoleQuery groupByName() Group by the name column
  * @method RoleQuery groupByDescription() Group by the description column
+ * @method RoleQuery groupByStyle() Group by the style column
  * @method RoleQuery groupByCreatedAt() Group by the created_at column
  * @method RoleQuery groupByUpdatedAt() Group by the updated_at column
  *
@@ -44,12 +46,14 @@ use UserBundle\Model\UserRole;
  *
  * @method Role findOneByName(string $name) Return the first Role filtered by the name column
  * @method Role findOneByDescription(string $description) Return the first Role filtered by the description column
+ * @method Role findOneByStyle(string $style) Return the first Role filtered by the style column
  * @method Role findOneByCreatedAt(string $created_at) Return the first Role filtered by the created_at column
  * @method Role findOneByUpdatedAt(string $updated_at) Return the first Role filtered by the updated_at column
  *
  * @method array findById(int $id) Return Role objects filtered by the id column
  * @method array findByName(string $name) Return Role objects filtered by the name column
  * @method array findByDescription(string $description) Return Role objects filtered by the description column
+ * @method array findByStyle(string $style) Return Role objects filtered by the style column
  * @method array findByCreatedAt(string $created_at) Return Role objects filtered by the created_at column
  * @method array findByUpdatedAt(string $updated_at) Return Role objects filtered by the updated_at column
  */
@@ -157,7 +161,7 @@ abstract class BaseRoleQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `name`, `description`, `created_at`, `updated_at` FROM `role` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `name`, `description`, `style`, `created_at`, `updated_at` FROM `role` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -347,6 +351,35 @@ abstract class BaseRoleQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query on the style column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByStyle('fooValue');   // WHERE style = 'fooValue'
+     * $query->filterByStyle('%fooValue%'); // WHERE style LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $style The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return RoleQuery The current query, for fluid interface
+     */
+    public function filterByStyle($style = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($style)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $style)) {
+                $style = str_replace('*', '%', $style);
+                $comparison = Criteria::LIKE;
+            }
+        }
+
+        return $this->addUsingAlias(RolePeer::STYLE, $style, $comparison);
+    }
+
+    /**
      * Filter the query on the created_at column
      *
      * Example usage:
@@ -464,7 +497,7 @@ abstract class BaseRoleQuery extends ModelCriteria
      *
      * @return RoleQuery The current query, for fluid interface
      */
-    public function joinUserRole($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinUserRole($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('UserRole');
@@ -499,7 +532,7 @@ abstract class BaseRoleQuery extends ModelCriteria
      *
      * @return   \UserBundle\Model\UserRoleQuery A secondary query class using the current class as primary query
      */
-    public function useUserRoleQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function useUserRoleQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
             ->joinUserRole($relationAlias, $joinType)

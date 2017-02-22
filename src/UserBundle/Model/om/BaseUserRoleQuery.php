@@ -19,11 +19,9 @@ use UserBundle\Model\UserRolePeer;
 use UserBundle\Model\UserRoleQuery;
 
 /**
- * @method UserRoleQuery orderById($order = Criteria::ASC) Order by the id column
  * @method UserRoleQuery orderByUserId($order = Criteria::ASC) Order by the user_id column
  * @method UserRoleQuery orderByRoleId($order = Criteria::ASC) Order by the role_id column
  *
- * @method UserRoleQuery groupById() Group by the id column
  * @method UserRoleQuery groupByUserId() Group by the user_id column
  * @method UserRoleQuery groupByRoleId() Group by the role_id column
  *
@@ -45,7 +43,6 @@ use UserBundle\Model\UserRoleQuery;
  * @method UserRole findOneByUserId(int $user_id) Return the first UserRole filtered by the user_id column
  * @method UserRole findOneByRoleId(int $role_id) Return the first UserRole filtered by the role_id column
  *
- * @method array findById(int $id) Return UserRole objects filtered by the id column
  * @method array findByUserId(int $user_id) Return UserRole objects filtered by the user_id column
  * @method array findByRoleId(int $role_id) Return UserRole objects filtered by the role_id column
  */
@@ -97,10 +94,11 @@ abstract class BaseUserRoleQuery extends ModelCriteria
      * Go fast if the query is untouched.
      *
      * <code>
-     * $obj  = $c->findPk(12, $con);
+     * $obj = $c->findPk(array(12, 34), $con);
      * </code>
      *
-     * @param mixed $key Primary key to use for the query
+     * @param array $key Primary key to use for the query
+                         A Primary key composition: [$user_id, $role_id]
      * @param     PropelPDO $con an optional connection object
      *
      * @return   UserRole|UserRole[]|mixed the result, formatted by the current formatter
@@ -110,7 +108,7 @@ abstract class BaseUserRoleQuery extends ModelCriteria
         if ($key === null) {
             return null;
         }
-        if ((null !== ($obj = UserRolePeer::getInstanceFromPool((string) $key))) && !$this->formatter) {
+        if ((null !== ($obj = UserRolePeer::getInstanceFromPool(serialize(array((string) $key[0], (string) $key[1]))))) && !$this->formatter) {
             // the object is already in the instance pool
             return $obj;
         }
@@ -128,20 +126,6 @@ abstract class BaseUserRoleQuery extends ModelCriteria
     }
 
     /**
-     * Alias of findPk to use instance pooling
-     *
-     * @param     mixed $key Primary key to use for the query
-     * @param     PropelPDO $con A connection object
-     *
-     * @return                 UserRole A model object, or null if the key is not found
-     * @throws PropelException
-     */
-     public function findOneById($key, $con = null)
-     {
-        return $this->findPk($key, $con);
-     }
-
-    /**
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
@@ -153,10 +137,11 @@ abstract class BaseUserRoleQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `user_id`, `role_id` FROM `user_role` WHERE `id` = :p0';
+        $sql = 'SELECT `user_id`, `role_id` FROM `user_role` WHERE `user_id` = :p0 AND `role_id` = :p1';
         try {
             $stmt = $con->prepare($sql);
-            $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
+            $stmt->bindValue(':p0', $key[0], PDO::PARAM_INT);
+            $stmt->bindValue(':p1', $key[1], PDO::PARAM_INT);
             $stmt->execute();
         } catch (Exception $e) {
             Propel::log($e->getMessage(), Propel::LOG_ERR);
@@ -166,7 +151,7 @@ abstract class BaseUserRoleQuery extends ModelCriteria
         if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
             $obj = new UserRole();
             $obj->hydrate($row);
-            UserRolePeer::addInstanceToPool($obj, (string) $key);
+            UserRolePeer::addInstanceToPool($obj, serialize(array((string) $key[0], (string) $key[1])));
         }
         $stmt->closeCursor();
 
@@ -195,7 +180,7 @@ abstract class BaseUserRoleQuery extends ModelCriteria
     /**
      * Find objects by primary key
      * <code>
-     * $objs = $c->findPks(array(12, 56, 832), $con);
+     * $objs = $c->findPks(array(array(12, 56), array(832, 123), array(123, 456)), $con);
      * </code>
      * @param     array $keys Primary keys to use for the query
      * @param     PropelPDO $con an optional connection object
@@ -225,8 +210,10 @@ abstract class BaseUserRoleQuery extends ModelCriteria
      */
     public function filterByPrimaryKey($key)
     {
+        $this->addUsingAlias(UserRolePeer::USER_ID, $key[0], Criteria::EQUAL);
+        $this->addUsingAlias(UserRolePeer::ROLE_ID, $key[1], Criteria::EQUAL);
 
-        return $this->addUsingAlias(UserRolePeer::ID, $key, Criteria::EQUAL);
+        return $this;
     }
 
     /**
@@ -238,50 +225,17 @@ abstract class BaseUserRoleQuery extends ModelCriteria
      */
     public function filterByPrimaryKeys($keys)
     {
-
-        return $this->addUsingAlias(UserRolePeer::ID, $keys, Criteria::IN);
-    }
-
-    /**
-     * Filter the query on the id column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterById(1234); // WHERE id = 1234
-     * $query->filterById(array(12, 34)); // WHERE id IN (12, 34)
-     * $query->filterById(array('min' => 12)); // WHERE id >= 12
-     * $query->filterById(array('max' => 12)); // WHERE id <= 12
-     * </code>
-     *
-     * @param     mixed $id The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return UserRoleQuery The current query, for fluid interface
-     */
-    public function filterById($id = null, $comparison = null)
-    {
-        if (is_array($id)) {
-            $useMinMax = false;
-            if (isset($id['min'])) {
-                $this->addUsingAlias(UserRolePeer::ID, $id['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($id['max'])) {
-                $this->addUsingAlias(UserRolePeer::ID, $id['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
+        if (empty($keys)) {
+            return $this->add(null, '1<>1', Criteria::CUSTOM);
+        }
+        foreach ($keys as $key) {
+            $cton0 = $this->getNewCriterion(UserRolePeer::USER_ID, $key[0], Criteria::EQUAL);
+            $cton1 = $this->getNewCriterion(UserRolePeer::ROLE_ID, $key[1], Criteria::EQUAL);
+            $cton0->addAnd($cton1);
+            $this->addOr($cton0);
         }
 
-        return $this->addUsingAlias(UserRolePeer::ID, $id, $comparison);
+        return $this;
     }
 
     /**
@@ -406,7 +360,7 @@ abstract class BaseUserRoleQuery extends ModelCriteria
      *
      * @return UserRoleQuery The current query, for fluid interface
      */
-    public function joinUser($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinUser($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('User');
@@ -441,7 +395,7 @@ abstract class BaseUserRoleQuery extends ModelCriteria
      *
      * @return   \UserBundle\Model\UserQuery A secondary query class using the current class as primary query
      */
-    public function useUserQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function useUserQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
             ->joinUser($relationAlias, $joinType)
@@ -482,7 +436,7 @@ abstract class BaseUserRoleQuery extends ModelCriteria
      *
      * @return UserRoleQuery The current query, for fluid interface
      */
-    public function joinRole($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinRole($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('Role');
@@ -517,7 +471,7 @@ abstract class BaseUserRoleQuery extends ModelCriteria
      *
      * @return   \UserBundle\Model\RoleQuery A secondary query class using the current class as primary query
      */
-    public function useRoleQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function useRoleQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
             ->joinRole($relationAlias, $joinType)
@@ -534,7 +488,9 @@ abstract class BaseUserRoleQuery extends ModelCriteria
     public function prune($userRole = null)
     {
         if ($userRole) {
-            $this->addUsingAlias(UserRolePeer::ID, $userRole->getId(), Criteria::NOT_EQUAL);
+            $this->addCond('pruneCond0', $this->getAliasedColName(UserRolePeer::USER_ID), $userRole->getUserId(), Criteria::NOT_EQUAL);
+            $this->addCond('pruneCond1', $this->getAliasedColName(UserRolePeer::ROLE_ID), $userRole->getRoleId(), Criteria::NOT_EQUAL);
+            $this->combine(array('pruneCond0', 'pruneCond1'), Criteria::LOGICAL_OR);
         }
 
         return $this;

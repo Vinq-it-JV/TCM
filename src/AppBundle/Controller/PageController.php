@@ -13,10 +13,4 @@ class PageController extends Controller
             'base_dir' => realpath($this->container->getParameter('kernel.root_dir').'/..'),
         ));
     }
-
-    public function semanticAction(Request $request)
-    {
-        return $this->render('AppBundle:semantic:semantic.html.twig', array());
-    }
-
 }

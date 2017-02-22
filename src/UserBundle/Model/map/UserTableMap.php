@@ -45,12 +45,16 @@ class UserTableMap extends TableMap
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
         $this->addColumn('username', 'Username', 'VARCHAR', false, 255, null);
         $this->addColumn('firstname', 'Firstname', 'VARCHAR', false, 255, null);
+        $this->addColumn('middlename', 'Middlename', 'VARCHAR', false, 255, null);
         $this->addColumn('lastname', 'Lastname', 'VARCHAR', false, 255, null);
-        $this->addColumn('email', 'Email', 'VARCHAR', false, 255, null);
+        $this->addForeignKey('gender', 'Gender', 'INTEGER', 'user_gender', 'id', false, null, null);
+        $this->addForeignKey('title', 'Title', 'INTEGER', 'user_title', 'id', false, null, null);
+        $this->addColumn('birth_date', 'BirthDate', 'TIMESTAMP', false, null, null);
         $this->addColumn('password', 'Password', 'VARCHAR', false, 255, null);
         $this->addColumn('secret', 'Secret', 'VARCHAR', false, 255, null);
         $this->addColumn('logins', 'Logins', 'INTEGER', false, null, 3);
-        $this->addColumn('language', 'Language', 'VARCHAR', false, 5, 'en');
+        $this->addForeignKey('country', 'Country', 'INTEGER', 'countries', 'id', false, null, null);
+        $this->addForeignKey('language', 'Language', 'INTEGER', 'countries', 'id', false, null, null);
         $this->addColumn('is_enabled', 'IsEnabled', 'BOOLEAN', false, 1, true);
         $this->addColumn('is_external', 'IsExternal', 'BOOLEAN', false, 1, false);
         $this->addColumn('is_locked', 'IsLocked', 'BOOLEAN', false, 1, false);
@@ -65,8 +69,18 @@ class UserTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('UserGender', 'UserBundle\\Model\\UserGender', RelationMap::MANY_TO_ONE, array('gender' => 'id', ), null, null);
+        $this->addRelation('UserTitle', 'UserBundle\\Model\\UserTitle', RelationMap::MANY_TO_ONE, array('title' => 'id', ), null, null);
+        $this->addRelation('CountriesRelatedByCountry', 'UserBundle\\Model\\Countries', RelationMap::MANY_TO_ONE, array('country' => 'id', ), null, null);
+        $this->addRelation('CountriesRelatedByLanguage', 'UserBundle\\Model\\Countries', RelationMap::MANY_TO_ONE, array('language' => 'id', ), null, null);
         $this->addRelation('UserRole', 'UserBundle\\Model\\UserRole', RelationMap::ONE_TO_MANY, array('id' => 'user_id', ), 'CASCADE', null, 'UserRoles');
+        $this->addRelation('UserAddress', 'UserBundle\\Model\\UserAddress', RelationMap::ONE_TO_MANY, array('id' => 'user_id', ), 'CASCADE', null, 'UserAddresses');
+        $this->addRelation('UserEmail', 'UserBundle\\Model\\UserEmail', RelationMap::ONE_TO_MANY, array('id' => 'user_id', ), 'CASCADE', null, 'UserEmails');
+        $this->addRelation('UserPhone', 'UserBundle\\Model\\UserPhone', RelationMap::ONE_TO_MANY, array('id' => 'user_id', ), 'CASCADE', null, 'UserPhones');
         $this->addRelation('Role', 'UserBundle\\Model\\Role', RelationMap::MANY_TO_MANY, array(), null, null, 'Roles');
+        $this->addRelation('Address', 'UserBundle\\Model\\Address', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'Addresses');
+        $this->addRelation('Email', 'UserBundle\\Model\\Email', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'Emails');
+        $this->addRelation('Phone', 'UserBundle\\Model\\Phone', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'Phones');
     } // buildRelations()
 
     /**

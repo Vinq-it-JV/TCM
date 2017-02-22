@@ -1,12 +1,13 @@
-# Portal home / dashboard
+# TCM home / dashboard
 tcm_home:
     path:     /
     defaults: { _controller: AppBundle:Page:index }
     options:
         expose: true
 
-semantic_test:
-    path:     /semantic
-    defaults: { _controller: AppBundle:Page:semantic }
+tcm_profile_change_password:
+    path:     /profile/change/password
+    methods:  [POST]
+    defaults: { _controller: UserBundle:Security:changePassword }
     options:
         expose: true

@@ -31,16 +31,13 @@ abstract class BaseUserRolePeer
     const TM_CLASS = 'UserBundle\\Model\\map\\UserRoleTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 3;
+    const NUM_COLUMNS = 2;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 3;
-
-    /** the column name for the id field */
-    const ID = 'user_role.id';
+    const NUM_HYDRATE_COLUMNS = 2;
 
     /** the column name for the user_id field */
     const USER_ID = 'user_role.user_id';
@@ -67,12 +64,12 @@ abstract class BaseUserRolePeer
      * e.g. UserRolePeer::$fieldNames[UserRolePeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'UserId', 'RoleId', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'userId', 'roleId', ),
-        BasePeer::TYPE_COLNAME => array (UserRolePeer::ID, UserRolePeer::USER_ID, UserRolePeer::ROLE_ID, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'USER_ID', 'ROLE_ID', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'user_id', 'role_id', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, )
+        BasePeer::TYPE_PHPNAME => array ('UserId', 'RoleId', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('userId', 'roleId', ),
+        BasePeer::TYPE_COLNAME => array (UserRolePeer::USER_ID, UserRolePeer::ROLE_ID, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('USER_ID', 'ROLE_ID', ),
+        BasePeer::TYPE_FIELDNAME => array ('user_id', 'role_id', ),
+        BasePeer::TYPE_NUM => array (0, 1, )
     );
 
     /**
@@ -82,12 +79,12 @@ abstract class BaseUserRolePeer
      * e.g. UserRolePeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'UserId' => 1, 'RoleId' => 2, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'userId' => 1, 'roleId' => 2, ),
-        BasePeer::TYPE_COLNAME => array (UserRolePeer::ID => 0, UserRolePeer::USER_ID => 1, UserRolePeer::ROLE_ID => 2, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'USER_ID' => 1, 'ROLE_ID' => 2, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'user_id' => 1, 'role_id' => 2, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, )
+        BasePeer::TYPE_PHPNAME => array ('UserId' => 0, 'RoleId' => 1, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('userId' => 0, 'roleId' => 1, ),
+        BasePeer::TYPE_COLNAME => array (UserRolePeer::USER_ID => 0, UserRolePeer::ROLE_ID => 1, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('USER_ID' => 0, 'ROLE_ID' => 1, ),
+        BasePeer::TYPE_FIELDNAME => array ('user_id' => 0, 'role_id' => 1, ),
+        BasePeer::TYPE_NUM => array (0, 1, )
     );
 
     /**
@@ -161,11 +158,9 @@ abstract class BaseUserRolePeer
     public static function addSelectColumns(Criteria $criteria, $alias = null)
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(UserRolePeer::ID);
             $criteria->addSelectColumn(UserRolePeer::USER_ID);
             $criteria->addSelectColumn(UserRolePeer::ROLE_ID);
         } else {
-            $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.user_id');
             $criteria->addSelectColumn($alias . '.role_id');
         }
@@ -294,7 +289,7 @@ abstract class BaseUserRolePeer
     {
         if (Propel::isInstancePoolingEnabled()) {
             if ($key === null) {
-                $key = (string) $obj->getId();
+                $key = serialize(array((string) $obj->getUserId(), (string) $obj->getRoleId()));
             } // if key === null
             UserRolePeer::$instances[$key] = $obj;
         }
@@ -317,10 +312,10 @@ abstract class BaseUserRolePeer
     {
         if (Propel::isInstancePoolingEnabled() && $value !== null) {
             if (is_object($value) && $value instanceof UserRole) {
-                $key = (string) $value->getId();
-            } elseif (is_scalar($value)) {
+                $key = serialize(array((string) $value->getUserId(), (string) $value->getRoleId()));
+            } elseif (is_array($value) && count($value) === 2) {
                 // assume we've been passed a primary key
-                $key = (string) $value;
+                $key = serialize(array((string) $value[0], (string) $value[1]));
             } else {
                 $e = new PropelException("Invalid value passed to removeInstanceFromPool().  Expected primary key or UserRole object; got " . (is_object($value) ? get_class($value) . ' object.' : var_export($value,true)));
                 throw $e;
@@ -387,11 +382,11 @@ abstract class BaseUserRolePeer
     public static function getPrimaryKeyHashFromRow($row, $startcol = 0)
     {
         // If the PK cannot be derived from the row, return null.
-        if ($row[$startcol] === null) {
+        if ($row[$startcol] === null && $row[$startcol + 1] === null) {
             return null;
         }
 
-        return (string) $row[$startcol];
+        return serialize(array((string) $row[$startcol], (string) $row[$startcol + 1]));
     }
 
     /**
@@ -406,7 +401,7 @@ abstract class BaseUserRolePeer
     public static function getPrimaryKeyFromRow($row, $startcol = 0)
     {
 
-        return (int) $row[$startcol];
+        return array((int) $row[$startcol], (int) $row[$startcol + 1]);
     }
 
     /**
@@ -1154,10 +1149,6 @@ abstract class BaseUserRolePeer
             $criteria = $values->buildCriteria(); // build Criteria from UserRole object
         }
 
-        if ($criteria->containsKey(UserRolePeer::ID) && $criteria->keyContainsValue(UserRolePeer::ID) ) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key ('.UserRolePeer::ID.')');
-        }
-
 
         // Set the correct dbName
         $criteria->setDbName(UserRolePeer::DATABASE_NAME);
@@ -1196,10 +1187,18 @@ abstract class BaseUserRolePeer
         if ($values instanceof Criteria) {
             $criteria = clone $values; // rename for clarity
 
-            $comparison = $criteria->getComparison(UserRolePeer::ID);
-            $value = $criteria->remove(UserRolePeer::ID);
+            $comparison = $criteria->getComparison(UserRolePeer::USER_ID);
+            $value = $criteria->remove(UserRolePeer::USER_ID);
             if ($value) {
-                $selectCriteria->add(UserRolePeer::ID, $value, $comparison);
+                $selectCriteria->add(UserRolePeer::USER_ID, $value, $comparison);
+            } else {
+                $selectCriteria->setPrimaryTableName(UserRolePeer::TABLE_NAME);
+            }
+
+            $comparison = $criteria->getComparison(UserRolePeer::ROLE_ID);
+            $value = $criteria->remove(UserRolePeer::ROLE_ID);
+            if ($value) {
+                $selectCriteria->add(UserRolePeer::ROLE_ID, $value, $comparison);
             } else {
                 $selectCriteria->setPrimaryTableName(UserRolePeer::TABLE_NAME);
             }
@@ -1278,10 +1277,18 @@ abstract class BaseUserRolePeer
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
             $criteria = new Criteria(UserRolePeer::DATABASE_NAME);
-            $criteria->add(UserRolePeer::ID, (array) $values, Criteria::IN);
-            // invalidate the cache for this object(s)
-            foreach ((array) $values as $singleval) {
-                UserRolePeer::removeInstanceFromPool($singleval);
+            // primary key is composite; we therefore, expect
+            // the primary key passed to be an array of pkey values
+            if (count($values) == count($values, COUNT_RECURSIVE)) {
+                // array is not multi-dimensional
+                $values = array($values);
+            }
+            foreach ($values as $value) {
+                $criterion = $criteria->getNewCriterion(UserRolePeer::USER_ID, $value[0]);
+                $criterion->addAnd($criteria->getNewCriterion(UserRolePeer::ROLE_ID, $value[1]));
+                $criteria->addOr($criterion);
+                // we can invalidate the cache for this single PK
+                UserRolePeer::removeInstanceFromPool($value);
             }
         }
 
@@ -1344,58 +1351,28 @@ abstract class BaseUserRolePeer
     }
 
     /**
-     * Retrieve a single object by pkey.
-     *
-     * @param int $pk the primary key.
-     * @param      PropelPDO $con the connection to use
+     * Retrieve object using using composite pkey values.
+     * @param   int $user_id
+     * @param   int $role_id
+     * @param      PropelPDO $con
      * @return UserRole
      */
-    public static function retrieveByPK($pk, PropelPDO $con = null)
-    {
-
-        if (null !== ($obj = UserRolePeer::getInstanceFromPool((string) $pk))) {
-            return $obj;
+    public static function retrieveByPK($user_id, $role_id, PropelPDO $con = null) {
+        $_instancePoolKey = serialize(array((string) $user_id, (string) $role_id));
+         if (null !== ($obj = UserRolePeer::getInstanceFromPool($_instancePoolKey))) {
+             return $obj;
         }
 
         if ($con === null) {
             $con = Propel::getConnection(UserRolePeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
-
         $criteria = new Criteria(UserRolePeer::DATABASE_NAME);
-        $criteria->add(UserRolePeer::ID, $pk);
-
+        $criteria->add(UserRolePeer::USER_ID, $user_id);
+        $criteria->add(UserRolePeer::ROLE_ID, $role_id);
         $v = UserRolePeer::doSelect($criteria, $con);
 
-        return !empty($v) > 0 ? $v[0] : null;
+        return !empty($v) ? $v[0] : null;
     }
-
-    /**
-     * Retrieve multiple objects by pkey.
-     *
-     * @param      array $pks List of primary keys
-     * @param      PropelPDO $con the connection to use
-     * @return UserRole[]
-     * @throws PropelException Any exceptions caught during processing will be
-     *		 rethrown wrapped into a PropelException.
-     */
-    public static function retrieveByPKs($pks, PropelPDO $con = null)
-    {
-        if ($con === null) {
-            $con = Propel::getConnection(UserRolePeer::DATABASE_NAME, Propel::CONNECTION_READ);
-        }
-
-        $objs = null;
-        if (empty($pks)) {
-            $objs = array();
-        } else {
-            $criteria = new Criteria(UserRolePeer::DATABASE_NAME);
-            $criteria->add(UserRolePeer::ID, $pks, Criteria::IN);
-            $objs = UserRolePeer::doSelect($criteria, $con);
-        }
-
-        return $objs;
-    }
-
 } // BaseUserRolePeer
 
 // This is the static code needed to register the TableMap for this table with the main Propel class.

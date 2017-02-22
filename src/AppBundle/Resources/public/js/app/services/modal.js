@@ -8,6 +8,7 @@ angular
     function($rootScope, $modal, $translate) {
 
     var $scope = $rootScope.$new();
+    var modal = '';
 
     $scope.modalDefaults = {
         keyboard : true,
@@ -36,7 +37,13 @@ angular
 
         console.log(modalDefaults.templateUrl);
 
-        return $modal({	scope : $scope,	templateUrl : modalDefaults.templateUrl, backdrop : modalDefaults.backdrop });
+        modal = $modal({scope : $scope,	templateUrl : modalDefaults.templateUrl, backdrop : modalDefaults.backdrop });
+        return modal;
+    };
+
+    var close = function ()
+    {
+        modal.hide();
     };
 
     return {
@@ -45,6 +52,10 @@ angular
             if (!customModalDefaults)
                 customModalDefaults = {};
             return show(customModalDefaults, customModalOptions);
+        },
+        close : function()
+        {
+            return close();
         }
     }
 } ]);

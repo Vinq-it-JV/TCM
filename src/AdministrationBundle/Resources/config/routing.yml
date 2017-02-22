@@ -1,0 +1,79 @@
+administration_dashboard:
+    path:     /
+    defaults: { _controller: AdministrationBundle:Page:dashboard }
+    options:
+        expose: true
+
+administration_users:
+    path:     /users
+    defaults: { _controller: AdministrationBundle:Page:users }
+    options:
+        expose: true
+
+administration_user_edit:
+    path:     /user/{userid}/edit
+    defaults: { _controller: AdministrationBundle:Page:editUser }
+    options:
+        expose: true
+
+administration_user_add:
+    path:     /user/add
+    defaults: { _controller: AdministrationBundle:Page:addUser }
+    options:
+        expose: true
+
+administration_users_get:
+    path:     /users/get
+    defaults: { _controller: AdministrationBundle:Data:getUsers }
+    methods: [GET]
+    options:
+        expose: true
+
+administration_user_get:
+    path:     /user/{userid}/get
+    defaults: { _controller: AdministrationBundle:Data:getUser }
+    methods: [GET]
+    options:
+        expose: true
+
+administration_user_new:
+    path:     /user/new
+    defaults: { _controller: AdministrationBundle:Data:newUser }
+    methods: [GET]
+    options:
+        expose: true
+
+administration_user_save:
+    path:     /user/{userid}/save
+    defaults: { _controller: AdministrationBundle:Data:saveUser }
+    methods: [POST, PUT]
+    options:
+        expose: true
+
+administration_user_delete:
+    path:     /user/{userid}/delete
+    defaults: { _controller: AdministrationBundle:Data:deleteUser }
+    methods: [DELETE]
+    options:
+        expose: true
+
+administration_user_delete_email:
+    path:     /user/{userid}/email/{emailid}/delete
+    defaults: { _controller: AdministrationBundle:Data:deleteUserEmail }
+    methods: [DELETE]
+    options:
+        expose: true
+
+administration_user_delete_phone:
+    path:     /user/{userid}/phone/{phoneid}/delete
+    defaults: { _controller: AdministrationBundle:Data:deleteUserPhone }
+    methods: [DELETE]
+    options:
+        expose: true
+
+administration_user_delete_address:
+    path:     /user/{userid}/address/{addressid}/delete
+    defaults: { _controller: AdministrationBundle:Data:deleteUserAddress }
+    methods: [DELETE]
+    options:
+        expose: true

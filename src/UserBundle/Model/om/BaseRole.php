@@ -63,6 +63,12 @@ abstract class BaseRole extends BaseObject implements Persistent
     protected $description;
 
     /**
+     * The value for the style field.
+     * @var        string
+     */
+    protected $style;
+
+    /**
      * The value for the created_at field.
      * @var        string
      */
@@ -148,6 +154,17 @@ abstract class BaseRole extends BaseObject implements Persistent
     {
 
         return $this->description;
+    }
+
+    /**
+     * Get the [style] column value.
+     *
+     * @return string
+     */
+    public function getStyle()
+    {
+
+        return $this->style;
     }
 
     /**
@@ -294,6 +311,27 @@ abstract class BaseRole extends BaseObject implements Persistent
     } // setDescription()
 
     /**
+     * Set the value of [style] column.
+     *
+     * @param  string $v new value
+     * @return Role The current object (for fluent API support)
+     */
+    public function setStyle($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->style !== $v) {
+            $this->style = $v;
+            $this->modifiedColumns[] = RolePeer::STYLE;
+        }
+
+
+        return $this;
+    } // setStyle()
+
+    /**
      * Sets the value of [created_at] column to a normalized version of the date/time value specified.
      *
      * @param mixed $v string, integer (timestamp), or DateTime value.
@@ -374,8 +412,9 @@ abstract class BaseRole extends BaseObject implements Persistent
             $this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
             $this->name = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
             $this->description = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
-            $this->created_at = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
-            $this->updated_at = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
+            $this->style = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
+            $this->created_at = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
+            $this->updated_at = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -385,7 +424,7 @@ abstract class BaseRole extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 5; // 5 = RolePeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 6; // 6 = RolePeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Role object", $e);
@@ -613,10 +652,9 @@ abstract class BaseRole extends BaseObject implements Persistent
 
             if ($this->userRolesScheduledForDeletion !== null) {
                 if (!$this->userRolesScheduledForDeletion->isEmpty()) {
-                    foreach ($this->userRolesScheduledForDeletion as $userRole) {
-                        // need to save related object because we set the relation to null
-                        $userRole->save($con);
-                    }
+                    UserRoleQuery::create()
+                        ->filterByPrimaryKeys($this->userRolesScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
                     $this->userRolesScheduledForDeletion = null;
                 }
             }
@@ -664,6 +702,9 @@ abstract class BaseRole extends BaseObject implements Persistent
         if ($this->isColumnModified(RolePeer::DESCRIPTION)) {
             $modifiedColumns[':p' . $index++]  = '`description`';
         }
+        if ($this->isColumnModified(RolePeer::STYLE)) {
+            $modifiedColumns[':p' . $index++]  = '`style`';
+        }
         if ($this->isColumnModified(RolePeer::CREATED_AT)) {
             $modifiedColumns[':p' . $index++]  = '`created_at`';
         }
@@ -689,6 +730,9 @@ abstract class BaseRole extends BaseObject implements Persistent
                         break;
                     case '`description`':
                         $stmt->bindValue($identifier, $this->description, PDO::PARAM_STR);
+                        break;
+                    case '`style`':
+                        $stmt->bindValue($identifier, $this->style, PDO::PARAM_STR);
                         break;
                     case '`created_at`':
                         $stmt->bindValue($identifier, $this->created_at, PDO::PARAM_STR);
@@ -848,9 +892,12 @@ abstract class BaseRole extends BaseObject implements Persistent
                 return $this->getDescription();
                 break;
             case 3:
-                return $this->getCreatedAt();
+                return $this->getStyle();
                 break;
             case 4:
+                return $this->getCreatedAt();
+                break;
+            case 5:
                 return $this->getUpdatedAt();
                 break;
             default:
@@ -885,8 +932,9 @@ abstract class BaseRole extends BaseObject implements Persistent
             $keys[0] => $this->getId(),
             $keys[1] => $this->getName(),
             $keys[2] => $this->getDescription(),
-            $keys[3] => $this->getCreatedAt(),
-            $keys[4] => $this->getUpdatedAt(),
+            $keys[3] => $this->getStyle(),
+            $keys[4] => $this->getCreatedAt(),
+            $keys[5] => $this->getUpdatedAt(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -941,9 +989,12 @@ abstract class BaseRole extends BaseObject implements Persistent
                 $this->setDescription($value);
                 break;
             case 3:
-                $this->setCreatedAt($value);
+                $this->setStyle($value);
                 break;
             case 4:
+                $this->setCreatedAt($value);
+                break;
+            case 5:
                 $this->setUpdatedAt($value);
                 break;
         } // switch()
@@ -973,8 +1024,9 @@ abstract class BaseRole extends BaseObject implements Persistent
         if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
         if (array_key_exists($keys[1], $arr)) $this->setName($arr[$keys[1]]);
         if (array_key_exists($keys[2], $arr)) $this->setDescription($arr[$keys[2]]);
-        if (array_key_exists($keys[3], $arr)) $this->setCreatedAt($arr[$keys[3]]);
-        if (array_key_exists($keys[4], $arr)) $this->setUpdatedAt($arr[$keys[4]]);
+        if (array_key_exists($keys[3], $arr)) $this->setStyle($arr[$keys[3]]);
+        if (array_key_exists($keys[4], $arr)) $this->setCreatedAt($arr[$keys[4]]);
+        if (array_key_exists($keys[5], $arr)) $this->setUpdatedAt($arr[$keys[5]]);
     }
 
     /**
@@ -989,6 +1041,7 @@ abstract class BaseRole extends BaseObject implements Persistent
         if ($this->isColumnModified(RolePeer::ID)) $criteria->add(RolePeer::ID, $this->id);
         if ($this->isColumnModified(RolePeer::NAME)) $criteria->add(RolePeer::NAME, $this->name);
         if ($this->isColumnModified(RolePeer::DESCRIPTION)) $criteria->add(RolePeer::DESCRIPTION, $this->description);
+        if ($this->isColumnModified(RolePeer::STYLE)) $criteria->add(RolePeer::STYLE, $this->style);
         if ($this->isColumnModified(RolePeer::CREATED_AT)) $criteria->add(RolePeer::CREATED_AT, $this->created_at);
         if ($this->isColumnModified(RolePeer::UPDATED_AT)) $criteria->add(RolePeer::UPDATED_AT, $this->updated_at);
 
@@ -1056,6 +1109,7 @@ abstract class BaseRole extends BaseObject implements Persistent
     {
         $copyObj->setName($this->getName());
         $copyObj->setDescription($this->getDescription());
+        $copyObj->setStyle($this->getStyle());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
 
@@ -1260,7 +1314,10 @@ abstract class BaseRole extends BaseObject implements Persistent
         $userRolesToDelete = $this->getUserRoles(new Criteria(), $con)->diff($userRoles);
 
 
-        $this->userRolesScheduledForDeletion = $userRolesToDelete;
+        //since at least one column in the foreign key is at the same time a PK
+        //we can not just set a PK to NULL in the lines below. We have to store
+        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
+        $this->userRolesScheduledForDeletion = clone $userRolesToDelete;
 
         foreach ($userRolesToDelete as $userRoleRemoved) {
             $userRoleRemoved->setRole(null);
@@ -1356,7 +1413,7 @@ abstract class BaseRole extends BaseObject implements Persistent
                 $this->userRolesScheduledForDeletion = clone $this->collUserRoles;
                 $this->userRolesScheduledForDeletion->clear();
             }
-            $this->userRolesScheduledForDeletion[]= $userRole;
+            $this->userRolesScheduledForDeletion[]= clone $userRole;
             $userRole->setRole(null);
         }
 
@@ -1583,6 +1640,7 @@ abstract class BaseRole extends BaseObject implements Persistent
         $this->id = null;
         $this->name = null;
         $this->description = null;
+        $this->style = null;
         $this->created_at = null;
         $this->updated_at = null;
         $this->alreadyInSave = false;

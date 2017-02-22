@@ -12,21 +12,34 @@ use \PropelCollection;
 use \PropelException;
 use \PropelObjectCollection;
 use \PropelPDO;
+use UserBundle\Model\Address;
+use UserBundle\Model\Countries;
+use UserBundle\Model\Email;
+use UserBundle\Model\Phone;
 use UserBundle\Model\Role;
 use UserBundle\Model\User;
+use UserBundle\Model\UserAddress;
+use UserBundle\Model\UserEmail;
+use UserBundle\Model\UserGender;
 use UserBundle\Model\UserPeer;
+use UserBundle\Model\UserPhone;
 use UserBundle\Model\UserQuery;
 use UserBundle\Model\UserRole;
+use UserBundle\Model\UserTitle;
 
 /**
  * @method UserQuery orderById($order = Criteria::ASC) Order by the id column
  * @method UserQuery orderByUsername($order = Criteria::ASC) Order by the username column
  * @method UserQuery orderByFirstname($order = Criteria::ASC) Order by the firstname column
+ * @method UserQuery orderByMiddlename($order = Criteria::ASC) Order by the middlename column
  * @method UserQuery orderByLastname($order = Criteria::ASC) Order by the lastname column
- * @method UserQuery orderByEmail($order = Criteria::ASC) Order by the email column
+ * @method UserQuery orderByGender($order = Criteria::ASC) Order by the gender column
+ * @method UserQuery orderByTitle($order = Criteria::ASC) Order by the title column
+ * @method UserQuery orderByBirthDate($order = Criteria::ASC) Order by the birth_date column
  * @method UserQuery orderByPassword($order = Criteria::ASC) Order by the password column
  * @method UserQuery orderBySecret($order = Criteria::ASC) Order by the secret column
  * @method UserQuery orderByLogins($order = Criteria::ASC) Order by the logins column
+ * @method UserQuery orderByCountry($order = Criteria::ASC) Order by the country column
  * @method UserQuery orderByLanguage($order = Criteria::ASC) Order by the language column
  * @method UserQuery orderByIsEnabled($order = Criteria::ASC) Order by the is_enabled column
  * @method UserQuery orderByIsExternal($order = Criteria::ASC) Order by the is_external column
@@ -38,11 +51,15 @@ use UserBundle\Model\UserRole;
  * @method UserQuery groupById() Group by the id column
  * @method UserQuery groupByUsername() Group by the username column
  * @method UserQuery groupByFirstname() Group by the firstname column
+ * @method UserQuery groupByMiddlename() Group by the middlename column
  * @method UserQuery groupByLastname() Group by the lastname column
- * @method UserQuery groupByEmail() Group by the email column
+ * @method UserQuery groupByGender() Group by the gender column
+ * @method UserQuery groupByTitle() Group by the title column
+ * @method UserQuery groupByBirthDate() Group by the birth_date column
  * @method UserQuery groupByPassword() Group by the password column
  * @method UserQuery groupBySecret() Group by the secret column
  * @method UserQuery groupByLogins() Group by the logins column
+ * @method UserQuery groupByCountry() Group by the country column
  * @method UserQuery groupByLanguage() Group by the language column
  * @method UserQuery groupByIsEnabled() Group by the is_enabled column
  * @method UserQuery groupByIsExternal() Group by the is_external column
@@ -55,21 +72,53 @@ use UserBundle\Model\UserRole;
  * @method UserQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
  * @method UserQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
+ * @method UserQuery leftJoinUserGender($relationAlias = null) Adds a LEFT JOIN clause to the query using the UserGender relation
+ * @method UserQuery rightJoinUserGender($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UserGender relation
+ * @method UserQuery innerJoinUserGender($relationAlias = null) Adds a INNER JOIN clause to the query using the UserGender relation
+ *
+ * @method UserQuery leftJoinUserTitle($relationAlias = null) Adds a LEFT JOIN clause to the query using the UserTitle relation
+ * @method UserQuery rightJoinUserTitle($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UserTitle relation
+ * @method UserQuery innerJoinUserTitle($relationAlias = null) Adds a INNER JOIN clause to the query using the UserTitle relation
+ *
+ * @method UserQuery leftJoinCountriesRelatedByCountry($relationAlias = null) Adds a LEFT JOIN clause to the query using the CountriesRelatedByCountry relation
+ * @method UserQuery rightJoinCountriesRelatedByCountry($relationAlias = null) Adds a RIGHT JOIN clause to the query using the CountriesRelatedByCountry relation
+ * @method UserQuery innerJoinCountriesRelatedByCountry($relationAlias = null) Adds a INNER JOIN clause to the query using the CountriesRelatedByCountry relation
+ *
+ * @method UserQuery leftJoinCountriesRelatedByLanguage($relationAlias = null) Adds a LEFT JOIN clause to the query using the CountriesRelatedByLanguage relation
+ * @method UserQuery rightJoinCountriesRelatedByLanguage($relationAlias = null) Adds a RIGHT JOIN clause to the query using the CountriesRelatedByLanguage relation
+ * @method UserQuery innerJoinCountriesRelatedByLanguage($relationAlias = null) Adds a INNER JOIN clause to the query using the CountriesRelatedByLanguage relation
+ *
  * @method UserQuery leftJoinUserRole($relationAlias = null) Adds a LEFT JOIN clause to the query using the UserRole relation
  * @method UserQuery rightJoinUserRole($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UserRole relation
  * @method UserQuery innerJoinUserRole($relationAlias = null) Adds a INNER JOIN clause to the query using the UserRole relation
+ *
+ * @method UserQuery leftJoinUserAddress($relationAlias = null) Adds a LEFT JOIN clause to the query using the UserAddress relation
+ * @method UserQuery rightJoinUserAddress($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UserAddress relation
+ * @method UserQuery innerJoinUserAddress($relationAlias = null) Adds a INNER JOIN clause to the query using the UserAddress relation
+ *
+ * @method UserQuery leftJoinUserEmail($relationAlias = null) Adds a LEFT JOIN clause to the query using the UserEmail relation
+ * @method UserQuery rightJoinUserEmail($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UserEmail relation
+ * @method UserQuery innerJoinUserEmail($relationAlias = null) Adds a INNER JOIN clause to the query using the UserEmail relation
+ *
+ * @method UserQuery leftJoinUserPhone($relationAlias = null) Adds a LEFT JOIN clause to the query using the UserPhone relation
+ * @method UserQuery rightJoinUserPhone($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UserPhone relation
+ * @method UserQuery innerJoinUserPhone($relationAlias = null) Adds a INNER JOIN clause to the query using the UserPhone relation
  *
  * @method User findOne(PropelPDO $con = null) Return the first User matching the query
  * @method User findOneOrCreate(PropelPDO $con = null) Return the first User matching the query, or a new User object populated from the query conditions when no match is found
  *
  * @method User findOneByUsername(string $username) Return the first User filtered by the username column
  * @method User findOneByFirstname(string $firstname) Return the first User filtered by the firstname column
+ * @method User findOneByMiddlename(string $middlename) Return the first User filtered by the middlename column
  * @method User findOneByLastname(string $lastname) Return the first User filtered by the lastname column
- * @method User findOneByEmail(string $email) Return the first User filtered by the email column
+ * @method User findOneByGender(int $gender) Return the first User filtered by the gender column
+ * @method User findOneByTitle(int $title) Return the first User filtered by the title column
+ * @method User findOneByBirthDate(string $birth_date) Return the first User filtered by the birth_date column
  * @method User findOneByPassword(string $password) Return the first User filtered by the password column
  * @method User findOneBySecret(string $secret) Return the first User filtered by the secret column
  * @method User findOneByLogins(int $logins) Return the first User filtered by the logins column
- * @method User findOneByLanguage(string $language) Return the first User filtered by the language column
+ * @method User findOneByCountry(int $country) Return the first User filtered by the country column
+ * @method User findOneByLanguage(int $language) Return the first User filtered by the language column
  * @method User findOneByIsEnabled(boolean $is_enabled) Return the first User filtered by the is_enabled column
  * @method User findOneByIsExternal(boolean $is_external) Return the first User filtered by the is_external column
  * @method User findOneByIsLocked(boolean $is_locked) Return the first User filtered by the is_locked column
@@ -80,12 +129,16 @@ use UserBundle\Model\UserRole;
  * @method array findById(int $id) Return User objects filtered by the id column
  * @method array findByUsername(string $username) Return User objects filtered by the username column
  * @method array findByFirstname(string $firstname) Return User objects filtered by the firstname column
+ * @method array findByMiddlename(string $middlename) Return User objects filtered by the middlename column
  * @method array findByLastname(string $lastname) Return User objects filtered by the lastname column
- * @method array findByEmail(string $email) Return User objects filtered by the email column
+ * @method array findByGender(int $gender) Return User objects filtered by the gender column
+ * @method array findByTitle(int $title) Return User objects filtered by the title column
+ * @method array findByBirthDate(string $birth_date) Return User objects filtered by the birth_date column
  * @method array findByPassword(string $password) Return User objects filtered by the password column
  * @method array findBySecret(string $secret) Return User objects filtered by the secret column
  * @method array findByLogins(int $logins) Return User objects filtered by the logins column
- * @method array findByLanguage(string $language) Return User objects filtered by the language column
+ * @method array findByCountry(int $country) Return User objects filtered by the country column
+ * @method array findByLanguage(int $language) Return User objects filtered by the language column
  * @method array findByIsEnabled(boolean $is_enabled) Return User objects filtered by the is_enabled column
  * @method array findByIsExternal(boolean $is_external) Return User objects filtered by the is_external column
  * @method array findByIsLocked(boolean $is_locked) Return User objects filtered by the is_locked column
@@ -197,7 +250,7 @@ abstract class BaseUserQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `username`, `firstname`, `lastname`, `email`, `password`, `secret`, `logins`, `language`, `is_enabled`, `is_external`, `is_locked`, `is_expired`, `created_at`, `updated_at` FROM `user` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `username`, `firstname`, `middlename`, `lastname`, `gender`, `title`, `birth_date`, `password`, `secret`, `logins`, `country`, `language`, `is_enabled`, `is_external`, `is_locked`, `is_expired`, `created_at`, `updated_at` FROM `user` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -387,6 +440,35 @@ abstract class BaseUserQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query on the middlename column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByMiddlename('fooValue');   // WHERE middlename = 'fooValue'
+     * $query->filterByMiddlename('%fooValue%'); // WHERE middlename LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $middlename The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return UserQuery The current query, for fluid interface
+     */
+    public function filterByMiddlename($middlename = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($middlename)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $middlename)) {
+                $middlename = str_replace('*', '%', $middlename);
+                $comparison = Criteria::LIKE;
+            }
+        }
+
+        return $this->addUsingAlias(UserPeer::MIDDLENAME, $middlename, $comparison);
+    }
+
+    /**
      * Filter the query on the lastname column
      *
      * Example usage:
@@ -416,32 +498,134 @@ abstract class BaseUserQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the email column
+     * Filter the query on the gender column
      *
      * Example usage:
      * <code>
-     * $query->filterByEmail('fooValue');   // WHERE email = 'fooValue'
-     * $query->filterByEmail('%fooValue%'); // WHERE email LIKE '%fooValue%'
+     * $query->filterByGender(1234); // WHERE gender = 1234
+     * $query->filterByGender(array(12, 34)); // WHERE gender IN (12, 34)
+     * $query->filterByGender(array('min' => 12)); // WHERE gender >= 12
+     * $query->filterByGender(array('max' => 12)); // WHERE gender <= 12
      * </code>
      *
-     * @param     string $email The value to use as filter.
-     *              Accepts wildcards (* and % trigger a LIKE)
+     * @see       filterByUserGender()
+     *
+     * @param     mixed $gender The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return UserQuery The current query, for fluid interface
      */
-    public function filterByEmail($email = null, $comparison = null)
+    public function filterByGender($gender = null, $comparison = null)
     {
-        if (null === $comparison) {
-            if (is_array($email)) {
+        if (is_array($gender)) {
+            $useMinMax = false;
+            if (isset($gender['min'])) {
+                $this->addUsingAlias(UserPeer::GENDER, $gender['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($gender['max'])) {
+                $this->addUsingAlias(UserPeer::GENDER, $gender['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
                 $comparison = Criteria::IN;
-            } elseif (preg_match('/[\%\*]/', $email)) {
-                $email = str_replace('*', '%', $email);
-                $comparison = Criteria::LIKE;
             }
         }
 
-        return $this->addUsingAlias(UserPeer::EMAIL, $email, $comparison);
+        return $this->addUsingAlias(UserPeer::GENDER, $gender, $comparison);
+    }
+
+    /**
+     * Filter the query on the title column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByTitle(1234); // WHERE title = 1234
+     * $query->filterByTitle(array(12, 34)); // WHERE title IN (12, 34)
+     * $query->filterByTitle(array('min' => 12)); // WHERE title >= 12
+     * $query->filterByTitle(array('max' => 12)); // WHERE title <= 12
+     * </code>
+     *
+     * @see       filterByUserTitle()
+     *
+     * @param     mixed $title The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return UserQuery The current query, for fluid interface
+     */
+    public function filterByTitle($title = null, $comparison = null)
+    {
+        if (is_array($title)) {
+            $useMinMax = false;
+            if (isset($title['min'])) {
+                $this->addUsingAlias(UserPeer::TITLE, $title['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($title['max'])) {
+                $this->addUsingAlias(UserPeer::TITLE, $title['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(UserPeer::TITLE, $title, $comparison);
+    }
+
+    /**
+     * Filter the query on the birth_date column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByBirthDate('2011-03-14'); // WHERE birth_date = '2011-03-14'
+     * $query->filterByBirthDate('now'); // WHERE birth_date = '2011-03-14'
+     * $query->filterByBirthDate(array('max' => 'yesterday')); // WHERE birth_date < '2011-03-13'
+     * </code>
+     *
+     * @param     mixed $birthDate The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return UserQuery The current query, for fluid interface
+     */
+    public function filterByBirthDate($birthDate = null, $comparison = null)
+    {
+        if (is_array($birthDate)) {
+            $useMinMax = false;
+            if (isset($birthDate['min'])) {
+                $this->addUsingAlias(UserPeer::BIRTH_DATE, $birthDate['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($birthDate['max'])) {
+                $this->addUsingAlias(UserPeer::BIRTH_DATE, $birthDate['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(UserPeer::BIRTH_DATE, $birthDate, $comparison);
     }
 
     /**
@@ -545,28 +729,87 @@ abstract class BaseUserQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query on the country column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByCountry(1234); // WHERE country = 1234
+     * $query->filterByCountry(array(12, 34)); // WHERE country IN (12, 34)
+     * $query->filterByCountry(array('min' => 12)); // WHERE country >= 12
+     * $query->filterByCountry(array('max' => 12)); // WHERE country <= 12
+     * </code>
+     *
+     * @see       filterByCountriesRelatedByCountry()
+     *
+     * @param     mixed $country The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return UserQuery The current query, for fluid interface
+     */
+    public function filterByCountry($country = null, $comparison = null)
+    {
+        if (is_array($country)) {
+            $useMinMax = false;
+            if (isset($country['min'])) {
+                $this->addUsingAlias(UserPeer::COUNTRY, $country['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($country['max'])) {
+                $this->addUsingAlias(UserPeer::COUNTRY, $country['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(UserPeer::COUNTRY, $country, $comparison);
+    }
+
+    /**
      * Filter the query on the language column
      *
      * Example usage:
      * <code>
-     * $query->filterByLanguage('fooValue');   // WHERE language = 'fooValue'
-     * $query->filterByLanguage('%fooValue%'); // WHERE language LIKE '%fooValue%'
+     * $query->filterByLanguage(1234); // WHERE language = 1234
+     * $query->filterByLanguage(array(12, 34)); // WHERE language IN (12, 34)
+     * $query->filterByLanguage(array('min' => 12)); // WHERE language >= 12
+     * $query->filterByLanguage(array('max' => 12)); // WHERE language <= 12
      * </code>
      *
-     * @param     string $language The value to use as filter.
-     *              Accepts wildcards (* and % trigger a LIKE)
+     * @see       filterByCountriesRelatedByLanguage()
+     *
+     * @param     mixed $language The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return UserQuery The current query, for fluid interface
      */
     public function filterByLanguage($language = null, $comparison = null)
     {
-        if (null === $comparison) {
-            if (is_array($language)) {
+        if (is_array($language)) {
+            $useMinMax = false;
+            if (isset($language['min'])) {
+                $this->addUsingAlias(UserPeer::LANGUAGE, $language['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($language['max'])) {
+                $this->addUsingAlias(UserPeer::LANGUAGE, $language['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
                 $comparison = Criteria::IN;
-            } elseif (preg_match('/[\%\*]/', $language)) {
-                $language = str_replace('*', '%', $language);
-                $comparison = Criteria::LIKE;
             }
         }
 
@@ -768,6 +1011,310 @@ abstract class BaseUserQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query by a related UserGender object
+     *
+     * @param   UserGender|PropelObjectCollection $userGender The related object(s) to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 UserQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByUserGender($userGender, $comparison = null)
+    {
+        if ($userGender instanceof UserGender) {
+            return $this
+                ->addUsingAlias(UserPeer::GENDER, $userGender->getId(), $comparison);
+        } elseif ($userGender instanceof PropelObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(UserPeer::GENDER, $userGender->toKeyValue('PrimaryKey', 'Id'), $comparison);
+        } else {
+            throw new PropelException('filterByUserGender() only accepts arguments of type UserGender or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the UserGender relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return UserQuery The current query, for fluid interface
+     */
+    public function joinUserGender($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('UserGender');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'UserGender');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the UserGender relation UserGender object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   \UserBundle\Model\UserGenderQuery A secondary query class using the current class as primary query
+     */
+    public function useUserGenderQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinUserGender($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'UserGender', '\UserBundle\Model\UserGenderQuery');
+    }
+
+    /**
+     * Filter the query by a related UserTitle object
+     *
+     * @param   UserTitle|PropelObjectCollection $userTitle The related object(s) to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 UserQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByUserTitle($userTitle, $comparison = null)
+    {
+        if ($userTitle instanceof UserTitle) {
+            return $this
+                ->addUsingAlias(UserPeer::TITLE, $userTitle->getId(), $comparison);
+        } elseif ($userTitle instanceof PropelObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(UserPeer::TITLE, $userTitle->toKeyValue('PrimaryKey', 'Id'), $comparison);
+        } else {
+            throw new PropelException('filterByUserTitle() only accepts arguments of type UserTitle or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the UserTitle relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return UserQuery The current query, for fluid interface
+     */
+    public function joinUserTitle($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('UserTitle');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'UserTitle');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the UserTitle relation UserTitle object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   \UserBundle\Model\UserTitleQuery A secondary query class using the current class as primary query
+     */
+    public function useUserTitleQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinUserTitle($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'UserTitle', '\UserBundle\Model\UserTitleQuery');
+    }
+
+    /**
+     * Filter the query by a related Countries object
+     *
+     * @param   Countries|PropelObjectCollection $countries The related object(s) to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 UserQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByCountriesRelatedByCountry($countries, $comparison = null)
+    {
+        if ($countries instanceof Countries) {
+            return $this
+                ->addUsingAlias(UserPeer::COUNTRY, $countries->getId(), $comparison);
+        } elseif ($countries instanceof PropelObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(UserPeer::COUNTRY, $countries->toKeyValue('PrimaryKey', 'Id'), $comparison);
+        } else {
+            throw new PropelException('filterByCountriesRelatedByCountry() only accepts arguments of type Countries or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the CountriesRelatedByCountry relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return UserQuery The current query, for fluid interface
+     */
+    public function joinCountriesRelatedByCountry($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('CountriesRelatedByCountry');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'CountriesRelatedByCountry');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the CountriesRelatedByCountry relation Countries object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   \UserBundle\Model\CountriesQuery A secondary query class using the current class as primary query
+     */
+    public function useCountriesRelatedByCountryQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinCountriesRelatedByCountry($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'CountriesRelatedByCountry', '\UserBundle\Model\CountriesQuery');
+    }
+
+    /**
+     * Filter the query by a related Countries object
+     *
+     * @param   Countries|PropelObjectCollection $countries The related object(s) to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 UserQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByCountriesRelatedByLanguage($countries, $comparison = null)
+    {
+        if ($countries instanceof Countries) {
+            return $this
+                ->addUsingAlias(UserPeer::LANGUAGE, $countries->getId(), $comparison);
+        } elseif ($countries instanceof PropelObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(UserPeer::LANGUAGE, $countries->toKeyValue('PrimaryKey', 'Id'), $comparison);
+        } else {
+            throw new PropelException('filterByCountriesRelatedByLanguage() only accepts arguments of type Countries or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the CountriesRelatedByLanguage relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return UserQuery The current query, for fluid interface
+     */
+    public function joinCountriesRelatedByLanguage($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('CountriesRelatedByLanguage');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'CountriesRelatedByLanguage');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the CountriesRelatedByLanguage relation Countries object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   \UserBundle\Model\CountriesQuery A secondary query class using the current class as primary query
+     */
+    public function useCountriesRelatedByLanguageQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinCountriesRelatedByLanguage($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'CountriesRelatedByLanguage', '\UserBundle\Model\CountriesQuery');
+    }
+
+    /**
      * Filter the query by a related UserRole object
      *
      * @param   UserRole|PropelObjectCollection $userRole  the related object to use as filter
@@ -799,7 +1346,7 @@ abstract class BaseUserQuery extends ModelCriteria
      *
      * @return UserQuery The current query, for fluid interface
      */
-    public function joinUserRole($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinUserRole($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('UserRole');
@@ -834,11 +1381,233 @@ abstract class BaseUserQuery extends ModelCriteria
      *
      * @return   \UserBundle\Model\UserRoleQuery A secondary query class using the current class as primary query
      */
-    public function useUserRoleQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function useUserRoleQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
             ->joinUserRole($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'UserRole', '\UserBundle\Model\UserRoleQuery');
+    }
+
+    /**
+     * Filter the query by a related UserAddress object
+     *
+     * @param   UserAddress|PropelObjectCollection $userAddress  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 UserQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByUserAddress($userAddress, $comparison = null)
+    {
+        if ($userAddress instanceof UserAddress) {
+            return $this
+                ->addUsingAlias(UserPeer::ID, $userAddress->getUserId(), $comparison);
+        } elseif ($userAddress instanceof PropelObjectCollection) {
+            return $this
+                ->useUserAddressQuery()
+                ->filterByPrimaryKeys($userAddress->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByUserAddress() only accepts arguments of type UserAddress or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the UserAddress relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return UserQuery The current query, for fluid interface
+     */
+    public function joinUserAddress($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('UserAddress');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'UserAddress');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the UserAddress relation UserAddress object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   \UserBundle\Model\UserAddressQuery A secondary query class using the current class as primary query
+     */
+    public function useUserAddressQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinUserAddress($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'UserAddress', '\UserBundle\Model\UserAddressQuery');
+    }
+
+    /**
+     * Filter the query by a related UserEmail object
+     *
+     * @param   UserEmail|PropelObjectCollection $userEmail  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 UserQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByUserEmail($userEmail, $comparison = null)
+    {
+        if ($userEmail instanceof UserEmail) {
+            return $this
+                ->addUsingAlias(UserPeer::ID, $userEmail->getUserId(), $comparison);
+        } elseif ($userEmail instanceof PropelObjectCollection) {
+            return $this
+                ->useUserEmailQuery()
+                ->filterByPrimaryKeys($userEmail->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByUserEmail() only accepts arguments of type UserEmail or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the UserEmail relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return UserQuery The current query, for fluid interface
+     */
+    public function joinUserEmail($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('UserEmail');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'UserEmail');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the UserEmail relation UserEmail object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   \UserBundle\Model\UserEmailQuery A secondary query class using the current class as primary query
+     */
+    public function useUserEmailQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinUserEmail($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'UserEmail', '\UserBundle\Model\UserEmailQuery');
+    }
+
+    /**
+     * Filter the query by a related UserPhone object
+     *
+     * @param   UserPhone|PropelObjectCollection $userPhone  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 UserQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByUserPhone($userPhone, $comparison = null)
+    {
+        if ($userPhone instanceof UserPhone) {
+            return $this
+                ->addUsingAlias(UserPeer::ID, $userPhone->getUserId(), $comparison);
+        } elseif ($userPhone instanceof PropelObjectCollection) {
+            return $this
+                ->useUserPhoneQuery()
+                ->filterByPrimaryKeys($userPhone->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByUserPhone() only accepts arguments of type UserPhone or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the UserPhone relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return UserQuery The current query, for fluid interface
+     */
+    public function joinUserPhone($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('UserPhone');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'UserPhone');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the UserPhone relation UserPhone object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   \UserBundle\Model\UserPhoneQuery A secondary query class using the current class as primary query
+     */
+    public function useUserPhoneQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinUserPhone($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'UserPhone', '\UserBundle\Model\UserPhoneQuery');
     }
 
     /**
@@ -855,6 +1624,57 @@ abstract class BaseUserQuery extends ModelCriteria
         return $this
             ->useUserRoleQuery()
             ->filterByRole($role, $comparison)
+            ->endUse();
+    }
+
+    /**
+     * Filter the query by a related Address object
+     * using the user_address table as cross reference
+     *
+     * @param   Address $address the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return   UserQuery The current query, for fluid interface
+     */
+    public function filterByAddress($address, $comparison = Criteria::EQUAL)
+    {
+        return $this
+            ->useUserAddressQuery()
+            ->filterByAddress($address, $comparison)
+            ->endUse();
+    }
+
+    /**
+     * Filter the query by a related Email object
+     * using the user_email table as cross reference
+     *
+     * @param   Email $email the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return   UserQuery The current query, for fluid interface
+     */
+    public function filterByEmail($email, $comparison = Criteria::EQUAL)
+    {
+        return $this
+            ->useUserEmailQuery()
+            ->filterByEmail($email, $comparison)
+            ->endUse();
+    }
+
+    /**
+     * Filter the query by a related Phone object
+     * using the user_phone table as cross reference
+     *
+     * @param   Phone $phone the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return   UserQuery The current query, for fluid interface
+     */
+    public function filterByPhone($phone, $comparison = Criteria::EQUAL)
+    {
+        return $this
+            ->useUserPhoneQuery()
+            ->filterByPhone($phone, $comparison)
             ->endUse();
     }
 

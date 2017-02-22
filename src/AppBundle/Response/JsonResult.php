@@ -70,6 +70,6 @@ class JsonResult extends JsonResponse
     {
         if (empty($this->contents))
             return new JsonResponse(array('message' => $this->message, 'errorcode' => $this->errorcode));
-        return new JsonResponse(array('message' => $this->message, 'errorcode' => $this->errorcode, key($this->contents) => $this->contents[key($this->contents)]));
+        return new JsonResponse(array('message' => $this->message, 'errorcode' => $this->errorcode, 'contents' => $this->contents));
     }
 }

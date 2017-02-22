@@ -47,7 +47,9 @@ angular
         },
         changeLanguage: function (id)
         {
-            var language = this.getRecord(id);
+            var language = this.getRecord(id.toLowerCase());
+            console.log(language);
+
             if (language)
                 if (language.Id.length)
                     $translate.use(language.Id);

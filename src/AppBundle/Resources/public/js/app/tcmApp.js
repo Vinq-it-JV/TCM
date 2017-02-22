@@ -5,13 +5,13 @@
  * @name controller.tcmApp
  * @description
  *
- * ## TCM V1.0 Application controller
+ * ## TCM V2.0 Application controller
  *  
  * TCM application routing en translation initialisation.
  *
  */
 angular
-    .module('tcmApp', ['ui.router', 'ngResource', 'ngCookies', 'ngSanitize', 'LocalStorageModule', 'ngAnimate', 'pascalprecht.translate', 'cgBusy', 'mgcrea.ngStrap', 'ghiscoding.validation'])
+    .module('tcmApp', ['ui.router', 'ui.select', 'ngResource', 'ngCookies', 'ngSanitize', 'LocalStorageModule', 'smart-table', 'ngAnimate', 'ghiscoding.validation', 'pascalprecht.translate', 'cgBusy', 'mgcrea.ngStrap'])
     .config(function($translateProvider) {
         $translateProvider.useStaticFilesLoader({
         	files: [{
@@ -32,7 +32,7 @@ angular
             .setNotify(true, true);
     })
     .config(['$urlRouterProvider', '$stateProvider', '$locationProvider', '$translateProvider',
-        function ($urlRouterProvider, $stateProvider, $locationProvider, $translateProvider) {
+        function ($urlRouterProvider, $stateProvider) {
             $stateProvider
             .state('home', {
                 url: Routing.generate('tcm_home')

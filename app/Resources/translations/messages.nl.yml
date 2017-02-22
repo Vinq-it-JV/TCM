@@ -1,0 +1,20 @@
+email:
+  credentials:
+    label: 'Gegevens'
+    from: 'Administratie van '
+    subject: 'Uw gegevens'
+    header: 'Uw gegevens voor inloggen @'
+    text1: 'U ontvangt deze email omdat u bent geregistreerd bij %Domain%.<br><br>Wij hebben een nieuw wachtwoord gegenereerd, welke u kunt gebruiken bij het inloggen.'
+    text2: 'Hierna kunt u in uw profiel het wachtwoord aanpassen naar uw eigen wachtwoord.<br><br>Als u vragen heeft neem dan contact op met ons support team via <a href="mailto:support@%Domain%?SUBJECT:Gegevens aanvraag voor:%Username%">Contacteer Support</a><br><br><b>Gebruik uw genruikersnaam in het onderwerp veld anders wordt uw aanvraag niet in behandeling genomen!</b>'
+    username: 'Gebruikersnaam'
+    password: 'Wachtwoord'
+
+  password:
+    label: 'Password'
+    from: 'Administratie van '
+    subject: 'Uw nieuwe wachtwoord'
+    header: 'Uw nieuwe wachtwoord voor inloggen @'
+    text1: 'U ontvangt deze email omdat u uw wachtwoord heeft veranderd voor %Domain%.<br><br>Houdt dit wachtwoord geheim en op een veilige plek, wij slaan dit wachtwoord niet op!'
+    text2: 'Maak alstublieft gebruik van een veilig wachtwoord wat niet makkelijk is te raden door iemand.<br><br>Als u vragen heeft neem dan contact op met ons support team via <a href="mailto:support@%Domain%?SUBJECT:Wachtwoord ondersteuning voor:%Username%">Contacteer Support</a><br><br><b>Gebruik uw genruikersnaam in het onderwerp veld anders wordt uw aanvraag niet in behandeling genomen!</b>'
+    username: 'Username'
+    password: 'New password'

@@ -1,0 +1,84 @@
+{% extends 'base.html.twig' %}
+
+{% block contents %}
+    {% if app.user %}
+        <div ng-controller="userCtrl" ng-init="getUsers()">
+
+            {% block header %}
+                {% include 'AdministrationBundle::header.html.twig' %}
+            {% endblock %}
+
+            {% block page %}
+                <div class="page">
+                    <div class="container">
+                        <div class="row">
+                            <div class="panel-body">
+                                <h4 ng-cloak>
+                                    <i class="fa fa-users"></i> {{ ng.translate('USERS') }}
+                                </h4>
+                                <hr/>
+                                <div class="well">
+                                    <section st-table="usersCollection" st-safe-src="users.users()">
+                                        <div class="row">
+                                            <div class="col-md-3 col-xs-6">
+                                                <input st-search class="form-control input-sm"
+                                                       placeholder="{{ ng.translate('SEARCH') }}" type="text" ng-cloak/>
+                                            </div>
+                                        </div>
+                                        <br/>
+                                        <div class="row">
+                                            <div class="col-md-12 col-xs-12">
+                                                <table class="table table-striped table-bordered">
+                                                    <thead>
+                                                    <tr>
+                                                        <th st-ratio="80" st-sort="user.Firstname" class="st-sortable"
+                                                            ng-cloak>{{ ng.translate('USER.NAME') }}</th>
+                                                        <th st-ratio="20"
+                                                            class="st-nosort text-right" ng-cloak>{{ ng.translate('ACTION') }}</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr ng-repeat="row in usersCollection">
+                                                        <td ng-cloak>{{ '{{ row.Name }}' }}</td>
+                                                        <td>
+                                                            <div class="pull-right">
+                                                                <button type="button" ng-click="editUser(row.Id)"
+                                                                        class="btn btn-xs btn-primary">
+                                                                    <i class="fa fa-pencil"></i>
+                                                                </button>
+                                                                <button type="button" ng-click="deleteUser(row.Id)"
+                                                                        class="btn btn-xs btn-danger">
+                                                                    <i class="fa fa-remove"></i>
+                                                                </button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </section>
+                                </div>
+                                <div class="panel-footer">
+                                    <div class="row">
+                                        <div class="col-md-12 col-xs-12">
+                                            <button class="btn btn-sm btn-success pull-right"
+                                                    ng-click="addUser()" ng-cloak>
+                                                <i class="fa fa-plus"></i> {{ ng.translate('ADD') }}</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endblock %}
+
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('bundles/app/js/app/datasets/users.js') }}"></script>
+{% endblock %}
+
