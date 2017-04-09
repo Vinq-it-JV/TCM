@@ -42,7 +42,7 @@ angular
             });
 
             $scope.$validationOptions = {
-                debounce: 1500,
+                debounce: 1000,
                 preValidateFormElements: true
             };
 
@@ -95,6 +95,32 @@ angular
                     'payload': {password: $scope.AUTH.user().password}
                 };
                 $scope.BE.post(postdata, $scope.fetchDataOk, $scope.fetchDataFail);
+            };
+
+            $scope.checkAddress = function (address) {
+                if (!$scope.isValidObject(address))
+                    return;
+                if ($scope.isEmpty(address.HouseNumber) || $scope.isEmpty(address.PostalCode))
+                    return;
+                var getdata = {
+                    'url': Routing.generate('usoft_postcode_api', {
+                        'postcode': $scope.trimAll(address.PostalCode),
+                        'nummer': $scope.trimAll(address.HouseNumber)
+                    })
+                };
+                $scope.BE.get(getdata, function (data) {
+                    if ($scope.isValidObject(data)) {
+                        address.City = data.city;
+                        address.StreetName = data.street;
+                        address.PostalCode = data.zipcode;
+                        address.HouseNumber = data.house_number;
+                        console.log(address);
+                    }
+                }, function (data) {
+                    if ($scope.isValidObject()) {
+                        console.log(data.message);
+                    }
+                });
             };
 
             $scope.showNotification = function (message, execute) {
@@ -169,6 +195,8 @@ angular
             };
 
             $scope.isValidObject = function (object) {
+                if (object == null)
+                    return false;
                 if (typeof object !== 'object')
                     return false;
                 if (object.length === 0)
@@ -176,5 +204,23 @@ angular
                 if (Object.keys(object).length === 0)
                     return false;
                 return true;
-            }
+            };
+
+            $scope.isValidIBAN = function (number) {
+                return IBAN.isValid(number);
+            };
+
+            $scope.isEmpty = function (data) {
+                if (data == null)
+                    return true;
+                if (typeof(data) == 'undefined')
+                    return true;
+                if (!data.length)
+                    return true;
+                return false;
+            };
+
+            $scope.trimAll = function (data) {
+                return data.replace(/\s+/g, '');
+            };
         }]);

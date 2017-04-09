@@ -83,17 +83,7 @@ angular
             Modal.open({}, modalOptions);
         };
 
-        $scope.info = function ()
-        {
-            console.log($scope.users.user());
-
-        };
-
-        $scope.changePassword = function ()
-        {
-        };
-        
-        $scope.deleteEmail = function (id)
+        $scope.deleteEmail = function (emailid)
         {
             var modalOptions = {
                 closeButtonText: $translate.instant('CANCEL'),
@@ -101,12 +91,12 @@ angular
                 headerText: $translate.instant('DELETE'),
                 bodyText: $translate.instant('QUESTION.DELETE_EMAIL'),
                 onExecute: function () {
-                    id = $scope.users.deleteEmail(id);
-                    if ($scope.users.user().Id == 0 || id == 0)
+                    emailid = $scope.users.deleteEmail(emailid);
+                    if ($scope.users.user().Id == 0 || emailid == 0)
                         return;
                     $scope.requestType = 'deleteEmail';
                     var deletedata = {
-                        'url': Routing.generate('administration_user_delete_email', {'userid':$scope.users.user().Id, 'emailid':id}),
+                        'url': Routing.generate('administration_user_delete_email', {'userid':$scope.users.user().Id, 'emailid':emailid}),
                         'payload': ''
                     };
                     $scope.BE.delete(deletedata, $scope.fetchDataOk, $scope.fetchDataFail);
@@ -115,7 +105,7 @@ angular
             Modal.open({}, modalOptions);
         };
 
-        $scope.deletePhone = function (id)
+        $scope.deletePhone = function (phoneid)
         {
             var modalOptions = {
                 closeButtonText: $translate.instant('CANCEL'),
@@ -123,12 +113,12 @@ angular
                 headerText: $translate.instant('DELETE'),
                 bodyText: $translate.instant('QUESTION.DELETE_PHONE'),
                 onExecute: function () {
-                    id = $scope.users.deletePhone(id);
-                    if ($scope.users.user().Id == 0 || id == 0)
+                    phoneid = $scope.users.deletePhone(phoneid);
+                    if ($scope.users.user().Id == 0 || phoneid == 0)
                         return;
                     $scope.requestType = 'deletePhone';
                     var deletedata = {
-                        'url': Routing.generate('administration_user_delete_phone', {'userid':$scope.users.user().Id, 'phoneid':id}),
+                        'url': Routing.generate('administration_user_delete_phone', {'userid':$scope.users.user().Id, 'phoneid':phoneid}),
                         'payload': ''
                     };
                     $scope.BE.delete(deletedata, $scope.fetchDataOk, $scope.fetchDataFail);
@@ -138,7 +128,7 @@ angular
             Modal.open({}, modalOptions);
         };
 
-        $scope.deleteAddress = function (id)
+        $scope.deleteAddress = function (addressid)
         {
             var modalOptions = {
                 closeButtonText: $translate.instant('CANCEL'),
@@ -146,12 +136,12 @@ angular
                 headerText: $translate.instant('DELETE'),
                 bodyText: $translate.instant('QUESTION.DELETE_ADDRESS'),
                 onExecute: function () {
-                    id = $scope.users.deleteAddress(id);
-                    if ($scope.users.user().Id == 0 || id == 0)
+                    addressid = $scope.users.deleteAddress(addressid);
+                    if ($scope.users.user().Id == 0 || addressid == 0)
                         return;
                     $scope.requestType = 'deleteAddress';
                     var deletedata = {
-                        'url': Routing.generate('administration_user_delete_address', {'userid':$scope.users.user().Id, 'addressid':id}),
+                        'url': Routing.generate('administration_user_delete_address', {'userid':$scope.users.user().Id, 'addressid':addressid}),
                         'payload': ''
                     };
                     $scope.BE.delete(deletedata, $scope.fetchDataOk, $scope.fetchDataFail);

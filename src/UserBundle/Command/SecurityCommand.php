@@ -36,6 +36,12 @@ class SecurityCommand extends ContainerAwareCommand {
         $this->rolesArr['ROLE_ADMIN']['Style'] = Role::ROLE_ADMIN_STYLE;
         $this->rolesArr['ROLE_SUPER_ADMIN']['Description'] = Role::ROLE_SUPER_ADMIN;
         $this->rolesArr['ROLE_SUPER_ADMIN']['Style'] = Role::ROLE_SUPER_ADMIN_STYLE;
+        $this->rolesArr['ROLE_OWNER']['Description'] = Role::ROLE_OWNER;
+        $this->rolesArr['ROLE_OWNER']['Style'] = Role::ROLE_OWNER_STYLE;
+        $this->rolesArr['ROLE_TECH_BEER']['Description'] = Role::ROLE_TECH_BEER;
+        $this->rolesArr['ROLE_TECH_BEER']['Style'] = Role::ROLE_TECH_BEER_STYLE;
+        $this->rolesArr['ROLE_TECH_COOLING']['Description'] = Role::ROLE_TECH_COOLING;
+        $this->rolesArr['ROLE_TECH_COOLING']['Style'] = Role::ROLE_TECH_COOLING_STYLE;
     }
 
     protected function configAdmins()
@@ -45,7 +51,7 @@ class SecurityCommand extends ContainerAwareCommand {
             ->toArray();
 
         $this->adminsArr['superadmin'] = Array('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_USER');
-        $this->adminsArr['j.visser'] = Array('ROLE_USER');
+        $this->adminsArr['j.visser'] = Array('ROLE_USER', 'ROLE_OWNER', 'ROLE_TECH_BEER', 'ROLE_TECH_COOLING');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -113,18 +119,18 @@ class SecurityCommand extends ContainerAwareCommand {
                 $roleArr = $this->findRole($role);
                 if ($roleArr)
                 {
-                    $therole = UserRoleQuery::create()
+                    $_role = UserRoleQuery::create()
                         ->filterByUserId($admin->getId())
                         ->findOneByRoleId($roleArr['Id']);
 
-                    if (is_null($therole))
+                    if (is_null($_role))
                     {
                         $userrole = new UserRole();
                         $userrole->setRoleId($roleArr['Id']);
                         $userrole->setUserId($admin->getId());
                         $userrole->save();
                         $output->writeln(" ->" . $role);
-                        $therole = null;
+                        $_role = null;
                     }
                 }
             }

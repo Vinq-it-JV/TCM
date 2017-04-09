@@ -15,6 +15,14 @@ use \PropelDateTime;
 use \PropelException;
 use \PropelObjectCollection;
 use \PropelPDO;
+use CompanyBundle\Model\Company;
+use CompanyBundle\Model\CompanyPhone;
+use CompanyBundle\Model\CompanyPhoneQuery;
+use CompanyBundle\Model\CompanyQuery;
+use StoreBundle\Model\Store;
+use StoreBundle\Model\StorePhone;
+use StoreBundle\Model\StorePhoneQuery;
+use StoreBundle\Model\StoreQuery;
 use UserBundle\Model\Phone;
 use UserBundle\Model\PhonePeer;
 use UserBundle\Model\PhoneQuery;
@@ -51,6 +59,13 @@ abstract class BasePhone extends BaseObject implements Persistent
     protected $id;
 
     /**
+     * The value for the primary field.
+     * Note: this column has a database default value of: false
+     * @var        boolean
+     */
+    protected $primary;
+
+    /**
      * The value for the phone_number field.
      * @var        string
      */
@@ -75,10 +90,32 @@ abstract class BasePhone extends BaseObject implements Persistent
     protected $updated_at;
 
     /**
+     * @var        PropelObjectCollection|CompanyPhone[] Collection to store aggregation of CompanyPhone objects.
+     */
+    protected $collCompanyPhones;
+    protected $collCompanyPhonesPartial;
+
+    /**
+     * @var        PropelObjectCollection|StorePhone[] Collection to store aggregation of StorePhone objects.
+     */
+    protected $collStorePhones;
+    protected $collStorePhonesPartial;
+
+    /**
      * @var        PropelObjectCollection|UserPhone[] Collection to store aggregation of UserPhone objects.
      */
     protected $collUserPhones;
     protected $collUserPhonesPartial;
+
+    /**
+     * @var        PropelObjectCollection|Company[] Collection to store aggregation of Company objects.
+     */
+    protected $collCompanies;
+
+    /**
+     * @var        PropelObjectCollection|Store[] Collection to store aggregation of Store objects.
+     */
+    protected $collStores;
 
     /**
      * @var        PropelObjectCollection|User[] Collection to store aggregation of User objects.
@@ -109,13 +146,58 @@ abstract class BasePhone extends BaseObject implements Persistent
      * An array of objects scheduled for deletion.
      * @var		PropelObjectCollection
      */
+    protected $companiesScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $storesScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
     protected $usersScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
      * @var		PropelObjectCollection
      */
+    protected $companyPhonesScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $storePhonesScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
     protected $userPhonesScheduledForDeletion = null;
+
+    /**
+     * Applies default values to this object.
+     * This method should be called from the object's constructor (or
+     * equivalent initialization method).
+     * @see        __construct()
+     */
+    public function applyDefaultValues()
+    {
+        $this->primary = false;
+    }
+
+    /**
+     * Initializes internal state of BasePhone object.
+     * @see        applyDefaults()
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->applyDefaultValues();
+    }
 
     /**
      * Get the [id] column value.
@@ -126,6 +208,17 @@ abstract class BasePhone extends BaseObject implements Persistent
     {
 
         return $this->id;
+    }
+
+    /**
+     * Get the [primary] column value.
+     *
+     * @return boolean
+     */
+    public function getPrimary()
+    {
+
+        return $this->primary;
     }
 
     /**
@@ -252,6 +345,35 @@ abstract class BasePhone extends BaseObject implements Persistent
     } // setId()
 
     /**
+     * Sets the value of the [primary] column.
+     * Non-boolean arguments are converted using the following rules:
+     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     *
+     * @param boolean|integer|string $v The new value
+     * @return Phone The current object (for fluent API support)
+     */
+    public function setPrimary($v)
+    {
+        if ($v !== null) {
+            if (is_string($v)) {
+                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            } else {
+                $v = (boolean) $v;
+            }
+        }
+
+        if ($this->primary !== $v) {
+            $this->primary = $v;
+            $this->modifiedColumns[] = PhonePeer::PRIMARY;
+        }
+
+
+        return $this;
+    } // setPrimary()
+
+    /**
      * Set the value of [phone_number] column.
      *
      * @param  string $v new value
@@ -349,6 +471,10 @@ abstract class BasePhone extends BaseObject implements Persistent
      */
     public function hasOnlyDefaultValues()
     {
+            if ($this->primary !== false) {
+                return false;
+            }
+
         // otherwise, everything was equal, so return true
         return true;
     } // hasOnlyDefaultValues()
@@ -372,10 +498,11 @@ abstract class BasePhone extends BaseObject implements Persistent
         try {
 
             $this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
-            $this->phone_number = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
-            $this->description = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
-            $this->created_at = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
-            $this->updated_at = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
+            $this->primary = ($row[$startcol + 1] !== null) ? (boolean) $row[$startcol + 1] : null;
+            $this->phone_number = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
+            $this->description = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
+            $this->created_at = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
+            $this->updated_at = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -385,7 +512,7 @@ abstract class BasePhone extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 5; // 5 = PhonePeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 6; // 6 = PhonePeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Phone object", $e);
@@ -447,8 +574,14 @@ abstract class BasePhone extends BaseObject implements Persistent
 
         if ($deep) {  // also de-associate any related objects?
 
+            $this->collCompanyPhones = null;
+
+            $this->collStorePhones = null;
+
             $this->collUserPhones = null;
 
+            $this->collCompanies = null;
+            $this->collStores = null;
             $this->collUsers = null;
         } // if (deep)
     }
@@ -585,6 +718,58 @@ abstract class BasePhone extends BaseObject implements Persistent
                 $this->resetModified();
             }
 
+            if ($this->companiesScheduledForDeletion !== null) {
+                if (!$this->companiesScheduledForDeletion->isEmpty()) {
+                    $pks = array();
+                    $pk = $this->getPrimaryKey();
+                    foreach ($this->companiesScheduledForDeletion->getPrimaryKeys(false) as $remotePk) {
+                        $pks[] = array($remotePk, $pk);
+                    }
+                    CompanyPhoneQuery::create()
+                        ->filterByPrimaryKeys($pks)
+                        ->delete($con);
+                    $this->companiesScheduledForDeletion = null;
+                }
+
+                foreach ($this->getCompanies() as $company) {
+                    if ($company->isModified()) {
+                        $company->save($con);
+                    }
+                }
+            } elseif ($this->collCompanies) {
+                foreach ($this->collCompanies as $company) {
+                    if ($company->isModified()) {
+                        $company->save($con);
+                    }
+                }
+            }
+
+            if ($this->storesScheduledForDeletion !== null) {
+                if (!$this->storesScheduledForDeletion->isEmpty()) {
+                    $pks = array();
+                    $pk = $this->getPrimaryKey();
+                    foreach ($this->storesScheduledForDeletion->getPrimaryKeys(false) as $remotePk) {
+                        $pks[] = array($remotePk, $pk);
+                    }
+                    StorePhoneQuery::create()
+                        ->filterByPrimaryKeys($pks)
+                        ->delete($con);
+                    $this->storesScheduledForDeletion = null;
+                }
+
+                foreach ($this->getStores() as $store) {
+                    if ($store->isModified()) {
+                        $store->save($con);
+                    }
+                }
+            } elseif ($this->collStores) {
+                foreach ($this->collStores as $store) {
+                    if ($store->isModified()) {
+                        $store->save($con);
+                    }
+                }
+            }
+
             if ($this->usersScheduledForDeletion !== null) {
                 if (!$this->usersScheduledForDeletion->isEmpty()) {
                     $pks = array();
@@ -607,6 +792,40 @@ abstract class BasePhone extends BaseObject implements Persistent
                 foreach ($this->collUsers as $user) {
                     if ($user->isModified()) {
                         $user->save($con);
+                    }
+                }
+            }
+
+            if ($this->companyPhonesScheduledForDeletion !== null) {
+                if (!$this->companyPhonesScheduledForDeletion->isEmpty()) {
+                    CompanyPhoneQuery::create()
+                        ->filterByPrimaryKeys($this->companyPhonesScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->companyPhonesScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collCompanyPhones !== null) {
+                foreach ($this->collCompanyPhones as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->storePhonesScheduledForDeletion !== null) {
+                if (!$this->storePhonesScheduledForDeletion->isEmpty()) {
+                    StorePhoneQuery::create()
+                        ->filterByPrimaryKeys($this->storePhonesScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->storePhonesScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collStorePhones !== null) {
+                foreach ($this->collStorePhones as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
                     }
                 }
             }
@@ -657,6 +876,9 @@ abstract class BasePhone extends BaseObject implements Persistent
         if ($this->isColumnModified(PhonePeer::ID)) {
             $modifiedColumns[':p' . $index++]  = '`id`';
         }
+        if ($this->isColumnModified(PhonePeer::PRIMARY)) {
+            $modifiedColumns[':p' . $index++]  = '`primary`';
+        }
         if ($this->isColumnModified(PhonePeer::PHONE_NUMBER)) {
             $modifiedColumns[':p' . $index++]  = '`phone_number`';
         }
@@ -682,6 +904,9 @@ abstract class BasePhone extends BaseObject implements Persistent
                 switch ($columnName) {
                     case '`id`':
                         $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
+                        break;
+                    case '`primary`':
+                        $stmt->bindValue($identifier, (int) $this->primary, PDO::PARAM_INT);
                         break;
                     case '`phone_number`':
                         $stmt->bindValue($identifier, $this->phone_number, PDO::PARAM_STR);
@@ -794,6 +1019,22 @@ abstract class BasePhone extends BaseObject implements Persistent
             }
 
 
+                if ($this->collCompanyPhones !== null) {
+                    foreach ($this->collCompanyPhones as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
+                if ($this->collStorePhones !== null) {
+                    foreach ($this->collStorePhones as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
                 if ($this->collUserPhones !== null) {
                     foreach ($this->collUserPhones as $referrerFK) {
                         if (!$referrerFK->validate($columns)) {
@@ -841,15 +1082,18 @@ abstract class BasePhone extends BaseObject implements Persistent
                 return $this->getId();
                 break;
             case 1:
-                return $this->getPhoneNumber();
+                return $this->getPrimary();
                 break;
             case 2:
-                return $this->getDescription();
+                return $this->getPhoneNumber();
                 break;
             case 3:
-                return $this->getCreatedAt();
+                return $this->getDescription();
                 break;
             case 4:
+                return $this->getCreatedAt();
+                break;
+            case 5:
                 return $this->getUpdatedAt();
                 break;
             default:
@@ -882,10 +1126,11 @@ abstract class BasePhone extends BaseObject implements Persistent
         $keys = PhonePeer::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getId(),
-            $keys[1] => $this->getPhoneNumber(),
-            $keys[2] => $this->getDescription(),
-            $keys[3] => $this->getCreatedAt(),
-            $keys[4] => $this->getUpdatedAt(),
+            $keys[1] => $this->getPrimary(),
+            $keys[2] => $this->getPhoneNumber(),
+            $keys[3] => $this->getDescription(),
+            $keys[4] => $this->getCreatedAt(),
+            $keys[5] => $this->getUpdatedAt(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -893,6 +1138,12 @@ abstract class BasePhone extends BaseObject implements Persistent
         }
 
         if ($includeForeignObjects) {
+            if (null !== $this->collCompanyPhones) {
+                $result['CompanyPhones'] = $this->collCompanyPhones->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collStorePhones) {
+                $result['StorePhones'] = $this->collStorePhones->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
             if (null !== $this->collUserPhones) {
                 $result['UserPhones'] = $this->collUserPhones->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
@@ -934,15 +1185,18 @@ abstract class BasePhone extends BaseObject implements Persistent
                 $this->setId($value);
                 break;
             case 1:
-                $this->setPhoneNumber($value);
+                $this->setPrimary($value);
                 break;
             case 2:
-                $this->setDescription($value);
+                $this->setPhoneNumber($value);
                 break;
             case 3:
-                $this->setCreatedAt($value);
+                $this->setDescription($value);
                 break;
             case 4:
+                $this->setCreatedAt($value);
+                break;
+            case 5:
                 $this->setUpdatedAt($value);
                 break;
         } // switch()
@@ -970,10 +1224,11 @@ abstract class BasePhone extends BaseObject implements Persistent
         $keys = PhonePeer::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
-        if (array_key_exists($keys[1], $arr)) $this->setPhoneNumber($arr[$keys[1]]);
-        if (array_key_exists($keys[2], $arr)) $this->setDescription($arr[$keys[2]]);
-        if (array_key_exists($keys[3], $arr)) $this->setCreatedAt($arr[$keys[3]]);
-        if (array_key_exists($keys[4], $arr)) $this->setUpdatedAt($arr[$keys[4]]);
+        if (array_key_exists($keys[1], $arr)) $this->setPrimary($arr[$keys[1]]);
+        if (array_key_exists($keys[2], $arr)) $this->setPhoneNumber($arr[$keys[2]]);
+        if (array_key_exists($keys[3], $arr)) $this->setDescription($arr[$keys[3]]);
+        if (array_key_exists($keys[4], $arr)) $this->setCreatedAt($arr[$keys[4]]);
+        if (array_key_exists($keys[5], $arr)) $this->setUpdatedAt($arr[$keys[5]]);
     }
 
     /**
@@ -986,6 +1241,7 @@ abstract class BasePhone extends BaseObject implements Persistent
         $criteria = new Criteria(PhonePeer::DATABASE_NAME);
 
         if ($this->isColumnModified(PhonePeer::ID)) $criteria->add(PhonePeer::ID, $this->id);
+        if ($this->isColumnModified(PhonePeer::PRIMARY)) $criteria->add(PhonePeer::PRIMARY, $this->primary);
         if ($this->isColumnModified(PhonePeer::PHONE_NUMBER)) $criteria->add(PhonePeer::PHONE_NUMBER, $this->phone_number);
         if ($this->isColumnModified(PhonePeer::DESCRIPTION)) $criteria->add(PhonePeer::DESCRIPTION, $this->description);
         if ($this->isColumnModified(PhonePeer::CREATED_AT)) $criteria->add(PhonePeer::CREATED_AT, $this->created_at);
@@ -1053,6 +1309,7 @@ abstract class BasePhone extends BaseObject implements Persistent
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
+        $copyObj->setPrimary($this->getPrimary());
         $copyObj->setPhoneNumber($this->getPhoneNumber());
         $copyObj->setDescription($this->getDescription());
         $copyObj->setCreatedAt($this->getCreatedAt());
@@ -1064,6 +1321,18 @@ abstract class BasePhone extends BaseObject implements Persistent
             $copyObj->setNew(false);
             // store object hash to prevent cycle
             $this->startCopy = true;
+
+            foreach ($this->getCompanyPhones() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addCompanyPhone($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getStorePhones() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addStorePhone($relObj->copy($deepCopy));
+                }
+            }
 
             foreach ($this->getUserPhones() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
@@ -1132,9 +1401,521 @@ abstract class BasePhone extends BaseObject implements Persistent
      */
     public function initRelation($relationName)
     {
+        if ('CompanyPhone' == $relationName) {
+            $this->initCompanyPhones();
+        }
+        if ('StorePhone' == $relationName) {
+            $this->initStorePhones();
+        }
         if ('UserPhone' == $relationName) {
             $this->initUserPhones();
         }
+    }
+
+    /**
+     * Clears out the collCompanyPhones collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Phone The current object (for fluent API support)
+     * @see        addCompanyPhones()
+     */
+    public function clearCompanyPhones()
+    {
+        $this->collCompanyPhones = null; // important to set this to null since that means it is uninitialized
+        $this->collCompanyPhonesPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collCompanyPhones collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialCompanyPhones($v = true)
+    {
+        $this->collCompanyPhonesPartial = $v;
+    }
+
+    /**
+     * Initializes the collCompanyPhones collection.
+     *
+     * By default this just sets the collCompanyPhones collection to an empty array (like clearcollCompanyPhones());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initCompanyPhones($overrideExisting = true)
+    {
+        if (null !== $this->collCompanyPhones && !$overrideExisting) {
+            return;
+        }
+        $this->collCompanyPhones = new PropelObjectCollection();
+        $this->collCompanyPhones->setModel('CompanyPhone');
+    }
+
+    /**
+     * Gets an array of CompanyPhone objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Phone is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|CompanyPhone[] List of CompanyPhone objects
+     * @throws PropelException
+     */
+    public function getCompanyPhones($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collCompanyPhonesPartial && !$this->isNew();
+        if (null === $this->collCompanyPhones || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collCompanyPhones) {
+                // return empty collection
+                $this->initCompanyPhones();
+            } else {
+                $collCompanyPhones = CompanyPhoneQuery::create(null, $criteria)
+                    ->filterByPhone($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collCompanyPhonesPartial && count($collCompanyPhones)) {
+                      $this->initCompanyPhones(false);
+
+                      foreach ($collCompanyPhones as $obj) {
+                        if (false == $this->collCompanyPhones->contains($obj)) {
+                          $this->collCompanyPhones->append($obj);
+                        }
+                      }
+
+                      $this->collCompanyPhonesPartial = true;
+                    }
+
+                    $collCompanyPhones->getInternalIterator()->rewind();
+
+                    return $collCompanyPhones;
+                }
+
+                if ($partial && $this->collCompanyPhones) {
+                    foreach ($this->collCompanyPhones as $obj) {
+                        if ($obj->isNew()) {
+                            $collCompanyPhones[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collCompanyPhones = $collCompanyPhones;
+                $this->collCompanyPhonesPartial = false;
+            }
+        }
+
+        return $this->collCompanyPhones;
+    }
+
+    /**
+     * Sets a collection of CompanyPhone objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $companyPhones A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Phone The current object (for fluent API support)
+     */
+    public function setCompanyPhones(PropelCollection $companyPhones, PropelPDO $con = null)
+    {
+        $companyPhonesToDelete = $this->getCompanyPhones(new Criteria(), $con)->diff($companyPhones);
+
+
+        //since at least one column in the foreign key is at the same time a PK
+        //we can not just set a PK to NULL in the lines below. We have to store
+        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
+        $this->companyPhonesScheduledForDeletion = clone $companyPhonesToDelete;
+
+        foreach ($companyPhonesToDelete as $companyPhoneRemoved) {
+            $companyPhoneRemoved->setPhone(null);
+        }
+
+        $this->collCompanyPhones = null;
+        foreach ($companyPhones as $companyPhone) {
+            $this->addCompanyPhone($companyPhone);
+        }
+
+        $this->collCompanyPhones = $companyPhones;
+        $this->collCompanyPhonesPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related CompanyPhone objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related CompanyPhone objects.
+     * @throws PropelException
+     */
+    public function countCompanyPhones(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collCompanyPhonesPartial && !$this->isNew();
+        if (null === $this->collCompanyPhones || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collCompanyPhones) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getCompanyPhones());
+            }
+            $query = CompanyPhoneQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByPhone($this)
+                ->count($con);
+        }
+
+        return count($this->collCompanyPhones);
+    }
+
+    /**
+     * Method called to associate a CompanyPhone object to this object
+     * through the CompanyPhone foreign key attribute.
+     *
+     * @param    CompanyPhone $l CompanyPhone
+     * @return Phone The current object (for fluent API support)
+     */
+    public function addCompanyPhone(CompanyPhone $l)
+    {
+        if ($this->collCompanyPhones === null) {
+            $this->initCompanyPhones();
+            $this->collCompanyPhonesPartial = true;
+        }
+
+        if (!in_array($l, $this->collCompanyPhones->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddCompanyPhone($l);
+
+            if ($this->companyPhonesScheduledForDeletion and $this->companyPhonesScheduledForDeletion->contains($l)) {
+                $this->companyPhonesScheduledForDeletion->remove($this->companyPhonesScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	CompanyPhone $companyPhone The companyPhone object to add.
+     */
+    protected function doAddCompanyPhone($companyPhone)
+    {
+        $this->collCompanyPhones[]= $companyPhone;
+        $companyPhone->setPhone($this);
+    }
+
+    /**
+     * @param	CompanyPhone $companyPhone The companyPhone object to remove.
+     * @return Phone The current object (for fluent API support)
+     */
+    public function removeCompanyPhone($companyPhone)
+    {
+        if ($this->getCompanyPhones()->contains($companyPhone)) {
+            $this->collCompanyPhones->remove($this->collCompanyPhones->search($companyPhone));
+            if (null === $this->companyPhonesScheduledForDeletion) {
+                $this->companyPhonesScheduledForDeletion = clone $this->collCompanyPhones;
+                $this->companyPhonesScheduledForDeletion->clear();
+            }
+            $this->companyPhonesScheduledForDeletion[]= clone $companyPhone;
+            $companyPhone->setPhone(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Phone is new, it will return
+     * an empty collection; or if this Phone has previously
+     * been saved, it will retrieve related CompanyPhones from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Phone.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|CompanyPhone[] List of CompanyPhone objects
+     */
+    public function getCompanyPhonesJoinCompany($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = CompanyPhoneQuery::create(null, $criteria);
+        $query->joinWith('Company', $join_behavior);
+
+        return $this->getCompanyPhones($query, $con);
+    }
+
+    /**
+     * Clears out the collStorePhones collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Phone The current object (for fluent API support)
+     * @see        addStorePhones()
+     */
+    public function clearStorePhones()
+    {
+        $this->collStorePhones = null; // important to set this to null since that means it is uninitialized
+        $this->collStorePhonesPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collStorePhones collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialStorePhones($v = true)
+    {
+        $this->collStorePhonesPartial = $v;
+    }
+
+    /**
+     * Initializes the collStorePhones collection.
+     *
+     * By default this just sets the collStorePhones collection to an empty array (like clearcollStorePhones());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initStorePhones($overrideExisting = true)
+    {
+        if (null !== $this->collStorePhones && !$overrideExisting) {
+            return;
+        }
+        $this->collStorePhones = new PropelObjectCollection();
+        $this->collStorePhones->setModel('StorePhone');
+    }
+
+    /**
+     * Gets an array of StorePhone objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Phone is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|StorePhone[] List of StorePhone objects
+     * @throws PropelException
+     */
+    public function getStorePhones($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collStorePhonesPartial && !$this->isNew();
+        if (null === $this->collStorePhones || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collStorePhones) {
+                // return empty collection
+                $this->initStorePhones();
+            } else {
+                $collStorePhones = StorePhoneQuery::create(null, $criteria)
+                    ->filterByPhone($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collStorePhonesPartial && count($collStorePhones)) {
+                      $this->initStorePhones(false);
+
+                      foreach ($collStorePhones as $obj) {
+                        if (false == $this->collStorePhones->contains($obj)) {
+                          $this->collStorePhones->append($obj);
+                        }
+                      }
+
+                      $this->collStorePhonesPartial = true;
+                    }
+
+                    $collStorePhones->getInternalIterator()->rewind();
+
+                    return $collStorePhones;
+                }
+
+                if ($partial && $this->collStorePhones) {
+                    foreach ($this->collStorePhones as $obj) {
+                        if ($obj->isNew()) {
+                            $collStorePhones[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collStorePhones = $collStorePhones;
+                $this->collStorePhonesPartial = false;
+            }
+        }
+
+        return $this->collStorePhones;
+    }
+
+    /**
+     * Sets a collection of StorePhone objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $storePhones A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Phone The current object (for fluent API support)
+     */
+    public function setStorePhones(PropelCollection $storePhones, PropelPDO $con = null)
+    {
+        $storePhonesToDelete = $this->getStorePhones(new Criteria(), $con)->diff($storePhones);
+
+
+        //since at least one column in the foreign key is at the same time a PK
+        //we can not just set a PK to NULL in the lines below. We have to store
+        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
+        $this->storePhonesScheduledForDeletion = clone $storePhonesToDelete;
+
+        foreach ($storePhonesToDelete as $storePhoneRemoved) {
+            $storePhoneRemoved->setPhone(null);
+        }
+
+        $this->collStorePhones = null;
+        foreach ($storePhones as $storePhone) {
+            $this->addStorePhone($storePhone);
+        }
+
+        $this->collStorePhones = $storePhones;
+        $this->collStorePhonesPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related StorePhone objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related StorePhone objects.
+     * @throws PropelException
+     */
+    public function countStorePhones(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collStorePhonesPartial && !$this->isNew();
+        if (null === $this->collStorePhones || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collStorePhones) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getStorePhones());
+            }
+            $query = StorePhoneQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByPhone($this)
+                ->count($con);
+        }
+
+        return count($this->collStorePhones);
+    }
+
+    /**
+     * Method called to associate a StorePhone object to this object
+     * through the StorePhone foreign key attribute.
+     *
+     * @param    StorePhone $l StorePhone
+     * @return Phone The current object (for fluent API support)
+     */
+    public function addStorePhone(StorePhone $l)
+    {
+        if ($this->collStorePhones === null) {
+            $this->initStorePhones();
+            $this->collStorePhonesPartial = true;
+        }
+
+        if (!in_array($l, $this->collStorePhones->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddStorePhone($l);
+
+            if ($this->storePhonesScheduledForDeletion and $this->storePhonesScheduledForDeletion->contains($l)) {
+                $this->storePhonesScheduledForDeletion->remove($this->storePhonesScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	StorePhone $storePhone The storePhone object to add.
+     */
+    protected function doAddStorePhone($storePhone)
+    {
+        $this->collStorePhones[]= $storePhone;
+        $storePhone->setPhone($this);
+    }
+
+    /**
+     * @param	StorePhone $storePhone The storePhone object to remove.
+     * @return Phone The current object (for fluent API support)
+     */
+    public function removeStorePhone($storePhone)
+    {
+        if ($this->getStorePhones()->contains($storePhone)) {
+            $this->collStorePhones->remove($this->collStorePhones->search($storePhone));
+            if (null === $this->storePhonesScheduledForDeletion) {
+                $this->storePhonesScheduledForDeletion = clone $this->collStorePhones;
+                $this->storePhonesScheduledForDeletion->clear();
+            }
+            $this->storePhonesScheduledForDeletion[]= clone $storePhone;
+            $storePhone->setPhone(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Phone is new, it will return
+     * an empty collection; or if this Phone has previously
+     * been saved, it will retrieve related StorePhones from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Phone.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|StorePhone[] List of StorePhone objects
+     */
+    public function getStorePhonesJoinStore($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = StorePhoneQuery::create(null, $criteria);
+        $query->joinWith('Store', $join_behavior);
+
+        return $this->getStorePhones($query, $con);
     }
 
     /**
@@ -1391,6 +2172,380 @@ abstract class BasePhone extends BaseObject implements Persistent
     }
 
     /**
+     * Clears out the collCompanies collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Phone The current object (for fluent API support)
+     * @see        addCompanies()
+     */
+    public function clearCompanies()
+    {
+        $this->collCompanies = null; // important to set this to null since that means it is uninitialized
+        $this->collCompaniesPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * Initializes the collCompanies collection.
+     *
+     * By default this just sets the collCompanies collection to an empty collection (like clearCompanies());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @return void
+     */
+    public function initCompanies()
+    {
+        $this->collCompanies = new PropelObjectCollection();
+        $this->collCompanies->setModel('Company');
+    }
+
+    /**
+     * Gets a collection of Company objects related by a many-to-many relationship
+     * to the current object by way of the company_phone cross-reference table.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Phone is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria Optional query object to filter the query
+     * @param PropelPDO $con Optional connection object
+     *
+     * @return PropelObjectCollection|Company[] List of Company objects
+     */
+    public function getCompanies($criteria = null, PropelPDO $con = null)
+    {
+        if (null === $this->collCompanies || null !== $criteria) {
+            if ($this->isNew() && null === $this->collCompanies) {
+                // return empty collection
+                $this->initCompanies();
+            } else {
+                $collCompanies = CompanyQuery::create(null, $criteria)
+                    ->filterByPhone($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    return $collCompanies;
+                }
+                $this->collCompanies = $collCompanies;
+            }
+        }
+
+        return $this->collCompanies;
+    }
+
+    /**
+     * Sets a collection of Company objects related by a many-to-many relationship
+     * to the current object by way of the company_phone cross-reference table.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $companies A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Phone The current object (for fluent API support)
+     */
+    public function setCompanies(PropelCollection $companies, PropelPDO $con = null)
+    {
+        $this->clearCompanies();
+        $currentCompanies = $this->getCompanies(null, $con);
+
+        $this->companiesScheduledForDeletion = $currentCompanies->diff($companies);
+
+        foreach ($companies as $company) {
+            if (!$currentCompanies->contains($company)) {
+                $this->doAddCompany($company);
+            }
+        }
+
+        $this->collCompanies = $companies;
+
+        return $this;
+    }
+
+    /**
+     * Gets the number of Company objects related by a many-to-many relationship
+     * to the current object by way of the company_phone cross-reference table.
+     *
+     * @param Criteria $criteria Optional query object to filter the query
+     * @param boolean $distinct Set to true to force count distinct
+     * @param PropelPDO $con Optional connection object
+     *
+     * @return int the number of related Company objects
+     */
+    public function countCompanies($criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        if (null === $this->collCompanies || null !== $criteria) {
+            if ($this->isNew() && null === $this->collCompanies) {
+                return 0;
+            } else {
+                $query = CompanyQuery::create(null, $criteria);
+                if ($distinct) {
+                    $query->distinct();
+                }
+
+                return $query
+                    ->filterByPhone($this)
+                    ->count($con);
+            }
+        } else {
+            return count($this->collCompanies);
+        }
+    }
+
+    /**
+     * Associate a Company object to this object
+     * through the company_phone cross reference table.
+     *
+     * @param  Company $company The CompanyPhone object to relate
+     * @return Phone The current object (for fluent API support)
+     */
+    public function addCompany(Company $company)
+    {
+        if ($this->collCompanies === null) {
+            $this->initCompanies();
+        }
+
+        if (!$this->collCompanies->contains($company)) { // only add it if the **same** object is not already associated
+            $this->doAddCompany($company);
+            $this->collCompanies[] = $company;
+
+            if ($this->companiesScheduledForDeletion and $this->companiesScheduledForDeletion->contains($company)) {
+                $this->companiesScheduledForDeletion->remove($this->companiesScheduledForDeletion->search($company));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Company $company The company object to add.
+     */
+    protected function doAddCompany(Company $company)
+    {
+        // set the back reference to this object directly as using provided method either results
+        // in endless loop or in multiple relations
+        if (!$company->getPhones()->contains($this)) { $companyPhone = new CompanyPhone();
+            $companyPhone->setCompany($company);
+            $this->addCompanyPhone($companyPhone);
+
+            $foreignCollection = $company->getPhones();
+            $foreignCollection[] = $this;
+        }
+    }
+
+    /**
+     * Remove a Company object to this object
+     * through the company_phone cross reference table.
+     *
+     * @param Company $company The CompanyPhone object to relate
+     * @return Phone The current object (for fluent API support)
+     */
+    public function removeCompany(Company $company)
+    {
+        if ($this->getCompanies()->contains($company)) {
+            $this->collCompanies->remove($this->collCompanies->search($company));
+            if (null === $this->companiesScheduledForDeletion) {
+                $this->companiesScheduledForDeletion = clone $this->collCompanies;
+                $this->companiesScheduledForDeletion->clear();
+            }
+            $this->companiesScheduledForDeletion[]= $company;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Clears out the collStores collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Phone The current object (for fluent API support)
+     * @see        addStores()
+     */
+    public function clearStores()
+    {
+        $this->collStores = null; // important to set this to null since that means it is uninitialized
+        $this->collStoresPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * Initializes the collStores collection.
+     *
+     * By default this just sets the collStores collection to an empty collection (like clearStores());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @return void
+     */
+    public function initStores()
+    {
+        $this->collStores = new PropelObjectCollection();
+        $this->collStores->setModel('Store');
+    }
+
+    /**
+     * Gets a collection of Store objects related by a many-to-many relationship
+     * to the current object by way of the store_phone cross-reference table.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Phone is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria Optional query object to filter the query
+     * @param PropelPDO $con Optional connection object
+     *
+     * @return PropelObjectCollection|Store[] List of Store objects
+     */
+    public function getStores($criteria = null, PropelPDO $con = null)
+    {
+        if (null === $this->collStores || null !== $criteria) {
+            if ($this->isNew() && null === $this->collStores) {
+                // return empty collection
+                $this->initStores();
+            } else {
+                $collStores = StoreQuery::create(null, $criteria)
+                    ->filterByPhone($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    return $collStores;
+                }
+                $this->collStores = $collStores;
+            }
+        }
+
+        return $this->collStores;
+    }
+
+    /**
+     * Sets a collection of Store objects related by a many-to-many relationship
+     * to the current object by way of the store_phone cross-reference table.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $stores A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Phone The current object (for fluent API support)
+     */
+    public function setStores(PropelCollection $stores, PropelPDO $con = null)
+    {
+        $this->clearStores();
+        $currentStores = $this->getStores(null, $con);
+
+        $this->storesScheduledForDeletion = $currentStores->diff($stores);
+
+        foreach ($stores as $store) {
+            if (!$currentStores->contains($store)) {
+                $this->doAddStore($store);
+            }
+        }
+
+        $this->collStores = $stores;
+
+        return $this;
+    }
+
+    /**
+     * Gets the number of Store objects related by a many-to-many relationship
+     * to the current object by way of the store_phone cross-reference table.
+     *
+     * @param Criteria $criteria Optional query object to filter the query
+     * @param boolean $distinct Set to true to force count distinct
+     * @param PropelPDO $con Optional connection object
+     *
+     * @return int the number of related Store objects
+     */
+    public function countStores($criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        if (null === $this->collStores || null !== $criteria) {
+            if ($this->isNew() && null === $this->collStores) {
+                return 0;
+            } else {
+                $query = StoreQuery::create(null, $criteria);
+                if ($distinct) {
+                    $query->distinct();
+                }
+
+                return $query
+                    ->filterByPhone($this)
+                    ->count($con);
+            }
+        } else {
+            return count($this->collStores);
+        }
+    }
+
+    /**
+     * Associate a Store object to this object
+     * through the store_phone cross reference table.
+     *
+     * @param  Store $store The StorePhone object to relate
+     * @return Phone The current object (for fluent API support)
+     */
+    public function addStore(Store $store)
+    {
+        if ($this->collStores === null) {
+            $this->initStores();
+        }
+
+        if (!$this->collStores->contains($store)) { // only add it if the **same** object is not already associated
+            $this->doAddStore($store);
+            $this->collStores[] = $store;
+
+            if ($this->storesScheduledForDeletion and $this->storesScheduledForDeletion->contains($store)) {
+                $this->storesScheduledForDeletion->remove($this->storesScheduledForDeletion->search($store));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Store $store The store object to add.
+     */
+    protected function doAddStore(Store $store)
+    {
+        // set the back reference to this object directly as using provided method either results
+        // in endless loop or in multiple relations
+        if (!$store->getPhones()->contains($this)) { $storePhone = new StorePhone();
+            $storePhone->setStore($store);
+            $this->addStorePhone($storePhone);
+
+            $foreignCollection = $store->getPhones();
+            $foreignCollection[] = $this;
+        }
+    }
+
+    /**
+     * Remove a Store object to this object
+     * through the store_phone cross reference table.
+     *
+     * @param Store $store The StorePhone object to relate
+     * @return Phone The current object (for fluent API support)
+     */
+    public function removeStore(Store $store)
+    {
+        if ($this->getStores()->contains($store)) {
+            $this->collStores->remove($this->collStores->search($store));
+            if (null === $this->storesScheduledForDeletion) {
+                $this->storesScheduledForDeletion = clone $this->collStores;
+                $this->storesScheduledForDeletion->clear();
+            }
+            $this->storesScheduledForDeletion[]= $store;
+        }
+
+        return $this;
+    }
+
+    /**
      * Clears out the collUsers collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
@@ -1583,6 +2738,7 @@ abstract class BasePhone extends BaseObject implements Persistent
     public function clear()
     {
         $this->id = null;
+        $this->primary = null;
         $this->phone_number = null;
         $this->description = null;
         $this->created_at = null;
@@ -1591,6 +2747,7 @@ abstract class BasePhone extends BaseObject implements Persistent
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
         $this->clearAllReferences();
+        $this->applyDefaultValues();
         $this->resetModified();
         $this->setNew(true);
         $this->setDeleted(false);
@@ -1609,8 +2766,28 @@ abstract class BasePhone extends BaseObject implements Persistent
     {
         if ($deep && !$this->alreadyInClearAllReferencesDeep) {
             $this->alreadyInClearAllReferencesDeep = true;
+            if ($this->collCompanyPhones) {
+                foreach ($this->collCompanyPhones as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collStorePhones) {
+                foreach ($this->collStorePhones as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collUserPhones) {
                 foreach ($this->collUserPhones as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collCompanies) {
+                foreach ($this->collCompanies as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collStores) {
+                foreach ($this->collStores as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
@@ -1623,10 +2800,26 @@ abstract class BasePhone extends BaseObject implements Persistent
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
 
+        if ($this->collCompanyPhones instanceof PropelCollection) {
+            $this->collCompanyPhones->clearIterator();
+        }
+        $this->collCompanyPhones = null;
+        if ($this->collStorePhones instanceof PropelCollection) {
+            $this->collStorePhones->clearIterator();
+        }
+        $this->collStorePhones = null;
         if ($this->collUserPhones instanceof PropelCollection) {
             $this->collUserPhones->clearIterator();
         }
         $this->collUserPhones = null;
+        if ($this->collCompanies instanceof PropelCollection) {
+            $this->collCompanies->clearIterator();
+        }
+        $this->collCompanies = null;
+        if ($this->collStores instanceof PropelCollection) {
+            $this->collStores->clearIterator();
+        }
+        $this->collStores = null;
         if ($this->collUsers instanceof PropelCollection) {
             $this->collUsers->clearIterator();
         }

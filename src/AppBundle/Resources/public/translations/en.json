@@ -15,10 +15,16 @@
     "CANCEL": "Cancel",
     "DELETE": "Delete",
     "SAVE": "Save",
+    "YES": "Yes",
+    "NO": "No",
+    "COPY": "Copy",
     "ROLE": {
         "USER": "User",
         "ADMIN": "Admin",
-        "SUPER_ADMIN": "Super admin"
+        "SUPER_ADMIN": "Super admin",
+        "OWNER": "Owner",
+        "TECH_BEER": "Beer technology",
+        "TECH_COOLING": "Cooling technology"
     },
     "GENDER": {
         "MALE": "Male",
@@ -60,6 +66,18 @@
           "DESCRIPTION": "This is an invoice address."
         }
     },
+    "COMPANY_TYPE": {
+        "BAR": {
+            "NAME": "Bar",
+            "DESCRIPTION": "This is a bar."
+        }
+    },
+    "STORE_TYPE": {
+        "BAR": {
+            "NAME": "Bar",
+            "DESCRIPTION": "This is a bar."
+        }
+    },
     "USER": {
         "LABEL": "User",
         "WELCOME": "Welcome",
@@ -93,11 +111,83 @@
     "ADMINISTRATION": {
         "LABEL": "Administration"
     },
+    "COMPANY": {
+        "LABEL": "Company",
+        "ACTIVE": "Active",
+        "CODE": "Code",
+        "TYPE": "Type",
+        "DESCRIPTION": "Description",
+        "WEBSITE": "Website",
+        "VAT_NUMBER": "VAT number",
+        "COC_NUMBER": "COC number",
+        "BANK_ACCOUNT_NUMBER": "IBAN",
+        "COMPANIES": "Companies",
+        "STORE": "Store",
+        "STORES": "Stores",
+        "REGIONS": "Regions",
+        "REGION": "Region",
+        "NAME": "Name",
+        "EMAIL": "Email",
+        "PHONE": "Phone number",
+        "ADDRESS": "Address",
+        "ADDRESS_TYPE": "Address type",
+        "ADDRESSES": "Addresses",
+        "STREET": "Street",
+        "POSTAL_CODE": "Postal code",
+        "CITY": "City",
+        "COUNTRY": "Country",
+        "MAP_URL": "Map URL",
+        "OWNERS": "Owners",
+        "CONTACTS": "Contacts",
+        "INFORMANTS": "Informants",
+        "NOTIFY": "Notify"
+    },
+    "STORE": {
+        "LABEL": "Store",
+        "ACTIVE": "Active",
+        "CODE": "Code",
+        "TYPE": "Type",
+        "DESCRIPTION": "Description",
+        "WEBSITE": "Website",
+        "VAT_NUMBER": "VAT number",
+        "COC_NUMBER": "COC number",
+        "BANK_ACCOUNT_NUMBER": "IBAN",
+        "COMPANY": "Company",
+        "COMPANIES": "Companies",
+        "STORES": "Stores",
+        "REGIONS": "Regions",
+        "REGION": "Region",
+        "NAME": "Name",
+        "EMAIL": "Email",
+        "PHONE": "Phone number",
+        "ADDRESS": "Address",
+        "ADDRESS_TYPE": "Address type",
+        "ADDRESSES": "Addresses",
+        "STREET": "Street",
+        "POSTAL_CODE": "Postal code",
+        "CITY": "City",
+        "COUNTRY": "Country",
+        "MAP_URL": "Map URL",
+        "OWNERS": "Owners",
+        "CONTACTS": "Contacts",
+        "INFORMANTS": "Informants",
+        "NOTIFY": "Notify"
+    },
+    "REGIONS": {
+        "LABEL": "Regions",
+        "REGION": "Region",
+        "NAME": "Name",
+        "DESCRIPTION": "Description"
+    },
     "QUESTION": {
         "DELETE_EMAIL": "Delete email address?",
         "DELETE_PHONE": "Delete phone number?",
         "DELETE_ADDRESS": "Delete address?",
-        "DELETE_USER": "Delete user?"
+        "DELETE_USER": "Delete user?",
+        "DELETE_COMPANY": "Delete company?",
+        "DELETE_REGION": "Delete region?",
+        "DELETE_STORE": "Delete store?",
+        "COPY_COMPANY_DATA": "Copy all company data?"
     },
     "AUTH": {
         "USERNAME": "Username",
@@ -121,6 +211,15 @@
         "USER_LOCKED_OUT": "User is locked out, please try later.",
         "EMAIL_CREDENTIALS_SENT": "Your credentials have been sent to your email address.",
         "ROLES": "Roles"
+    },
+    "PAYMENT": {
+        "METHOD": "Payment method",
+        "NAME": {
+            "METHOD_AUTOMATIC_PAYMENT": "Automatic payment",
+            "METHOD_INVOICE": "Invoice",
+            "METHOD_CASH": "Cash",
+            "METHOD_BANK_TRANSFER": "Bank transfer"
+        }
     },
     "LNG": {
         "ENGLISH": "English",

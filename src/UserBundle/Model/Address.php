@@ -46,7 +46,7 @@ class Address extends BaseAddress
         if (is_numeric($country))
             $country = CountriesQuery::create()->findOneById($country);
         if (empty($country))
-            $country = CountriesQuery::create()->findOneById(Countries::COUNTRY_GB);
+            $country = CountriesQuery::create()->findOneById(Countries::COUNTRY_NL);
         if (!empty($country))
             $country = $country->toArray();
         return $country;

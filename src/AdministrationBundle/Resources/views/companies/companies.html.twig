@@ -1,0 +1,90 @@
+{% extends 'base.html.twig' %}
+
+{% block contents %}
+    {% if app.user %}
+        <div ng-controller="companyCtrl" ng-init="getCompanies()">
+
+            {% block header %}
+                {% include 'AdministrationBundle:header:header.html.twig' %}
+            {% endblock %}
+
+            {% block page %}
+                <div class="page">
+                    <div class="container">
+                        <div class="row">
+                            <div class="panel-body">
+                                <h4 ng-cloak>
+                                    <i class="fa fa-building-o"></i> {{ ng.translate('COMPANY.COMPANIES') }}
+                                </h4>
+                                <hr/>
+                                <div class="well">
+                                    <section st-table="companiesCollection" st-safe-src="companies.companies()">
+                                        <div class="row">
+                                            <div class="col-md-3 col-xs-6">
+                                                <input st-search class="form-control input-sm"
+                                                       placeholder="{{ ng.translate('SEARCH') }}" type="text" ng-cloak/>
+                                            </div>
+                                        </div>
+                                        <br/>
+                                        <div class="row">
+                                            <div class="col-md-12 col-xs-12">
+                                                <table class="table table-striped table-bordered">
+                                                    <thead>
+                                                    <tr>
+                                                        <th st-sort="Name" class="st-sortable col-md-8 col-xs-7"
+                                                            ng-cloak>{{ ng.translate('COMPANY.NAME') }}</th>
+                                                        <th st-sort="IsEnabled" class="st-sortable col-md-1 col-xs-2 text-right"
+                                                            ng-cloak>{{ ng.translate('COMPANY.ACTIVE') }}</th>
+                                                        <th class="st-nosort text-right col-md-2 col-xs-3"
+                                                            ng-cloak>{{ ng.translate('ACTION') }}</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr ng-repeat="row in companiesCollection">
+                                                        <td ng-cloak>{{ '{{ row.Name }}' }}</td>
+                                                        <td ng-cloak class="text-right">
+                                                            <label class="label label-success tag-label" ng-show="{{ '{{ row.IsEnabled }}' }}">{{ ng.translate('YES') }}</label>
+                                                            <label class="label label-danger tag-label" ng-hide="{{ '{{ row.IsEnabled }}' }}">{{ ng.translate('NO') }}</label>
+                                                        </td>
+                                                        <td>
+                                                            <div class="pull-right">
+                                                                <button type="button" ng-click="editCompany(row.Id)"
+                                                                        class="btn btn-xs btn-primary">
+                                                                    <i class="fa fa-pencil"></i>
+                                                                </button>
+                                                                <button type="button" ng-click="deleteCompany(row.Id)"
+                                                                        class="btn btn-xs btn-danger">
+                                                                    <i class="fa fa-remove"></i>
+                                                                </button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </section>
+                                </div>
+                                <div class="panel-footer">
+                                    <div class="row">
+                                        <div class="col-md-12 col-xs-12">
+                                            <button class="btn btn-sm btn-success pull-right"
+                                                    ng-click="addCompany()" ng-cloak>
+                                                <i class="fa fa-plus"></i> {{ ng.translate('ADD') }}</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endblock %}
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('bundles/app/js/app/controllers/companyCtrl.js') }}"></script>
+    <script src="{{ asset('bundles/app/js/app/datasets/companies.js') }}"></script>
+{% endblock %}
+

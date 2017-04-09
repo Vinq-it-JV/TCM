@@ -129,6 +129,7 @@
 
     <table name='email'>
         <column name='id' type='integer' primaryKey='true' autoIncrement='true'/>
+        <column name='primary' type='boolean' default='false' />
         <column name='email' type='varchar' size='255' />
         <column name='description' type='varchar' size='255' />
         <behavior name="timestampable" />
@@ -136,6 +137,7 @@
 
     <table name='phone'>
         <column name='id' type='integer' primaryKey='true' autoIncrement='true'/>
+        <column name='primary' type='boolean' default='false' />
         <column name='phone_number' type='varchar' size='255' />
         <column name='description' type='varchar' size='255' />
         <behavior name="timestampable" />

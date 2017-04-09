@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<database name="default" defaultIdMethod="native" namespace="StoreBundle\Model">
+    <table name="store">
+        <column name="id" type="integer" primaryKey="true" autoIncrement="true" />
+        <column name="main_company" type="integer" />
+        <column name="name" type="varchar" size="255" />
+        <column name="description" type="longvarchar" />
+        <column name="type" type="integer" />
+        <column name="code" type="varchar" size="25"/>
+        <column name="website" type="varchar" size="255"/>
+        <column name="region" type="integer" />
+        <column name="remarks" type="longvarchar" />
+        <column name="payment_method" type="integer" />
+        <column name="bank_account_number" type="varchar" size="50"/>
+        <column name="vat_number" type="varchar" size="255"/>
+        <column name="coc_number" type="varchar" size="255"/>
+        <column name="is_enabled" type='boolean' default='true'/>
+        <column name="is_deleted" type='boolean' default='false'/>
+        <behavior name="timestampable" />
+        <foreign-key foreignTable="company">
+            <reference local="main_company" foreign="id"/>
+        </foreign-key>
+        <foreign-key foreignTable="store_type">
+            <reference local="type" foreign="id"/>
+        </foreign-key>
+        <foreign-key foreignTable="regions">
+            <reference local="region" foreign="id"/>
+        </foreign-key>
+    </table>
+
+    <table name="store_address" isCrossRef="true">
+        <column name="store_id" type="integer" primaryKey="true"/>
+        <column name="address_id" type="integer" primaryKey="true"/>
+        <foreign-key foreignTable="store" onDelete="CASCADE">
+            <reference local="store_id" foreign="id"/>
+        </foreign-key>
+        <foreign-key foreignTable="address" onDelete="CASCADE">
+            <reference local="address_id" foreign="id" />
+        </foreign-key>
+    </table>
+
+    <table name="store_email" isCrossRef="true">
+        <column name="store_id" type="integer" primaryKey="true"/>
+        <column name="email_id" type="integer" primaryKey="true"/>
+        <foreign-key foreignTable="store" onDelete="CASCADE">
+            <reference local="store_id" foreign="id" />
+        </foreign-key>
+        <foreign-key foreignTable="email" onDelete="CASCADE">
+            <reference local="email_id" foreign="id"/>
+        </foreign-key>
+    </table>
+
+    <table name="store_phone" isCrossRef="true">
+        <column name="store_id" type="integer" primaryKey="true"/>
+        <column name="phone_id" type="integer" primaryKey="true"/>
+        <foreign-key foreignTable="store" onDelete="CASCADE">
+            <reference local="store_id" foreign="id"/>
+        </foreign-key>
+        <foreign-key foreignTable="phone" onDelete="CASCADE">
+            <reference local="phone_id" foreign="id"/>
+        </foreign-key>
+    </table>
+
+    <table name="store_contact" isCrossRef="true">
+        <column name="store_id" type="integer" primaryKey="true"/>
+        <column name="contact_id" type="integer" primaryKey="true"/>
+        <foreign-key foreignTable="store" phpName="ContactStore" onDelete="CASCADE">
+            <reference local="store_id" foreign="id"/>
+        </foreign-key>
+        <foreign-key foreignTable="user" phpName="Contact">
+            <reference local="contact_id" foreign="id"/>
+        </foreign-key>
+    </table>
+
+    <table name="store_informant" isCrossRef="true">
+        <column name="store_id" type="integer" primaryKey="true"/>
+        <column name="informant_id" type="integer" primaryKey="true"/>
+        <foreign-key foreignTable="store" phpName="InformantStore" onDelete="CASCADE">
+            <reference local="store_id" foreign="id"/>
+        </foreign-key>
+        <foreign-key foreignTable="user" phpName="Informant">
+            <reference local="informant_id" foreign="id"/>
+        </foreign-key>
+    </table>
+
+    <table name="store_owner" isCrossRef="true">
+        <column name="store_id" type="integer" primaryKey="true"/>
+        <column name="owner_id" type="integer" primaryKey="true"/>
+        <foreign-key foreignTable="store" phpName="OwnerStore" onDelete="CASCADE">
+            <reference local="store_id" foreign="id"/>
+        </foreign-key>
+        <foreign-key foreignTable="user" phpName="Owner">
+            <reference local="owner_id" foreign="id"/>
+        </foreign-key>
+    </table>
+
+    <table name="store_type">
+        <column name="id" type="integer" primaryKey="true" autoIncrement="true"/>
+        <column name="name" type="varchar" size="255" />
+        <column name="description" type="varchar" size="255" />
+    </table>
+
+</database>

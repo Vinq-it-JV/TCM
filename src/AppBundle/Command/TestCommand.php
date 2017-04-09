@@ -2,6 +2,9 @@
 
 namespace AppBundle\Command;
 
+use CompanyBundle\Model\Company;
+use CompanyBundle\Model\Informant;
+use CompanyBundle\Model\InformantQuery;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -16,6 +19,8 @@ use UserBundle\Model\UserTitle;
 use UserBundle\Model\UserTitleQuery;
 use UserBundle\Model\Address;
 use UserBundle\Model\Phone;
+use StoreBundle\Model\Store;
+
 
 /**
  * Class TestCommand
@@ -37,8 +42,36 @@ class TestCommand extends ContainerAwareCommand {
         //$this->getFullUserTemplate($output);
         //$this->addEmailAddress($output);
         //$this->userLanguage($output);
-        $this->sendEmail($output);
+        //$this->sendEmail($output);
+        //$this->companyTest($output);
+        $this->postcodeApiTest($output);
         $output->writeln("Ready.");
+    }
+
+    protected function postcodeApiTest(OutputInterface $output)
+    {
+        $address = $this->getContainer()->get('usoft.postcode.client')->getAddress('2652HA', 1);
+        if (!empty($address)) {
+            $output->writeln($address->getStreet());
+            $output->writeln($address->getNumber());
+            $output->writeln($address->getCity());
+            $output->writeln($address->getProvince());
+            $output->writeln($address->getZipcode());
+        }
+    }
+
+    protected function companyTest(OutputInterface $output)
+    {
+        $user = UserQuery::create()->findOneByUsername('jvisser');
+
+        if (!empty($user)) {
+            $company = new Company();
+            $company
+                ->setName('Jeroen Visser BV')
+                ->setDescription('Gewoon een leuk bedrijf')
+                ->save();
+            $output->writeln('Company created!');
+        }
     }
 
     protected function sendEmail(OutputInterface $output)

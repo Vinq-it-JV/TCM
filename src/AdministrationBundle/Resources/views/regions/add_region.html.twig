@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% import _self as form %}
+
+{% block contents %}
+    {% if app.user %}
+        {% set ngInit = "newRegion()" %}
+    <div ng-controller="regionCtrl" ng-init="{{ ngInit }}">
+
+        {% block header %}
+            {% include 'AdministrationBundle:header:header.html.twig' %}
+        {% endblock %}
+
+        {% block page %}
+            <div class="page">
+                <div class="container">
+                    <div class="row">
+                        <div class="panel-body">
+                            <h4 ng-cloak>
+                                <i class="fa fa-map-marker"></i> {{ ng.translate('REGIONS.REGION') }}
+                            </h4>
+                            <hr/>
+                            {%  include 'AdministrationBundle:regions:region_form.html.twig' %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endblock %}
+    </div>
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('bundles/app/js/app/controllers/regionCtrl.js') }}"></script>
+    <script src="{{ asset('bundles/app/js/app/datasets/regions.js') }}"></script>
+{% endblock %}

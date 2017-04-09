@@ -28,5 +28,4 @@ class AddressType extends BaseAddressType
         $typeArr['address_type'] = $types->toArray();
         return $typeArr;
     }
-
 }

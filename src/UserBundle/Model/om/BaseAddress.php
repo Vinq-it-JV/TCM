@@ -15,6 +15,14 @@ use \PropelDateTime;
 use \PropelException;
 use \PropelObjectCollection;
 use \PropelPDO;
+use CompanyBundle\Model\Company;
+use CompanyBundle\Model\CompanyAddress;
+use CompanyBundle\Model\CompanyAddressQuery;
+use CompanyBundle\Model\CompanyQuery;
+use StoreBundle\Model\Store;
+use StoreBundle\Model\StoreAddress;
+use StoreBundle\Model\StoreAddressQuery;
+use StoreBundle\Model\StoreQuery;
 use UserBundle\Model\Address;
 use UserBundle\Model\AddressPeer;
 use UserBundle\Model\AddressQuery;
@@ -118,10 +126,32 @@ abstract class BaseAddress extends BaseObject implements Persistent
     protected $aCountries;
 
     /**
+     * @var        PropelObjectCollection|CompanyAddress[] Collection to store aggregation of CompanyAddress objects.
+     */
+    protected $collCompanyAddresses;
+    protected $collCompanyAddressesPartial;
+
+    /**
+     * @var        PropelObjectCollection|StoreAddress[] Collection to store aggregation of StoreAddress objects.
+     */
+    protected $collStoreAddresses;
+    protected $collStoreAddressesPartial;
+
+    /**
      * @var        PropelObjectCollection|UserAddress[] Collection to store aggregation of UserAddress objects.
      */
     protected $collUserAddresses;
     protected $collUserAddressesPartial;
+
+    /**
+     * @var        PropelObjectCollection|Company[] Collection to store aggregation of Company objects.
+     */
+    protected $collCompanies;
+
+    /**
+     * @var        PropelObjectCollection|Store[] Collection to store aggregation of Store objects.
+     */
+    protected $collStores;
 
     /**
      * @var        PropelObjectCollection|User[] Collection to store aggregation of User objects.
@@ -152,7 +182,31 @@ abstract class BaseAddress extends BaseObject implements Persistent
      * An array of objects scheduled for deletion.
      * @var		PropelObjectCollection
      */
+    protected $companiesScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $storesScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
     protected $usersScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $companyAddressesScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $storeAddressesScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -696,8 +750,14 @@ abstract class BaseAddress extends BaseObject implements Persistent
         if ($deep) {  // also de-associate any related objects?
 
             $this->aCountries = null;
+            $this->collCompanyAddresses = null;
+
+            $this->collStoreAddresses = null;
+
             $this->collUserAddresses = null;
 
+            $this->collCompanies = null;
+            $this->collStores = null;
             $this->collUsers = null;
         } // if (deep)
     }
@@ -846,6 +906,58 @@ abstract class BaseAddress extends BaseObject implements Persistent
                 $this->resetModified();
             }
 
+            if ($this->companiesScheduledForDeletion !== null) {
+                if (!$this->companiesScheduledForDeletion->isEmpty()) {
+                    $pks = array();
+                    $pk = $this->getPrimaryKey();
+                    foreach ($this->companiesScheduledForDeletion->getPrimaryKeys(false) as $remotePk) {
+                        $pks[] = array($remotePk, $pk);
+                    }
+                    CompanyAddressQuery::create()
+                        ->filterByPrimaryKeys($pks)
+                        ->delete($con);
+                    $this->companiesScheduledForDeletion = null;
+                }
+
+                foreach ($this->getCompanies() as $company) {
+                    if ($company->isModified()) {
+                        $company->save($con);
+                    }
+                }
+            } elseif ($this->collCompanies) {
+                foreach ($this->collCompanies as $company) {
+                    if ($company->isModified()) {
+                        $company->save($con);
+                    }
+                }
+            }
+
+            if ($this->storesScheduledForDeletion !== null) {
+                if (!$this->storesScheduledForDeletion->isEmpty()) {
+                    $pks = array();
+                    $pk = $this->getPrimaryKey();
+                    foreach ($this->storesScheduledForDeletion->getPrimaryKeys(false) as $remotePk) {
+                        $pks[] = array($remotePk, $pk);
+                    }
+                    StoreAddressQuery::create()
+                        ->filterByPrimaryKeys($pks)
+                        ->delete($con);
+                    $this->storesScheduledForDeletion = null;
+                }
+
+                foreach ($this->getStores() as $store) {
+                    if ($store->isModified()) {
+                        $store->save($con);
+                    }
+                }
+            } elseif ($this->collStores) {
+                foreach ($this->collStores as $store) {
+                    if ($store->isModified()) {
+                        $store->save($con);
+                    }
+                }
+            }
+
             if ($this->usersScheduledForDeletion !== null) {
                 if (!$this->usersScheduledForDeletion->isEmpty()) {
                     $pks = array();
@@ -868,6 +980,40 @@ abstract class BaseAddress extends BaseObject implements Persistent
                 foreach ($this->collUsers as $user) {
                     if ($user->isModified()) {
                         $user->save($con);
+                    }
+                }
+            }
+
+            if ($this->companyAddressesScheduledForDeletion !== null) {
+                if (!$this->companyAddressesScheduledForDeletion->isEmpty()) {
+                    CompanyAddressQuery::create()
+                        ->filterByPrimaryKeys($this->companyAddressesScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->companyAddressesScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collCompanyAddresses !== null) {
+                foreach ($this->collCompanyAddresses as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->storeAddressesScheduledForDeletion !== null) {
+                if (!$this->storeAddressesScheduledForDeletion->isEmpty()) {
+                    StoreAddressQuery::create()
+                        ->filterByPrimaryKeys($this->storeAddressesScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->storeAddressesScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collStoreAddresses !== null) {
+                foreach ($this->collStoreAddresses as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
                     }
                 }
             }
@@ -1103,6 +1249,22 @@ abstract class BaseAddress extends BaseObject implements Persistent
             }
 
 
+                if ($this->collCompanyAddresses !== null) {
+                    foreach ($this->collCompanyAddresses as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
+                if ($this->collStoreAddresses !== null) {
+                    foreach ($this->collStoreAddresses as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
                 if ($this->collUserAddresses !== null) {
                     foreach ($this->collUserAddresses as $referrerFK) {
                         if (!$referrerFK->validate($columns)) {
@@ -1228,6 +1390,12 @@ abstract class BaseAddress extends BaseObject implements Persistent
         if ($includeForeignObjects) {
             if (null !== $this->aCountries) {
                 $result['Countries'] = $this->aCountries->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->collCompanyAddresses) {
+                $result['CompanyAddresses'] = $this->collCompanyAddresses->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collStoreAddresses) {
+                $result['StoreAddresses'] = $this->collStoreAddresses->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collUserAddresses) {
                 $result['UserAddresses'] = $this->collUserAddresses->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
@@ -1437,6 +1605,18 @@ abstract class BaseAddress extends BaseObject implements Persistent
             // store object hash to prevent cycle
             $this->startCopy = true;
 
+            foreach ($this->getCompanyAddresses() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addCompanyAddress($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getStoreAddresses() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addStoreAddress($relObj->copy($deepCopy));
+                }
+            }
+
             foreach ($this->getUserAddresses() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addUserAddress($relObj->copy($deepCopy));
@@ -1556,9 +1736,521 @@ abstract class BaseAddress extends BaseObject implements Persistent
      */
     public function initRelation($relationName)
     {
+        if ('CompanyAddress' == $relationName) {
+            $this->initCompanyAddresses();
+        }
+        if ('StoreAddress' == $relationName) {
+            $this->initStoreAddresses();
+        }
         if ('UserAddress' == $relationName) {
             $this->initUserAddresses();
         }
+    }
+
+    /**
+     * Clears out the collCompanyAddresses collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Address The current object (for fluent API support)
+     * @see        addCompanyAddresses()
+     */
+    public function clearCompanyAddresses()
+    {
+        $this->collCompanyAddresses = null; // important to set this to null since that means it is uninitialized
+        $this->collCompanyAddressesPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collCompanyAddresses collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialCompanyAddresses($v = true)
+    {
+        $this->collCompanyAddressesPartial = $v;
+    }
+
+    /**
+     * Initializes the collCompanyAddresses collection.
+     *
+     * By default this just sets the collCompanyAddresses collection to an empty array (like clearcollCompanyAddresses());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initCompanyAddresses($overrideExisting = true)
+    {
+        if (null !== $this->collCompanyAddresses && !$overrideExisting) {
+            return;
+        }
+        $this->collCompanyAddresses = new PropelObjectCollection();
+        $this->collCompanyAddresses->setModel('CompanyAddress');
+    }
+
+    /**
+     * Gets an array of CompanyAddress objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Address is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|CompanyAddress[] List of CompanyAddress objects
+     * @throws PropelException
+     */
+    public function getCompanyAddresses($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collCompanyAddressesPartial && !$this->isNew();
+        if (null === $this->collCompanyAddresses || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collCompanyAddresses) {
+                // return empty collection
+                $this->initCompanyAddresses();
+            } else {
+                $collCompanyAddresses = CompanyAddressQuery::create(null, $criteria)
+                    ->filterByAddress($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collCompanyAddressesPartial && count($collCompanyAddresses)) {
+                      $this->initCompanyAddresses(false);
+
+                      foreach ($collCompanyAddresses as $obj) {
+                        if (false == $this->collCompanyAddresses->contains($obj)) {
+                          $this->collCompanyAddresses->append($obj);
+                        }
+                      }
+
+                      $this->collCompanyAddressesPartial = true;
+                    }
+
+                    $collCompanyAddresses->getInternalIterator()->rewind();
+
+                    return $collCompanyAddresses;
+                }
+
+                if ($partial && $this->collCompanyAddresses) {
+                    foreach ($this->collCompanyAddresses as $obj) {
+                        if ($obj->isNew()) {
+                            $collCompanyAddresses[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collCompanyAddresses = $collCompanyAddresses;
+                $this->collCompanyAddressesPartial = false;
+            }
+        }
+
+        return $this->collCompanyAddresses;
+    }
+
+    /**
+     * Sets a collection of CompanyAddress objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $companyAddresses A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Address The current object (for fluent API support)
+     */
+    public function setCompanyAddresses(PropelCollection $companyAddresses, PropelPDO $con = null)
+    {
+        $companyAddressesToDelete = $this->getCompanyAddresses(new Criteria(), $con)->diff($companyAddresses);
+
+
+        //since at least one column in the foreign key is at the same time a PK
+        //we can not just set a PK to NULL in the lines below. We have to store
+        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
+        $this->companyAddressesScheduledForDeletion = clone $companyAddressesToDelete;
+
+        foreach ($companyAddressesToDelete as $companyAddressRemoved) {
+            $companyAddressRemoved->setAddress(null);
+        }
+
+        $this->collCompanyAddresses = null;
+        foreach ($companyAddresses as $companyAddress) {
+            $this->addCompanyAddress($companyAddress);
+        }
+
+        $this->collCompanyAddresses = $companyAddresses;
+        $this->collCompanyAddressesPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related CompanyAddress objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related CompanyAddress objects.
+     * @throws PropelException
+     */
+    public function countCompanyAddresses(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collCompanyAddressesPartial && !$this->isNew();
+        if (null === $this->collCompanyAddresses || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collCompanyAddresses) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getCompanyAddresses());
+            }
+            $query = CompanyAddressQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByAddress($this)
+                ->count($con);
+        }
+
+        return count($this->collCompanyAddresses);
+    }
+
+    /**
+     * Method called to associate a CompanyAddress object to this object
+     * through the CompanyAddress foreign key attribute.
+     *
+     * @param    CompanyAddress $l CompanyAddress
+     * @return Address The current object (for fluent API support)
+     */
+    public function addCompanyAddress(CompanyAddress $l)
+    {
+        if ($this->collCompanyAddresses === null) {
+            $this->initCompanyAddresses();
+            $this->collCompanyAddressesPartial = true;
+        }
+
+        if (!in_array($l, $this->collCompanyAddresses->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddCompanyAddress($l);
+
+            if ($this->companyAddressesScheduledForDeletion and $this->companyAddressesScheduledForDeletion->contains($l)) {
+                $this->companyAddressesScheduledForDeletion->remove($this->companyAddressesScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	CompanyAddress $companyAddress The companyAddress object to add.
+     */
+    protected function doAddCompanyAddress($companyAddress)
+    {
+        $this->collCompanyAddresses[]= $companyAddress;
+        $companyAddress->setAddress($this);
+    }
+
+    /**
+     * @param	CompanyAddress $companyAddress The companyAddress object to remove.
+     * @return Address The current object (for fluent API support)
+     */
+    public function removeCompanyAddress($companyAddress)
+    {
+        if ($this->getCompanyAddresses()->contains($companyAddress)) {
+            $this->collCompanyAddresses->remove($this->collCompanyAddresses->search($companyAddress));
+            if (null === $this->companyAddressesScheduledForDeletion) {
+                $this->companyAddressesScheduledForDeletion = clone $this->collCompanyAddresses;
+                $this->companyAddressesScheduledForDeletion->clear();
+            }
+            $this->companyAddressesScheduledForDeletion[]= clone $companyAddress;
+            $companyAddress->setAddress(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Address is new, it will return
+     * an empty collection; or if this Address has previously
+     * been saved, it will retrieve related CompanyAddresses from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Address.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|CompanyAddress[] List of CompanyAddress objects
+     */
+    public function getCompanyAddressesJoinCompany($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = CompanyAddressQuery::create(null, $criteria);
+        $query->joinWith('Company', $join_behavior);
+
+        return $this->getCompanyAddresses($query, $con);
+    }
+
+    /**
+     * Clears out the collStoreAddresses collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Address The current object (for fluent API support)
+     * @see        addStoreAddresses()
+     */
+    public function clearStoreAddresses()
+    {
+        $this->collStoreAddresses = null; // important to set this to null since that means it is uninitialized
+        $this->collStoreAddressesPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collStoreAddresses collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialStoreAddresses($v = true)
+    {
+        $this->collStoreAddressesPartial = $v;
+    }
+
+    /**
+     * Initializes the collStoreAddresses collection.
+     *
+     * By default this just sets the collStoreAddresses collection to an empty array (like clearcollStoreAddresses());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initStoreAddresses($overrideExisting = true)
+    {
+        if (null !== $this->collStoreAddresses && !$overrideExisting) {
+            return;
+        }
+        $this->collStoreAddresses = new PropelObjectCollection();
+        $this->collStoreAddresses->setModel('StoreAddress');
+    }
+
+    /**
+     * Gets an array of StoreAddress objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Address is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|StoreAddress[] List of StoreAddress objects
+     * @throws PropelException
+     */
+    public function getStoreAddresses($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collStoreAddressesPartial && !$this->isNew();
+        if (null === $this->collStoreAddresses || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collStoreAddresses) {
+                // return empty collection
+                $this->initStoreAddresses();
+            } else {
+                $collStoreAddresses = StoreAddressQuery::create(null, $criteria)
+                    ->filterByAddress($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collStoreAddressesPartial && count($collStoreAddresses)) {
+                      $this->initStoreAddresses(false);
+
+                      foreach ($collStoreAddresses as $obj) {
+                        if (false == $this->collStoreAddresses->contains($obj)) {
+                          $this->collStoreAddresses->append($obj);
+                        }
+                      }
+
+                      $this->collStoreAddressesPartial = true;
+                    }
+
+                    $collStoreAddresses->getInternalIterator()->rewind();
+
+                    return $collStoreAddresses;
+                }
+
+                if ($partial && $this->collStoreAddresses) {
+                    foreach ($this->collStoreAddresses as $obj) {
+                        if ($obj->isNew()) {
+                            $collStoreAddresses[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collStoreAddresses = $collStoreAddresses;
+                $this->collStoreAddressesPartial = false;
+            }
+        }
+
+        return $this->collStoreAddresses;
+    }
+
+    /**
+     * Sets a collection of StoreAddress objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $storeAddresses A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Address The current object (for fluent API support)
+     */
+    public function setStoreAddresses(PropelCollection $storeAddresses, PropelPDO $con = null)
+    {
+        $storeAddressesToDelete = $this->getStoreAddresses(new Criteria(), $con)->diff($storeAddresses);
+
+
+        //since at least one column in the foreign key is at the same time a PK
+        //we can not just set a PK to NULL in the lines below. We have to store
+        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
+        $this->storeAddressesScheduledForDeletion = clone $storeAddressesToDelete;
+
+        foreach ($storeAddressesToDelete as $storeAddressRemoved) {
+            $storeAddressRemoved->setAddress(null);
+        }
+
+        $this->collStoreAddresses = null;
+        foreach ($storeAddresses as $storeAddress) {
+            $this->addStoreAddress($storeAddress);
+        }
+
+        $this->collStoreAddresses = $storeAddresses;
+        $this->collStoreAddressesPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related StoreAddress objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related StoreAddress objects.
+     * @throws PropelException
+     */
+    public function countStoreAddresses(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collStoreAddressesPartial && !$this->isNew();
+        if (null === $this->collStoreAddresses || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collStoreAddresses) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getStoreAddresses());
+            }
+            $query = StoreAddressQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByAddress($this)
+                ->count($con);
+        }
+
+        return count($this->collStoreAddresses);
+    }
+
+    /**
+     * Method called to associate a StoreAddress object to this object
+     * through the StoreAddress foreign key attribute.
+     *
+     * @param    StoreAddress $l StoreAddress
+     * @return Address The current object (for fluent API support)
+     */
+    public function addStoreAddress(StoreAddress $l)
+    {
+        if ($this->collStoreAddresses === null) {
+            $this->initStoreAddresses();
+            $this->collStoreAddressesPartial = true;
+        }
+
+        if (!in_array($l, $this->collStoreAddresses->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddStoreAddress($l);
+
+            if ($this->storeAddressesScheduledForDeletion and $this->storeAddressesScheduledForDeletion->contains($l)) {
+                $this->storeAddressesScheduledForDeletion->remove($this->storeAddressesScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	StoreAddress $storeAddress The storeAddress object to add.
+     */
+    protected function doAddStoreAddress($storeAddress)
+    {
+        $this->collStoreAddresses[]= $storeAddress;
+        $storeAddress->setAddress($this);
+    }
+
+    /**
+     * @param	StoreAddress $storeAddress The storeAddress object to remove.
+     * @return Address The current object (for fluent API support)
+     */
+    public function removeStoreAddress($storeAddress)
+    {
+        if ($this->getStoreAddresses()->contains($storeAddress)) {
+            $this->collStoreAddresses->remove($this->collStoreAddresses->search($storeAddress));
+            if (null === $this->storeAddressesScheduledForDeletion) {
+                $this->storeAddressesScheduledForDeletion = clone $this->collStoreAddresses;
+                $this->storeAddressesScheduledForDeletion->clear();
+            }
+            $this->storeAddressesScheduledForDeletion[]= clone $storeAddress;
+            $storeAddress->setAddress(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Address is new, it will return
+     * an empty collection; or if this Address has previously
+     * been saved, it will retrieve related StoreAddresses from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Address.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|StoreAddress[] List of StoreAddress objects
+     */
+    public function getStoreAddressesJoinStore($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = StoreAddressQuery::create(null, $criteria);
+        $query->joinWith('Store', $join_behavior);
+
+        return $this->getStoreAddresses($query, $con);
     }
 
     /**
@@ -1815,6 +2507,380 @@ abstract class BaseAddress extends BaseObject implements Persistent
     }
 
     /**
+     * Clears out the collCompanies collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Address The current object (for fluent API support)
+     * @see        addCompanies()
+     */
+    public function clearCompanies()
+    {
+        $this->collCompanies = null; // important to set this to null since that means it is uninitialized
+        $this->collCompaniesPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * Initializes the collCompanies collection.
+     *
+     * By default this just sets the collCompanies collection to an empty collection (like clearCompanies());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @return void
+     */
+    public function initCompanies()
+    {
+        $this->collCompanies = new PropelObjectCollection();
+        $this->collCompanies->setModel('Company');
+    }
+
+    /**
+     * Gets a collection of Company objects related by a many-to-many relationship
+     * to the current object by way of the company_address cross-reference table.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Address is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria Optional query object to filter the query
+     * @param PropelPDO $con Optional connection object
+     *
+     * @return PropelObjectCollection|Company[] List of Company objects
+     */
+    public function getCompanies($criteria = null, PropelPDO $con = null)
+    {
+        if (null === $this->collCompanies || null !== $criteria) {
+            if ($this->isNew() && null === $this->collCompanies) {
+                // return empty collection
+                $this->initCompanies();
+            } else {
+                $collCompanies = CompanyQuery::create(null, $criteria)
+                    ->filterByAddress($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    return $collCompanies;
+                }
+                $this->collCompanies = $collCompanies;
+            }
+        }
+
+        return $this->collCompanies;
+    }
+
+    /**
+     * Sets a collection of Company objects related by a many-to-many relationship
+     * to the current object by way of the company_address cross-reference table.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $companies A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Address The current object (for fluent API support)
+     */
+    public function setCompanies(PropelCollection $companies, PropelPDO $con = null)
+    {
+        $this->clearCompanies();
+        $currentCompanies = $this->getCompanies(null, $con);
+
+        $this->companiesScheduledForDeletion = $currentCompanies->diff($companies);
+
+        foreach ($companies as $company) {
+            if (!$currentCompanies->contains($company)) {
+                $this->doAddCompany($company);
+            }
+        }
+
+        $this->collCompanies = $companies;
+
+        return $this;
+    }
+
+    /**
+     * Gets the number of Company objects related by a many-to-many relationship
+     * to the current object by way of the company_address cross-reference table.
+     *
+     * @param Criteria $criteria Optional query object to filter the query
+     * @param boolean $distinct Set to true to force count distinct
+     * @param PropelPDO $con Optional connection object
+     *
+     * @return int the number of related Company objects
+     */
+    public function countCompanies($criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        if (null === $this->collCompanies || null !== $criteria) {
+            if ($this->isNew() && null === $this->collCompanies) {
+                return 0;
+            } else {
+                $query = CompanyQuery::create(null, $criteria);
+                if ($distinct) {
+                    $query->distinct();
+                }
+
+                return $query
+                    ->filterByAddress($this)
+                    ->count($con);
+            }
+        } else {
+            return count($this->collCompanies);
+        }
+    }
+
+    /**
+     * Associate a Company object to this object
+     * through the company_address cross reference table.
+     *
+     * @param  Company $company The CompanyAddress object to relate
+     * @return Address The current object (for fluent API support)
+     */
+    public function addCompany(Company $company)
+    {
+        if ($this->collCompanies === null) {
+            $this->initCompanies();
+        }
+
+        if (!$this->collCompanies->contains($company)) { // only add it if the **same** object is not already associated
+            $this->doAddCompany($company);
+            $this->collCompanies[] = $company;
+
+            if ($this->companiesScheduledForDeletion and $this->companiesScheduledForDeletion->contains($company)) {
+                $this->companiesScheduledForDeletion->remove($this->companiesScheduledForDeletion->search($company));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Company $company The company object to add.
+     */
+    protected function doAddCompany(Company $company)
+    {
+        // set the back reference to this object directly as using provided method either results
+        // in endless loop or in multiple relations
+        if (!$company->getAddresses()->contains($this)) { $companyAddress = new CompanyAddress();
+            $companyAddress->setCompany($company);
+            $this->addCompanyAddress($companyAddress);
+
+            $foreignCollection = $company->getAddresses();
+            $foreignCollection[] = $this;
+        }
+    }
+
+    /**
+     * Remove a Company object to this object
+     * through the company_address cross reference table.
+     *
+     * @param Company $company The CompanyAddress object to relate
+     * @return Address The current object (for fluent API support)
+     */
+    public function removeCompany(Company $company)
+    {
+        if ($this->getCompanies()->contains($company)) {
+            $this->collCompanies->remove($this->collCompanies->search($company));
+            if (null === $this->companiesScheduledForDeletion) {
+                $this->companiesScheduledForDeletion = clone $this->collCompanies;
+                $this->companiesScheduledForDeletion->clear();
+            }
+            $this->companiesScheduledForDeletion[]= $company;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Clears out the collStores collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Address The current object (for fluent API support)
+     * @see        addStores()
+     */
+    public function clearStores()
+    {
+        $this->collStores = null; // important to set this to null since that means it is uninitialized
+        $this->collStoresPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * Initializes the collStores collection.
+     *
+     * By default this just sets the collStores collection to an empty collection (like clearStores());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @return void
+     */
+    public function initStores()
+    {
+        $this->collStores = new PropelObjectCollection();
+        $this->collStores->setModel('Store');
+    }
+
+    /**
+     * Gets a collection of Store objects related by a many-to-many relationship
+     * to the current object by way of the store_address cross-reference table.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Address is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria Optional query object to filter the query
+     * @param PropelPDO $con Optional connection object
+     *
+     * @return PropelObjectCollection|Store[] List of Store objects
+     */
+    public function getStores($criteria = null, PropelPDO $con = null)
+    {
+        if (null === $this->collStores || null !== $criteria) {
+            if ($this->isNew() && null === $this->collStores) {
+                // return empty collection
+                $this->initStores();
+            } else {
+                $collStores = StoreQuery::create(null, $criteria)
+                    ->filterByAddress($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    return $collStores;
+                }
+                $this->collStores = $collStores;
+            }
+        }
+
+        return $this->collStores;
+    }
+
+    /**
+     * Sets a collection of Store objects related by a many-to-many relationship
+     * to the current object by way of the store_address cross-reference table.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $stores A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Address The current object (for fluent API support)
+     */
+    public function setStores(PropelCollection $stores, PropelPDO $con = null)
+    {
+        $this->clearStores();
+        $currentStores = $this->getStores(null, $con);
+
+        $this->storesScheduledForDeletion = $currentStores->diff($stores);
+
+        foreach ($stores as $store) {
+            if (!$currentStores->contains($store)) {
+                $this->doAddStore($store);
+            }
+        }
+
+        $this->collStores = $stores;
+
+        return $this;
+    }
+
+    /**
+     * Gets the number of Store objects related by a many-to-many relationship
+     * to the current object by way of the store_address cross-reference table.
+     *
+     * @param Criteria $criteria Optional query object to filter the query
+     * @param boolean $distinct Set to true to force count distinct
+     * @param PropelPDO $con Optional connection object
+     *
+     * @return int the number of related Store objects
+     */
+    public function countStores($criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        if (null === $this->collStores || null !== $criteria) {
+            if ($this->isNew() && null === $this->collStores) {
+                return 0;
+            } else {
+                $query = StoreQuery::create(null, $criteria);
+                if ($distinct) {
+                    $query->distinct();
+                }
+
+                return $query
+                    ->filterByAddress($this)
+                    ->count($con);
+            }
+        } else {
+            return count($this->collStores);
+        }
+    }
+
+    /**
+     * Associate a Store object to this object
+     * through the store_address cross reference table.
+     *
+     * @param  Store $store The StoreAddress object to relate
+     * @return Address The current object (for fluent API support)
+     */
+    public function addStore(Store $store)
+    {
+        if ($this->collStores === null) {
+            $this->initStores();
+        }
+
+        if (!$this->collStores->contains($store)) { // only add it if the **same** object is not already associated
+            $this->doAddStore($store);
+            $this->collStores[] = $store;
+
+            if ($this->storesScheduledForDeletion and $this->storesScheduledForDeletion->contains($store)) {
+                $this->storesScheduledForDeletion->remove($this->storesScheduledForDeletion->search($store));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Store $store The store object to add.
+     */
+    protected function doAddStore(Store $store)
+    {
+        // set the back reference to this object directly as using provided method either results
+        // in endless loop or in multiple relations
+        if (!$store->getAddresses()->contains($this)) { $storeAddress = new StoreAddress();
+            $storeAddress->setStore($store);
+            $this->addStoreAddress($storeAddress);
+
+            $foreignCollection = $store->getAddresses();
+            $foreignCollection[] = $this;
+        }
+    }
+
+    /**
+     * Remove a Store object to this object
+     * through the store_address cross reference table.
+     *
+     * @param Store $store The StoreAddress object to relate
+     * @return Address The current object (for fluent API support)
+     */
+    public function removeStore(Store $store)
+    {
+        if ($this->getStores()->contains($store)) {
+            $this->collStores->remove($this->collStores->search($store));
+            if (null === $this->storesScheduledForDeletion) {
+                $this->storesScheduledForDeletion = clone $this->collStores;
+                $this->storesScheduledForDeletion->clear();
+            }
+            $this->storesScheduledForDeletion[]= $store;
+        }
+
+        return $this;
+    }
+
+    /**
      * Clears out the collUsers collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
@@ -2039,8 +3105,28 @@ abstract class BaseAddress extends BaseObject implements Persistent
     {
         if ($deep && !$this->alreadyInClearAllReferencesDeep) {
             $this->alreadyInClearAllReferencesDeep = true;
+            if ($this->collCompanyAddresses) {
+                foreach ($this->collCompanyAddresses as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collStoreAddresses) {
+                foreach ($this->collStoreAddresses as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collUserAddresses) {
                 foreach ($this->collUserAddresses as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collCompanies) {
+                foreach ($this->collCompanies as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collStores) {
+                foreach ($this->collStores as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
@@ -2056,10 +3142,26 @@ abstract class BaseAddress extends BaseObject implements Persistent
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
 
+        if ($this->collCompanyAddresses instanceof PropelCollection) {
+            $this->collCompanyAddresses->clearIterator();
+        }
+        $this->collCompanyAddresses = null;
+        if ($this->collStoreAddresses instanceof PropelCollection) {
+            $this->collStoreAddresses->clearIterator();
+        }
+        $this->collStoreAddresses = null;
         if ($this->collUserAddresses instanceof PropelCollection) {
             $this->collUserAddresses->clearIterator();
         }
         $this->collUserAddresses = null;
+        if ($this->collCompanies instanceof PropelCollection) {
+            $this->collCompanies->clearIterator();
+        }
+        $this->collCompanies = null;
+        if ($this->collStores instanceof PropelCollection) {
+            $this->collStores->clearIterator();
+        }
+        $this->collStores = null;
         if ($this->collUsers instanceof PropelCollection) {
             $this->collUsers->clearIterator();
         }

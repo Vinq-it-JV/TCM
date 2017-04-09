@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% import _self as form %}
+
+{% block contents %}
+    {% if app.user %}
+        {% set ngInit = "getCompany(" ~ company.Id ~ ")" %}
+    <div ng-controller="companyCtrl" ng-init="{{ ngInit }}">
+
+        {% block header %}
+            {% include 'AdministrationBundle:header:header.html.twig' %}
+        {% endblock %}
+
+        {% block page %}
+            <div class="page">
+                <div class="container">
+                    <div class="row">
+                        <div class="panel-body">
+                            <h4 ng-cloak>
+                                <i class="fa fa-building-o"></i> {{ ng.translate('COMPANY.LABEL') }}
+                            </h4>
+                            <hr/>
+                            {% include 'AdministrationBundle:companies:company_form.html.twig' %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endblock %}
+    </div>
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('bundles/app/js/app/controllers/companyCtrl.js') }}"></script>
+    <script src="{{ asset('bundles/app/js/app/datasets/companies.js') }}"></script>
+{% endblock %}

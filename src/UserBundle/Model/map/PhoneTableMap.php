@@ -43,6 +43,7 @@ class PhoneTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
+        $this->addColumn('primary', 'Primary', 'BOOLEAN', false, 1, false);
         $this->addColumn('phone_number', 'PhoneNumber', 'VARCHAR', false, 255, null);
         $this->addColumn('description', 'Description', 'VARCHAR', false, 255, null);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
@@ -55,7 +56,11 @@ class PhoneTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('CompanyPhone', 'CompanyBundle\\Model\\CompanyPhone', RelationMap::ONE_TO_MANY, array('id' => 'phone_id', ), 'CASCADE', null, 'CompanyPhones');
+        $this->addRelation('StorePhone', 'StoreBundle\\Model\\StorePhone', RelationMap::ONE_TO_MANY, array('id' => 'phone_id', ), 'CASCADE', null, 'StorePhones');
         $this->addRelation('UserPhone', 'UserBundle\\Model\\UserPhone', RelationMap::ONE_TO_MANY, array('id' => 'phone_id', ), 'CASCADE', null, 'UserPhones');
+        $this->addRelation('Company', 'CompanyBundle\\Model\\Company', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'Companies');
+        $this->addRelation('Store', 'StoreBundle\\Model\\Store', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'Stores');
         $this->addRelation('User', 'UserBundle\\Model\\User', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'Users');
     } // buildRelations()
 

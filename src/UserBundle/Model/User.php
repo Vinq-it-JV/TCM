@@ -2,9 +2,11 @@
 
 namespace UserBundle\Model;
 
+use CompanyBundle\Model\CompanyQuery;
 use \PropelPDO;
 use UserBundle\Model\om\BaseUser;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
+use \Criteria;
 
 class User extends BaseUser implements AdvancedUserInterface
 {
@@ -193,17 +195,22 @@ class User extends BaseUser implements AdvancedUserInterface
      * @return array
      */
     public function getUserDataArray()
-    {   $data = [];
+    {
+        $data = [];
         $data['user'] = $this->toArray();
         $data['user']['Name'] = $this->getName();
         $data['user']['Roles'] = $this->getRolesArray();
 
+        $c = new Criteria();
+        $c->addDescendingOrderByColumn('email.primary');
         if (!$this->getEmails()->isEmpty())
-            foreach ($this->getEmails() as $email)
+            foreach ($this->getEmails($c) as $email)
                 $data['user']['Emails'][] = $email->getEmailDataArray()['email'];
 
+        $c = new Criteria();
+        $c->addDescendingOrderByColumn('phone.primary');
         if (!$this->getPhones()->isEmpty())
-            foreach ($this->getPhones() as $phone)
+            foreach ($this->getPhones($c) as $phone)
                 $data['user']['Phones'][] = $phone->getPhoneDataArray()['phone'];
 
         if (!$this->getAddresses()->isEmpty()) {
@@ -242,9 +249,10 @@ class User extends BaseUser implements AdvancedUserInterface
      * @return string
      */
     public function getLanguageCode()
-    {   $language = parent::getLanguage();
-        if (!empty($language))
-        {   $country = CountriesQuery::create()
+    {
+        $language = parent::getLanguage();
+        if (!empty($language)) {
+            $country = CountriesQuery::create()
                 ->findOneById($language);
             if (!empty($country))
                 return $country->getLanguageCode();
@@ -288,12 +296,62 @@ class User extends BaseUser implements AdvancedUserInterface
     }
 
     /**
+     * getUsersListArray()
+     * @return mixed
+     */
+    static public function getUsersListArray()
+    {
+        $users = UserQuery::create()
+            ->orderByLastname('ASC')
+            ->find();
+
+        foreach ($users as $user)
+            $usersArr['users'][] = $user->getUserDataArray()['user'];
+
+        return $usersArr;
+    }
+
+    /**
+     * getInformantsListArray()
+     * @return array
+     */
+    static public function getInformantsListArray()
+    {
+        $informantsArr = [];
+        $companies = CompanyQuery::create()
+            ->filterByIsEnabled(true)
+                ->useCompanyInformantQuery()
+                    ->useInformantQuery()
+                        ->useUserRoleQuery()
+                            ->useRoleQuery()
+                                ->filterByName(array('ROLE_TECH_BEER', 'ROLE_TECH_COOLING'), Criteria::IN)
+                            ->endUse()
+                        ->endUse()
+                    ->endUse()
+                ->endUse()
+            ->distinct()
+            ->find();
+
+        foreach ($companies as $company) {
+            if (!$company->getInformants()->isEmpty()) {
+                foreach ($company->getInformants() as $informant) {
+                    $informantData = $informant->getUserdataArray()['user'];
+                    $informantData['CompanyName'] = $company->getName();
+                    $informantsArr['informants'][] = $informantData;
+                }
+            }
+        }
+        return $informantsArr;
+    }
+
+    /**
      * hasEmail($emailaddress)
      * @param $emailaddress
      * @return mixed|null|Email
      */
     public function hasEmail($emailaddress)
-    {   foreach ($this->getEmails() as $email)
+    {
+        foreach ($this->getEmails() as $email)
             if (strcmp(strtolower($email->getEmail()), strtolower($emailaddress)) === 0)
                 return $email;
         return null;
@@ -305,7 +363,8 @@ class User extends BaseUser implements AdvancedUserInterface
      * @return mixed|null|Phone
      */
     public function hasPhone($phonenumber)
-    {   foreach ($this->getPhones() as $phone)
+    {
+        foreach ($this->getPhones() as $phone)
             if (strcmp($phone->getPhoneNumber(), $phonenumber) === 0)
                 return $phone;
         return null;
@@ -317,9 +376,10 @@ class User extends BaseUser implements AdvancedUserInterface
      * @return mixed|null|Address
      */
     public function hasAddress($address)
-    {   $address = (object)$address;
-        foreach ($this->getAddresses() as $_address)
-        {   if ($_address->getHouseNumber() == $address->HouseNumber)
+    {
+        $address = (object)$address;
+        foreach ($this->getAddresses() as $_address) {
+            if ($_address->getHouseNumber() == $address->HouseNumber)
                 if (strcmp(strtoupper($_address->getPostalCode()), strtoupper(str_replace(' ', '', $address->PostalCode))) === 0)
                     return $_address;
         }
@@ -338,7 +398,7 @@ class User extends BaseUser implements AdvancedUserInterface
             ->orderById('ASC')
             ->find();
 
-        if($roles->isEmpty())
+        if ($roles->isEmpty())
             $roles = RoleQuery::create()->findById(Role::ROLE_USER_ID);
 
         foreach ($roles as $role)
@@ -358,7 +418,7 @@ class User extends BaseUser implements AdvancedUserInterface
             ->select(array('Name'))
             ->find();
 
-        if($roles->isEmpty())
+        if ($roles->isEmpty())
             return array('ROLE_USER');
 
         return $roles->toArray();
@@ -372,9 +432,9 @@ class User extends BaseUser implements AdvancedUserInterface
     public function hasRole($userrole)
     {
         $roles = $this->getRolesArray();
-        if (!empty($roles))
-        {   foreach ($roles as $role)
-            {   $role = (object)$role;
+        if (!empty($roles)) {
+            foreach ($roles as $role) {
+                $role = (object)$role;
                 if (strcmp(strtoupper($role->Name), strtoupper($userrole)) === 0)
                     return true;
             }

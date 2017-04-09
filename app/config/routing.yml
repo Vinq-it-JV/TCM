@@ -1,3 +1,11 @@
+store:
+    resource: "@StoreBundle/Resources/config/routing.yml"
+    prefix:   /
+
+company:
+    resource: "@CompanyBundle/Resources/config/routing.yml"
+    prefix:   /
+
 administration:
     resource: "@AdministrationBundle/Resources/config/routing.yml"
     prefix:   /administration
@@ -12,3 +20,7 @@ app:
 
 fos_js_routing:
     resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
+
+postcode:
+    resource: "@UsoftPostcodeBundle/Resources/config/routing.yml"
+    prefix:   /

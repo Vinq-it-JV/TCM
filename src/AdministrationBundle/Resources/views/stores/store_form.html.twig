@@ -1,0 +1,502 @@
+<form class="form-horizontal" method="post" name="storeForm"
+      action="{{ url('administration_store_save', { 'storeid' : store.Id }) }}" novalidate>
+    <div class="panel-body">
+        <div class="well" ng-form="storeDataForm">
+            {# Store information block #}
+            <input name="Id" type="hidden" value="{{ store.Id }}"/>
+            <div class="form-group">
+                <label class="control-label col-md-2"
+                       ng-cloak>{{ ng.translate('STORE.ACTIVE') }}</label>
+                <div class="col-md-2">
+                    {% verbatim %}
+                    <input type="hidden" name="IsEnabled" value="{{ stores.store().IsEnabled }}">
+                    <toggle-switch
+                            class="switch-small switch-success"
+                            off-class="switch-small switch-danger"
+                            ng-model="stores.store().IsEnabled"
+                            on-label="{{ 'YES' | translate }}"
+                            off-label="{{ 'NO' | translate }}" ng-cloak>
+                    </toggle-switch>
+                    {% endverbatim %}
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-2"
+                       ng-cloak>{{ ng.translate('STORE.TYPE') }}</label>
+                <div class="col-md-3">
+                    {% verbatim %}
+                    <input type="hidden" name="Type" value="{{ stores.store().Type.Id }}">
+                    <ui-select ng-model="stores.store().Type" search-enabled="true" theme="select2" style="width:100%;">
+                        <ui-select-match placeholder="{{ 'SELECT' | translate }}" ng-cloak>{{ $select.selected.Name|translate }}</ui-select-match>
+                        <ui-select-choices repeat="item in stores.lists().store_type | filterTranslate : {'Name':$select.search}" ng-cloak>{{ item.Name | translate }}</ui-select-choices>
+                    </ui-select>
+                    {% endverbatim %}
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-2"
+                       ng-cloak>{{ ng.translate('STORE.COMPANY') }}</label>
+                <div class="col-md-6">
+                    {% verbatim %}
+                    <input type="hidden" name="Company" value="{{ stores.store().MainCompany.Id }}">
+                    <ui-select ng-model="stores.store().MainCompany" search-enabled="true" theme="select2" style="width:100%;" on-select="companyChanged($item)">
+                        <ui-select-match placeholder="{{ 'SELECT' | translate }}" ng-cloak>{{ $select.selected.Name }}</ui-select-match>
+                        <ui-select-choices repeat="item in stores.lists().companies" ng-cloak>{{ item.Name }}</ui-select-choices>
+                    </ui-select>
+                    {% endverbatim %}
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-2"
+                       ng-cloak>{{ ng.translate('STORE.CODE') }}</label>
+                <div class="col-md-3">
+                    <input class="form-control input-sm" name="Code" type="text"
+                           ng-model="stores.store().Code" validation="min_len:1|required" no-enter/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-2"
+                       ng-cloak>{{ ng.translate('STORE.NAME') }}</label>
+                <div class="col-md-6">
+                    <input class="form-control input-sm" name="Name" type="text"
+                           ng-model="stores.store().Name" validation="min_len:3|required" no-enter/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-2"
+                       ng-cloak>{{ ng.translate('STORE.DESCRIPTION') }}</label>
+                <div class="col-md-10">
+                        <textarea class="form-control input-sm no-resize" name="Description"
+                                  ng-model="stores.store().Description" rows="5"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-2"
+                       ng-cloak>{{ ng.translate('STORE.WEBSITE') }}</label>
+                <div class="col-md-6">
+                    <input class="form-control input-sm" name="Website" type="text"
+                           ng-model="stores.store().Website" validation="url" no-enter/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-2"
+                       ng-cloak>{{ ng.translate('STORE.REGION') }}</label>
+                <div class="col-md-3">
+                    {% verbatim %}
+                        <input type="hidden" name="Region" value="{{ stores.store().Region.Id }}">
+                        <ui-select ng-model="stores.store().Region" search-enabled="true" theme="select2" style="width:100%;">
+                            <ui-select-match placeholder="{{ 'SELECT' | translate }}" ng-cloak>{{ $select.selected.Name }}</ui-select-match>
+                            <ui-select-choices repeat="item in stores.lists().regions" ng-cloak>{{ item.Name }}</ui-select-choices>
+                        </ui-select>
+                    {% endverbatim %}
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-2"
+                       ng-cloak>{{ ng.translate('STORE.VAT_NUMBER') }}</label>
+                <div class="col-md-4">
+                    <input class="form-control input-sm" name="VatNumber" type="text"
+                           ng-model="stores.store().VatNumber" no-enter/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-2"
+                       ng-cloak>{{ ng.translate('STORE.COC_NUMBER') }}</label>
+                <div class="col-md-4">
+                    <input class="form-control input-sm" name="CocNumber" type="text"
+                           ng-model="stores.store().CocNumber" no-enter/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-2"
+                       ng-cloak>{{ ng.translate('PAYMENT.METHOD') }}</label>
+                <div class="col-md-3">
+                    {% verbatim %}
+                        <input type="hidden" name="PaymentMethod" value="{{ stores.store().PaymentMethod.Id }}">
+                        <ui-select ng-model="stores.store().PaymentMethod" search-enabled="true" theme="select2" style="width:100%;">
+                            <ui-select-match placeholder="{{ 'SELECT' | translate }}" ng-cloak>{{ $select.selected.Name|translate }}</ui-select-match>
+                            <ui-select-choices repeat="item in stores.lists().payment_methods | filterTranslate : {'Name':$select.search}" ng-cloak>{{ item.Name | translate }}</ui-select-choices>
+                        </ui-select>
+                    {% endverbatim %}
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-2"
+                       ng-cloak>{{ ng.translate('STORE.BANK_ACCOUNT_NUMBER') }}</label>
+                <div class="col-md-4">
+                    {% verbatim %}
+                        <input class="form-control input-sm" name="BankAccountNumber" type="text"
+                               ng-model="stores.store().BankAccountNumber" validation="custom:isValidIBAN(stores.store().BankAccountNumber):alt=INVALID_IBAN|{{ isAutomaticPayment() ? 'required' : '' }}" ng-disabled="!isAutomaticPayment()" no-enter/>
+                        {% endverbatim %}
+                </div>
+            </div>
+        </div>
+
+        {# Emails block #}
+        <div class="well">
+            <div class="form-group">
+                <label class="control-label col-md-2 col-xs-12"
+                       ng-cloak>{{ ng.translate('STORE.EMAIL') }}</label>
+                {% verbatim %}
+                <div class="col-md-10 col-xs-12">
+                    <div ng-repeat="email in stores.store().Emails track by $index">
+                        <div class="form-group">
+                            <div class="col-md-4 col-xs-8 radio-inline">
+                                <input type="radio" name="EmailPrimary" class="check-offset" value="{{ email.Id }}" ng-checked="{{ email.Primary || stores.store().Emails.length == 1 }}"/>
+                                <input class="form-control input-sm" name="emails[{{ email.Id }}][Email]"
+                                       ng-model="email.Email" no-enter/>
+                            </div>
+                            <button type="button" class="btn btn-sm btn-danger"
+                                    ng-click="deleteEmail($index)"><i class="fa fa-remove"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-form="emailForm">
+                        <div class="col-md-4 col-xs-8">
+                            <input class="form-control input-sm" ng-model="stores.email().Email"
+                                   name="email" placeholder="{{ 'STORE.EMAIL' | translate }}"
+                                   validation="email|{{!stores.emails().length ? 'required': ''}}" no-enter ng-cloak/>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-success"
+                                ng-click="stores.addEmail()"
+                                ng-disabled="emailForm.$invalid||!stores.email().Email.length"><i
+                                class="fa fa-plus"></i></button>
+                    </div>
+                </div>
+                {% endverbatim %}
+            </div>
+        </div>
+        <hr/>
+
+        {# Phone numbers block #}
+        <div class="well">
+            <div class="form-group">
+                <label class="control-label col-md-2 col-xs-12"
+                       ng-cloak>{{ ng.translate('STORE.PHONE') }}</label>
+                {% verbatim %}
+                <div class="col-md-10 col-xs-12">
+                    <div ng-repeat="phone in stores.store().Phones track by $index">
+                        <div class="form-group">
+                            <div class="col-md-4 col-xs-8 radio-inline">
+                                <input type="radio" name="PhonePrimary" class="check-offset" value="{{ phone.Id }}" ng-checked="{{ phone.Primary || stores.store().Phones.length == 1 }}"/>
+                                <input class="form-control input-sm" name="phones[{{ phone.Id }}][PhoneNumber]"
+                                       ng-model="phone.PhoneNumber" no-enter/>
+                            </div>
+                            <button type="button" class="btn btn-sm btn-danger"
+                                    ng-click="deletePhone($index)"><i class="fa fa-remove"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-form="phoneForm">
+                        <div class="col-md-4 col-xs-8">
+                            <input class="form-control input-sm"
+                                   ng-model="stores.phone().PhoneNumber" name="phone"
+                                   placeholder="{{ 'STORE.PHONE' | translate }}"
+                                   validation="phone_international" no-enter ng-cloak/>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-success"
+                                ng-click="stores.addPhone()"
+                                ng-disabled="phoneForm.$invalid||!stores.phone().PhoneNumber.length">
+                            <i class="fa fa-plus"></i></button>
+                    </div>
+                </div>
+                {% endverbatim %}
+            </div>
+        </div>
+
+        {# Addresses block #}
+        <h5 ng-cloak>
+            <i class="fa fa-envelope fa-fw"></i> {{ ng.translate('STORE.ADDRESSES') }}
+        </h5>
+        <hr/>
+        {% verbatim %}
+        <div ng-repeat="address in stores.store().Addresses track by $index">
+            <hr ng-hide="$first"/>
+            <div class="well">
+                <div ng-form="addressForm">
+                    <div class="form-group">
+                        <label class="control-label col-md-2 col-xs-12"
+                               ng-cloak>{{ 'STORE.ADDRESS_TYPE' | translate }}</label>
+                        <div class="col-md-10 col-xs-12">
+                            <div class="row">
+                                <div class="col-md-3 col-xs-8">
+                                    <input type="hidden" name="addresses[{{ address.Id }}][Type]" value="{{ address.Type.Id }}">
+                                    <ui-select ng-model="address.Type" search-enabled="true" theme="select2" style="width:100%;">
+                                        <ui-select-match placeholder="{{ 'SELECT' | translate }}" ng-cloak>{{ $select.selected.Name | translate }}</ui-select-match>
+                                        <ui-select-choices repeat="item in stores.lists().address_type | filterTranslate : {'Name':$select.search}" ng-cloak>{{ item.Name | translate}}</ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                <div class="col-md-9 col-xs-4">
+                                    <div class="pull-right">
+                                        <button type="button" class="btn btn-sm btn-success"
+                                                ng-click="stores.addAddress()" ng-disabled="addressForm.$invalid"
+                                                ng-hide="!$last"><i class="fa fa-plus"></i></button>
+                                        <button type="button" class="btn btn-sm btn-danger"
+                                            ng-click="deleteAddress($index)"><i class="fa fa-remove"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-2 col-xs-12"
+                               ng-cloak>{{ 'STORE.STREET' | translate }}</label>
+                        <div class="col-md-10 col-xs-12">
+                            <div class="row">
+                                <div class="col-md-6 col-xs-9">
+                                    <input class="form-control input-sm"
+                                           name="addresses[{{ address.Id }}][StreetName]"
+                                           ng-model="address.StreetName" validation="required" no-enter/>
+                                </div>
+                                <div class="col-md-2 col-xs-3">
+                                    <input class="form-control input-sm"
+                                           name="addresses[{{ address.Id }}][HouseNumber]"
+                                           ng-model="address.HouseNumber"
+                                           validation="required" no-enter/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-2 col-xs-12"
+                               ng-cloak>{{ 'STORE.POSTAL_CODE' | translate }}</label>
+                        <div class="col-md-10 col-xs-12">
+                            <div class="row">
+                                <div class="col-md-3 col-xs-6">
+                                    <input class="form-control input-sm"
+                                           name="addresses[{{ address.Id }}][PostalCode]"
+                                           ng-model="address.PostalCode" validation="required" no-enter/>
+                                </div>
+                                <div class="col-md-2 col-xs-2">
+                                    <button class="btn btn-primary btn-sm" type="button" ng-click="checkAddress(address)"><i
+                                                class="fa fa-map-marker"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-2 col-xs-12"
+                               ng-cloak>{{ 'STORE.CITY' | translate }}</label>
+                        <div class="col-md-10 col-xs-12">
+                            <div class="row">
+                                <div class="col-md-4 col-xs-10">
+                                    <input class="form-control input-sm"
+                                           name="addresses[{{ address.Id }}][City]" ng-model="address.City"
+                                           validation="required" no-enter/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-2 col-xs-12"
+                               ng-cloak>{{ 'STORE.COUNTRY' | translate }}</label>
+                        <div class="col-md-10 col-xs-12">
+                            <div class="row">
+                                <div class="col-md-3 col-xs-8">
+                                    <input type="hidden" name="addresses[{{ address.Id }}][Country]" value="{{ address.Country.CountryCode }}">
+                                    <ui-select name="addresses[{{ address.Id }}][Country]" ng-model="address.Country" search-enabled="true" theme="select2" style="width:100%;">
+                                        <ui-select-match placeholder="{{ 'SELECT' | translate }}" ng-cloak>{{$select.selected.Name | translate}}</ui-select-match>
+                                        <ui-select-choices repeat="item in stores.lists().countries | filterTranslate : {'Name':$select.search}" ng-cloak>{{ item.Name | translate}}</ui-select-choices>
+                                    </ui-select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-2 col-xs-12"
+                               ng-cloak>{{ 'STORE.MAP_URL' | translate }}</label>
+                        <div class="col-md-10 col-xs-12">
+                            <div class="row">
+                                <div class="col-md-12 col-xs-12">
+                                    <input class="form-control input-sm"
+                                           name="addresses[{{ address.Id }}][MapUrl]"
+                                           ng-model="address.MapUrl" no-enter/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endverbatim %}
+
+        {# Add address block #}
+        {% verbatim %}
+        <div ng-show="!stores.store().Addresses||!stores.store().Addresses.length">
+            <div class="well">
+                <div class="form-group">
+                    <label class="control-label col-md-2 col-xs-12"
+                           ng-cloak>{{ 'STORE.ADDRESS' | translate }}</label>
+                    <div class="col-md-3">
+                        <button type="button" class="btn btn-sm btn-success"
+                                ng-click="stores.addAddress()"><i class="fa fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endverbatim %}
+
+        {# Owners block #}
+        <h5 ng-cloak>
+            <i class="fa fa-users fa-fw"></i> {{ ng.translate('STORE.OWNERS') }}
+        </h5>
+        <hr/>
+        {% verbatim %}
+        <div class="well">
+            <div class="form-group">
+                <label class="control-label col-md-2 col-xs-12"
+                       ng-cloak>{{ 'STORE.OWNERS' | translate }}</label>
+                <div class="col-md-10 col-xs-12">
+                    <div class="row">
+                        <div class="col-md-6 col-xs-12">
+                            <ui-select multiple ng-model="stores.store().Owners" close-on-select="false" theme="select2" style="width:100%;">
+                                <ui-select-match placeholder="{{ 'SELECT' | translate }}">
+                                    <div class="row">
+                                        <div class="col-md-12 col-xs-12">{{ $item.Name }}</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 col-xs-6">
+                                            <div style="padding-left: 1em"><div class="label label-default" ng-show="$item.Phones"><i class="fa fa-phone fa-fw"></i>: {{ $item.Phones[0].PhoneNumber }}</div></div>
+                                            <div style="padding-left: 1em"><div class="label label-default"><i class="fa fa-envelope fa-fw"></i>: {{ $item.Emails[0].Email }}</div><input name="owners[{{ $item.Id }}]" value="{{ $item.Name }}" hidden/></div>
+                                        </div>
+                                    </div>
+                                </ui-select-match>
+                                <ui-select-choices repeat="owner in stores.lists().users track by owner.Id" ui-disable-choice="item.disabled" ng-cloak>
+                                    <div class="row">
+                                        <div class="col-md-12 col-xs-12">
+                                            <div ng-bind-html="owner.Name | highlight: $select.search"></div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 col-xs-6">
+                                            <div style="padding-left: 1em"><i class="fa fa-envelope fa-fw"></i>: {{ owner.Emails[0].Email }}</div>
+                                            <div style="padding-left: 1em" ng-show="owner.Phones"><i class="fa fa-phone fa-fw"></i>: {{ owner.Phones[0].PhoneNumber }}</div>
+                                        </div>
+                                    </div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endverbatim %}
+
+        {# Contacts block #}
+        <h5 ng-cloak>
+            <i class="fa fa-phone fa-fw"></i> {{ ng.translate('STORE.CONTACTS') }}
+        </h5>
+        <hr/>
+        {% verbatim %}
+        <div class="well">
+            <div class="form-group">
+                <label class="control-label col-md-2 col-xs-12"
+                       ng-cloak>{{ 'STORE.CONTACTS' | translate }}</label>
+                <div class="col-md-10 col-xs-12">
+                    <div class="row">
+                        <div class="col-md-6 col-xs-12">
+                            <ui-select multiple ng-model="stores.store().Contacts" close-on-select="false" theme="select2" style="width:100%;">
+                                <ui-select-match placeholder="{{ 'SELECT' | translate }}">
+                                    <div class="row">
+                                        <div class="col-md-12 col-xs-12">{{ $item.Name }}</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 col-xs-6">
+                                            <div style="padding-left: 1em"><div class="label label-default" ng-show="$item.Phones"><i class="fa fa-phone fa-fw"></i>: {{ $item.Phones[0].PhoneNumber }}</div></div>
+                                            <div style="padding-left: 1em"><div class="label label-default"><i class="fa fa-envelope fa-fw"></i>: {{ $item.Emails[0].Email }}</div><input name="contacts[{{ $item.Id }}]" value="{{ $item.Name }}" hidden/></div>
+                                        </div>
+                                    </div>
+                                </ui-select-match>
+                                <ui-select-choices repeat="contact in stores.lists().users track by contact.Id" ui-disable-choice="item.disabled" ng-cloak>
+                                    <div class="row">
+                                        <div class="col-md-12 col-xs-12">
+                                            <div ng-bind-html="contact.Name | highlight: $select.search"></div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 col-xs-6">
+                                            <div style="padding-left: 1em"><i class="fa fa-envelope fa-fw"></i>: {{ contact.Emails[0].Email }}</div>
+                                            <div style="padding-left: 1em" ng-show="contact.Phones"><i class="fa fa-phone fa-fw"></i>: {{ contact.Phones[0].PhoneNumber }}</div>
+                                        </div>
+                                    </div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endverbatim %}
+
+        {# Informants block #}
+        <h5 ng-cloak>
+            <i class="fa fa-phone fa-fw"></i> {{ ng.translate('STORE.INFORMANTS') }}
+        </h5>
+        <hr/>
+        {% verbatim %}
+        <div class="well">
+            <div class="form-group">
+                <label class="control-label col-md-2 col-xs-12"
+                       ng-cloak>{{ 'STORE.NOTIFY' | translate }}</label>
+                <div class="col-md-10 col-xs-12">
+                    <div class="row">
+                        <div class="col-md-6 col-xs-12">
+                            <ui-select multiple ng-model="stores.store().Informants" close-on-select="false" theme="select2" style="width:100%;">
+                                <ui-select-match placeholder="{{ 'SELECT' | translate }}">
+                                    <div class="row">
+                                        <div class="col-md-12 col-xs-12">{{ $item.Name }}</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 col-xs-6">
+                                            <div style="padding-left: 1em"><div class="label label-default" ng-show="$item.Phones"><i class="fa fa-phone fa-fw"></i>: {{ $item.Phones[0].PhoneNumber }}</div></div>
+                                            <div style="padding-left: 1em"><div class="label label-default"><i class="fa fa-envelope fa-fw"></i>: {{ $item.Emails[0].Email }}</div><input name="informants[{{ $item.Id }}]" value="{{ $item.Name }}" hidden/></div>
+                                        </div>
+                                        <div class="col-md-6 col-xs-6">
+                                            <div style="padding-left: 1em" ng-repeat="role in $item.Roles">
+                                                <div ng-show="role.Id > 4" class="{{ role.Style }}">{{ role.Description | translate }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ui-select-match>
+                                <ui-select-choices group-by="'CompanyName'" repeat="informant in stores.lists().informants track by informant.Id" ui-disable-choice="item.disabled" ng-cloak>
+                                    <div class="row">
+                                        <div class="col-md-12 col-xs-12">
+                                            <div ng-bind-html="informant.Name | highlight: $select.search"></div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 col-xs-6">
+                                            <div style="padding-left: 1em"><i class="fa fa-envelope fa-fw"></i>: {{ informant.Emails[0].Email }}</div>
+                                            <div style="padding-left: 1em" ng-show="informant.Phones"><i class="fa fa-phone fa-fw"></i>: {{ informant.Phones[0].PhoneNumber }}</div>
+                                        </div>
+                                        <div class="col-md-6 col-xs-6">
+                                            <div style="padding-left: 1em" ng-repeat="role in informant.Roles">
+                                                <div ng-show="role.Id > 4" class="{{ role.Style }}">{{ role.Description | translate }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endverbatim %}
+    </div>
+
+    {# Submit form block #}
+    <div class="panel-footer">
+        <div class="row">
+            <div class="col-md-12">
+                <a href="{{ path('administration_stores') }}" class="btn btn-sm btn-default pull-left"
+                   ng-click="BE.showLoader(true)"><i class="fa fa-close" ng-cloak></i> {{ ng.translate('CANCEL') }}</a>
+                <button type="submit" class="btn btn-sm btn-success pull-right" ng-click="BE.showLoader(true)"
+                        ng-disabled="storeForm.$invalid||!stores.emails().length">
+                    <i class="fa fa-floppy-o" ng-cloak></i> {{ ng.translate('SAVE') }}
+                </button>
+            </div>
+        </div>
+    </div>
+</form>

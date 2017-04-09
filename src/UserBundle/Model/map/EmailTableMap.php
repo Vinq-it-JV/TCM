@@ -43,6 +43,7 @@ class EmailTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
+        $this->addColumn('primary', 'Primary', 'BOOLEAN', false, 1, false);
         $this->addColumn('email', 'Email', 'VARCHAR', false, 255, null);
         $this->addColumn('description', 'Description', 'VARCHAR', false, 255, null);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
@@ -55,7 +56,11 @@ class EmailTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('CompanyEmail', 'CompanyBundle\\Model\\CompanyEmail', RelationMap::ONE_TO_MANY, array('id' => 'email_id', ), 'CASCADE', null, 'CompanyEmails');
+        $this->addRelation('StoreEmail', 'StoreBundle\\Model\\StoreEmail', RelationMap::ONE_TO_MANY, array('id' => 'email_id', ), 'CASCADE', null, 'StoreEmails');
         $this->addRelation('UserEmail', 'UserBundle\\Model\\UserEmail', RelationMap::ONE_TO_MANY, array('id' => 'email_id', ), 'CASCADE', null, 'UserEmails');
+        $this->addRelation('Company', 'CompanyBundle\\Model\\Company', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'Companies');
+        $this->addRelation('Store', 'StoreBundle\\Model\\Store', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'Stores');
         $this->addRelation('User', 'UserBundle\\Model\\User', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'Users');
     } // buildRelations()
 

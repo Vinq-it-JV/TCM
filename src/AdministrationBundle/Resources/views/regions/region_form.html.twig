@@ -1,0 +1,39 @@
+<form class="form-horizontal" method="post" name="regionForm"
+      action="{{ url('administration_region_save', { 'regionid' : region.Id }) }}" novalidate>
+    <div class="panel-body">
+        <div class="well" ng-form="regionDataForm">
+            {# Region information block #}
+            <input name="Id" type="hidden" value="{{ region.Id }}"/>
+            <div class="form-group">
+                <label class="control-label col-md-2"
+                       ng-cloak>{{ ng.translate('REGIONS.NAME') }}</label>
+                <div class="col-md-6">
+                    <input class="form-control input-sm" name="Name" type="text"
+                           ng-model="regions.region().Name" validation="min_len:3|required" no-enter/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-2"
+                       ng-cloak>{{ ng.translate('REGIONS.DESCRIPTION') }}</label>
+                <div class="col-md-10">
+                        <textarea class="form-control input-sm no-resize" name="Description"
+                                  ng-model="regions.region().Description" rows="5"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# Submit form block #}
+    <div class="panel-footer">
+        <div class="row">
+            <div class="col-md-12">
+                <a href="{{ path('administration_regions') }}" class="btn btn-sm btn-default pull-left"
+                   ng-click="BE.showLoader(true)"><i class="fa fa-close" ng-cloak></i> {{ ng.translate('CANCEL') }}</a>
+                <button type="submit" class="btn btn-sm btn-success pull-right" ng-click="BE.showLoader(true)"
+                        ng-disabled="regionForm.$invalid">
+                    <i class="fa fa-floppy-o" ng-cloak></i> {{ ng.translate('SAVE') }}
+                </button>
+            </div>
+        </div>
+    </div>
+</form>

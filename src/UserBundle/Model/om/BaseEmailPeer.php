@@ -9,6 +9,8 @@ use \PDOStatement;
 use \Propel;
 use \PropelException;
 use \PropelPDO;
+use CompanyBundle\Model\CompanyEmailPeer;
+use StoreBundle\Model\StoreEmailPeer;
 use UserBundle\Model\Email;
 use UserBundle\Model\EmailPeer;
 use UserBundle\Model\UserEmailPeer;
@@ -30,16 +32,19 @@ abstract class BaseEmailPeer
     const TM_CLASS = 'UserBundle\\Model\\map\\EmailTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 5;
+    const NUM_COLUMNS = 6;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 5;
+    const NUM_HYDRATE_COLUMNS = 6;
 
     /** the column name for the id field */
     const ID = 'email.id';
+
+    /** the column name for the primary field */
+    const PRIMARY = 'email.primary';
 
     /** the column name for the email field */
     const EMAIL = 'email.email';
@@ -72,12 +77,12 @@ abstract class BaseEmailPeer
      * e.g. EmailPeer::$fieldNames[EmailPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'Email', 'Description', 'CreatedAt', 'UpdatedAt', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'email', 'description', 'createdAt', 'updatedAt', ),
-        BasePeer::TYPE_COLNAME => array (EmailPeer::ID, EmailPeer::EMAIL, EmailPeer::DESCRIPTION, EmailPeer::CREATED_AT, EmailPeer::UPDATED_AT, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'EMAIL', 'DESCRIPTION', 'CREATED_AT', 'UPDATED_AT', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'email', 'description', 'created_at', 'updated_at', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
+        BasePeer::TYPE_PHPNAME => array ('Id', 'Primary', 'Email', 'Description', 'CreatedAt', 'UpdatedAt', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'primary', 'email', 'description', 'createdAt', 'updatedAt', ),
+        BasePeer::TYPE_COLNAME => array (EmailPeer::ID, EmailPeer::PRIMARY, EmailPeer::EMAIL, EmailPeer::DESCRIPTION, EmailPeer::CREATED_AT, EmailPeer::UPDATED_AT, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'PRIMARY', 'EMAIL', 'DESCRIPTION', 'CREATED_AT', 'UPDATED_AT', ),
+        BasePeer::TYPE_FIELDNAME => array ('id', 'primary', 'email', 'description', 'created_at', 'updated_at', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
     );
 
     /**
@@ -87,12 +92,12 @@ abstract class BaseEmailPeer
      * e.g. EmailPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Email' => 1, 'Description' => 2, 'CreatedAt' => 3, 'UpdatedAt' => 4, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'email' => 1, 'description' => 2, 'createdAt' => 3, 'updatedAt' => 4, ),
-        BasePeer::TYPE_COLNAME => array (EmailPeer::ID => 0, EmailPeer::EMAIL => 1, EmailPeer::DESCRIPTION => 2, EmailPeer::CREATED_AT => 3, EmailPeer::UPDATED_AT => 4, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'EMAIL' => 1, 'DESCRIPTION' => 2, 'CREATED_AT' => 3, 'UPDATED_AT' => 4, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'email' => 1, 'description' => 2, 'created_at' => 3, 'updated_at' => 4, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
+        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Primary' => 1, 'Email' => 2, 'Description' => 3, 'CreatedAt' => 4, 'UpdatedAt' => 5, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'primary' => 1, 'email' => 2, 'description' => 3, 'createdAt' => 4, 'updatedAt' => 5, ),
+        BasePeer::TYPE_COLNAME => array (EmailPeer::ID => 0, EmailPeer::PRIMARY => 1, EmailPeer::EMAIL => 2, EmailPeer::DESCRIPTION => 3, EmailPeer::CREATED_AT => 4, EmailPeer::UPDATED_AT => 5, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'PRIMARY' => 1, 'EMAIL' => 2, 'DESCRIPTION' => 3, 'CREATED_AT' => 4, 'UPDATED_AT' => 5, ),
+        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'primary' => 1, 'email' => 2, 'description' => 3, 'created_at' => 4, 'updated_at' => 5, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
     );
 
     /**
@@ -167,12 +172,14 @@ abstract class BaseEmailPeer
     {
         if (null === $alias) {
             $criteria->addSelectColumn(EmailPeer::ID);
+            $criteria->addSelectColumn(EmailPeer::PRIMARY);
             $criteria->addSelectColumn(EmailPeer::EMAIL);
             $criteria->addSelectColumn(EmailPeer::DESCRIPTION);
             $criteria->addSelectColumn(EmailPeer::CREATED_AT);
             $criteria->addSelectColumn(EmailPeer::UPDATED_AT);
         } else {
             $criteria->addSelectColumn($alias . '.id');
+            $criteria->addSelectColumn($alias . '.primary');
             $criteria->addSelectColumn($alias . '.email');
             $criteria->addSelectColumn($alias . '.description');
             $criteria->addSelectColumn($alias . '.created_at');
@@ -381,6 +388,12 @@ abstract class BaseEmailPeer
      */
     public static function clearRelatedInstancePool()
     {
+        // Invalidate objects in CompanyEmailPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        CompanyEmailPeer::clearInstancePool();
+        // Invalidate objects in StoreEmailPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        StoreEmailPeer::clearInstancePool();
         // Invalidate objects in UserEmailPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         UserEmailPeer::clearInstancePool();
@@ -717,6 +730,18 @@ abstract class BaseEmailPeer
         $objects = EmailPeer::doSelect($criteria, $con);
         foreach ($objects as $obj) {
 
+
+            // delete related CompanyEmail objects
+            $criteria = new Criteria(CompanyEmailPeer::DATABASE_NAME);
+
+            $criteria->add(CompanyEmailPeer::EMAIL_ID, $obj->getId());
+            $affectedRows += CompanyEmailPeer::doDelete($criteria, $con);
+
+            // delete related StoreEmail objects
+            $criteria = new Criteria(StoreEmailPeer::DATABASE_NAME);
+
+            $criteria->add(StoreEmailPeer::EMAIL_ID, $obj->getId());
+            $affectedRows += StoreEmailPeer::doDelete($criteria, $con);
 
             // delete related UserEmail objects
             $criteria = new Criteria(UserEmailPeer::DATABASE_NAME);

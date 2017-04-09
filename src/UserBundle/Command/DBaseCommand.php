@@ -31,8 +31,8 @@ class DBaseCommand extends ContainerAwareCommand {
 
     protected function configure()
     {
-        $this->setName('dbase:initialize')
-            ->setDescription('Initialize standard lists');
+        $this->setName('dbase:user:initialize')
+            ->setDescription('Initialize standard lists for the user database');
     }
 
     protected function configGenderList()
@@ -77,7 +77,7 @@ class DBaseCommand extends ContainerAwareCommand {
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln("Start database init of lists.");
+        $output->writeln("Start database init of user.");
         $this->configGenderList();
         $this->configTitleList();
         $this->configCountryList();

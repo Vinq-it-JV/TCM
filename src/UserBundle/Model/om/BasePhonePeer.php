@@ -9,6 +9,8 @@ use \PDOStatement;
 use \Propel;
 use \PropelException;
 use \PropelPDO;
+use CompanyBundle\Model\CompanyPhonePeer;
+use StoreBundle\Model\StorePhonePeer;
 use UserBundle\Model\Phone;
 use UserBundle\Model\PhonePeer;
 use UserBundle\Model\UserPhonePeer;
@@ -30,16 +32,19 @@ abstract class BasePhonePeer
     const TM_CLASS = 'UserBundle\\Model\\map\\PhoneTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 5;
+    const NUM_COLUMNS = 6;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 5;
+    const NUM_HYDRATE_COLUMNS = 6;
 
     /** the column name for the id field */
     const ID = 'phone.id';
+
+    /** the column name for the primary field */
+    const PRIMARY = 'phone.primary';
 
     /** the column name for the phone_number field */
     const PHONE_NUMBER = 'phone.phone_number';
@@ -72,12 +77,12 @@ abstract class BasePhonePeer
      * e.g. PhonePeer::$fieldNames[PhonePeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'PhoneNumber', 'Description', 'CreatedAt', 'UpdatedAt', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'phoneNumber', 'description', 'createdAt', 'updatedAt', ),
-        BasePeer::TYPE_COLNAME => array (PhonePeer::ID, PhonePeer::PHONE_NUMBER, PhonePeer::DESCRIPTION, PhonePeer::CREATED_AT, PhonePeer::UPDATED_AT, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'PHONE_NUMBER', 'DESCRIPTION', 'CREATED_AT', 'UPDATED_AT', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'phone_number', 'description', 'created_at', 'updated_at', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
+        BasePeer::TYPE_PHPNAME => array ('Id', 'Primary', 'PhoneNumber', 'Description', 'CreatedAt', 'UpdatedAt', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'primary', 'phoneNumber', 'description', 'createdAt', 'updatedAt', ),
+        BasePeer::TYPE_COLNAME => array (PhonePeer::ID, PhonePeer::PRIMARY, PhonePeer::PHONE_NUMBER, PhonePeer::DESCRIPTION, PhonePeer::CREATED_AT, PhonePeer::UPDATED_AT, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'PRIMARY', 'PHONE_NUMBER', 'DESCRIPTION', 'CREATED_AT', 'UPDATED_AT', ),
+        BasePeer::TYPE_FIELDNAME => array ('id', 'primary', 'phone_number', 'description', 'created_at', 'updated_at', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
     );
 
     /**
@@ -87,12 +92,12 @@ abstract class BasePhonePeer
      * e.g. PhonePeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'PhoneNumber' => 1, 'Description' => 2, 'CreatedAt' => 3, 'UpdatedAt' => 4, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'phoneNumber' => 1, 'description' => 2, 'createdAt' => 3, 'updatedAt' => 4, ),
-        BasePeer::TYPE_COLNAME => array (PhonePeer::ID => 0, PhonePeer::PHONE_NUMBER => 1, PhonePeer::DESCRIPTION => 2, PhonePeer::CREATED_AT => 3, PhonePeer::UPDATED_AT => 4, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'PHONE_NUMBER' => 1, 'DESCRIPTION' => 2, 'CREATED_AT' => 3, 'UPDATED_AT' => 4, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'phone_number' => 1, 'description' => 2, 'created_at' => 3, 'updated_at' => 4, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
+        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Primary' => 1, 'PhoneNumber' => 2, 'Description' => 3, 'CreatedAt' => 4, 'UpdatedAt' => 5, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'primary' => 1, 'phoneNumber' => 2, 'description' => 3, 'createdAt' => 4, 'updatedAt' => 5, ),
+        BasePeer::TYPE_COLNAME => array (PhonePeer::ID => 0, PhonePeer::PRIMARY => 1, PhonePeer::PHONE_NUMBER => 2, PhonePeer::DESCRIPTION => 3, PhonePeer::CREATED_AT => 4, PhonePeer::UPDATED_AT => 5, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'PRIMARY' => 1, 'PHONE_NUMBER' => 2, 'DESCRIPTION' => 3, 'CREATED_AT' => 4, 'UPDATED_AT' => 5, ),
+        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'primary' => 1, 'phone_number' => 2, 'description' => 3, 'created_at' => 4, 'updated_at' => 5, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
     );
 
     /**
@@ -167,12 +172,14 @@ abstract class BasePhonePeer
     {
         if (null === $alias) {
             $criteria->addSelectColumn(PhonePeer::ID);
+            $criteria->addSelectColumn(PhonePeer::PRIMARY);
             $criteria->addSelectColumn(PhonePeer::PHONE_NUMBER);
             $criteria->addSelectColumn(PhonePeer::DESCRIPTION);
             $criteria->addSelectColumn(PhonePeer::CREATED_AT);
             $criteria->addSelectColumn(PhonePeer::UPDATED_AT);
         } else {
             $criteria->addSelectColumn($alias . '.id');
+            $criteria->addSelectColumn($alias . '.primary');
             $criteria->addSelectColumn($alias . '.phone_number');
             $criteria->addSelectColumn($alias . '.description');
             $criteria->addSelectColumn($alias . '.created_at');
@@ -381,6 +388,12 @@ abstract class BasePhonePeer
      */
     public static function clearRelatedInstancePool()
     {
+        // Invalidate objects in CompanyPhonePeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        CompanyPhonePeer::clearInstancePool();
+        // Invalidate objects in StorePhonePeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        StorePhonePeer::clearInstancePool();
         // Invalidate objects in UserPhonePeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         UserPhonePeer::clearInstancePool();
@@ -717,6 +730,18 @@ abstract class BasePhonePeer
         $objects = PhonePeer::doSelect($criteria, $con);
         foreach ($objects as $obj) {
 
+
+            // delete related CompanyPhone objects
+            $criteria = new Criteria(CompanyPhonePeer::DATABASE_NAME);
+
+            $criteria->add(CompanyPhonePeer::PHONE_ID, $obj->getId());
+            $affectedRows += CompanyPhonePeer::doDelete($criteria, $con);
+
+            // delete related StorePhone objects
+            $criteria = new Criteria(StorePhonePeer::DATABASE_NAME);
+
+            $criteria->add(StorePhonePeer::PHONE_ID, $obj->getId());
+            $affectedRows += StorePhonePeer::doDelete($criteria, $con);
 
             // delete related UserPhone objects
             $criteria = new Criteria(UserPhonePeer::DATABASE_NAME);

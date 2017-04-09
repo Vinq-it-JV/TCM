@@ -4,9 +4,26 @@ administration_dashboard:
     options:
         expose: true
 
+#
+# USERS
+#
 administration_users:
     path:     /users
     defaults: { _controller: AdministrationBundle:Page:users }
+    options:
+        expose: true
+
+administration_users_get:
+    path:     /users/get
+    defaults: { _controller: UserBundle:Data:getUsers }
+    methods: [GET]
+    options:
+        expose: true
+
+administration_user_get:
+    path:     /user/{userid}/get
+    defaults: { _controller: UserBundle:Data:getUser }
+    methods: [GET]
     options:
         expose: true
 
@@ -22,58 +39,255 @@ administration_user_add:
     options:
         expose: true
 
-administration_users_get:
-    path:     /users/get
-    defaults: { _controller: AdministrationBundle:Data:getUsers }
-    methods: [GET]
-    options:
-        expose: true
-
-administration_user_get:
-    path:     /user/{userid}/get
-    defaults: { _controller: AdministrationBundle:Data:getUser }
-    methods: [GET]
-    options:
-        expose: true
-
 administration_user_new:
     path:     /user/new
-    defaults: { _controller: AdministrationBundle:Data:newUser }
+    defaults: { _controller: UserBundle:Data:newUser }
     methods: [GET]
     options:
         expose: true
 
 administration_user_save:
     path:     /user/{userid}/save
-    defaults: { _controller: AdministrationBundle:Data:saveUser }
+    defaults: { _controller: UserBundle:Data:saveUser }
     methods: [POST, PUT]
     options:
         expose: true
 
 administration_user_delete:
     path:     /user/{userid}/delete
-    defaults: { _controller: AdministrationBundle:Data:deleteUser }
+    defaults: { _controller: UserBundle:Data:deleteUser }
     methods: [DELETE]
     options:
         expose: true
 
 administration_user_delete_email:
     path:     /user/{userid}/email/{emailid}/delete
-    defaults: { _controller: AdministrationBundle:Data:deleteUserEmail }
+    defaults: { _controller: UserBundle:Data:deleteUserEmail }
     methods: [DELETE]
     options:
         expose: true
 
 administration_user_delete_phone:
     path:     /user/{userid}/phone/{phoneid}/delete
-    defaults: { _controller: AdministrationBundle:Data:deleteUserPhone }
+    defaults: { _controller: UserBundle:Data:deleteUserPhone }
     methods: [DELETE]
     options:
         expose: true
 
 administration_user_delete_address:
     path:     /user/{userid}/address/{addressid}/delete
-    defaults: { _controller: AdministrationBundle:Data:deleteUserAddress }
+    defaults: { _controller: UserBundle:Data:deleteUserAddress }
+    methods: [DELETE]
+    options:
+        expose: true
+
+#
+# COMPANIES
+#
+administration_companies:
+    path:     /companies
+    defaults: { _controller: AdministrationBundle:Page:companies }
+    options:
+        expose: true
+
+administration_companies_get:
+    path:     /companies/get
+    defaults: { _controller: CompanyBundle:Data:getCompanies }
+    methods: [GET]
+    options:
+        expose: true
+
+administration_company_get:
+    path:     /company/{companyid}/get
+    defaults: { _controller: CompanyBundle:Data:getCompany }
+    methods: [GET]
+    options:
+        expose: true
+
+administration_company_edit:
+    path:     /company/{companyid}/edit
+    defaults: { _controller: AdministrationBundle:Page:editCompany }
+    options:
+        expose: true
+
+administration_company_add:
+    path:     /company/add
+    defaults: { _controller: AdministrationBundle:Page:addCompany }
+    options:
+        expose: true
+
+administration_company_new:
+    path:     /company/new
+    defaults: { _controller: CompanyBundle:Data:newCompany }
+    methods: [GET]
+    options:
+        expose: true
+
+administration_company_save:
+    path:     /company/{companyid}/save
+    defaults: { _controller: CompanyBundle:Data:saveCompany }
+    methods: [POST, PUT]
+    options:
+        expose: true
+
+administration_company_delete:
+    path:     /company/{companyid}/delete
+    defaults: { _controller: CompanyBundle:Data:deleteCompany }
+    methods: [DELETE]
+    options:
+        expose: true
+
+administration_company_delete_email:
+    path:     /company/{companyid}/email/{emailid}/delete
+    defaults: { _controller: CompanyBundle:Data:deleteCompanyEmail }
+    methods: [DELETE]
+    options:
+        expose: true
+
+administration_company_delete_phone:
+    path:     /company/{companyid}/phone/{phoneid}/delete
+    defaults: { _controller: CompanyBundle:Data:deleteCompanyPhone }
+    methods: [DELETE]
+    options:
+        expose: true
+
+administration_company_delete_address:
+    path:     /company/{companyid}/address/{addressid}/delete
+    defaults: { _controller: CompanyBundle:Data:deleteCompanyAddress }
+    methods: [DELETE]
+    options:
+        expose: true
+
+#
+# REGIONS
+#
+administration_regions:
+    path:     /regions
+    defaults: { _controller: AdministrationBundle:Page:regions }
+    options:
+        expose: true
+
+administration_regions_get:
+    path:     /regions/get
+    defaults: { _controller: CompanyBundle:Data:getRegions }
+    methods: [GET]
+    options:
+        expose: true
+
+administration_region_get:
+    path:     /region/{regionid}/get
+    defaults: { _controller: CompanyBundle:Data:getRegion }
+    methods: [GET]
+    options:
+        expose: true
+
+administration_region_edit:
+    path:     /region/{regionid}/edit
+    defaults: { _controller: AdministrationBundle:Page:editRegion }
+    options:
+        expose: true
+
+administration_region_add:
+    path:     /region/add
+    defaults: { _controller: AdministrationBundle:Page:addRegion }
+    options:
+        expose: true
+
+administration_region_new:
+    path:     /region/new
+    defaults: { _controller: CompanyBundle:Data:newRegion }
+    methods: [GET]
+    options:
+        expose: true
+
+administration_region_save:
+    path:     /region/{regionid}/save
+    defaults: { _controller: CompanyBundle:Data:saveRegion }
+    methods: [POST, PUT]
+    options:
+        expose: true
+
+administration_region_delete:
+    path:     /region/{regionid}/delete
+    defaults: { _controller: CompanyBundle:Data:deleteRegion }
+    methods: [DELETE]
+    options:
+        expose: true
+
+#
+# STORES
+#
+
+administration_stores:
+    path:     /stores
+    defaults: { _controller: AdministrationBundle:Page:stores }
+    options:
+        expose: true
+
+administration_stores_get:
+    path:     /stores/get
+    defaults: { _controller: StoreBundle:Data:getStores }
+    methods: [GET]
+    options:
+        expose: true
+
+administration_store_get:
+    path:     /store/{storeid}/get
+    defaults: { _controller: StoreBundle:Data:getStore }
+    methods: [GET]
+    options:
+        expose: true
+
+administration_store_edit:
+    path:     /store/{storeid}/edit
+    defaults: { _controller: AdministrationBundle:Page:editStore }
+    options:
+        expose: true
+
+administration_store_add:
+    path:     /store/add
+    defaults: { _controller: AdministrationBundle:Page:addStore }
+    options:
+        expose: true
+
+administration_store_new:
+    path:     /store/new
+    defaults: { _controller: StoreBundle:Data:newStore }
+    methods: [GET]
+    options:
+        expose: true
+
+administration_store_save:
+    path:     /store/{storeid}/save
+    defaults: { _controller: StoreBundle:Data:saveStore }
+    methods: [POST, PUT]
+    options:
+        expose: true
+
+administration_store_delete:
+    path:     /store/{storeid}/delete
+    defaults: { _controller: StoreBundle:Data:deleteStore }
+    methods: [DELETE]
+    options:
+        expose: true
+
+administration_store_delete_email:
+    path:     /store/{storeid}/email/{emailid}/delete
+    defaults: { _controller: StoreBundle:Data:deleteStoreEmail }
+    methods: [DELETE]
+    options:
+        expose: true
+
+administration_store_delete_phone:
+    path:     /store/{storeid}/phone/{phoneid}/delete
+    defaults: { _controller: StoreBundle:Data:deleteStorePhone }
+    methods: [DELETE]
+    options:
+        expose: true
+
+administration_store_delete_address:
+    path:     /store/{storeid}/address/{addressid}/delete
+    defaults: { _controller: StoreBundle:Data:deleteStoreAddress }
     methods: [DELETE]
     options:
         expose: true

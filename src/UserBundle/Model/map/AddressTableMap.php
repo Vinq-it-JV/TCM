@@ -62,7 +62,11 @@ class AddressTableMap extends TableMap
     public function buildRelations()
     {
         $this->addRelation('Countries', 'UserBundle\\Model\\Countries', RelationMap::MANY_TO_ONE, array('country' => 'id', ), null, null);
+        $this->addRelation('CompanyAddress', 'CompanyBundle\\Model\\CompanyAddress', RelationMap::ONE_TO_MANY, array('id' => 'address_id', ), 'CASCADE', null, 'CompanyAddresses');
+        $this->addRelation('StoreAddress', 'StoreBundle\\Model\\StoreAddress', RelationMap::ONE_TO_MANY, array('id' => 'address_id', ), 'CASCADE', null, 'StoreAddresses');
         $this->addRelation('UserAddress', 'UserBundle\\Model\\UserAddress', RelationMap::ONE_TO_MANY, array('id' => 'address_id', ), 'CASCADE', null, 'UserAddresses');
+        $this->addRelation('Company', 'CompanyBundle\\Model\\Company', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'Companies');
+        $this->addRelation('Store', 'StoreBundle\\Model\\Store', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'Stores');
         $this->addRelation('User', 'UserBundle\\Model\\User', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'Users');
     } // buildRelations()
 

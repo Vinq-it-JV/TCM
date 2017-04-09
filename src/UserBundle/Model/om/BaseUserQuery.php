@@ -12,6 +12,14 @@ use \PropelCollection;
 use \PropelException;
 use \PropelObjectCollection;
 use \PropelPDO;
+use CompanyBundle\Model\Company;
+use CompanyBundle\Model\CompanyContact;
+use CompanyBundle\Model\CompanyInformant;
+use CompanyBundle\Model\CompanyOwner;
+use StoreBundle\Model\Store;
+use StoreBundle\Model\StoreContact;
+use StoreBundle\Model\StoreInformant;
+use StoreBundle\Model\StoreOwner;
 use UserBundle\Model\Address;
 use UserBundle\Model\Countries;
 use UserBundle\Model\Email;
@@ -87,6 +95,30 @@ use UserBundle\Model\UserTitle;
  * @method UserQuery leftJoinCountriesRelatedByLanguage($relationAlias = null) Adds a LEFT JOIN clause to the query using the CountriesRelatedByLanguage relation
  * @method UserQuery rightJoinCountriesRelatedByLanguage($relationAlias = null) Adds a RIGHT JOIN clause to the query using the CountriesRelatedByLanguage relation
  * @method UserQuery innerJoinCountriesRelatedByLanguage($relationAlias = null) Adds a INNER JOIN clause to the query using the CountriesRelatedByLanguage relation
+ *
+ * @method UserQuery leftJoinCompanyContact($relationAlias = null) Adds a LEFT JOIN clause to the query using the CompanyContact relation
+ * @method UserQuery rightJoinCompanyContact($relationAlias = null) Adds a RIGHT JOIN clause to the query using the CompanyContact relation
+ * @method UserQuery innerJoinCompanyContact($relationAlias = null) Adds a INNER JOIN clause to the query using the CompanyContact relation
+ *
+ * @method UserQuery leftJoinCompanyInformant($relationAlias = null) Adds a LEFT JOIN clause to the query using the CompanyInformant relation
+ * @method UserQuery rightJoinCompanyInformant($relationAlias = null) Adds a RIGHT JOIN clause to the query using the CompanyInformant relation
+ * @method UserQuery innerJoinCompanyInformant($relationAlias = null) Adds a INNER JOIN clause to the query using the CompanyInformant relation
+ *
+ * @method UserQuery leftJoinCompanyOwner($relationAlias = null) Adds a LEFT JOIN clause to the query using the CompanyOwner relation
+ * @method UserQuery rightJoinCompanyOwner($relationAlias = null) Adds a RIGHT JOIN clause to the query using the CompanyOwner relation
+ * @method UserQuery innerJoinCompanyOwner($relationAlias = null) Adds a INNER JOIN clause to the query using the CompanyOwner relation
+ *
+ * @method UserQuery leftJoinStoreContact($relationAlias = null) Adds a LEFT JOIN clause to the query using the StoreContact relation
+ * @method UserQuery rightJoinStoreContact($relationAlias = null) Adds a RIGHT JOIN clause to the query using the StoreContact relation
+ * @method UserQuery innerJoinStoreContact($relationAlias = null) Adds a INNER JOIN clause to the query using the StoreContact relation
+ *
+ * @method UserQuery leftJoinStoreInformant($relationAlias = null) Adds a LEFT JOIN clause to the query using the StoreInformant relation
+ * @method UserQuery rightJoinStoreInformant($relationAlias = null) Adds a RIGHT JOIN clause to the query using the StoreInformant relation
+ * @method UserQuery innerJoinStoreInformant($relationAlias = null) Adds a INNER JOIN clause to the query using the StoreInformant relation
+ *
+ * @method UserQuery leftJoinStoreOwner($relationAlias = null) Adds a LEFT JOIN clause to the query using the StoreOwner relation
+ * @method UserQuery rightJoinStoreOwner($relationAlias = null) Adds a RIGHT JOIN clause to the query using the StoreOwner relation
+ * @method UserQuery innerJoinStoreOwner($relationAlias = null) Adds a INNER JOIN clause to the query using the StoreOwner relation
  *
  * @method UserQuery leftJoinUserRole($relationAlias = null) Adds a LEFT JOIN clause to the query using the UserRole relation
  * @method UserQuery rightJoinUserRole($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UserRole relation
@@ -1315,6 +1347,450 @@ abstract class BaseUserQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query by a related CompanyContact object
+     *
+     * @param   CompanyContact|PropelObjectCollection $companyContact  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 UserQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByCompanyContact($companyContact, $comparison = null)
+    {
+        if ($companyContact instanceof CompanyContact) {
+            return $this
+                ->addUsingAlias(UserPeer::ID, $companyContact->getContactId(), $comparison);
+        } elseif ($companyContact instanceof PropelObjectCollection) {
+            return $this
+                ->useCompanyContactQuery()
+                ->filterByPrimaryKeys($companyContact->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByCompanyContact() only accepts arguments of type CompanyContact or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the CompanyContact relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return UserQuery The current query, for fluid interface
+     */
+    public function joinCompanyContact($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('CompanyContact');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'CompanyContact');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the CompanyContact relation CompanyContact object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   \CompanyBundle\Model\CompanyContactQuery A secondary query class using the current class as primary query
+     */
+    public function useCompanyContactQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinCompanyContact($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'CompanyContact', '\CompanyBundle\Model\CompanyContactQuery');
+    }
+
+    /**
+     * Filter the query by a related CompanyInformant object
+     *
+     * @param   CompanyInformant|PropelObjectCollection $companyInformant  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 UserQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByCompanyInformant($companyInformant, $comparison = null)
+    {
+        if ($companyInformant instanceof CompanyInformant) {
+            return $this
+                ->addUsingAlias(UserPeer::ID, $companyInformant->getInformantId(), $comparison);
+        } elseif ($companyInformant instanceof PropelObjectCollection) {
+            return $this
+                ->useCompanyInformantQuery()
+                ->filterByPrimaryKeys($companyInformant->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByCompanyInformant() only accepts arguments of type CompanyInformant or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the CompanyInformant relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return UserQuery The current query, for fluid interface
+     */
+    public function joinCompanyInformant($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('CompanyInformant');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'CompanyInformant');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the CompanyInformant relation CompanyInformant object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   \CompanyBundle\Model\CompanyInformantQuery A secondary query class using the current class as primary query
+     */
+    public function useCompanyInformantQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinCompanyInformant($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'CompanyInformant', '\CompanyBundle\Model\CompanyInformantQuery');
+    }
+
+    /**
+     * Filter the query by a related CompanyOwner object
+     *
+     * @param   CompanyOwner|PropelObjectCollection $companyOwner  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 UserQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByCompanyOwner($companyOwner, $comparison = null)
+    {
+        if ($companyOwner instanceof CompanyOwner) {
+            return $this
+                ->addUsingAlias(UserPeer::ID, $companyOwner->getOwnerId(), $comparison);
+        } elseif ($companyOwner instanceof PropelObjectCollection) {
+            return $this
+                ->useCompanyOwnerQuery()
+                ->filterByPrimaryKeys($companyOwner->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByCompanyOwner() only accepts arguments of type CompanyOwner or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the CompanyOwner relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return UserQuery The current query, for fluid interface
+     */
+    public function joinCompanyOwner($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('CompanyOwner');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'CompanyOwner');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the CompanyOwner relation CompanyOwner object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   \CompanyBundle\Model\CompanyOwnerQuery A secondary query class using the current class as primary query
+     */
+    public function useCompanyOwnerQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinCompanyOwner($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'CompanyOwner', '\CompanyBundle\Model\CompanyOwnerQuery');
+    }
+
+    /**
+     * Filter the query by a related StoreContact object
+     *
+     * @param   StoreContact|PropelObjectCollection $storeContact  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 UserQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByStoreContact($storeContact, $comparison = null)
+    {
+        if ($storeContact instanceof StoreContact) {
+            return $this
+                ->addUsingAlias(UserPeer::ID, $storeContact->getContactId(), $comparison);
+        } elseif ($storeContact instanceof PropelObjectCollection) {
+            return $this
+                ->useStoreContactQuery()
+                ->filterByPrimaryKeys($storeContact->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByStoreContact() only accepts arguments of type StoreContact or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the StoreContact relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return UserQuery The current query, for fluid interface
+     */
+    public function joinStoreContact($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('StoreContact');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'StoreContact');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the StoreContact relation StoreContact object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   \StoreBundle\Model\StoreContactQuery A secondary query class using the current class as primary query
+     */
+    public function useStoreContactQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinStoreContact($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'StoreContact', '\StoreBundle\Model\StoreContactQuery');
+    }
+
+    /**
+     * Filter the query by a related StoreInformant object
+     *
+     * @param   StoreInformant|PropelObjectCollection $storeInformant  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 UserQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByStoreInformant($storeInformant, $comparison = null)
+    {
+        if ($storeInformant instanceof StoreInformant) {
+            return $this
+                ->addUsingAlias(UserPeer::ID, $storeInformant->getInformantId(), $comparison);
+        } elseif ($storeInformant instanceof PropelObjectCollection) {
+            return $this
+                ->useStoreInformantQuery()
+                ->filterByPrimaryKeys($storeInformant->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByStoreInformant() only accepts arguments of type StoreInformant or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the StoreInformant relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return UserQuery The current query, for fluid interface
+     */
+    public function joinStoreInformant($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('StoreInformant');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'StoreInformant');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the StoreInformant relation StoreInformant object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   \StoreBundle\Model\StoreInformantQuery A secondary query class using the current class as primary query
+     */
+    public function useStoreInformantQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinStoreInformant($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'StoreInformant', '\StoreBundle\Model\StoreInformantQuery');
+    }
+
+    /**
+     * Filter the query by a related StoreOwner object
+     *
+     * @param   StoreOwner|PropelObjectCollection $storeOwner  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 UserQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByStoreOwner($storeOwner, $comparison = null)
+    {
+        if ($storeOwner instanceof StoreOwner) {
+            return $this
+                ->addUsingAlias(UserPeer::ID, $storeOwner->getOwnerId(), $comparison);
+        } elseif ($storeOwner instanceof PropelObjectCollection) {
+            return $this
+                ->useStoreOwnerQuery()
+                ->filterByPrimaryKeys($storeOwner->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByStoreOwner() only accepts arguments of type StoreOwner or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the StoreOwner relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return UserQuery The current query, for fluid interface
+     */
+    public function joinStoreOwner($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('StoreOwner');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'StoreOwner');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the StoreOwner relation StoreOwner object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   \StoreBundle\Model\StoreOwnerQuery A secondary query class using the current class as primary query
+     */
+    public function useStoreOwnerQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinStoreOwner($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'StoreOwner', '\StoreBundle\Model\StoreOwnerQuery');
+    }
+
+    /**
      * Filter the query by a related UserRole object
      *
      * @param   UserRole|PropelObjectCollection $userRole  the related object to use as filter
@@ -1608,6 +2084,108 @@ abstract class BaseUserQuery extends ModelCriteria
         return $this
             ->joinUserPhone($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'UserPhone', '\UserBundle\Model\UserPhoneQuery');
+    }
+
+    /**
+     * Filter the query by a related Company object
+     * using the company_contact table as cross reference
+     *
+     * @param   Company $company the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return   UserQuery The current query, for fluid interface
+     */
+    public function filterByContactCompany($company, $comparison = Criteria::EQUAL)
+    {
+        return $this
+            ->useCompanyContactQuery()
+            ->filterByContactCompany($company, $comparison)
+            ->endUse();
+    }
+
+    /**
+     * Filter the query by a related Company object
+     * using the company_informant table as cross reference
+     *
+     * @param   Company $company the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return   UserQuery The current query, for fluid interface
+     */
+    public function filterByInformantCompany($company, $comparison = Criteria::EQUAL)
+    {
+        return $this
+            ->useCompanyInformantQuery()
+            ->filterByInformantCompany($company, $comparison)
+            ->endUse();
+    }
+
+    /**
+     * Filter the query by a related Company object
+     * using the company_owner table as cross reference
+     *
+     * @param   Company $company the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return   UserQuery The current query, for fluid interface
+     */
+    public function filterByOwnerCompany($company, $comparison = Criteria::EQUAL)
+    {
+        return $this
+            ->useCompanyOwnerQuery()
+            ->filterByOwnerCompany($company, $comparison)
+            ->endUse();
+    }
+
+    /**
+     * Filter the query by a related Store object
+     * using the store_contact table as cross reference
+     *
+     * @param   Store $store the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return   UserQuery The current query, for fluid interface
+     */
+    public function filterByContactStore($store, $comparison = Criteria::EQUAL)
+    {
+        return $this
+            ->useStoreContactQuery()
+            ->filterByContactStore($store, $comparison)
+            ->endUse();
+    }
+
+    /**
+     * Filter the query by a related Store object
+     * using the store_informant table as cross reference
+     *
+     * @param   Store $store the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return   UserQuery The current query, for fluid interface
+     */
+    public function filterByInformantStore($store, $comparison = Criteria::EQUAL)
+    {
+        return $this
+            ->useStoreInformantQuery()
+            ->filterByInformantStore($store, $comparison)
+            ->endUse();
+    }
+
+    /**
+     * Filter the query by a related Store object
+     * using the store_owner table as cross reference
+     *
+     * @param   Store $store the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return   UserQuery The current query, for fluid interface
+     */
+    public function filterByOwnerStore($store, $comparison = Criteria::EQUAL)
+    {
+        return $this
+            ->useStoreOwnerQuery()
+            ->filterByOwnerStore($store, $comparison)
+            ->endUse();
     }
 
     /**

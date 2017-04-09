@@ -59,10 +59,6 @@ angular
         {
             return d_users;
         },
-        usersCollection: function ()
-        {
-            return d_usersCollection;
-        },
         templateSet: function (template)
         {
             d_template = template;
@@ -186,7 +182,7 @@ angular
                 d_user.Addresses = [];
 
             d_address.Id = moment().unix();
-            d_address.Type = 1;
+            d_address.Type = null;
             d_address.New = true;
             d_user.Addresses.push(d_address);
 

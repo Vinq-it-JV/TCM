@@ -1,0 +1,41 @@
+<div class="navbar navbar-default navbar-fixed-top">
+    <div role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="{{ path('administration_dashboard') }}" ng-cloak>{{  ng.translate('ADMINISTRATION.LABEL') }}</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    {% include ('UserBundle:header:user.html.twig') %}
+                    <li class="dropdown">
+                        <a href="#" data-toggle="dropdown">
+                            <i class="icon-book icon-white"></i><div class="inline" ng-cloak>{{ ng.translate('COMPANY.LABEL') }} <b class="caret"></b></div>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{{ path('administration_companies') }}" ng-cloak> {{ ng.translate('COMPANY.COMPANIES') }} </a></li>
+                            <li><a href="{{ path('administration_stores') }}" ng-cloak> {{ ng.translate('STORE.STORES') }} </a></li>
+                            <li><a href="{{ path('administration_regions') }}" ng-cloak> {{ ng.translate('COMPANY.REGIONS') }} </a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <a href="#" data-toggle="dropdown">
+                            <i class="icon-book icon-white"></i><div class="inline" ng-cloak>{{ '{{ AUTH.user().Name }}' }} <b class="caret"></b></div>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="" ng-click="showProfile()" ng-cloak> {{ ng.translate('USER.PROFILE') }} </a></li>
+                            <li><a href="{{ path('logout') }}" ng-cloak> {{ ng.translate('AUTH.LOGOUT') }} </a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

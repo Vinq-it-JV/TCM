@@ -6,6 +6,8 @@
 @import "sb-admin-2.min.css";
 @import "smart-table.css";
 @import "select.css";
+@import "select2.css";
+@import "angular-toggle.css";
 
 html {
     width: 100%;
@@ -81,4 +83,26 @@ body {
     border-bottom-right-radius: 4px;
     -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .05);
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, .05)
+}
+
+.no-resize {
+    resize: none;
+}
+
+.tag-label {
+    font-size: 100% !important;
+}
+
+.check-offset {
+    margin: 7px 0 0 0;
+
+}
+
+.radio-inline {
+    padding-top: 0px !important;
+}
+
+input[type=checkbox], input[type=radio] {
+    margin: 7px 0 0;
+    line-height: normal;
 }

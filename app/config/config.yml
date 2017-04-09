@@ -4,6 +4,8 @@ imports:
     - { resource: services.yml }
     - { resource: "@UserBundle/Resources/config/services.yml" }
     - { resource: "@AdministrationBundle/Resources/config/services.yml" }
+    - { resource: "@CompanyBundle/Resources/config/services.yml" }
+    - { resource: "@StoreBundle/Resources/config/services.yml" }
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
@@ -55,3 +57,7 @@ swiftmailer:
     spool:
         type: file
         path: "%kernel.root_dir%/data/mail-spool"
+
+usoft_postcode:
+    apiwise:
+        key: 'P4YtqxfDFNlgy3nOt1tE4IC3w1uUbiv35fhgMpg0'

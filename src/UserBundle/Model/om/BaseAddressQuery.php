@@ -12,6 +12,10 @@ use \PropelCollection;
 use \PropelException;
 use \PropelObjectCollection;
 use \PropelPDO;
+use CompanyBundle\Model\Company;
+use CompanyBundle\Model\CompanyAddress;
+use StoreBundle\Model\Store;
+use StoreBundle\Model\StoreAddress;
 use UserBundle\Model\Address;
 use UserBundle\Model\AddressPeer;
 use UserBundle\Model\AddressQuery;
@@ -51,6 +55,14 @@ use UserBundle\Model\UserAddress;
  * @method AddressQuery leftJoinCountries($relationAlias = null) Adds a LEFT JOIN clause to the query using the Countries relation
  * @method AddressQuery rightJoinCountries($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Countries relation
  * @method AddressQuery innerJoinCountries($relationAlias = null) Adds a INNER JOIN clause to the query using the Countries relation
+ *
+ * @method AddressQuery leftJoinCompanyAddress($relationAlias = null) Adds a LEFT JOIN clause to the query using the CompanyAddress relation
+ * @method AddressQuery rightJoinCompanyAddress($relationAlias = null) Adds a RIGHT JOIN clause to the query using the CompanyAddress relation
+ * @method AddressQuery innerJoinCompanyAddress($relationAlias = null) Adds a INNER JOIN clause to the query using the CompanyAddress relation
+ *
+ * @method AddressQuery leftJoinStoreAddress($relationAlias = null) Adds a LEFT JOIN clause to the query using the StoreAddress relation
+ * @method AddressQuery rightJoinStoreAddress($relationAlias = null) Adds a RIGHT JOIN clause to the query using the StoreAddress relation
+ * @method AddressQuery innerJoinStoreAddress($relationAlias = null) Adds a INNER JOIN clause to the query using the StoreAddress relation
  *
  * @method AddressQuery leftJoinUserAddress($relationAlias = null) Adds a LEFT JOIN clause to the query using the UserAddress relation
  * @method AddressQuery rightJoinUserAddress($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UserAddress relation
@@ -740,6 +752,154 @@ abstract class BaseAddressQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query by a related CompanyAddress object
+     *
+     * @param   CompanyAddress|PropelObjectCollection $companyAddress  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 AddressQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByCompanyAddress($companyAddress, $comparison = null)
+    {
+        if ($companyAddress instanceof CompanyAddress) {
+            return $this
+                ->addUsingAlias(AddressPeer::ID, $companyAddress->getAddressId(), $comparison);
+        } elseif ($companyAddress instanceof PropelObjectCollection) {
+            return $this
+                ->useCompanyAddressQuery()
+                ->filterByPrimaryKeys($companyAddress->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByCompanyAddress() only accepts arguments of type CompanyAddress or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the CompanyAddress relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return AddressQuery The current query, for fluid interface
+     */
+    public function joinCompanyAddress($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('CompanyAddress');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'CompanyAddress');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the CompanyAddress relation CompanyAddress object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   \CompanyBundle\Model\CompanyAddressQuery A secondary query class using the current class as primary query
+     */
+    public function useCompanyAddressQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinCompanyAddress($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'CompanyAddress', '\CompanyBundle\Model\CompanyAddressQuery');
+    }
+
+    /**
+     * Filter the query by a related StoreAddress object
+     *
+     * @param   StoreAddress|PropelObjectCollection $storeAddress  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 AddressQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByStoreAddress($storeAddress, $comparison = null)
+    {
+        if ($storeAddress instanceof StoreAddress) {
+            return $this
+                ->addUsingAlias(AddressPeer::ID, $storeAddress->getAddressId(), $comparison);
+        } elseif ($storeAddress instanceof PropelObjectCollection) {
+            return $this
+                ->useStoreAddressQuery()
+                ->filterByPrimaryKeys($storeAddress->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByStoreAddress() only accepts arguments of type StoreAddress or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the StoreAddress relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return AddressQuery The current query, for fluid interface
+     */
+    public function joinStoreAddress($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('StoreAddress');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'StoreAddress');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the StoreAddress relation StoreAddress object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   \StoreBundle\Model\StoreAddressQuery A secondary query class using the current class as primary query
+     */
+    public function useStoreAddressQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinStoreAddress($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'StoreAddress', '\StoreBundle\Model\StoreAddressQuery');
+    }
+
+    /**
      * Filter the query by a related UserAddress object
      *
      * @param   UserAddress|PropelObjectCollection $userAddress  the related object to use as filter
@@ -811,6 +971,40 @@ abstract class BaseAddressQuery extends ModelCriteria
         return $this
             ->joinUserAddress($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'UserAddress', '\UserBundle\Model\UserAddressQuery');
+    }
+
+    /**
+     * Filter the query by a related Company object
+     * using the company_address table as cross reference
+     *
+     * @param   Company $company the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return   AddressQuery The current query, for fluid interface
+     */
+    public function filterByCompany($company, $comparison = Criteria::EQUAL)
+    {
+        return $this
+            ->useCompanyAddressQuery()
+            ->filterByCompany($company, $comparison)
+            ->endUse();
+    }
+
+    /**
+     * Filter the query by a related Store object
+     * using the store_address table as cross reference
+     *
+     * @param   Store $store the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return   AddressQuery The current query, for fluid interface
+     */
+    public function filterByStore($store, $comparison = Criteria::EQUAL)
+    {
+        return $this
+            ->useStoreAddressQuery()
+            ->filterByStore($store, $comparison)
+            ->endUse();
     }
 
     /**

@@ -2,3 +2,7 @@ services:
     tcm_authenticator:
         class: UserBundle\Security\DBAuthenticator
         arguments: ["@security.password_encoder","%logins%"]
+
+    class_helper:
+        class: AppBundle\Services\ClassHelper
+        arguments: []

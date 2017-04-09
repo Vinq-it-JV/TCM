@@ -15,6 +15,22 @@ use \PropelDateTime;
 use \PropelException;
 use \PropelObjectCollection;
 use \PropelPDO;
+use CompanyBundle\Model\Company;
+use CompanyBundle\Model\CompanyContact;
+use CompanyBundle\Model\CompanyContactQuery;
+use CompanyBundle\Model\CompanyInformant;
+use CompanyBundle\Model\CompanyInformantQuery;
+use CompanyBundle\Model\CompanyOwner;
+use CompanyBundle\Model\CompanyOwnerQuery;
+use CompanyBundle\Model\CompanyQuery;
+use StoreBundle\Model\Store;
+use StoreBundle\Model\StoreContact;
+use StoreBundle\Model\StoreContactQuery;
+use StoreBundle\Model\StoreInformant;
+use StoreBundle\Model\StoreInformantQuery;
+use StoreBundle\Model\StoreOwner;
+use StoreBundle\Model\StoreOwnerQuery;
+use StoreBundle\Model\StoreQuery;
 use UserBundle\Model\Address;
 use UserBundle\Model\AddressQuery;
 use UserBundle\Model\Countries;
@@ -202,6 +218,42 @@ abstract class BaseUser extends BaseObject implements Persistent
     protected $aCountriesRelatedByLanguage;
 
     /**
+     * @var        PropelObjectCollection|CompanyContact[] Collection to store aggregation of CompanyContact objects.
+     */
+    protected $collCompanyContacts;
+    protected $collCompanyContactsPartial;
+
+    /**
+     * @var        PropelObjectCollection|CompanyInformant[] Collection to store aggregation of CompanyInformant objects.
+     */
+    protected $collCompanyInformants;
+    protected $collCompanyInformantsPartial;
+
+    /**
+     * @var        PropelObjectCollection|CompanyOwner[] Collection to store aggregation of CompanyOwner objects.
+     */
+    protected $collCompanyOwners;
+    protected $collCompanyOwnersPartial;
+
+    /**
+     * @var        PropelObjectCollection|StoreContact[] Collection to store aggregation of StoreContact objects.
+     */
+    protected $collStoreContacts;
+    protected $collStoreContactsPartial;
+
+    /**
+     * @var        PropelObjectCollection|StoreInformant[] Collection to store aggregation of StoreInformant objects.
+     */
+    protected $collStoreInformants;
+    protected $collStoreInformantsPartial;
+
+    /**
+     * @var        PropelObjectCollection|StoreOwner[] Collection to store aggregation of StoreOwner objects.
+     */
+    protected $collStoreOwners;
+    protected $collStoreOwnersPartial;
+
+    /**
      * @var        PropelObjectCollection|UserRole[] Collection to store aggregation of UserRole objects.
      */
     protected $collUserRoles;
@@ -224,6 +276,36 @@ abstract class BaseUser extends BaseObject implements Persistent
      */
     protected $collUserPhones;
     protected $collUserPhonesPartial;
+
+    /**
+     * @var        PropelObjectCollection|Company[] Collection to store aggregation of Company objects.
+     */
+    protected $collContactCompanies;
+
+    /**
+     * @var        PropelObjectCollection|Company[] Collection to store aggregation of Company objects.
+     */
+    protected $collInformantCompanies;
+
+    /**
+     * @var        PropelObjectCollection|Company[] Collection to store aggregation of Company objects.
+     */
+    protected $collOwnerCompanies;
+
+    /**
+     * @var        PropelObjectCollection|Store[] Collection to store aggregation of Store objects.
+     */
+    protected $collContactStores;
+
+    /**
+     * @var        PropelObjectCollection|Store[] Collection to store aggregation of Store objects.
+     */
+    protected $collInformantStores;
+
+    /**
+     * @var        PropelObjectCollection|Store[] Collection to store aggregation of Store objects.
+     */
+    protected $collOwnerStores;
 
     /**
      * @var        PropelObjectCollection|Role[] Collection to store aggregation of Role objects.
@@ -269,6 +351,42 @@ abstract class BaseUser extends BaseObject implements Persistent
      * An array of objects scheduled for deletion.
      * @var		PropelObjectCollection
      */
+    protected $contactCompaniesScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $informantCompaniesScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $ownerCompaniesScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $contactStoresScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $informantStoresScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $ownerStoresScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
     protected $rolesScheduledForDeletion = null;
 
     /**
@@ -288,6 +406,42 @@ abstract class BaseUser extends BaseObject implements Persistent
      * @var		PropelObjectCollection
      */
     protected $phonesScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $companyContactsScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $companyInformantsScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $companyOwnersScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $storeContactsScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $storeInformantsScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $storeOwnersScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -1245,6 +1399,18 @@ abstract class BaseUser extends BaseObject implements Persistent
             $this->aUserTitle = null;
             $this->aCountriesRelatedByCountry = null;
             $this->aCountriesRelatedByLanguage = null;
+            $this->collCompanyContacts = null;
+
+            $this->collCompanyInformants = null;
+
+            $this->collCompanyOwners = null;
+
+            $this->collStoreContacts = null;
+
+            $this->collStoreInformants = null;
+
+            $this->collStoreOwners = null;
+
             $this->collUserRoles = null;
 
             $this->collUserAddresses = null;
@@ -1253,6 +1419,12 @@ abstract class BaseUser extends BaseObject implements Persistent
 
             $this->collUserPhones = null;
 
+            $this->collContactCompanies = null;
+            $this->collInformantCompanies = null;
+            $this->collOwnerCompanies = null;
+            $this->collContactStores = null;
+            $this->collInformantStores = null;
+            $this->collOwnerStores = null;
             $this->collRoles = null;
             $this->collAddresses = null;
             $this->collEmails = null;
@@ -1425,6 +1597,162 @@ abstract class BaseUser extends BaseObject implements Persistent
                 $this->resetModified();
             }
 
+            if ($this->contactCompaniesScheduledForDeletion !== null) {
+                if (!$this->contactCompaniesScheduledForDeletion->isEmpty()) {
+                    $pks = array();
+                    $pk = $this->getPrimaryKey();
+                    foreach ($this->contactCompaniesScheduledForDeletion->getPrimaryKeys(false) as $remotePk) {
+                        $pks[] = array($remotePk, $pk);
+                    }
+                    CompanyContactQuery::create()
+                        ->filterByPrimaryKeys($pks)
+                        ->delete($con);
+                    $this->contactCompaniesScheduledForDeletion = null;
+                }
+
+                foreach ($this->getContactCompanies() as $contactCompany) {
+                    if ($contactCompany->isModified()) {
+                        $contactCompany->save($con);
+                    }
+                }
+            } elseif ($this->collContactCompanies) {
+                foreach ($this->collContactCompanies as $contactCompany) {
+                    if ($contactCompany->isModified()) {
+                        $contactCompany->save($con);
+                    }
+                }
+            }
+
+            if ($this->informantCompaniesScheduledForDeletion !== null) {
+                if (!$this->informantCompaniesScheduledForDeletion->isEmpty()) {
+                    $pks = array();
+                    $pk = $this->getPrimaryKey();
+                    foreach ($this->informantCompaniesScheduledForDeletion->getPrimaryKeys(false) as $remotePk) {
+                        $pks[] = array($remotePk, $pk);
+                    }
+                    CompanyInformantQuery::create()
+                        ->filterByPrimaryKeys($pks)
+                        ->delete($con);
+                    $this->informantCompaniesScheduledForDeletion = null;
+                }
+
+                foreach ($this->getInformantCompanies() as $informantCompany) {
+                    if ($informantCompany->isModified()) {
+                        $informantCompany->save($con);
+                    }
+                }
+            } elseif ($this->collInformantCompanies) {
+                foreach ($this->collInformantCompanies as $informantCompany) {
+                    if ($informantCompany->isModified()) {
+                        $informantCompany->save($con);
+                    }
+                }
+            }
+
+            if ($this->ownerCompaniesScheduledForDeletion !== null) {
+                if (!$this->ownerCompaniesScheduledForDeletion->isEmpty()) {
+                    $pks = array();
+                    $pk = $this->getPrimaryKey();
+                    foreach ($this->ownerCompaniesScheduledForDeletion->getPrimaryKeys(false) as $remotePk) {
+                        $pks[] = array($remotePk, $pk);
+                    }
+                    CompanyOwnerQuery::create()
+                        ->filterByPrimaryKeys($pks)
+                        ->delete($con);
+                    $this->ownerCompaniesScheduledForDeletion = null;
+                }
+
+                foreach ($this->getOwnerCompanies() as $ownerCompany) {
+                    if ($ownerCompany->isModified()) {
+                        $ownerCompany->save($con);
+                    }
+                }
+            } elseif ($this->collOwnerCompanies) {
+                foreach ($this->collOwnerCompanies as $ownerCompany) {
+                    if ($ownerCompany->isModified()) {
+                        $ownerCompany->save($con);
+                    }
+                }
+            }
+
+            if ($this->contactStoresScheduledForDeletion !== null) {
+                if (!$this->contactStoresScheduledForDeletion->isEmpty()) {
+                    $pks = array();
+                    $pk = $this->getPrimaryKey();
+                    foreach ($this->contactStoresScheduledForDeletion->getPrimaryKeys(false) as $remotePk) {
+                        $pks[] = array($remotePk, $pk);
+                    }
+                    StoreContactQuery::create()
+                        ->filterByPrimaryKeys($pks)
+                        ->delete($con);
+                    $this->contactStoresScheduledForDeletion = null;
+                }
+
+                foreach ($this->getContactStores() as $contactStore) {
+                    if ($contactStore->isModified()) {
+                        $contactStore->save($con);
+                    }
+                }
+            } elseif ($this->collContactStores) {
+                foreach ($this->collContactStores as $contactStore) {
+                    if ($contactStore->isModified()) {
+                        $contactStore->save($con);
+                    }
+                }
+            }
+
+            if ($this->informantStoresScheduledForDeletion !== null) {
+                if (!$this->informantStoresScheduledForDeletion->isEmpty()) {
+                    $pks = array();
+                    $pk = $this->getPrimaryKey();
+                    foreach ($this->informantStoresScheduledForDeletion->getPrimaryKeys(false) as $remotePk) {
+                        $pks[] = array($remotePk, $pk);
+                    }
+                    StoreInformantQuery::create()
+                        ->filterByPrimaryKeys($pks)
+                        ->delete($con);
+                    $this->informantStoresScheduledForDeletion = null;
+                }
+
+                foreach ($this->getInformantStores() as $informantStore) {
+                    if ($informantStore->isModified()) {
+                        $informantStore->save($con);
+                    }
+                }
+            } elseif ($this->collInformantStores) {
+                foreach ($this->collInformantStores as $informantStore) {
+                    if ($informantStore->isModified()) {
+                        $informantStore->save($con);
+                    }
+                }
+            }
+
+            if ($this->ownerStoresScheduledForDeletion !== null) {
+                if (!$this->ownerStoresScheduledForDeletion->isEmpty()) {
+                    $pks = array();
+                    $pk = $this->getPrimaryKey();
+                    foreach ($this->ownerStoresScheduledForDeletion->getPrimaryKeys(false) as $remotePk) {
+                        $pks[] = array($remotePk, $pk);
+                    }
+                    StoreOwnerQuery::create()
+                        ->filterByPrimaryKeys($pks)
+                        ->delete($con);
+                    $this->ownerStoresScheduledForDeletion = null;
+                }
+
+                foreach ($this->getOwnerStores() as $ownerStore) {
+                    if ($ownerStore->isModified()) {
+                        $ownerStore->save($con);
+                    }
+                }
+            } elseif ($this->collOwnerStores) {
+                foreach ($this->collOwnerStores as $ownerStore) {
+                    if ($ownerStore->isModified()) {
+                        $ownerStore->save($con);
+                    }
+                }
+            }
+
             if ($this->rolesScheduledForDeletion !== null) {
                 if (!$this->rolesScheduledForDeletion->isEmpty()) {
                     $pks = array();
@@ -1525,6 +1853,108 @@ abstract class BaseUser extends BaseObject implements Persistent
                 foreach ($this->collPhones as $phone) {
                     if ($phone->isModified()) {
                         $phone->save($con);
+                    }
+                }
+            }
+
+            if ($this->companyContactsScheduledForDeletion !== null) {
+                if (!$this->companyContactsScheduledForDeletion->isEmpty()) {
+                    CompanyContactQuery::create()
+                        ->filterByPrimaryKeys($this->companyContactsScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->companyContactsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collCompanyContacts !== null) {
+                foreach ($this->collCompanyContacts as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->companyInformantsScheduledForDeletion !== null) {
+                if (!$this->companyInformantsScheduledForDeletion->isEmpty()) {
+                    CompanyInformantQuery::create()
+                        ->filterByPrimaryKeys($this->companyInformantsScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->companyInformantsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collCompanyInformants !== null) {
+                foreach ($this->collCompanyInformants as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->companyOwnersScheduledForDeletion !== null) {
+                if (!$this->companyOwnersScheduledForDeletion->isEmpty()) {
+                    CompanyOwnerQuery::create()
+                        ->filterByPrimaryKeys($this->companyOwnersScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->companyOwnersScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collCompanyOwners !== null) {
+                foreach ($this->collCompanyOwners as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->storeContactsScheduledForDeletion !== null) {
+                if (!$this->storeContactsScheduledForDeletion->isEmpty()) {
+                    StoreContactQuery::create()
+                        ->filterByPrimaryKeys($this->storeContactsScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->storeContactsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collStoreContacts !== null) {
+                foreach ($this->collStoreContacts as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->storeInformantsScheduledForDeletion !== null) {
+                if (!$this->storeInformantsScheduledForDeletion->isEmpty()) {
+                    StoreInformantQuery::create()
+                        ->filterByPrimaryKeys($this->storeInformantsScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->storeInformantsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collStoreInformants !== null) {
+                foreach ($this->collStoreInformants as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->storeOwnersScheduledForDeletion !== null) {
+                if (!$this->storeOwnersScheduledForDeletion->isEmpty()) {
+                    StoreOwnerQuery::create()
+                        ->filterByPrimaryKeys($this->storeOwnersScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->storeOwnersScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collStoreOwners !== null) {
+                foreach ($this->collStoreOwners as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
                     }
                 }
             }
@@ -1877,6 +2307,54 @@ abstract class BaseUser extends BaseObject implements Persistent
             }
 
 
+                if ($this->collCompanyContacts !== null) {
+                    foreach ($this->collCompanyContacts as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
+                if ($this->collCompanyInformants !== null) {
+                    foreach ($this->collCompanyInformants as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
+                if ($this->collCompanyOwners !== null) {
+                    foreach ($this->collCompanyOwners as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
+                if ($this->collStoreContacts !== null) {
+                    foreach ($this->collStoreContacts as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
+                if ($this->collStoreInformants !== null) {
+                    foreach ($this->collStoreInformants as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
+                if ($this->collStoreOwners !== null) {
+                    foreach ($this->collStoreOwners as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
                 if ($this->collUserRoles !== null) {
                     foreach ($this->collUserRoles as $referrerFK) {
                         if (!$referrerFK->validate($columns)) {
@@ -2067,6 +2545,24 @@ abstract class BaseUser extends BaseObject implements Persistent
             }
             if (null !== $this->aCountriesRelatedByLanguage) {
                 $result['CountriesRelatedByLanguage'] = $this->aCountriesRelatedByLanguage->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->collCompanyContacts) {
+                $result['CompanyContacts'] = $this->collCompanyContacts->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collCompanyInformants) {
+                $result['CompanyInformants'] = $this->collCompanyInformants->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collCompanyOwners) {
+                $result['CompanyOwners'] = $this->collCompanyOwners->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collStoreContacts) {
+                $result['StoreContacts'] = $this->collStoreContacts->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collStoreInformants) {
+                $result['StoreInformants'] = $this->collStoreInformants->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collStoreOwners) {
+                $result['StoreOwners'] = $this->collStoreOwners->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collUserRoles) {
                 $result['UserRoles'] = $this->collUserRoles->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
@@ -2332,6 +2828,42 @@ abstract class BaseUser extends BaseObject implements Persistent
             $copyObj->setNew(false);
             // store object hash to prevent cycle
             $this->startCopy = true;
+
+            foreach ($this->getCompanyContacts() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addCompanyContact($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getCompanyInformants() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addCompanyInformant($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getCompanyOwners() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addCompanyOwner($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getStoreContacts() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addStoreContact($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getStoreInformants() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addStoreInformant($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getStoreOwners() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addStoreOwner($relObj->copy($deepCopy));
+                }
+            }
 
             foreach ($this->getUserRoles() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
@@ -2626,6 +3158,24 @@ abstract class BaseUser extends BaseObject implements Persistent
      */
     public function initRelation($relationName)
     {
+        if ('CompanyContact' == $relationName) {
+            $this->initCompanyContacts();
+        }
+        if ('CompanyInformant' == $relationName) {
+            $this->initCompanyInformants();
+        }
+        if ('CompanyOwner' == $relationName) {
+            $this->initCompanyOwners();
+        }
+        if ('StoreContact' == $relationName) {
+            $this->initStoreContacts();
+        }
+        if ('StoreInformant' == $relationName) {
+            $this->initStoreInformants();
+        }
+        if ('StoreOwner' == $relationName) {
+            $this->initStoreOwners();
+        }
         if ('UserRole' == $relationName) {
             $this->initUserRoles();
         }
@@ -2638,6 +3188,1524 @@ abstract class BaseUser extends BaseObject implements Persistent
         if ('UserPhone' == $relationName) {
             $this->initUserPhones();
         }
+    }
+
+    /**
+     * Clears out the collCompanyContacts collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return User The current object (for fluent API support)
+     * @see        addCompanyContacts()
+     */
+    public function clearCompanyContacts()
+    {
+        $this->collCompanyContacts = null; // important to set this to null since that means it is uninitialized
+        $this->collCompanyContactsPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collCompanyContacts collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialCompanyContacts($v = true)
+    {
+        $this->collCompanyContactsPartial = $v;
+    }
+
+    /**
+     * Initializes the collCompanyContacts collection.
+     *
+     * By default this just sets the collCompanyContacts collection to an empty array (like clearcollCompanyContacts());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initCompanyContacts($overrideExisting = true)
+    {
+        if (null !== $this->collCompanyContacts && !$overrideExisting) {
+            return;
+        }
+        $this->collCompanyContacts = new PropelObjectCollection();
+        $this->collCompanyContacts->setModel('CompanyContact');
+    }
+
+    /**
+     * Gets an array of CompanyContact objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this User is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|CompanyContact[] List of CompanyContact objects
+     * @throws PropelException
+     */
+    public function getCompanyContacts($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collCompanyContactsPartial && !$this->isNew();
+        if (null === $this->collCompanyContacts || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collCompanyContacts) {
+                // return empty collection
+                $this->initCompanyContacts();
+            } else {
+                $collCompanyContacts = CompanyContactQuery::create(null, $criteria)
+                    ->filterByContact($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collCompanyContactsPartial && count($collCompanyContacts)) {
+                      $this->initCompanyContacts(false);
+
+                      foreach ($collCompanyContacts as $obj) {
+                        if (false == $this->collCompanyContacts->contains($obj)) {
+                          $this->collCompanyContacts->append($obj);
+                        }
+                      }
+
+                      $this->collCompanyContactsPartial = true;
+                    }
+
+                    $collCompanyContacts->getInternalIterator()->rewind();
+
+                    return $collCompanyContacts;
+                }
+
+                if ($partial && $this->collCompanyContacts) {
+                    foreach ($this->collCompanyContacts as $obj) {
+                        if ($obj->isNew()) {
+                            $collCompanyContacts[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collCompanyContacts = $collCompanyContacts;
+                $this->collCompanyContactsPartial = false;
+            }
+        }
+
+        return $this->collCompanyContacts;
+    }
+
+    /**
+     * Sets a collection of CompanyContact objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $companyContacts A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return User The current object (for fluent API support)
+     */
+    public function setCompanyContacts(PropelCollection $companyContacts, PropelPDO $con = null)
+    {
+        $companyContactsToDelete = $this->getCompanyContacts(new Criteria(), $con)->diff($companyContacts);
+
+
+        //since at least one column in the foreign key is at the same time a PK
+        //we can not just set a PK to NULL in the lines below. We have to store
+        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
+        $this->companyContactsScheduledForDeletion = clone $companyContactsToDelete;
+
+        foreach ($companyContactsToDelete as $companyContactRemoved) {
+            $companyContactRemoved->setContact(null);
+        }
+
+        $this->collCompanyContacts = null;
+        foreach ($companyContacts as $companyContact) {
+            $this->addCompanyContact($companyContact);
+        }
+
+        $this->collCompanyContacts = $companyContacts;
+        $this->collCompanyContactsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related CompanyContact objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related CompanyContact objects.
+     * @throws PropelException
+     */
+    public function countCompanyContacts(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collCompanyContactsPartial && !$this->isNew();
+        if (null === $this->collCompanyContacts || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collCompanyContacts) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getCompanyContacts());
+            }
+            $query = CompanyContactQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByContact($this)
+                ->count($con);
+        }
+
+        return count($this->collCompanyContacts);
+    }
+
+    /**
+     * Method called to associate a CompanyContact object to this object
+     * through the CompanyContact foreign key attribute.
+     *
+     * @param    CompanyContact $l CompanyContact
+     * @return User The current object (for fluent API support)
+     */
+    public function addCompanyContact(CompanyContact $l)
+    {
+        if ($this->collCompanyContacts === null) {
+            $this->initCompanyContacts();
+            $this->collCompanyContactsPartial = true;
+        }
+
+        if (!in_array($l, $this->collCompanyContacts->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddCompanyContact($l);
+
+            if ($this->companyContactsScheduledForDeletion and $this->companyContactsScheduledForDeletion->contains($l)) {
+                $this->companyContactsScheduledForDeletion->remove($this->companyContactsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	CompanyContact $companyContact The companyContact object to add.
+     */
+    protected function doAddCompanyContact($companyContact)
+    {
+        $this->collCompanyContacts[]= $companyContact;
+        $companyContact->setContact($this);
+    }
+
+    /**
+     * @param	CompanyContact $companyContact The companyContact object to remove.
+     * @return User The current object (for fluent API support)
+     */
+    public function removeCompanyContact($companyContact)
+    {
+        if ($this->getCompanyContacts()->contains($companyContact)) {
+            $this->collCompanyContacts->remove($this->collCompanyContacts->search($companyContact));
+            if (null === $this->companyContactsScheduledForDeletion) {
+                $this->companyContactsScheduledForDeletion = clone $this->collCompanyContacts;
+                $this->companyContactsScheduledForDeletion->clear();
+            }
+            $this->companyContactsScheduledForDeletion[]= clone $companyContact;
+            $companyContact->setContact(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this User is new, it will return
+     * an empty collection; or if this User has previously
+     * been saved, it will retrieve related CompanyContacts from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in User.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|CompanyContact[] List of CompanyContact objects
+     */
+    public function getCompanyContactsJoinContactCompany($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = CompanyContactQuery::create(null, $criteria);
+        $query->joinWith('ContactCompany', $join_behavior);
+
+        return $this->getCompanyContacts($query, $con);
+    }
+
+    /**
+     * Clears out the collCompanyInformants collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return User The current object (for fluent API support)
+     * @see        addCompanyInformants()
+     */
+    public function clearCompanyInformants()
+    {
+        $this->collCompanyInformants = null; // important to set this to null since that means it is uninitialized
+        $this->collCompanyInformantsPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collCompanyInformants collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialCompanyInformants($v = true)
+    {
+        $this->collCompanyInformantsPartial = $v;
+    }
+
+    /**
+     * Initializes the collCompanyInformants collection.
+     *
+     * By default this just sets the collCompanyInformants collection to an empty array (like clearcollCompanyInformants());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initCompanyInformants($overrideExisting = true)
+    {
+        if (null !== $this->collCompanyInformants && !$overrideExisting) {
+            return;
+        }
+        $this->collCompanyInformants = new PropelObjectCollection();
+        $this->collCompanyInformants->setModel('CompanyInformant');
+    }
+
+    /**
+     * Gets an array of CompanyInformant objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this User is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|CompanyInformant[] List of CompanyInformant objects
+     * @throws PropelException
+     */
+    public function getCompanyInformants($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collCompanyInformantsPartial && !$this->isNew();
+        if (null === $this->collCompanyInformants || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collCompanyInformants) {
+                // return empty collection
+                $this->initCompanyInformants();
+            } else {
+                $collCompanyInformants = CompanyInformantQuery::create(null, $criteria)
+                    ->filterByInformant($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collCompanyInformantsPartial && count($collCompanyInformants)) {
+                      $this->initCompanyInformants(false);
+
+                      foreach ($collCompanyInformants as $obj) {
+                        if (false == $this->collCompanyInformants->contains($obj)) {
+                          $this->collCompanyInformants->append($obj);
+                        }
+                      }
+
+                      $this->collCompanyInformantsPartial = true;
+                    }
+
+                    $collCompanyInformants->getInternalIterator()->rewind();
+
+                    return $collCompanyInformants;
+                }
+
+                if ($partial && $this->collCompanyInformants) {
+                    foreach ($this->collCompanyInformants as $obj) {
+                        if ($obj->isNew()) {
+                            $collCompanyInformants[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collCompanyInformants = $collCompanyInformants;
+                $this->collCompanyInformantsPartial = false;
+            }
+        }
+
+        return $this->collCompanyInformants;
+    }
+
+    /**
+     * Sets a collection of CompanyInformant objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $companyInformants A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return User The current object (for fluent API support)
+     */
+    public function setCompanyInformants(PropelCollection $companyInformants, PropelPDO $con = null)
+    {
+        $companyInformantsToDelete = $this->getCompanyInformants(new Criteria(), $con)->diff($companyInformants);
+
+
+        //since at least one column in the foreign key is at the same time a PK
+        //we can not just set a PK to NULL in the lines below. We have to store
+        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
+        $this->companyInformantsScheduledForDeletion = clone $companyInformantsToDelete;
+
+        foreach ($companyInformantsToDelete as $companyInformantRemoved) {
+            $companyInformantRemoved->setInformant(null);
+        }
+
+        $this->collCompanyInformants = null;
+        foreach ($companyInformants as $companyInformant) {
+            $this->addCompanyInformant($companyInformant);
+        }
+
+        $this->collCompanyInformants = $companyInformants;
+        $this->collCompanyInformantsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related CompanyInformant objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related CompanyInformant objects.
+     * @throws PropelException
+     */
+    public function countCompanyInformants(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collCompanyInformantsPartial && !$this->isNew();
+        if (null === $this->collCompanyInformants || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collCompanyInformants) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getCompanyInformants());
+            }
+            $query = CompanyInformantQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByInformant($this)
+                ->count($con);
+        }
+
+        return count($this->collCompanyInformants);
+    }
+
+    /**
+     * Method called to associate a CompanyInformant object to this object
+     * through the CompanyInformant foreign key attribute.
+     *
+     * @param    CompanyInformant $l CompanyInformant
+     * @return User The current object (for fluent API support)
+     */
+    public function addCompanyInformant(CompanyInformant $l)
+    {
+        if ($this->collCompanyInformants === null) {
+            $this->initCompanyInformants();
+            $this->collCompanyInformantsPartial = true;
+        }
+
+        if (!in_array($l, $this->collCompanyInformants->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddCompanyInformant($l);
+
+            if ($this->companyInformantsScheduledForDeletion and $this->companyInformantsScheduledForDeletion->contains($l)) {
+                $this->companyInformantsScheduledForDeletion->remove($this->companyInformantsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	CompanyInformant $companyInformant The companyInformant object to add.
+     */
+    protected function doAddCompanyInformant($companyInformant)
+    {
+        $this->collCompanyInformants[]= $companyInformant;
+        $companyInformant->setInformant($this);
+    }
+
+    /**
+     * @param	CompanyInformant $companyInformant The companyInformant object to remove.
+     * @return User The current object (for fluent API support)
+     */
+    public function removeCompanyInformant($companyInformant)
+    {
+        if ($this->getCompanyInformants()->contains($companyInformant)) {
+            $this->collCompanyInformants->remove($this->collCompanyInformants->search($companyInformant));
+            if (null === $this->companyInformantsScheduledForDeletion) {
+                $this->companyInformantsScheduledForDeletion = clone $this->collCompanyInformants;
+                $this->companyInformantsScheduledForDeletion->clear();
+            }
+            $this->companyInformantsScheduledForDeletion[]= clone $companyInformant;
+            $companyInformant->setInformant(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this User is new, it will return
+     * an empty collection; or if this User has previously
+     * been saved, it will retrieve related CompanyInformants from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in User.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|CompanyInformant[] List of CompanyInformant objects
+     */
+    public function getCompanyInformantsJoinInformantCompany($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = CompanyInformantQuery::create(null, $criteria);
+        $query->joinWith('InformantCompany', $join_behavior);
+
+        return $this->getCompanyInformants($query, $con);
+    }
+
+    /**
+     * Clears out the collCompanyOwners collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return User The current object (for fluent API support)
+     * @see        addCompanyOwners()
+     */
+    public function clearCompanyOwners()
+    {
+        $this->collCompanyOwners = null; // important to set this to null since that means it is uninitialized
+        $this->collCompanyOwnersPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collCompanyOwners collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialCompanyOwners($v = true)
+    {
+        $this->collCompanyOwnersPartial = $v;
+    }
+
+    /**
+     * Initializes the collCompanyOwners collection.
+     *
+     * By default this just sets the collCompanyOwners collection to an empty array (like clearcollCompanyOwners());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initCompanyOwners($overrideExisting = true)
+    {
+        if (null !== $this->collCompanyOwners && !$overrideExisting) {
+            return;
+        }
+        $this->collCompanyOwners = new PropelObjectCollection();
+        $this->collCompanyOwners->setModel('CompanyOwner');
+    }
+
+    /**
+     * Gets an array of CompanyOwner objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this User is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|CompanyOwner[] List of CompanyOwner objects
+     * @throws PropelException
+     */
+    public function getCompanyOwners($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collCompanyOwnersPartial && !$this->isNew();
+        if (null === $this->collCompanyOwners || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collCompanyOwners) {
+                // return empty collection
+                $this->initCompanyOwners();
+            } else {
+                $collCompanyOwners = CompanyOwnerQuery::create(null, $criteria)
+                    ->filterByOwner($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collCompanyOwnersPartial && count($collCompanyOwners)) {
+                      $this->initCompanyOwners(false);
+
+                      foreach ($collCompanyOwners as $obj) {
+                        if (false == $this->collCompanyOwners->contains($obj)) {
+                          $this->collCompanyOwners->append($obj);
+                        }
+                      }
+
+                      $this->collCompanyOwnersPartial = true;
+                    }
+
+                    $collCompanyOwners->getInternalIterator()->rewind();
+
+                    return $collCompanyOwners;
+                }
+
+                if ($partial && $this->collCompanyOwners) {
+                    foreach ($this->collCompanyOwners as $obj) {
+                        if ($obj->isNew()) {
+                            $collCompanyOwners[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collCompanyOwners = $collCompanyOwners;
+                $this->collCompanyOwnersPartial = false;
+            }
+        }
+
+        return $this->collCompanyOwners;
+    }
+
+    /**
+     * Sets a collection of CompanyOwner objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $companyOwners A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return User The current object (for fluent API support)
+     */
+    public function setCompanyOwners(PropelCollection $companyOwners, PropelPDO $con = null)
+    {
+        $companyOwnersToDelete = $this->getCompanyOwners(new Criteria(), $con)->diff($companyOwners);
+
+
+        //since at least one column in the foreign key is at the same time a PK
+        //we can not just set a PK to NULL in the lines below. We have to store
+        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
+        $this->companyOwnersScheduledForDeletion = clone $companyOwnersToDelete;
+
+        foreach ($companyOwnersToDelete as $companyOwnerRemoved) {
+            $companyOwnerRemoved->setOwner(null);
+        }
+
+        $this->collCompanyOwners = null;
+        foreach ($companyOwners as $companyOwner) {
+            $this->addCompanyOwner($companyOwner);
+        }
+
+        $this->collCompanyOwners = $companyOwners;
+        $this->collCompanyOwnersPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related CompanyOwner objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related CompanyOwner objects.
+     * @throws PropelException
+     */
+    public function countCompanyOwners(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collCompanyOwnersPartial && !$this->isNew();
+        if (null === $this->collCompanyOwners || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collCompanyOwners) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getCompanyOwners());
+            }
+            $query = CompanyOwnerQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByOwner($this)
+                ->count($con);
+        }
+
+        return count($this->collCompanyOwners);
+    }
+
+    /**
+     * Method called to associate a CompanyOwner object to this object
+     * through the CompanyOwner foreign key attribute.
+     *
+     * @param    CompanyOwner $l CompanyOwner
+     * @return User The current object (for fluent API support)
+     */
+    public function addCompanyOwner(CompanyOwner $l)
+    {
+        if ($this->collCompanyOwners === null) {
+            $this->initCompanyOwners();
+            $this->collCompanyOwnersPartial = true;
+        }
+
+        if (!in_array($l, $this->collCompanyOwners->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddCompanyOwner($l);
+
+            if ($this->companyOwnersScheduledForDeletion and $this->companyOwnersScheduledForDeletion->contains($l)) {
+                $this->companyOwnersScheduledForDeletion->remove($this->companyOwnersScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	CompanyOwner $companyOwner The companyOwner object to add.
+     */
+    protected function doAddCompanyOwner($companyOwner)
+    {
+        $this->collCompanyOwners[]= $companyOwner;
+        $companyOwner->setOwner($this);
+    }
+
+    /**
+     * @param	CompanyOwner $companyOwner The companyOwner object to remove.
+     * @return User The current object (for fluent API support)
+     */
+    public function removeCompanyOwner($companyOwner)
+    {
+        if ($this->getCompanyOwners()->contains($companyOwner)) {
+            $this->collCompanyOwners->remove($this->collCompanyOwners->search($companyOwner));
+            if (null === $this->companyOwnersScheduledForDeletion) {
+                $this->companyOwnersScheduledForDeletion = clone $this->collCompanyOwners;
+                $this->companyOwnersScheduledForDeletion->clear();
+            }
+            $this->companyOwnersScheduledForDeletion[]= clone $companyOwner;
+            $companyOwner->setOwner(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this User is new, it will return
+     * an empty collection; or if this User has previously
+     * been saved, it will retrieve related CompanyOwners from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in User.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|CompanyOwner[] List of CompanyOwner objects
+     */
+    public function getCompanyOwnersJoinOwnerCompany($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = CompanyOwnerQuery::create(null, $criteria);
+        $query->joinWith('OwnerCompany', $join_behavior);
+
+        return $this->getCompanyOwners($query, $con);
+    }
+
+    /**
+     * Clears out the collStoreContacts collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return User The current object (for fluent API support)
+     * @see        addStoreContacts()
+     */
+    public function clearStoreContacts()
+    {
+        $this->collStoreContacts = null; // important to set this to null since that means it is uninitialized
+        $this->collStoreContactsPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collStoreContacts collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialStoreContacts($v = true)
+    {
+        $this->collStoreContactsPartial = $v;
+    }
+
+    /**
+     * Initializes the collStoreContacts collection.
+     *
+     * By default this just sets the collStoreContacts collection to an empty array (like clearcollStoreContacts());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initStoreContacts($overrideExisting = true)
+    {
+        if (null !== $this->collStoreContacts && !$overrideExisting) {
+            return;
+        }
+        $this->collStoreContacts = new PropelObjectCollection();
+        $this->collStoreContacts->setModel('StoreContact');
+    }
+
+    /**
+     * Gets an array of StoreContact objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this User is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|StoreContact[] List of StoreContact objects
+     * @throws PropelException
+     */
+    public function getStoreContacts($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collStoreContactsPartial && !$this->isNew();
+        if (null === $this->collStoreContacts || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collStoreContacts) {
+                // return empty collection
+                $this->initStoreContacts();
+            } else {
+                $collStoreContacts = StoreContactQuery::create(null, $criteria)
+                    ->filterByContact($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collStoreContactsPartial && count($collStoreContacts)) {
+                      $this->initStoreContacts(false);
+
+                      foreach ($collStoreContacts as $obj) {
+                        if (false == $this->collStoreContacts->contains($obj)) {
+                          $this->collStoreContacts->append($obj);
+                        }
+                      }
+
+                      $this->collStoreContactsPartial = true;
+                    }
+
+                    $collStoreContacts->getInternalIterator()->rewind();
+
+                    return $collStoreContacts;
+                }
+
+                if ($partial && $this->collStoreContacts) {
+                    foreach ($this->collStoreContacts as $obj) {
+                        if ($obj->isNew()) {
+                            $collStoreContacts[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collStoreContacts = $collStoreContacts;
+                $this->collStoreContactsPartial = false;
+            }
+        }
+
+        return $this->collStoreContacts;
+    }
+
+    /**
+     * Sets a collection of StoreContact objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $storeContacts A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return User The current object (for fluent API support)
+     */
+    public function setStoreContacts(PropelCollection $storeContacts, PropelPDO $con = null)
+    {
+        $storeContactsToDelete = $this->getStoreContacts(new Criteria(), $con)->diff($storeContacts);
+
+
+        //since at least one column in the foreign key is at the same time a PK
+        //we can not just set a PK to NULL in the lines below. We have to store
+        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
+        $this->storeContactsScheduledForDeletion = clone $storeContactsToDelete;
+
+        foreach ($storeContactsToDelete as $storeContactRemoved) {
+            $storeContactRemoved->setContact(null);
+        }
+
+        $this->collStoreContacts = null;
+        foreach ($storeContacts as $storeContact) {
+            $this->addStoreContact($storeContact);
+        }
+
+        $this->collStoreContacts = $storeContacts;
+        $this->collStoreContactsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related StoreContact objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related StoreContact objects.
+     * @throws PropelException
+     */
+    public function countStoreContacts(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collStoreContactsPartial && !$this->isNew();
+        if (null === $this->collStoreContacts || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collStoreContacts) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getStoreContacts());
+            }
+            $query = StoreContactQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByContact($this)
+                ->count($con);
+        }
+
+        return count($this->collStoreContacts);
+    }
+
+    /**
+     * Method called to associate a StoreContact object to this object
+     * through the StoreContact foreign key attribute.
+     *
+     * @param    StoreContact $l StoreContact
+     * @return User The current object (for fluent API support)
+     */
+    public function addStoreContact(StoreContact $l)
+    {
+        if ($this->collStoreContacts === null) {
+            $this->initStoreContacts();
+            $this->collStoreContactsPartial = true;
+        }
+
+        if (!in_array($l, $this->collStoreContacts->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddStoreContact($l);
+
+            if ($this->storeContactsScheduledForDeletion and $this->storeContactsScheduledForDeletion->contains($l)) {
+                $this->storeContactsScheduledForDeletion->remove($this->storeContactsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	StoreContact $storeContact The storeContact object to add.
+     */
+    protected function doAddStoreContact($storeContact)
+    {
+        $this->collStoreContacts[]= $storeContact;
+        $storeContact->setContact($this);
+    }
+
+    /**
+     * @param	StoreContact $storeContact The storeContact object to remove.
+     * @return User The current object (for fluent API support)
+     */
+    public function removeStoreContact($storeContact)
+    {
+        if ($this->getStoreContacts()->contains($storeContact)) {
+            $this->collStoreContacts->remove($this->collStoreContacts->search($storeContact));
+            if (null === $this->storeContactsScheduledForDeletion) {
+                $this->storeContactsScheduledForDeletion = clone $this->collStoreContacts;
+                $this->storeContactsScheduledForDeletion->clear();
+            }
+            $this->storeContactsScheduledForDeletion[]= clone $storeContact;
+            $storeContact->setContact(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this User is new, it will return
+     * an empty collection; or if this User has previously
+     * been saved, it will retrieve related StoreContacts from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in User.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|StoreContact[] List of StoreContact objects
+     */
+    public function getStoreContactsJoinContactStore($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = StoreContactQuery::create(null, $criteria);
+        $query->joinWith('ContactStore', $join_behavior);
+
+        return $this->getStoreContacts($query, $con);
+    }
+
+    /**
+     * Clears out the collStoreInformants collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return User The current object (for fluent API support)
+     * @see        addStoreInformants()
+     */
+    public function clearStoreInformants()
+    {
+        $this->collStoreInformants = null; // important to set this to null since that means it is uninitialized
+        $this->collStoreInformantsPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collStoreInformants collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialStoreInformants($v = true)
+    {
+        $this->collStoreInformantsPartial = $v;
+    }
+
+    /**
+     * Initializes the collStoreInformants collection.
+     *
+     * By default this just sets the collStoreInformants collection to an empty array (like clearcollStoreInformants());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initStoreInformants($overrideExisting = true)
+    {
+        if (null !== $this->collStoreInformants && !$overrideExisting) {
+            return;
+        }
+        $this->collStoreInformants = new PropelObjectCollection();
+        $this->collStoreInformants->setModel('StoreInformant');
+    }
+
+    /**
+     * Gets an array of StoreInformant objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this User is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|StoreInformant[] List of StoreInformant objects
+     * @throws PropelException
+     */
+    public function getStoreInformants($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collStoreInformantsPartial && !$this->isNew();
+        if (null === $this->collStoreInformants || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collStoreInformants) {
+                // return empty collection
+                $this->initStoreInformants();
+            } else {
+                $collStoreInformants = StoreInformantQuery::create(null, $criteria)
+                    ->filterByInformant($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collStoreInformantsPartial && count($collStoreInformants)) {
+                      $this->initStoreInformants(false);
+
+                      foreach ($collStoreInformants as $obj) {
+                        if (false == $this->collStoreInformants->contains($obj)) {
+                          $this->collStoreInformants->append($obj);
+                        }
+                      }
+
+                      $this->collStoreInformantsPartial = true;
+                    }
+
+                    $collStoreInformants->getInternalIterator()->rewind();
+
+                    return $collStoreInformants;
+                }
+
+                if ($partial && $this->collStoreInformants) {
+                    foreach ($this->collStoreInformants as $obj) {
+                        if ($obj->isNew()) {
+                            $collStoreInformants[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collStoreInformants = $collStoreInformants;
+                $this->collStoreInformantsPartial = false;
+            }
+        }
+
+        return $this->collStoreInformants;
+    }
+
+    /**
+     * Sets a collection of StoreInformant objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $storeInformants A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return User The current object (for fluent API support)
+     */
+    public function setStoreInformants(PropelCollection $storeInformants, PropelPDO $con = null)
+    {
+        $storeInformantsToDelete = $this->getStoreInformants(new Criteria(), $con)->diff($storeInformants);
+
+
+        //since at least one column in the foreign key is at the same time a PK
+        //we can not just set a PK to NULL in the lines below. We have to store
+        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
+        $this->storeInformantsScheduledForDeletion = clone $storeInformantsToDelete;
+
+        foreach ($storeInformantsToDelete as $storeInformantRemoved) {
+            $storeInformantRemoved->setInformant(null);
+        }
+
+        $this->collStoreInformants = null;
+        foreach ($storeInformants as $storeInformant) {
+            $this->addStoreInformant($storeInformant);
+        }
+
+        $this->collStoreInformants = $storeInformants;
+        $this->collStoreInformantsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related StoreInformant objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related StoreInformant objects.
+     * @throws PropelException
+     */
+    public function countStoreInformants(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collStoreInformantsPartial && !$this->isNew();
+        if (null === $this->collStoreInformants || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collStoreInformants) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getStoreInformants());
+            }
+            $query = StoreInformantQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByInformant($this)
+                ->count($con);
+        }
+
+        return count($this->collStoreInformants);
+    }
+
+    /**
+     * Method called to associate a StoreInformant object to this object
+     * through the StoreInformant foreign key attribute.
+     *
+     * @param    StoreInformant $l StoreInformant
+     * @return User The current object (for fluent API support)
+     */
+    public function addStoreInformant(StoreInformant $l)
+    {
+        if ($this->collStoreInformants === null) {
+            $this->initStoreInformants();
+            $this->collStoreInformantsPartial = true;
+        }
+
+        if (!in_array($l, $this->collStoreInformants->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddStoreInformant($l);
+
+            if ($this->storeInformantsScheduledForDeletion and $this->storeInformantsScheduledForDeletion->contains($l)) {
+                $this->storeInformantsScheduledForDeletion->remove($this->storeInformantsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	StoreInformant $storeInformant The storeInformant object to add.
+     */
+    protected function doAddStoreInformant($storeInformant)
+    {
+        $this->collStoreInformants[]= $storeInformant;
+        $storeInformant->setInformant($this);
+    }
+
+    /**
+     * @param	StoreInformant $storeInformant The storeInformant object to remove.
+     * @return User The current object (for fluent API support)
+     */
+    public function removeStoreInformant($storeInformant)
+    {
+        if ($this->getStoreInformants()->contains($storeInformant)) {
+            $this->collStoreInformants->remove($this->collStoreInformants->search($storeInformant));
+            if (null === $this->storeInformantsScheduledForDeletion) {
+                $this->storeInformantsScheduledForDeletion = clone $this->collStoreInformants;
+                $this->storeInformantsScheduledForDeletion->clear();
+            }
+            $this->storeInformantsScheduledForDeletion[]= clone $storeInformant;
+            $storeInformant->setInformant(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this User is new, it will return
+     * an empty collection; or if this User has previously
+     * been saved, it will retrieve related StoreInformants from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in User.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|StoreInformant[] List of StoreInformant objects
+     */
+    public function getStoreInformantsJoinInformantStore($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = StoreInformantQuery::create(null, $criteria);
+        $query->joinWith('InformantStore', $join_behavior);
+
+        return $this->getStoreInformants($query, $con);
+    }
+
+    /**
+     * Clears out the collStoreOwners collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return User The current object (for fluent API support)
+     * @see        addStoreOwners()
+     */
+    public function clearStoreOwners()
+    {
+        $this->collStoreOwners = null; // important to set this to null since that means it is uninitialized
+        $this->collStoreOwnersPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collStoreOwners collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialStoreOwners($v = true)
+    {
+        $this->collStoreOwnersPartial = $v;
+    }
+
+    /**
+     * Initializes the collStoreOwners collection.
+     *
+     * By default this just sets the collStoreOwners collection to an empty array (like clearcollStoreOwners());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initStoreOwners($overrideExisting = true)
+    {
+        if (null !== $this->collStoreOwners && !$overrideExisting) {
+            return;
+        }
+        $this->collStoreOwners = new PropelObjectCollection();
+        $this->collStoreOwners->setModel('StoreOwner');
+    }
+
+    /**
+     * Gets an array of StoreOwner objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this User is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|StoreOwner[] List of StoreOwner objects
+     * @throws PropelException
+     */
+    public function getStoreOwners($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collStoreOwnersPartial && !$this->isNew();
+        if (null === $this->collStoreOwners || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collStoreOwners) {
+                // return empty collection
+                $this->initStoreOwners();
+            } else {
+                $collStoreOwners = StoreOwnerQuery::create(null, $criteria)
+                    ->filterByOwner($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collStoreOwnersPartial && count($collStoreOwners)) {
+                      $this->initStoreOwners(false);
+
+                      foreach ($collStoreOwners as $obj) {
+                        if (false == $this->collStoreOwners->contains($obj)) {
+                          $this->collStoreOwners->append($obj);
+                        }
+                      }
+
+                      $this->collStoreOwnersPartial = true;
+                    }
+
+                    $collStoreOwners->getInternalIterator()->rewind();
+
+                    return $collStoreOwners;
+                }
+
+                if ($partial && $this->collStoreOwners) {
+                    foreach ($this->collStoreOwners as $obj) {
+                        if ($obj->isNew()) {
+                            $collStoreOwners[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collStoreOwners = $collStoreOwners;
+                $this->collStoreOwnersPartial = false;
+            }
+        }
+
+        return $this->collStoreOwners;
+    }
+
+    /**
+     * Sets a collection of StoreOwner objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $storeOwners A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return User The current object (for fluent API support)
+     */
+    public function setStoreOwners(PropelCollection $storeOwners, PropelPDO $con = null)
+    {
+        $storeOwnersToDelete = $this->getStoreOwners(new Criteria(), $con)->diff($storeOwners);
+
+
+        //since at least one column in the foreign key is at the same time a PK
+        //we can not just set a PK to NULL in the lines below. We have to store
+        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
+        $this->storeOwnersScheduledForDeletion = clone $storeOwnersToDelete;
+
+        foreach ($storeOwnersToDelete as $storeOwnerRemoved) {
+            $storeOwnerRemoved->setOwner(null);
+        }
+
+        $this->collStoreOwners = null;
+        foreach ($storeOwners as $storeOwner) {
+            $this->addStoreOwner($storeOwner);
+        }
+
+        $this->collStoreOwners = $storeOwners;
+        $this->collStoreOwnersPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related StoreOwner objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related StoreOwner objects.
+     * @throws PropelException
+     */
+    public function countStoreOwners(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collStoreOwnersPartial && !$this->isNew();
+        if (null === $this->collStoreOwners || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collStoreOwners) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getStoreOwners());
+            }
+            $query = StoreOwnerQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByOwner($this)
+                ->count($con);
+        }
+
+        return count($this->collStoreOwners);
+    }
+
+    /**
+     * Method called to associate a StoreOwner object to this object
+     * through the StoreOwner foreign key attribute.
+     *
+     * @param    StoreOwner $l StoreOwner
+     * @return User The current object (for fluent API support)
+     */
+    public function addStoreOwner(StoreOwner $l)
+    {
+        if ($this->collStoreOwners === null) {
+            $this->initStoreOwners();
+            $this->collStoreOwnersPartial = true;
+        }
+
+        if (!in_array($l, $this->collStoreOwners->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddStoreOwner($l);
+
+            if ($this->storeOwnersScheduledForDeletion and $this->storeOwnersScheduledForDeletion->contains($l)) {
+                $this->storeOwnersScheduledForDeletion->remove($this->storeOwnersScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	StoreOwner $storeOwner The storeOwner object to add.
+     */
+    protected function doAddStoreOwner($storeOwner)
+    {
+        $this->collStoreOwners[]= $storeOwner;
+        $storeOwner->setOwner($this);
+    }
+
+    /**
+     * @param	StoreOwner $storeOwner The storeOwner object to remove.
+     * @return User The current object (for fluent API support)
+     */
+    public function removeStoreOwner($storeOwner)
+    {
+        if ($this->getStoreOwners()->contains($storeOwner)) {
+            $this->collStoreOwners->remove($this->collStoreOwners->search($storeOwner));
+            if (null === $this->storeOwnersScheduledForDeletion) {
+                $this->storeOwnersScheduledForDeletion = clone $this->collStoreOwners;
+                $this->storeOwnersScheduledForDeletion->clear();
+            }
+            $this->storeOwnersScheduledForDeletion[]= clone $storeOwner;
+            $storeOwner->setOwner(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this User is new, it will return
+     * an empty collection; or if this User has previously
+     * been saved, it will retrieve related StoreOwners from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in User.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|StoreOwner[] List of StoreOwner objects
+     */
+    public function getStoreOwnersJoinOwnerStore($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = StoreOwnerQuery::create(null, $criteria);
+        $query->joinWith('OwnerStore', $join_behavior);
+
+        return $this->getStoreOwners($query, $con);
     }
 
     /**
@@ -3653,6 +5721,1128 @@ abstract class BaseUser extends BaseObject implements Persistent
     }
 
     /**
+     * Clears out the collContactCompanies collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return User The current object (for fluent API support)
+     * @see        addContactCompanies()
+     */
+    public function clearContactCompanies()
+    {
+        $this->collContactCompanies = null; // important to set this to null since that means it is uninitialized
+        $this->collContactCompaniesPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * Initializes the collContactCompanies collection.
+     *
+     * By default this just sets the collContactCompanies collection to an empty collection (like clearContactCompanies());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @return void
+     */
+    public function initContactCompanies()
+    {
+        $this->collContactCompanies = new PropelObjectCollection();
+        $this->collContactCompanies->setModel('Company');
+    }
+
+    /**
+     * Gets a collection of Company objects related by a many-to-many relationship
+     * to the current object by way of the company_contact cross-reference table.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this User is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria Optional query object to filter the query
+     * @param PropelPDO $con Optional connection object
+     *
+     * @return PropelObjectCollection|Company[] List of Company objects
+     */
+    public function getContactCompanies($criteria = null, PropelPDO $con = null)
+    {
+        if (null === $this->collContactCompanies || null !== $criteria) {
+            if ($this->isNew() && null === $this->collContactCompanies) {
+                // return empty collection
+                $this->initContactCompanies();
+            } else {
+                $collContactCompanies = CompanyQuery::create(null, $criteria)
+                    ->filterByContact($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    return $collContactCompanies;
+                }
+                $this->collContactCompanies = $collContactCompanies;
+            }
+        }
+
+        return $this->collContactCompanies;
+    }
+
+    /**
+     * Sets a collection of Company objects related by a many-to-many relationship
+     * to the current object by way of the company_contact cross-reference table.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $contactCompanies A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return User The current object (for fluent API support)
+     */
+    public function setContactCompanies(PropelCollection $contactCompanies, PropelPDO $con = null)
+    {
+        $this->clearContactCompanies();
+        $currentContactCompanies = $this->getContactCompanies(null, $con);
+
+        $this->contactCompaniesScheduledForDeletion = $currentContactCompanies->diff($contactCompanies);
+
+        foreach ($contactCompanies as $contactCompany) {
+            if (!$currentContactCompanies->contains($contactCompany)) {
+                $this->doAddContactCompany($contactCompany);
+            }
+        }
+
+        $this->collContactCompanies = $contactCompanies;
+
+        return $this;
+    }
+
+    /**
+     * Gets the number of Company objects related by a many-to-many relationship
+     * to the current object by way of the company_contact cross-reference table.
+     *
+     * @param Criteria $criteria Optional query object to filter the query
+     * @param boolean $distinct Set to true to force count distinct
+     * @param PropelPDO $con Optional connection object
+     *
+     * @return int the number of related Company objects
+     */
+    public function countContactCompanies($criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        if (null === $this->collContactCompanies || null !== $criteria) {
+            if ($this->isNew() && null === $this->collContactCompanies) {
+                return 0;
+            } else {
+                $query = CompanyQuery::create(null, $criteria);
+                if ($distinct) {
+                    $query->distinct();
+                }
+
+                return $query
+                    ->filterByContact($this)
+                    ->count($con);
+            }
+        } else {
+            return count($this->collContactCompanies);
+        }
+    }
+
+    /**
+     * Associate a Company object to this object
+     * through the company_contact cross reference table.
+     *
+     * @param  Company $company The CompanyContact object to relate
+     * @return User The current object (for fluent API support)
+     */
+    public function addContactCompany(Company $company)
+    {
+        if ($this->collContactCompanies === null) {
+            $this->initContactCompanies();
+        }
+
+        if (!$this->collContactCompanies->contains($company)) { // only add it if the **same** object is not already associated
+            $this->doAddContactCompany($company);
+            $this->collContactCompanies[] = $company;
+
+            if ($this->contactCompaniesScheduledForDeletion and $this->contactCompaniesScheduledForDeletion->contains($company)) {
+                $this->contactCompaniesScheduledForDeletion->remove($this->contactCompaniesScheduledForDeletion->search($company));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	ContactCompany $contactCompany The contactCompany object to add.
+     */
+    protected function doAddContactCompany(Company $contactCompany)
+    {
+        // set the back reference to this object directly as using provided method either results
+        // in endless loop or in multiple relations
+        if (!$contactCompany->getContacts()->contains($this)) { $companyContact = new CompanyContact();
+            $companyContact->setContactCompany($contactCompany);
+            $this->addCompanyContact($companyContact);
+
+            $foreignCollection = $contactCompany->getContacts();
+            $foreignCollection[] = $this;
+        }
+    }
+
+    /**
+     * Remove a Company object to this object
+     * through the company_contact cross reference table.
+     *
+     * @param Company $company The CompanyContact object to relate
+     * @return User The current object (for fluent API support)
+     */
+    public function removeContactCompany(Company $company)
+    {
+        if ($this->getContactCompanies()->contains($company)) {
+            $this->collContactCompanies->remove($this->collContactCompanies->search($company));
+            if (null === $this->contactCompaniesScheduledForDeletion) {
+                $this->contactCompaniesScheduledForDeletion = clone $this->collContactCompanies;
+                $this->contactCompaniesScheduledForDeletion->clear();
+            }
+            $this->contactCompaniesScheduledForDeletion[]= $company;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Clears out the collInformantCompanies collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return User The current object (for fluent API support)
+     * @see        addInformantCompanies()
+     */
+    public function clearInformantCompanies()
+    {
+        $this->collInformantCompanies = null; // important to set this to null since that means it is uninitialized
+        $this->collInformantCompaniesPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * Initializes the collInformantCompanies collection.
+     *
+     * By default this just sets the collInformantCompanies collection to an empty collection (like clearInformantCompanies());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @return void
+     */
+    public function initInformantCompanies()
+    {
+        $this->collInformantCompanies = new PropelObjectCollection();
+        $this->collInformantCompanies->setModel('Company');
+    }
+
+    /**
+     * Gets a collection of Company objects related by a many-to-many relationship
+     * to the current object by way of the company_informant cross-reference table.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this User is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria Optional query object to filter the query
+     * @param PropelPDO $con Optional connection object
+     *
+     * @return PropelObjectCollection|Company[] List of Company objects
+     */
+    public function getInformantCompanies($criteria = null, PropelPDO $con = null)
+    {
+        if (null === $this->collInformantCompanies || null !== $criteria) {
+            if ($this->isNew() && null === $this->collInformantCompanies) {
+                // return empty collection
+                $this->initInformantCompanies();
+            } else {
+                $collInformantCompanies = CompanyQuery::create(null, $criteria)
+                    ->filterByInformant($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    return $collInformantCompanies;
+                }
+                $this->collInformantCompanies = $collInformantCompanies;
+            }
+        }
+
+        return $this->collInformantCompanies;
+    }
+
+    /**
+     * Sets a collection of Company objects related by a many-to-many relationship
+     * to the current object by way of the company_informant cross-reference table.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $informantCompanies A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return User The current object (for fluent API support)
+     */
+    public function setInformantCompanies(PropelCollection $informantCompanies, PropelPDO $con = null)
+    {
+        $this->clearInformantCompanies();
+        $currentInformantCompanies = $this->getInformantCompanies(null, $con);
+
+        $this->informantCompaniesScheduledForDeletion = $currentInformantCompanies->diff($informantCompanies);
+
+        foreach ($informantCompanies as $informantCompany) {
+            if (!$currentInformantCompanies->contains($informantCompany)) {
+                $this->doAddInformantCompany($informantCompany);
+            }
+        }
+
+        $this->collInformantCompanies = $informantCompanies;
+
+        return $this;
+    }
+
+    /**
+     * Gets the number of Company objects related by a many-to-many relationship
+     * to the current object by way of the company_informant cross-reference table.
+     *
+     * @param Criteria $criteria Optional query object to filter the query
+     * @param boolean $distinct Set to true to force count distinct
+     * @param PropelPDO $con Optional connection object
+     *
+     * @return int the number of related Company objects
+     */
+    public function countInformantCompanies($criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        if (null === $this->collInformantCompanies || null !== $criteria) {
+            if ($this->isNew() && null === $this->collInformantCompanies) {
+                return 0;
+            } else {
+                $query = CompanyQuery::create(null, $criteria);
+                if ($distinct) {
+                    $query->distinct();
+                }
+
+                return $query
+                    ->filterByInformant($this)
+                    ->count($con);
+            }
+        } else {
+            return count($this->collInformantCompanies);
+        }
+    }
+
+    /**
+     * Associate a Company object to this object
+     * through the company_informant cross reference table.
+     *
+     * @param  Company $company The CompanyInformant object to relate
+     * @return User The current object (for fluent API support)
+     */
+    public function addInformantCompany(Company $company)
+    {
+        if ($this->collInformantCompanies === null) {
+            $this->initInformantCompanies();
+        }
+
+        if (!$this->collInformantCompanies->contains($company)) { // only add it if the **same** object is not already associated
+            $this->doAddInformantCompany($company);
+            $this->collInformantCompanies[] = $company;
+
+            if ($this->informantCompaniesScheduledForDeletion and $this->informantCompaniesScheduledForDeletion->contains($company)) {
+                $this->informantCompaniesScheduledForDeletion->remove($this->informantCompaniesScheduledForDeletion->search($company));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	InformantCompany $informantCompany The informantCompany object to add.
+     */
+    protected function doAddInformantCompany(Company $informantCompany)
+    {
+        // set the back reference to this object directly as using provided method either results
+        // in endless loop or in multiple relations
+        if (!$informantCompany->getInformants()->contains($this)) { $companyInformant = new CompanyInformant();
+            $companyInformant->setInformantCompany($informantCompany);
+            $this->addCompanyInformant($companyInformant);
+
+            $foreignCollection = $informantCompany->getInformants();
+            $foreignCollection[] = $this;
+        }
+    }
+
+    /**
+     * Remove a Company object to this object
+     * through the company_informant cross reference table.
+     *
+     * @param Company $company The CompanyInformant object to relate
+     * @return User The current object (for fluent API support)
+     */
+    public function removeInformantCompany(Company $company)
+    {
+        if ($this->getInformantCompanies()->contains($company)) {
+            $this->collInformantCompanies->remove($this->collInformantCompanies->search($company));
+            if (null === $this->informantCompaniesScheduledForDeletion) {
+                $this->informantCompaniesScheduledForDeletion = clone $this->collInformantCompanies;
+                $this->informantCompaniesScheduledForDeletion->clear();
+            }
+            $this->informantCompaniesScheduledForDeletion[]= $company;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Clears out the collOwnerCompanies collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return User The current object (for fluent API support)
+     * @see        addOwnerCompanies()
+     */
+    public function clearOwnerCompanies()
+    {
+        $this->collOwnerCompanies = null; // important to set this to null since that means it is uninitialized
+        $this->collOwnerCompaniesPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * Initializes the collOwnerCompanies collection.
+     *
+     * By default this just sets the collOwnerCompanies collection to an empty collection (like clearOwnerCompanies());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @return void
+     */
+    public function initOwnerCompanies()
+    {
+        $this->collOwnerCompanies = new PropelObjectCollection();
+        $this->collOwnerCompanies->setModel('Company');
+    }
+
+    /**
+     * Gets a collection of Company objects related by a many-to-many relationship
+     * to the current object by way of the company_owner cross-reference table.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this User is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria Optional query object to filter the query
+     * @param PropelPDO $con Optional connection object
+     *
+     * @return PropelObjectCollection|Company[] List of Company objects
+     */
+    public function getOwnerCompanies($criteria = null, PropelPDO $con = null)
+    {
+        if (null === $this->collOwnerCompanies || null !== $criteria) {
+            if ($this->isNew() && null === $this->collOwnerCompanies) {
+                // return empty collection
+                $this->initOwnerCompanies();
+            } else {
+                $collOwnerCompanies = CompanyQuery::create(null, $criteria)
+                    ->filterByOwner($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    return $collOwnerCompanies;
+                }
+                $this->collOwnerCompanies = $collOwnerCompanies;
+            }
+        }
+
+        return $this->collOwnerCompanies;
+    }
+
+    /**
+     * Sets a collection of Company objects related by a many-to-many relationship
+     * to the current object by way of the company_owner cross-reference table.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $ownerCompanies A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return User The current object (for fluent API support)
+     */
+    public function setOwnerCompanies(PropelCollection $ownerCompanies, PropelPDO $con = null)
+    {
+        $this->clearOwnerCompanies();
+        $currentOwnerCompanies = $this->getOwnerCompanies(null, $con);
+
+        $this->ownerCompaniesScheduledForDeletion = $currentOwnerCompanies->diff($ownerCompanies);
+
+        foreach ($ownerCompanies as $ownerCompany) {
+            if (!$currentOwnerCompanies->contains($ownerCompany)) {
+                $this->doAddOwnerCompany($ownerCompany);
+            }
+        }
+
+        $this->collOwnerCompanies = $ownerCompanies;
+
+        return $this;
+    }
+
+    /**
+     * Gets the number of Company objects related by a many-to-many relationship
+     * to the current object by way of the company_owner cross-reference table.
+     *
+     * @param Criteria $criteria Optional query object to filter the query
+     * @param boolean $distinct Set to true to force count distinct
+     * @param PropelPDO $con Optional connection object
+     *
+     * @return int the number of related Company objects
+     */
+    public function countOwnerCompanies($criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        if (null === $this->collOwnerCompanies || null !== $criteria) {
+            if ($this->isNew() && null === $this->collOwnerCompanies) {
+                return 0;
+            } else {
+                $query = CompanyQuery::create(null, $criteria);
+                if ($distinct) {
+                    $query->distinct();
+                }
+
+                return $query
+                    ->filterByOwner($this)
+                    ->count($con);
+            }
+        } else {
+            return count($this->collOwnerCompanies);
+        }
+    }
+
+    /**
+     * Associate a Company object to this object
+     * through the company_owner cross reference table.
+     *
+     * @param  Company $company The CompanyOwner object to relate
+     * @return User The current object (for fluent API support)
+     */
+    public function addOwnerCompany(Company $company)
+    {
+        if ($this->collOwnerCompanies === null) {
+            $this->initOwnerCompanies();
+        }
+
+        if (!$this->collOwnerCompanies->contains($company)) { // only add it if the **same** object is not already associated
+            $this->doAddOwnerCompany($company);
+            $this->collOwnerCompanies[] = $company;
+
+            if ($this->ownerCompaniesScheduledForDeletion and $this->ownerCompaniesScheduledForDeletion->contains($company)) {
+                $this->ownerCompaniesScheduledForDeletion->remove($this->ownerCompaniesScheduledForDeletion->search($company));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	OwnerCompany $ownerCompany The ownerCompany object to add.
+     */
+    protected function doAddOwnerCompany(Company $ownerCompany)
+    {
+        // set the back reference to this object directly as using provided method either results
+        // in endless loop or in multiple relations
+        if (!$ownerCompany->getOwners()->contains($this)) { $companyOwner = new CompanyOwner();
+            $companyOwner->setOwnerCompany($ownerCompany);
+            $this->addCompanyOwner($companyOwner);
+
+            $foreignCollection = $ownerCompany->getOwners();
+            $foreignCollection[] = $this;
+        }
+    }
+
+    /**
+     * Remove a Company object to this object
+     * through the company_owner cross reference table.
+     *
+     * @param Company $company The CompanyOwner object to relate
+     * @return User The current object (for fluent API support)
+     */
+    public function removeOwnerCompany(Company $company)
+    {
+        if ($this->getOwnerCompanies()->contains($company)) {
+            $this->collOwnerCompanies->remove($this->collOwnerCompanies->search($company));
+            if (null === $this->ownerCompaniesScheduledForDeletion) {
+                $this->ownerCompaniesScheduledForDeletion = clone $this->collOwnerCompanies;
+                $this->ownerCompaniesScheduledForDeletion->clear();
+            }
+            $this->ownerCompaniesScheduledForDeletion[]= $company;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Clears out the collContactStores collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return User The current object (for fluent API support)
+     * @see        addContactStores()
+     */
+    public function clearContactStores()
+    {
+        $this->collContactStores = null; // important to set this to null since that means it is uninitialized
+        $this->collContactStoresPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * Initializes the collContactStores collection.
+     *
+     * By default this just sets the collContactStores collection to an empty collection (like clearContactStores());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @return void
+     */
+    public function initContactStores()
+    {
+        $this->collContactStores = new PropelObjectCollection();
+        $this->collContactStores->setModel('Store');
+    }
+
+    /**
+     * Gets a collection of Store objects related by a many-to-many relationship
+     * to the current object by way of the store_contact cross-reference table.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this User is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria Optional query object to filter the query
+     * @param PropelPDO $con Optional connection object
+     *
+     * @return PropelObjectCollection|Store[] List of Store objects
+     */
+    public function getContactStores($criteria = null, PropelPDO $con = null)
+    {
+        if (null === $this->collContactStores || null !== $criteria) {
+            if ($this->isNew() && null === $this->collContactStores) {
+                // return empty collection
+                $this->initContactStores();
+            } else {
+                $collContactStores = StoreQuery::create(null, $criteria)
+                    ->filterByContact($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    return $collContactStores;
+                }
+                $this->collContactStores = $collContactStores;
+            }
+        }
+
+        return $this->collContactStores;
+    }
+
+    /**
+     * Sets a collection of Store objects related by a many-to-many relationship
+     * to the current object by way of the store_contact cross-reference table.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $contactStores A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return User The current object (for fluent API support)
+     */
+    public function setContactStores(PropelCollection $contactStores, PropelPDO $con = null)
+    {
+        $this->clearContactStores();
+        $currentContactStores = $this->getContactStores(null, $con);
+
+        $this->contactStoresScheduledForDeletion = $currentContactStores->diff($contactStores);
+
+        foreach ($contactStores as $contactStore) {
+            if (!$currentContactStores->contains($contactStore)) {
+                $this->doAddContactStore($contactStore);
+            }
+        }
+
+        $this->collContactStores = $contactStores;
+
+        return $this;
+    }
+
+    /**
+     * Gets the number of Store objects related by a many-to-many relationship
+     * to the current object by way of the store_contact cross-reference table.
+     *
+     * @param Criteria $criteria Optional query object to filter the query
+     * @param boolean $distinct Set to true to force count distinct
+     * @param PropelPDO $con Optional connection object
+     *
+     * @return int the number of related Store objects
+     */
+    public function countContactStores($criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        if (null === $this->collContactStores || null !== $criteria) {
+            if ($this->isNew() && null === $this->collContactStores) {
+                return 0;
+            } else {
+                $query = StoreQuery::create(null, $criteria);
+                if ($distinct) {
+                    $query->distinct();
+                }
+
+                return $query
+                    ->filterByContact($this)
+                    ->count($con);
+            }
+        } else {
+            return count($this->collContactStores);
+        }
+    }
+
+    /**
+     * Associate a Store object to this object
+     * through the store_contact cross reference table.
+     *
+     * @param  Store $store The StoreContact object to relate
+     * @return User The current object (for fluent API support)
+     */
+    public function addContactStore(Store $store)
+    {
+        if ($this->collContactStores === null) {
+            $this->initContactStores();
+        }
+
+        if (!$this->collContactStores->contains($store)) { // only add it if the **same** object is not already associated
+            $this->doAddContactStore($store);
+            $this->collContactStores[] = $store;
+
+            if ($this->contactStoresScheduledForDeletion and $this->contactStoresScheduledForDeletion->contains($store)) {
+                $this->contactStoresScheduledForDeletion->remove($this->contactStoresScheduledForDeletion->search($store));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	ContactStore $contactStore The contactStore object to add.
+     */
+    protected function doAddContactStore(Store $contactStore)
+    {
+        // set the back reference to this object directly as using provided method either results
+        // in endless loop or in multiple relations
+        if (!$contactStore->getContacts()->contains($this)) { $storeContact = new StoreContact();
+            $storeContact->setContactStore($contactStore);
+            $this->addStoreContact($storeContact);
+
+            $foreignCollection = $contactStore->getContacts();
+            $foreignCollection[] = $this;
+        }
+    }
+
+    /**
+     * Remove a Store object to this object
+     * through the store_contact cross reference table.
+     *
+     * @param Store $store The StoreContact object to relate
+     * @return User The current object (for fluent API support)
+     */
+    public function removeContactStore(Store $store)
+    {
+        if ($this->getContactStores()->contains($store)) {
+            $this->collContactStores->remove($this->collContactStores->search($store));
+            if (null === $this->contactStoresScheduledForDeletion) {
+                $this->contactStoresScheduledForDeletion = clone $this->collContactStores;
+                $this->contactStoresScheduledForDeletion->clear();
+            }
+            $this->contactStoresScheduledForDeletion[]= $store;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Clears out the collInformantStores collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return User The current object (for fluent API support)
+     * @see        addInformantStores()
+     */
+    public function clearInformantStores()
+    {
+        $this->collInformantStores = null; // important to set this to null since that means it is uninitialized
+        $this->collInformantStoresPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * Initializes the collInformantStores collection.
+     *
+     * By default this just sets the collInformantStores collection to an empty collection (like clearInformantStores());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @return void
+     */
+    public function initInformantStores()
+    {
+        $this->collInformantStores = new PropelObjectCollection();
+        $this->collInformantStores->setModel('Store');
+    }
+
+    /**
+     * Gets a collection of Store objects related by a many-to-many relationship
+     * to the current object by way of the store_informant cross-reference table.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this User is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria Optional query object to filter the query
+     * @param PropelPDO $con Optional connection object
+     *
+     * @return PropelObjectCollection|Store[] List of Store objects
+     */
+    public function getInformantStores($criteria = null, PropelPDO $con = null)
+    {
+        if (null === $this->collInformantStores || null !== $criteria) {
+            if ($this->isNew() && null === $this->collInformantStores) {
+                // return empty collection
+                $this->initInformantStores();
+            } else {
+                $collInformantStores = StoreQuery::create(null, $criteria)
+                    ->filterByInformant($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    return $collInformantStores;
+                }
+                $this->collInformantStores = $collInformantStores;
+            }
+        }
+
+        return $this->collInformantStores;
+    }
+
+    /**
+     * Sets a collection of Store objects related by a many-to-many relationship
+     * to the current object by way of the store_informant cross-reference table.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $informantStores A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return User The current object (for fluent API support)
+     */
+    public function setInformantStores(PropelCollection $informantStores, PropelPDO $con = null)
+    {
+        $this->clearInformantStores();
+        $currentInformantStores = $this->getInformantStores(null, $con);
+
+        $this->informantStoresScheduledForDeletion = $currentInformantStores->diff($informantStores);
+
+        foreach ($informantStores as $informantStore) {
+            if (!$currentInformantStores->contains($informantStore)) {
+                $this->doAddInformantStore($informantStore);
+            }
+        }
+
+        $this->collInformantStores = $informantStores;
+
+        return $this;
+    }
+
+    /**
+     * Gets the number of Store objects related by a many-to-many relationship
+     * to the current object by way of the store_informant cross-reference table.
+     *
+     * @param Criteria $criteria Optional query object to filter the query
+     * @param boolean $distinct Set to true to force count distinct
+     * @param PropelPDO $con Optional connection object
+     *
+     * @return int the number of related Store objects
+     */
+    public function countInformantStores($criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        if (null === $this->collInformantStores || null !== $criteria) {
+            if ($this->isNew() && null === $this->collInformantStores) {
+                return 0;
+            } else {
+                $query = StoreQuery::create(null, $criteria);
+                if ($distinct) {
+                    $query->distinct();
+                }
+
+                return $query
+                    ->filterByInformant($this)
+                    ->count($con);
+            }
+        } else {
+            return count($this->collInformantStores);
+        }
+    }
+
+    /**
+     * Associate a Store object to this object
+     * through the store_informant cross reference table.
+     *
+     * @param  Store $store The StoreInformant object to relate
+     * @return User The current object (for fluent API support)
+     */
+    public function addInformantStore(Store $store)
+    {
+        if ($this->collInformantStores === null) {
+            $this->initInformantStores();
+        }
+
+        if (!$this->collInformantStores->contains($store)) { // only add it if the **same** object is not already associated
+            $this->doAddInformantStore($store);
+            $this->collInformantStores[] = $store;
+
+            if ($this->informantStoresScheduledForDeletion and $this->informantStoresScheduledForDeletion->contains($store)) {
+                $this->informantStoresScheduledForDeletion->remove($this->informantStoresScheduledForDeletion->search($store));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	InformantStore $informantStore The informantStore object to add.
+     */
+    protected function doAddInformantStore(Store $informantStore)
+    {
+        // set the back reference to this object directly as using provided method either results
+        // in endless loop or in multiple relations
+        if (!$informantStore->getInformants()->contains($this)) { $storeInformant = new StoreInformant();
+            $storeInformant->setInformantStore($informantStore);
+            $this->addStoreInformant($storeInformant);
+
+            $foreignCollection = $informantStore->getInformants();
+            $foreignCollection[] = $this;
+        }
+    }
+
+    /**
+     * Remove a Store object to this object
+     * through the store_informant cross reference table.
+     *
+     * @param Store $store The StoreInformant object to relate
+     * @return User The current object (for fluent API support)
+     */
+    public function removeInformantStore(Store $store)
+    {
+        if ($this->getInformantStores()->contains($store)) {
+            $this->collInformantStores->remove($this->collInformantStores->search($store));
+            if (null === $this->informantStoresScheduledForDeletion) {
+                $this->informantStoresScheduledForDeletion = clone $this->collInformantStores;
+                $this->informantStoresScheduledForDeletion->clear();
+            }
+            $this->informantStoresScheduledForDeletion[]= $store;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Clears out the collOwnerStores collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return User The current object (for fluent API support)
+     * @see        addOwnerStores()
+     */
+    public function clearOwnerStores()
+    {
+        $this->collOwnerStores = null; // important to set this to null since that means it is uninitialized
+        $this->collOwnerStoresPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * Initializes the collOwnerStores collection.
+     *
+     * By default this just sets the collOwnerStores collection to an empty collection (like clearOwnerStores());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @return void
+     */
+    public function initOwnerStores()
+    {
+        $this->collOwnerStores = new PropelObjectCollection();
+        $this->collOwnerStores->setModel('Store');
+    }
+
+    /**
+     * Gets a collection of Store objects related by a many-to-many relationship
+     * to the current object by way of the store_owner cross-reference table.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this User is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria Optional query object to filter the query
+     * @param PropelPDO $con Optional connection object
+     *
+     * @return PropelObjectCollection|Store[] List of Store objects
+     */
+    public function getOwnerStores($criteria = null, PropelPDO $con = null)
+    {
+        if (null === $this->collOwnerStores || null !== $criteria) {
+            if ($this->isNew() && null === $this->collOwnerStores) {
+                // return empty collection
+                $this->initOwnerStores();
+            } else {
+                $collOwnerStores = StoreQuery::create(null, $criteria)
+                    ->filterByOwner($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    return $collOwnerStores;
+                }
+                $this->collOwnerStores = $collOwnerStores;
+            }
+        }
+
+        return $this->collOwnerStores;
+    }
+
+    /**
+     * Sets a collection of Store objects related by a many-to-many relationship
+     * to the current object by way of the store_owner cross-reference table.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $ownerStores A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return User The current object (for fluent API support)
+     */
+    public function setOwnerStores(PropelCollection $ownerStores, PropelPDO $con = null)
+    {
+        $this->clearOwnerStores();
+        $currentOwnerStores = $this->getOwnerStores(null, $con);
+
+        $this->ownerStoresScheduledForDeletion = $currentOwnerStores->diff($ownerStores);
+
+        foreach ($ownerStores as $ownerStore) {
+            if (!$currentOwnerStores->contains($ownerStore)) {
+                $this->doAddOwnerStore($ownerStore);
+            }
+        }
+
+        $this->collOwnerStores = $ownerStores;
+
+        return $this;
+    }
+
+    /**
+     * Gets the number of Store objects related by a many-to-many relationship
+     * to the current object by way of the store_owner cross-reference table.
+     *
+     * @param Criteria $criteria Optional query object to filter the query
+     * @param boolean $distinct Set to true to force count distinct
+     * @param PropelPDO $con Optional connection object
+     *
+     * @return int the number of related Store objects
+     */
+    public function countOwnerStores($criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        if (null === $this->collOwnerStores || null !== $criteria) {
+            if ($this->isNew() && null === $this->collOwnerStores) {
+                return 0;
+            } else {
+                $query = StoreQuery::create(null, $criteria);
+                if ($distinct) {
+                    $query->distinct();
+                }
+
+                return $query
+                    ->filterByOwner($this)
+                    ->count($con);
+            }
+        } else {
+            return count($this->collOwnerStores);
+        }
+    }
+
+    /**
+     * Associate a Store object to this object
+     * through the store_owner cross reference table.
+     *
+     * @param  Store $store The StoreOwner object to relate
+     * @return User The current object (for fluent API support)
+     */
+    public function addOwnerStore(Store $store)
+    {
+        if ($this->collOwnerStores === null) {
+            $this->initOwnerStores();
+        }
+
+        if (!$this->collOwnerStores->contains($store)) { // only add it if the **same** object is not already associated
+            $this->doAddOwnerStore($store);
+            $this->collOwnerStores[] = $store;
+
+            if ($this->ownerStoresScheduledForDeletion and $this->ownerStoresScheduledForDeletion->contains($store)) {
+                $this->ownerStoresScheduledForDeletion->remove($this->ownerStoresScheduledForDeletion->search($store));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	OwnerStore $ownerStore The ownerStore object to add.
+     */
+    protected function doAddOwnerStore(Store $ownerStore)
+    {
+        // set the back reference to this object directly as using provided method either results
+        // in endless loop or in multiple relations
+        if (!$ownerStore->getOwners()->contains($this)) { $storeOwner = new StoreOwner();
+            $storeOwner->setOwnerStore($ownerStore);
+            $this->addStoreOwner($storeOwner);
+
+            $foreignCollection = $ownerStore->getOwners();
+            $foreignCollection[] = $this;
+        }
+    }
+
+    /**
+     * Remove a Store object to this object
+     * through the store_owner cross reference table.
+     *
+     * @param Store $store The StoreOwner object to relate
+     * @return User The current object (for fluent API support)
+     */
+    public function removeOwnerStore(Store $store)
+    {
+        if ($this->getOwnerStores()->contains($store)) {
+            $this->collOwnerStores->remove($this->collOwnerStores->search($store));
+            if (null === $this->ownerStoresScheduledForDeletion) {
+                $this->ownerStoresScheduledForDeletion = clone $this->collOwnerStores;
+                $this->ownerStoresScheduledForDeletion->clear();
+            }
+            $this->ownerStoresScheduledForDeletion[]= $store;
+        }
+
+        return $this;
+    }
+
+    /**
      * Clears out the collRoles collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
@@ -4447,6 +7637,36 @@ abstract class BaseUser extends BaseObject implements Persistent
     {
         if ($deep && !$this->alreadyInClearAllReferencesDeep) {
             $this->alreadyInClearAllReferencesDeep = true;
+            if ($this->collCompanyContacts) {
+                foreach ($this->collCompanyContacts as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collCompanyInformants) {
+                foreach ($this->collCompanyInformants as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collCompanyOwners) {
+                foreach ($this->collCompanyOwners as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collStoreContacts) {
+                foreach ($this->collStoreContacts as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collStoreInformants) {
+                foreach ($this->collStoreInformants as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collStoreOwners) {
+                foreach ($this->collStoreOwners as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collUserRoles) {
                 foreach ($this->collUserRoles as $o) {
                     $o->clearAllReferences($deep);
@@ -4464,6 +7684,36 @@ abstract class BaseUser extends BaseObject implements Persistent
             }
             if ($this->collUserPhones) {
                 foreach ($this->collUserPhones as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collContactCompanies) {
+                foreach ($this->collContactCompanies as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collInformantCompanies) {
+                foreach ($this->collInformantCompanies as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collOwnerCompanies) {
+                foreach ($this->collOwnerCompanies as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collContactStores) {
+                foreach ($this->collContactStores as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collInformantStores) {
+                foreach ($this->collInformantStores as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collOwnerStores) {
+                foreach ($this->collOwnerStores as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
@@ -4503,6 +7753,30 @@ abstract class BaseUser extends BaseObject implements Persistent
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
 
+        if ($this->collCompanyContacts instanceof PropelCollection) {
+            $this->collCompanyContacts->clearIterator();
+        }
+        $this->collCompanyContacts = null;
+        if ($this->collCompanyInformants instanceof PropelCollection) {
+            $this->collCompanyInformants->clearIterator();
+        }
+        $this->collCompanyInformants = null;
+        if ($this->collCompanyOwners instanceof PropelCollection) {
+            $this->collCompanyOwners->clearIterator();
+        }
+        $this->collCompanyOwners = null;
+        if ($this->collStoreContacts instanceof PropelCollection) {
+            $this->collStoreContacts->clearIterator();
+        }
+        $this->collStoreContacts = null;
+        if ($this->collStoreInformants instanceof PropelCollection) {
+            $this->collStoreInformants->clearIterator();
+        }
+        $this->collStoreInformants = null;
+        if ($this->collStoreOwners instanceof PropelCollection) {
+            $this->collStoreOwners->clearIterator();
+        }
+        $this->collStoreOwners = null;
         if ($this->collUserRoles instanceof PropelCollection) {
             $this->collUserRoles->clearIterator();
         }
@@ -4519,6 +7793,30 @@ abstract class BaseUser extends BaseObject implements Persistent
             $this->collUserPhones->clearIterator();
         }
         $this->collUserPhones = null;
+        if ($this->collContactCompanies instanceof PropelCollection) {
+            $this->collContactCompanies->clearIterator();
+        }
+        $this->collContactCompanies = null;
+        if ($this->collInformantCompanies instanceof PropelCollection) {
+            $this->collInformantCompanies->clearIterator();
+        }
+        $this->collInformantCompanies = null;
+        if ($this->collOwnerCompanies instanceof PropelCollection) {
+            $this->collOwnerCompanies->clearIterator();
+        }
+        $this->collOwnerCompanies = null;
+        if ($this->collContactStores instanceof PropelCollection) {
+            $this->collContactStores->clearIterator();
+        }
+        $this->collContactStores = null;
+        if ($this->collInformantStores instanceof PropelCollection) {
+            $this->collInformantStores->clearIterator();
+        }
+        $this->collInformantStores = null;
+        if ($this->collOwnerStores instanceof PropelCollection) {
+            $this->collOwnerStores->clearIterator();
+        }
+        $this->collOwnerStores = null;
         if ($this->collRoles instanceof PropelCollection) {
             $this->collRoles->clearIterator();
         }

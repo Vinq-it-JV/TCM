@@ -12,6 +12,10 @@ use \PropelCollection;
 use \PropelException;
 use \PropelObjectCollection;
 use \PropelPDO;
+use CompanyBundle\Model\Company;
+use CompanyBundle\Model\CompanyPhone;
+use StoreBundle\Model\Store;
+use StoreBundle\Model\StorePhone;
 use UserBundle\Model\Phone;
 use UserBundle\Model\PhonePeer;
 use UserBundle\Model\PhoneQuery;
@@ -20,12 +24,14 @@ use UserBundle\Model\UserPhone;
 
 /**
  * @method PhoneQuery orderById($order = Criteria::ASC) Order by the id column
+ * @method PhoneQuery orderByPrimary($order = Criteria::ASC) Order by the primary column
  * @method PhoneQuery orderByPhoneNumber($order = Criteria::ASC) Order by the phone_number column
  * @method PhoneQuery orderByDescription($order = Criteria::ASC) Order by the description column
  * @method PhoneQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
  * @method PhoneQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
  *
  * @method PhoneQuery groupById() Group by the id column
+ * @method PhoneQuery groupByPrimary() Group by the primary column
  * @method PhoneQuery groupByPhoneNumber() Group by the phone_number column
  * @method PhoneQuery groupByDescription() Group by the description column
  * @method PhoneQuery groupByCreatedAt() Group by the created_at column
@@ -35,6 +41,14 @@ use UserBundle\Model\UserPhone;
  * @method PhoneQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
  * @method PhoneQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
+ * @method PhoneQuery leftJoinCompanyPhone($relationAlias = null) Adds a LEFT JOIN clause to the query using the CompanyPhone relation
+ * @method PhoneQuery rightJoinCompanyPhone($relationAlias = null) Adds a RIGHT JOIN clause to the query using the CompanyPhone relation
+ * @method PhoneQuery innerJoinCompanyPhone($relationAlias = null) Adds a INNER JOIN clause to the query using the CompanyPhone relation
+ *
+ * @method PhoneQuery leftJoinStorePhone($relationAlias = null) Adds a LEFT JOIN clause to the query using the StorePhone relation
+ * @method PhoneQuery rightJoinStorePhone($relationAlias = null) Adds a RIGHT JOIN clause to the query using the StorePhone relation
+ * @method PhoneQuery innerJoinStorePhone($relationAlias = null) Adds a INNER JOIN clause to the query using the StorePhone relation
+ *
  * @method PhoneQuery leftJoinUserPhone($relationAlias = null) Adds a LEFT JOIN clause to the query using the UserPhone relation
  * @method PhoneQuery rightJoinUserPhone($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UserPhone relation
  * @method PhoneQuery innerJoinUserPhone($relationAlias = null) Adds a INNER JOIN clause to the query using the UserPhone relation
@@ -42,12 +56,14 @@ use UserBundle\Model\UserPhone;
  * @method Phone findOne(PropelPDO $con = null) Return the first Phone matching the query
  * @method Phone findOneOrCreate(PropelPDO $con = null) Return the first Phone matching the query, or a new Phone object populated from the query conditions when no match is found
  *
+ * @method Phone findOneByPrimary(boolean $primary) Return the first Phone filtered by the primary column
  * @method Phone findOneByPhoneNumber(string $phone_number) Return the first Phone filtered by the phone_number column
  * @method Phone findOneByDescription(string $description) Return the first Phone filtered by the description column
  * @method Phone findOneByCreatedAt(string $created_at) Return the first Phone filtered by the created_at column
  * @method Phone findOneByUpdatedAt(string $updated_at) Return the first Phone filtered by the updated_at column
  *
  * @method array findById(int $id) Return Phone objects filtered by the id column
+ * @method array findByPrimary(boolean $primary) Return Phone objects filtered by the primary column
  * @method array findByPhoneNumber(string $phone_number) Return Phone objects filtered by the phone_number column
  * @method array findByDescription(string $description) Return Phone objects filtered by the description column
  * @method array findByCreatedAt(string $created_at) Return Phone objects filtered by the created_at column
@@ -157,7 +173,7 @@ abstract class BasePhoneQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `phone_number`, `description`, `created_at`, `updated_at` FROM `phone` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `primary`, `phone_number`, `description`, `created_at`, `updated_at` FROM `phone` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -286,6 +302,33 @@ abstract class BasePhoneQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(PhonePeer::ID, $id, $comparison);
+    }
+
+    /**
+     * Filter the query on the primary column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByPrimary(true); // WHERE primary = true
+     * $query->filterByPrimary('yes'); // WHERE primary = true
+     * </code>
+     *
+     * @param     boolean|string $primary The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return PhoneQuery The current query, for fluid interface
+     */
+    public function filterByPrimary($primary = null, $comparison = null)
+    {
+        if (is_string($primary)) {
+            $primary = in_array(strtolower($primary), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+
+        return $this->addUsingAlias(PhonePeer::PRIMARY, $primary, $comparison);
     }
 
     /**
@@ -433,6 +476,154 @@ abstract class BasePhoneQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query by a related CompanyPhone object
+     *
+     * @param   CompanyPhone|PropelObjectCollection $companyPhone  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 PhoneQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByCompanyPhone($companyPhone, $comparison = null)
+    {
+        if ($companyPhone instanceof CompanyPhone) {
+            return $this
+                ->addUsingAlias(PhonePeer::ID, $companyPhone->getPhoneId(), $comparison);
+        } elseif ($companyPhone instanceof PropelObjectCollection) {
+            return $this
+                ->useCompanyPhoneQuery()
+                ->filterByPrimaryKeys($companyPhone->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByCompanyPhone() only accepts arguments of type CompanyPhone or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the CompanyPhone relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return PhoneQuery The current query, for fluid interface
+     */
+    public function joinCompanyPhone($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('CompanyPhone');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'CompanyPhone');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the CompanyPhone relation CompanyPhone object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   \CompanyBundle\Model\CompanyPhoneQuery A secondary query class using the current class as primary query
+     */
+    public function useCompanyPhoneQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinCompanyPhone($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'CompanyPhone', '\CompanyBundle\Model\CompanyPhoneQuery');
+    }
+
+    /**
+     * Filter the query by a related StorePhone object
+     *
+     * @param   StorePhone|PropelObjectCollection $storePhone  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 PhoneQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByStorePhone($storePhone, $comparison = null)
+    {
+        if ($storePhone instanceof StorePhone) {
+            return $this
+                ->addUsingAlias(PhonePeer::ID, $storePhone->getPhoneId(), $comparison);
+        } elseif ($storePhone instanceof PropelObjectCollection) {
+            return $this
+                ->useStorePhoneQuery()
+                ->filterByPrimaryKeys($storePhone->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByStorePhone() only accepts arguments of type StorePhone or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the StorePhone relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return PhoneQuery The current query, for fluid interface
+     */
+    public function joinStorePhone($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('StorePhone');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'StorePhone');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the StorePhone relation StorePhone object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   \StoreBundle\Model\StorePhoneQuery A secondary query class using the current class as primary query
+     */
+    public function useStorePhoneQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinStorePhone($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'StorePhone', '\StoreBundle\Model\StorePhoneQuery');
+    }
+
+    /**
      * Filter the query by a related UserPhone object
      *
      * @param   UserPhone|PropelObjectCollection $userPhone  the related object to use as filter
@@ -504,6 +695,40 @@ abstract class BasePhoneQuery extends ModelCriteria
         return $this
             ->joinUserPhone($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'UserPhone', '\UserBundle\Model\UserPhoneQuery');
+    }
+
+    /**
+     * Filter the query by a related Company object
+     * using the company_phone table as cross reference
+     *
+     * @param   Company $company the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return   PhoneQuery The current query, for fluid interface
+     */
+    public function filterByCompany($company, $comparison = Criteria::EQUAL)
+    {
+        return $this
+            ->useCompanyPhoneQuery()
+            ->filterByCompany($company, $comparison)
+            ->endUse();
+    }
+
+    /**
+     * Filter the query by a related Store object
+     * using the store_phone table as cross reference
+     *
+     * @param   Store $store the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return   PhoneQuery The current query, for fluid interface
+     */
+    public function filterByStore($store, $comparison = Criteria::EQUAL)
+    {
+        return $this
+            ->useStorePhoneQuery()
+            ->filterByStore($store, $comparison)
+            ->endUse();
     }
 
     /**

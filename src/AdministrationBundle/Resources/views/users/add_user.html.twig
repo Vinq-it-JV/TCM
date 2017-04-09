@@ -8,7 +8,7 @@
     <div ng-controller="userCtrl" ng-init="{{ ngInit }}">
 
         {% block header %}
-            {% include 'AdministrationBundle::header.html.twig' %}
+            {% include 'AdministrationBundle:header:header.html.twig' %}
         {% endblock %}
 
         {% block page %}
@@ -25,17 +25,11 @@
                     </div>
                 </div>
             </div>
-            </div>
         {% endblock %}
-        </div>
+    </div>
     {% endif %}
 {% endblock %}
 
 {% block javascripts %}
     <script src="{{ asset('bundles/app/js/app/datasets/users.js') }}"></script>
 {% endblock %}
-
-{% macro addressForm() %}
-    {% verbatim %}
-    {% endverbatim %}
-{% endmacro %}

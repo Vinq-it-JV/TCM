@@ -12,6 +12,10 @@ use \PropelCollection;
 use \PropelException;
 use \PropelObjectCollection;
 use \PropelPDO;
+use CompanyBundle\Model\Company;
+use CompanyBundle\Model\CompanyEmail;
+use StoreBundle\Model\Store;
+use StoreBundle\Model\StoreEmail;
 use UserBundle\Model\Email;
 use UserBundle\Model\EmailPeer;
 use UserBundle\Model\EmailQuery;
@@ -20,12 +24,14 @@ use UserBundle\Model\UserEmail;
 
 /**
  * @method EmailQuery orderById($order = Criteria::ASC) Order by the id column
+ * @method EmailQuery orderByPrimary($order = Criteria::ASC) Order by the primary column
  * @method EmailQuery orderByEmail($order = Criteria::ASC) Order by the email column
  * @method EmailQuery orderByDescription($order = Criteria::ASC) Order by the description column
  * @method EmailQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
  * @method EmailQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
  *
  * @method EmailQuery groupById() Group by the id column
+ * @method EmailQuery groupByPrimary() Group by the primary column
  * @method EmailQuery groupByEmail() Group by the email column
  * @method EmailQuery groupByDescription() Group by the description column
  * @method EmailQuery groupByCreatedAt() Group by the created_at column
@@ -35,6 +41,14 @@ use UserBundle\Model\UserEmail;
  * @method EmailQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
  * @method EmailQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
+ * @method EmailQuery leftJoinCompanyEmail($relationAlias = null) Adds a LEFT JOIN clause to the query using the CompanyEmail relation
+ * @method EmailQuery rightJoinCompanyEmail($relationAlias = null) Adds a RIGHT JOIN clause to the query using the CompanyEmail relation
+ * @method EmailQuery innerJoinCompanyEmail($relationAlias = null) Adds a INNER JOIN clause to the query using the CompanyEmail relation
+ *
+ * @method EmailQuery leftJoinStoreEmail($relationAlias = null) Adds a LEFT JOIN clause to the query using the StoreEmail relation
+ * @method EmailQuery rightJoinStoreEmail($relationAlias = null) Adds a RIGHT JOIN clause to the query using the StoreEmail relation
+ * @method EmailQuery innerJoinStoreEmail($relationAlias = null) Adds a INNER JOIN clause to the query using the StoreEmail relation
+ *
  * @method EmailQuery leftJoinUserEmail($relationAlias = null) Adds a LEFT JOIN clause to the query using the UserEmail relation
  * @method EmailQuery rightJoinUserEmail($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UserEmail relation
  * @method EmailQuery innerJoinUserEmail($relationAlias = null) Adds a INNER JOIN clause to the query using the UserEmail relation
@@ -42,12 +56,14 @@ use UserBundle\Model\UserEmail;
  * @method Email findOne(PropelPDO $con = null) Return the first Email matching the query
  * @method Email findOneOrCreate(PropelPDO $con = null) Return the first Email matching the query, or a new Email object populated from the query conditions when no match is found
  *
+ * @method Email findOneByPrimary(boolean $primary) Return the first Email filtered by the primary column
  * @method Email findOneByEmail(string $email) Return the first Email filtered by the email column
  * @method Email findOneByDescription(string $description) Return the first Email filtered by the description column
  * @method Email findOneByCreatedAt(string $created_at) Return the first Email filtered by the created_at column
  * @method Email findOneByUpdatedAt(string $updated_at) Return the first Email filtered by the updated_at column
  *
  * @method array findById(int $id) Return Email objects filtered by the id column
+ * @method array findByPrimary(boolean $primary) Return Email objects filtered by the primary column
  * @method array findByEmail(string $email) Return Email objects filtered by the email column
  * @method array findByDescription(string $description) Return Email objects filtered by the description column
  * @method array findByCreatedAt(string $created_at) Return Email objects filtered by the created_at column
@@ -157,7 +173,7 @@ abstract class BaseEmailQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `email`, `description`, `created_at`, `updated_at` FROM `email` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `primary`, `email`, `description`, `created_at`, `updated_at` FROM `email` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -286,6 +302,33 @@ abstract class BaseEmailQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(EmailPeer::ID, $id, $comparison);
+    }
+
+    /**
+     * Filter the query on the primary column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByPrimary(true); // WHERE primary = true
+     * $query->filterByPrimary('yes'); // WHERE primary = true
+     * </code>
+     *
+     * @param     boolean|string $primary The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return EmailQuery The current query, for fluid interface
+     */
+    public function filterByPrimary($primary = null, $comparison = null)
+    {
+        if (is_string($primary)) {
+            $primary = in_array(strtolower($primary), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+
+        return $this->addUsingAlias(EmailPeer::PRIMARY, $primary, $comparison);
     }
 
     /**
@@ -433,6 +476,154 @@ abstract class BaseEmailQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query by a related CompanyEmail object
+     *
+     * @param   CompanyEmail|PropelObjectCollection $companyEmail  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 EmailQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByCompanyEmail($companyEmail, $comparison = null)
+    {
+        if ($companyEmail instanceof CompanyEmail) {
+            return $this
+                ->addUsingAlias(EmailPeer::ID, $companyEmail->getEmailId(), $comparison);
+        } elseif ($companyEmail instanceof PropelObjectCollection) {
+            return $this
+                ->useCompanyEmailQuery()
+                ->filterByPrimaryKeys($companyEmail->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByCompanyEmail() only accepts arguments of type CompanyEmail or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the CompanyEmail relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return EmailQuery The current query, for fluid interface
+     */
+    public function joinCompanyEmail($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('CompanyEmail');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'CompanyEmail');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the CompanyEmail relation CompanyEmail object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   \CompanyBundle\Model\CompanyEmailQuery A secondary query class using the current class as primary query
+     */
+    public function useCompanyEmailQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinCompanyEmail($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'CompanyEmail', '\CompanyBundle\Model\CompanyEmailQuery');
+    }
+
+    /**
+     * Filter the query by a related StoreEmail object
+     *
+     * @param   StoreEmail|PropelObjectCollection $storeEmail  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 EmailQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByStoreEmail($storeEmail, $comparison = null)
+    {
+        if ($storeEmail instanceof StoreEmail) {
+            return $this
+                ->addUsingAlias(EmailPeer::ID, $storeEmail->getEmailId(), $comparison);
+        } elseif ($storeEmail instanceof PropelObjectCollection) {
+            return $this
+                ->useStoreEmailQuery()
+                ->filterByPrimaryKeys($storeEmail->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByStoreEmail() only accepts arguments of type StoreEmail or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the StoreEmail relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return EmailQuery The current query, for fluid interface
+     */
+    public function joinStoreEmail($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('StoreEmail');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'StoreEmail');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the StoreEmail relation StoreEmail object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   \StoreBundle\Model\StoreEmailQuery A secondary query class using the current class as primary query
+     */
+    public function useStoreEmailQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinStoreEmail($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'StoreEmail', '\StoreBundle\Model\StoreEmailQuery');
+    }
+
+    /**
      * Filter the query by a related UserEmail object
      *
      * @param   UserEmail|PropelObjectCollection $userEmail  the related object to use as filter
@@ -504,6 +695,40 @@ abstract class BaseEmailQuery extends ModelCriteria
         return $this
             ->joinUserEmail($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'UserEmail', '\UserBundle\Model\UserEmailQuery');
+    }
+
+    /**
+     * Filter the query by a related Company object
+     * using the company_email table as cross reference
+     *
+     * @param   Company $company the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return   EmailQuery The current query, for fluid interface
+     */
+    public function filterByCompany($company, $comparison = Criteria::EQUAL)
+    {
+        return $this
+            ->useCompanyEmailQuery()
+            ->filterByCompany($company, $comparison)
+            ->endUse();
+    }
+
+    /**
+     * Filter the query by a related Store object
+     * using the store_email table as cross reference
+     *
+     * @param   Store $store the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return   EmailQuery The current query, for fluid interface
+     */
+    public function filterByStore($store, $comparison = Criteria::EQUAL)
+    {
+        return $this
+            ->useStoreEmailQuery()
+            ->filterByStore($store, $comparison)
+            ->endUse();
     }
 
     /**

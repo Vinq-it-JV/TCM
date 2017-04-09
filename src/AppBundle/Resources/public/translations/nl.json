@@ -15,10 +15,16 @@
     "CANCEL": "Annuleren",
     "DELETE": "Verwijderen",
     "SAVE": "Opslaan",
+    "YES": "Ja",
+    "NO": "Nee",
+    "COPY": "Kopieer",
     "ROLE": {
         "USER": "Gebruiker",
         "ADMIN": "Admin",
-        "SUPER_ADMIN": "Super admin"
+        "SUPER_ADMIN": "Super admin",
+        "OWNER": "Eigenaar",
+        "TECH_BEER": "Biertechniek",
+        "TECH_COOLING": "Koeltechniek"
     },
     "GENDER": {
         "MALE": "Man",
@@ -60,6 +66,18 @@
             "DESCRIPTION": "Dit is een factuuradres."
         }
     },
+    "COMPANY_TYPE": {
+        "BAR": {
+            "NAME": "Bar",
+            "DESCRIPTION": "Dit is een bar."
+        }
+    },
+    "STORE_TYPE": {
+        "BAR": {
+            "NAME": "Bar",
+            "DESCRIPTION": "Dit is een bar."
+        }
+    },
     "USER": {
         "LABEL": "Gebruiker",
         "WELCOME": "Welkom",
@@ -93,11 +111,83 @@
     "ADMINISTRATION": {
         "LABEL": "Administratie"
     },
+    "COMPANY": {
+        "LABEL": "Bedrijf",
+        "ACTIVE": "Actief",
+        "CODE": "Code",
+        "TYPE": "Type",
+        "DESCRIPTION": "Omschrijving",
+        "WEBSITE": "Website",
+        "VAT_NUMBER": "BTW nummer",
+        "COC_NUMBER": "KvK nummer",
+        "BANK_ACCOUNT_NUMBER": "IBAN",
+        "COMPANIES": "Bedrijven",
+        "STORE": "Filiaal",
+        "STORES": "Filialen",
+        "REGIONS": "Regio's",
+        "REGION": "Regio",
+        "NAME": "Naam",
+        "EMAIL": "Email",
+        "PHONE": "Telefoonnummer",
+        "ADDRESS": "Adres",
+        "ADDRESS_TYPE": "Adres type",
+        "ADDRESSES": "Adressen",
+        "STREET": "Straat",
+        "POSTAL_CODE": "Postcode",
+        "CITY": "Stad",
+        "COUNTRY": "Land",
+        "MAP_URL": "Kaart URL",
+        "OWNERS": "Eigenaren",
+        "CONTACTS": "Contactpersonen",
+        "INFORMANTS": "Informanten",
+        "NOTIFY": "Notificeer"
+    },
+    "STORE": {
+        "LABEL": "Filiaal",
+        "ACTIVE": "Actief",
+        "CODE": "Code",
+        "TYPE": "Type",
+        "DESCRIPTION": "Omschrijving",
+        "WEBSITE": "Website",
+        "VAT_NUMBER": "BTW nummer",
+        "COC_NUMBER": "KvK nummer",
+        "BANK_ACCOUNT_NUMBER": "IBAN",
+        "COMPANY": "Bedrijf",
+        "COMPANIES": "Bedrijven",
+        "STORES": "Filialen",
+        "REGIONS": "Regio's",
+        "REGION": "Regio",
+        "NAME": "Naam",
+        "EMAIL": "Email",
+        "PHONE": "Telefoonnummer",
+        "ADDRESS": "Adres",
+        "ADDRESS_TYPE": "Adres type",
+        "ADDRESSES": "Adressen",
+        "STREET": "Straat",
+        "POSTAL_CODE": "Postcode",
+        "CITY": "Stad",
+        "COUNTRY": "Land",
+        "MAP_URL": "Kaart URL",
+        "OWNERS": "Eigenaren",
+        "CONTACTS": "Contactpersonen",
+        "INFORMANTS": "Informanten",
+        "NOTIFY": "Notificeer"
+    },
+    "REGIONS": {
+        "LABEL": "Regio's",
+        "REGION": "Regio",
+        "NAME": "Naam",
+        "DESCRIPTION": "Omschrijving"
+    },
     "QUESTION": {
         "DELETE_EMAIL": "Email adres verwijderen?",
         "DELETE_PHONE": "Telefoonnummer verwijderen?",
         "DELETE_ADDRESS": "Adres verwijderen?",
-        "DELETE_USER": "Gebruiker verwijderen?"
+        "DELETE_USER": "Gebruiker verwijderen?",
+        "DELETE_COMPANY": "Bedrijf verwijderen?",
+        "DELETE_REGION": "Regio verwijderen?",
+        "DELETE_STORE": "Filiaal verwijderen?",
+        "COPY_COMPANY_DATA": "Bedrijfsdata kopiëren?"
     },
     "AUTH": {
         "USERNAME": "Gebruikersnaam",
@@ -121,6 +211,15 @@
         "USER_LOCKED_OUT": "User is locked out, please try later.",
         "EMAIL_CREDENTIALS_SENT": "Your credentials have been sent to your email address.",
         "ROLES": "Rollen"
+    },
+    "PAYMENT": {
+        "METHOD": "Betaalmethode",
+        "NAME": {
+            "METHOD_AUTOMATIC_PAYMENT": "Automatische incasso",
+            "METHOD_INVOICE": "Factuur",
+            "METHOD_CASH": "Contant",
+            "METHOD_BANK_TRANSFER": "Bank overschrijving"
+        }
     },
     "LNG": {
         "ENGLISH": "English",

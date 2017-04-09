@@ -3,5 +3,5 @@ services:
         class: AdministrationBundle\Controller\PageController
 
     class_helper:
-        class: AdministrationBundle\Services\ClassHelper
+        class: AppBundle\Services\ClassHelper
         arguments: []

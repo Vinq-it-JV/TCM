@@ -15,6 +15,14 @@ use \PropelDateTime;
 use \PropelException;
 use \PropelObjectCollection;
 use \PropelPDO;
+use CompanyBundle\Model\Company;
+use CompanyBundle\Model\CompanyEmail;
+use CompanyBundle\Model\CompanyEmailQuery;
+use CompanyBundle\Model\CompanyQuery;
+use StoreBundle\Model\Store;
+use StoreBundle\Model\StoreEmail;
+use StoreBundle\Model\StoreEmailQuery;
+use StoreBundle\Model\StoreQuery;
 use UserBundle\Model\Email;
 use UserBundle\Model\EmailPeer;
 use UserBundle\Model\EmailQuery;
@@ -51,6 +59,13 @@ abstract class BaseEmail extends BaseObject implements Persistent
     protected $id;
 
     /**
+     * The value for the primary field.
+     * Note: this column has a database default value of: false
+     * @var        boolean
+     */
+    protected $primary;
+
+    /**
      * The value for the email field.
      * @var        string
      */
@@ -75,10 +90,32 @@ abstract class BaseEmail extends BaseObject implements Persistent
     protected $updated_at;
 
     /**
+     * @var        PropelObjectCollection|CompanyEmail[] Collection to store aggregation of CompanyEmail objects.
+     */
+    protected $collCompanyEmails;
+    protected $collCompanyEmailsPartial;
+
+    /**
+     * @var        PropelObjectCollection|StoreEmail[] Collection to store aggregation of StoreEmail objects.
+     */
+    protected $collStoreEmails;
+    protected $collStoreEmailsPartial;
+
+    /**
      * @var        PropelObjectCollection|UserEmail[] Collection to store aggregation of UserEmail objects.
      */
     protected $collUserEmails;
     protected $collUserEmailsPartial;
+
+    /**
+     * @var        PropelObjectCollection|Company[] Collection to store aggregation of Company objects.
+     */
+    protected $collCompanies;
+
+    /**
+     * @var        PropelObjectCollection|Store[] Collection to store aggregation of Store objects.
+     */
+    protected $collStores;
 
     /**
      * @var        PropelObjectCollection|User[] Collection to store aggregation of User objects.
@@ -109,13 +146,58 @@ abstract class BaseEmail extends BaseObject implements Persistent
      * An array of objects scheduled for deletion.
      * @var		PropelObjectCollection
      */
+    protected $companiesScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $storesScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
     protected $usersScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
      * @var		PropelObjectCollection
      */
+    protected $companyEmailsScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $storeEmailsScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
     protected $userEmailsScheduledForDeletion = null;
+
+    /**
+     * Applies default values to this object.
+     * This method should be called from the object's constructor (or
+     * equivalent initialization method).
+     * @see        __construct()
+     */
+    public function applyDefaultValues()
+    {
+        $this->primary = false;
+    }
+
+    /**
+     * Initializes internal state of BaseEmail object.
+     * @see        applyDefaults()
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->applyDefaultValues();
+    }
 
     /**
      * Get the [id] column value.
@@ -126,6 +208,17 @@ abstract class BaseEmail extends BaseObject implements Persistent
     {
 
         return $this->id;
+    }
+
+    /**
+     * Get the [primary] column value.
+     *
+     * @return boolean
+     */
+    public function getPrimary()
+    {
+
+        return $this->primary;
     }
 
     /**
@@ -252,6 +345,35 @@ abstract class BaseEmail extends BaseObject implements Persistent
     } // setId()
 
     /**
+     * Sets the value of the [primary] column.
+     * Non-boolean arguments are converted using the following rules:
+     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     *
+     * @param boolean|integer|string $v The new value
+     * @return Email The current object (for fluent API support)
+     */
+    public function setPrimary($v)
+    {
+        if ($v !== null) {
+            if (is_string($v)) {
+                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            } else {
+                $v = (boolean) $v;
+            }
+        }
+
+        if ($this->primary !== $v) {
+            $this->primary = $v;
+            $this->modifiedColumns[] = EmailPeer::PRIMARY;
+        }
+
+
+        return $this;
+    } // setPrimary()
+
+    /**
      * Set the value of [email] column.
      *
      * @param  string $v new value
@@ -349,6 +471,10 @@ abstract class BaseEmail extends BaseObject implements Persistent
      */
     public function hasOnlyDefaultValues()
     {
+            if ($this->primary !== false) {
+                return false;
+            }
+
         // otherwise, everything was equal, so return true
         return true;
     } // hasOnlyDefaultValues()
@@ -372,10 +498,11 @@ abstract class BaseEmail extends BaseObject implements Persistent
         try {
 
             $this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
-            $this->email = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
-            $this->description = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
-            $this->created_at = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
-            $this->updated_at = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
+            $this->primary = ($row[$startcol + 1] !== null) ? (boolean) $row[$startcol + 1] : null;
+            $this->email = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
+            $this->description = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
+            $this->created_at = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
+            $this->updated_at = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -385,7 +512,7 @@ abstract class BaseEmail extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 5; // 5 = EmailPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 6; // 6 = EmailPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Email object", $e);
@@ -447,8 +574,14 @@ abstract class BaseEmail extends BaseObject implements Persistent
 
         if ($deep) {  // also de-associate any related objects?
 
+            $this->collCompanyEmails = null;
+
+            $this->collStoreEmails = null;
+
             $this->collUserEmails = null;
 
+            $this->collCompanies = null;
+            $this->collStores = null;
             $this->collUsers = null;
         } // if (deep)
     }
@@ -585,6 +718,58 @@ abstract class BaseEmail extends BaseObject implements Persistent
                 $this->resetModified();
             }
 
+            if ($this->companiesScheduledForDeletion !== null) {
+                if (!$this->companiesScheduledForDeletion->isEmpty()) {
+                    $pks = array();
+                    $pk = $this->getPrimaryKey();
+                    foreach ($this->companiesScheduledForDeletion->getPrimaryKeys(false) as $remotePk) {
+                        $pks[] = array($remotePk, $pk);
+                    }
+                    CompanyEmailQuery::create()
+                        ->filterByPrimaryKeys($pks)
+                        ->delete($con);
+                    $this->companiesScheduledForDeletion = null;
+                }
+
+                foreach ($this->getCompanies() as $company) {
+                    if ($company->isModified()) {
+                        $company->save($con);
+                    }
+                }
+            } elseif ($this->collCompanies) {
+                foreach ($this->collCompanies as $company) {
+                    if ($company->isModified()) {
+                        $company->save($con);
+                    }
+                }
+            }
+
+            if ($this->storesScheduledForDeletion !== null) {
+                if (!$this->storesScheduledForDeletion->isEmpty()) {
+                    $pks = array();
+                    $pk = $this->getPrimaryKey();
+                    foreach ($this->storesScheduledForDeletion->getPrimaryKeys(false) as $remotePk) {
+                        $pks[] = array($remotePk, $pk);
+                    }
+                    StoreEmailQuery::create()
+                        ->filterByPrimaryKeys($pks)
+                        ->delete($con);
+                    $this->storesScheduledForDeletion = null;
+                }
+
+                foreach ($this->getStores() as $store) {
+                    if ($store->isModified()) {
+                        $store->save($con);
+                    }
+                }
+            } elseif ($this->collStores) {
+                foreach ($this->collStores as $store) {
+                    if ($store->isModified()) {
+                        $store->save($con);
+                    }
+                }
+            }
+
             if ($this->usersScheduledForDeletion !== null) {
                 if (!$this->usersScheduledForDeletion->isEmpty()) {
                     $pks = array();
@@ -607,6 +792,40 @@ abstract class BaseEmail extends BaseObject implements Persistent
                 foreach ($this->collUsers as $user) {
                     if ($user->isModified()) {
                         $user->save($con);
+                    }
+                }
+            }
+
+            if ($this->companyEmailsScheduledForDeletion !== null) {
+                if (!$this->companyEmailsScheduledForDeletion->isEmpty()) {
+                    CompanyEmailQuery::create()
+                        ->filterByPrimaryKeys($this->companyEmailsScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->companyEmailsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collCompanyEmails !== null) {
+                foreach ($this->collCompanyEmails as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->storeEmailsScheduledForDeletion !== null) {
+                if (!$this->storeEmailsScheduledForDeletion->isEmpty()) {
+                    StoreEmailQuery::create()
+                        ->filterByPrimaryKeys($this->storeEmailsScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->storeEmailsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collStoreEmails !== null) {
+                foreach ($this->collStoreEmails as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
                     }
                 }
             }
@@ -657,6 +876,9 @@ abstract class BaseEmail extends BaseObject implements Persistent
         if ($this->isColumnModified(EmailPeer::ID)) {
             $modifiedColumns[':p' . $index++]  = '`id`';
         }
+        if ($this->isColumnModified(EmailPeer::PRIMARY)) {
+            $modifiedColumns[':p' . $index++]  = '`primary`';
+        }
         if ($this->isColumnModified(EmailPeer::EMAIL)) {
             $modifiedColumns[':p' . $index++]  = '`email`';
         }
@@ -682,6 +904,9 @@ abstract class BaseEmail extends BaseObject implements Persistent
                 switch ($columnName) {
                     case '`id`':
                         $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
+                        break;
+                    case '`primary`':
+                        $stmt->bindValue($identifier, (int) $this->primary, PDO::PARAM_INT);
                         break;
                     case '`email`':
                         $stmt->bindValue($identifier, $this->email, PDO::PARAM_STR);
@@ -794,6 +1019,22 @@ abstract class BaseEmail extends BaseObject implements Persistent
             }
 
 
+                if ($this->collCompanyEmails !== null) {
+                    foreach ($this->collCompanyEmails as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
+                if ($this->collStoreEmails !== null) {
+                    foreach ($this->collStoreEmails as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
                 if ($this->collUserEmails !== null) {
                     foreach ($this->collUserEmails as $referrerFK) {
                         if (!$referrerFK->validate($columns)) {
@@ -841,15 +1082,18 @@ abstract class BaseEmail extends BaseObject implements Persistent
                 return $this->getId();
                 break;
             case 1:
-                return $this->getEmail();
+                return $this->getPrimary();
                 break;
             case 2:
-                return $this->getDescription();
+                return $this->getEmail();
                 break;
             case 3:
-                return $this->getCreatedAt();
+                return $this->getDescription();
                 break;
             case 4:
+                return $this->getCreatedAt();
+                break;
+            case 5:
                 return $this->getUpdatedAt();
                 break;
             default:
@@ -882,10 +1126,11 @@ abstract class BaseEmail extends BaseObject implements Persistent
         $keys = EmailPeer::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getId(),
-            $keys[1] => $this->getEmail(),
-            $keys[2] => $this->getDescription(),
-            $keys[3] => $this->getCreatedAt(),
-            $keys[4] => $this->getUpdatedAt(),
+            $keys[1] => $this->getPrimary(),
+            $keys[2] => $this->getEmail(),
+            $keys[3] => $this->getDescription(),
+            $keys[4] => $this->getCreatedAt(),
+            $keys[5] => $this->getUpdatedAt(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -893,6 +1138,12 @@ abstract class BaseEmail extends BaseObject implements Persistent
         }
 
         if ($includeForeignObjects) {
+            if (null !== $this->collCompanyEmails) {
+                $result['CompanyEmails'] = $this->collCompanyEmails->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collStoreEmails) {
+                $result['StoreEmails'] = $this->collStoreEmails->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
             if (null !== $this->collUserEmails) {
                 $result['UserEmails'] = $this->collUserEmails->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
@@ -934,15 +1185,18 @@ abstract class BaseEmail extends BaseObject implements Persistent
                 $this->setId($value);
                 break;
             case 1:
-                $this->setEmail($value);
+                $this->setPrimary($value);
                 break;
             case 2:
-                $this->setDescription($value);
+                $this->setEmail($value);
                 break;
             case 3:
-                $this->setCreatedAt($value);
+                $this->setDescription($value);
                 break;
             case 4:
+                $this->setCreatedAt($value);
+                break;
+            case 5:
                 $this->setUpdatedAt($value);
                 break;
         } // switch()
@@ -970,10 +1224,11 @@ abstract class BaseEmail extends BaseObject implements Persistent
         $keys = EmailPeer::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
-        if (array_key_exists($keys[1], $arr)) $this->setEmail($arr[$keys[1]]);
-        if (array_key_exists($keys[2], $arr)) $this->setDescription($arr[$keys[2]]);
-        if (array_key_exists($keys[3], $arr)) $this->setCreatedAt($arr[$keys[3]]);
-        if (array_key_exists($keys[4], $arr)) $this->setUpdatedAt($arr[$keys[4]]);
+        if (array_key_exists($keys[1], $arr)) $this->setPrimary($arr[$keys[1]]);
+        if (array_key_exists($keys[2], $arr)) $this->setEmail($arr[$keys[2]]);
+        if (array_key_exists($keys[3], $arr)) $this->setDescription($arr[$keys[3]]);
+        if (array_key_exists($keys[4], $arr)) $this->setCreatedAt($arr[$keys[4]]);
+        if (array_key_exists($keys[5], $arr)) $this->setUpdatedAt($arr[$keys[5]]);
     }
 
     /**
@@ -986,6 +1241,7 @@ abstract class BaseEmail extends BaseObject implements Persistent
         $criteria = new Criteria(EmailPeer::DATABASE_NAME);
 
         if ($this->isColumnModified(EmailPeer::ID)) $criteria->add(EmailPeer::ID, $this->id);
+        if ($this->isColumnModified(EmailPeer::PRIMARY)) $criteria->add(EmailPeer::PRIMARY, $this->primary);
         if ($this->isColumnModified(EmailPeer::EMAIL)) $criteria->add(EmailPeer::EMAIL, $this->email);
         if ($this->isColumnModified(EmailPeer::DESCRIPTION)) $criteria->add(EmailPeer::DESCRIPTION, $this->description);
         if ($this->isColumnModified(EmailPeer::CREATED_AT)) $criteria->add(EmailPeer::CREATED_AT, $this->created_at);
@@ -1053,6 +1309,7 @@ abstract class BaseEmail extends BaseObject implements Persistent
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
+        $copyObj->setPrimary($this->getPrimary());
         $copyObj->setEmail($this->getEmail());
         $copyObj->setDescription($this->getDescription());
         $copyObj->setCreatedAt($this->getCreatedAt());
@@ -1064,6 +1321,18 @@ abstract class BaseEmail extends BaseObject implements Persistent
             $copyObj->setNew(false);
             // store object hash to prevent cycle
             $this->startCopy = true;
+
+            foreach ($this->getCompanyEmails() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addCompanyEmail($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getStoreEmails() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addStoreEmail($relObj->copy($deepCopy));
+                }
+            }
 
             foreach ($this->getUserEmails() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
@@ -1132,9 +1401,521 @@ abstract class BaseEmail extends BaseObject implements Persistent
      */
     public function initRelation($relationName)
     {
+        if ('CompanyEmail' == $relationName) {
+            $this->initCompanyEmails();
+        }
+        if ('StoreEmail' == $relationName) {
+            $this->initStoreEmails();
+        }
         if ('UserEmail' == $relationName) {
             $this->initUserEmails();
         }
+    }
+
+    /**
+     * Clears out the collCompanyEmails collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Email The current object (for fluent API support)
+     * @see        addCompanyEmails()
+     */
+    public function clearCompanyEmails()
+    {
+        $this->collCompanyEmails = null; // important to set this to null since that means it is uninitialized
+        $this->collCompanyEmailsPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collCompanyEmails collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialCompanyEmails($v = true)
+    {
+        $this->collCompanyEmailsPartial = $v;
+    }
+
+    /**
+     * Initializes the collCompanyEmails collection.
+     *
+     * By default this just sets the collCompanyEmails collection to an empty array (like clearcollCompanyEmails());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initCompanyEmails($overrideExisting = true)
+    {
+        if (null !== $this->collCompanyEmails && !$overrideExisting) {
+            return;
+        }
+        $this->collCompanyEmails = new PropelObjectCollection();
+        $this->collCompanyEmails->setModel('CompanyEmail');
+    }
+
+    /**
+     * Gets an array of CompanyEmail objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Email is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|CompanyEmail[] List of CompanyEmail objects
+     * @throws PropelException
+     */
+    public function getCompanyEmails($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collCompanyEmailsPartial && !$this->isNew();
+        if (null === $this->collCompanyEmails || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collCompanyEmails) {
+                // return empty collection
+                $this->initCompanyEmails();
+            } else {
+                $collCompanyEmails = CompanyEmailQuery::create(null, $criteria)
+                    ->filterByEmail($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collCompanyEmailsPartial && count($collCompanyEmails)) {
+                      $this->initCompanyEmails(false);
+
+                      foreach ($collCompanyEmails as $obj) {
+                        if (false == $this->collCompanyEmails->contains($obj)) {
+                          $this->collCompanyEmails->append($obj);
+                        }
+                      }
+
+                      $this->collCompanyEmailsPartial = true;
+                    }
+
+                    $collCompanyEmails->getInternalIterator()->rewind();
+
+                    return $collCompanyEmails;
+                }
+
+                if ($partial && $this->collCompanyEmails) {
+                    foreach ($this->collCompanyEmails as $obj) {
+                        if ($obj->isNew()) {
+                            $collCompanyEmails[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collCompanyEmails = $collCompanyEmails;
+                $this->collCompanyEmailsPartial = false;
+            }
+        }
+
+        return $this->collCompanyEmails;
+    }
+
+    /**
+     * Sets a collection of CompanyEmail objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $companyEmails A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Email The current object (for fluent API support)
+     */
+    public function setCompanyEmails(PropelCollection $companyEmails, PropelPDO $con = null)
+    {
+        $companyEmailsToDelete = $this->getCompanyEmails(new Criteria(), $con)->diff($companyEmails);
+
+
+        //since at least one column in the foreign key is at the same time a PK
+        //we can not just set a PK to NULL in the lines below. We have to store
+        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
+        $this->companyEmailsScheduledForDeletion = clone $companyEmailsToDelete;
+
+        foreach ($companyEmailsToDelete as $companyEmailRemoved) {
+            $companyEmailRemoved->setEmail(null);
+        }
+
+        $this->collCompanyEmails = null;
+        foreach ($companyEmails as $companyEmail) {
+            $this->addCompanyEmail($companyEmail);
+        }
+
+        $this->collCompanyEmails = $companyEmails;
+        $this->collCompanyEmailsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related CompanyEmail objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related CompanyEmail objects.
+     * @throws PropelException
+     */
+    public function countCompanyEmails(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collCompanyEmailsPartial && !$this->isNew();
+        if (null === $this->collCompanyEmails || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collCompanyEmails) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getCompanyEmails());
+            }
+            $query = CompanyEmailQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByEmail($this)
+                ->count($con);
+        }
+
+        return count($this->collCompanyEmails);
+    }
+
+    /**
+     * Method called to associate a CompanyEmail object to this object
+     * through the CompanyEmail foreign key attribute.
+     *
+     * @param    CompanyEmail $l CompanyEmail
+     * @return Email The current object (for fluent API support)
+     */
+    public function addCompanyEmail(CompanyEmail $l)
+    {
+        if ($this->collCompanyEmails === null) {
+            $this->initCompanyEmails();
+            $this->collCompanyEmailsPartial = true;
+        }
+
+        if (!in_array($l, $this->collCompanyEmails->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddCompanyEmail($l);
+
+            if ($this->companyEmailsScheduledForDeletion and $this->companyEmailsScheduledForDeletion->contains($l)) {
+                $this->companyEmailsScheduledForDeletion->remove($this->companyEmailsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	CompanyEmail $companyEmail The companyEmail object to add.
+     */
+    protected function doAddCompanyEmail($companyEmail)
+    {
+        $this->collCompanyEmails[]= $companyEmail;
+        $companyEmail->setEmail($this);
+    }
+
+    /**
+     * @param	CompanyEmail $companyEmail The companyEmail object to remove.
+     * @return Email The current object (for fluent API support)
+     */
+    public function removeCompanyEmail($companyEmail)
+    {
+        if ($this->getCompanyEmails()->contains($companyEmail)) {
+            $this->collCompanyEmails->remove($this->collCompanyEmails->search($companyEmail));
+            if (null === $this->companyEmailsScheduledForDeletion) {
+                $this->companyEmailsScheduledForDeletion = clone $this->collCompanyEmails;
+                $this->companyEmailsScheduledForDeletion->clear();
+            }
+            $this->companyEmailsScheduledForDeletion[]= clone $companyEmail;
+            $companyEmail->setEmail(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Email is new, it will return
+     * an empty collection; or if this Email has previously
+     * been saved, it will retrieve related CompanyEmails from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Email.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|CompanyEmail[] List of CompanyEmail objects
+     */
+    public function getCompanyEmailsJoinCompany($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = CompanyEmailQuery::create(null, $criteria);
+        $query->joinWith('Company', $join_behavior);
+
+        return $this->getCompanyEmails($query, $con);
+    }
+
+    /**
+     * Clears out the collStoreEmails collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Email The current object (for fluent API support)
+     * @see        addStoreEmails()
+     */
+    public function clearStoreEmails()
+    {
+        $this->collStoreEmails = null; // important to set this to null since that means it is uninitialized
+        $this->collStoreEmailsPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collStoreEmails collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialStoreEmails($v = true)
+    {
+        $this->collStoreEmailsPartial = $v;
+    }
+
+    /**
+     * Initializes the collStoreEmails collection.
+     *
+     * By default this just sets the collStoreEmails collection to an empty array (like clearcollStoreEmails());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initStoreEmails($overrideExisting = true)
+    {
+        if (null !== $this->collStoreEmails && !$overrideExisting) {
+            return;
+        }
+        $this->collStoreEmails = new PropelObjectCollection();
+        $this->collStoreEmails->setModel('StoreEmail');
+    }
+
+    /**
+     * Gets an array of StoreEmail objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Email is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|StoreEmail[] List of StoreEmail objects
+     * @throws PropelException
+     */
+    public function getStoreEmails($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collStoreEmailsPartial && !$this->isNew();
+        if (null === $this->collStoreEmails || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collStoreEmails) {
+                // return empty collection
+                $this->initStoreEmails();
+            } else {
+                $collStoreEmails = StoreEmailQuery::create(null, $criteria)
+                    ->filterByEmail($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collStoreEmailsPartial && count($collStoreEmails)) {
+                      $this->initStoreEmails(false);
+
+                      foreach ($collStoreEmails as $obj) {
+                        if (false == $this->collStoreEmails->contains($obj)) {
+                          $this->collStoreEmails->append($obj);
+                        }
+                      }
+
+                      $this->collStoreEmailsPartial = true;
+                    }
+
+                    $collStoreEmails->getInternalIterator()->rewind();
+
+                    return $collStoreEmails;
+                }
+
+                if ($partial && $this->collStoreEmails) {
+                    foreach ($this->collStoreEmails as $obj) {
+                        if ($obj->isNew()) {
+                            $collStoreEmails[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collStoreEmails = $collStoreEmails;
+                $this->collStoreEmailsPartial = false;
+            }
+        }
+
+        return $this->collStoreEmails;
+    }
+
+    /**
+     * Sets a collection of StoreEmail objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $storeEmails A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Email The current object (for fluent API support)
+     */
+    public function setStoreEmails(PropelCollection $storeEmails, PropelPDO $con = null)
+    {
+        $storeEmailsToDelete = $this->getStoreEmails(new Criteria(), $con)->diff($storeEmails);
+
+
+        //since at least one column in the foreign key is at the same time a PK
+        //we can not just set a PK to NULL in the lines below. We have to store
+        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
+        $this->storeEmailsScheduledForDeletion = clone $storeEmailsToDelete;
+
+        foreach ($storeEmailsToDelete as $storeEmailRemoved) {
+            $storeEmailRemoved->setEmail(null);
+        }
+
+        $this->collStoreEmails = null;
+        foreach ($storeEmails as $storeEmail) {
+            $this->addStoreEmail($storeEmail);
+        }
+
+        $this->collStoreEmails = $storeEmails;
+        $this->collStoreEmailsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related StoreEmail objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related StoreEmail objects.
+     * @throws PropelException
+     */
+    public function countStoreEmails(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collStoreEmailsPartial && !$this->isNew();
+        if (null === $this->collStoreEmails || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collStoreEmails) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getStoreEmails());
+            }
+            $query = StoreEmailQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByEmail($this)
+                ->count($con);
+        }
+
+        return count($this->collStoreEmails);
+    }
+
+    /**
+     * Method called to associate a StoreEmail object to this object
+     * through the StoreEmail foreign key attribute.
+     *
+     * @param    StoreEmail $l StoreEmail
+     * @return Email The current object (for fluent API support)
+     */
+    public function addStoreEmail(StoreEmail $l)
+    {
+        if ($this->collStoreEmails === null) {
+            $this->initStoreEmails();
+            $this->collStoreEmailsPartial = true;
+        }
+
+        if (!in_array($l, $this->collStoreEmails->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddStoreEmail($l);
+
+            if ($this->storeEmailsScheduledForDeletion and $this->storeEmailsScheduledForDeletion->contains($l)) {
+                $this->storeEmailsScheduledForDeletion->remove($this->storeEmailsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	StoreEmail $storeEmail The storeEmail object to add.
+     */
+    protected function doAddStoreEmail($storeEmail)
+    {
+        $this->collStoreEmails[]= $storeEmail;
+        $storeEmail->setEmail($this);
+    }
+
+    /**
+     * @param	StoreEmail $storeEmail The storeEmail object to remove.
+     * @return Email The current object (for fluent API support)
+     */
+    public function removeStoreEmail($storeEmail)
+    {
+        if ($this->getStoreEmails()->contains($storeEmail)) {
+            $this->collStoreEmails->remove($this->collStoreEmails->search($storeEmail));
+            if (null === $this->storeEmailsScheduledForDeletion) {
+                $this->storeEmailsScheduledForDeletion = clone $this->collStoreEmails;
+                $this->storeEmailsScheduledForDeletion->clear();
+            }
+            $this->storeEmailsScheduledForDeletion[]= clone $storeEmail;
+            $storeEmail->setEmail(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Email is new, it will return
+     * an empty collection; or if this Email has previously
+     * been saved, it will retrieve related StoreEmails from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Email.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|StoreEmail[] List of StoreEmail objects
+     */
+    public function getStoreEmailsJoinStore($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = StoreEmailQuery::create(null, $criteria);
+        $query->joinWith('Store', $join_behavior);
+
+        return $this->getStoreEmails($query, $con);
     }
 
     /**
@@ -1391,6 +2172,380 @@ abstract class BaseEmail extends BaseObject implements Persistent
     }
 
     /**
+     * Clears out the collCompanies collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Email The current object (for fluent API support)
+     * @see        addCompanies()
+     */
+    public function clearCompanies()
+    {
+        $this->collCompanies = null; // important to set this to null since that means it is uninitialized
+        $this->collCompaniesPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * Initializes the collCompanies collection.
+     *
+     * By default this just sets the collCompanies collection to an empty collection (like clearCompanies());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @return void
+     */
+    public function initCompanies()
+    {
+        $this->collCompanies = new PropelObjectCollection();
+        $this->collCompanies->setModel('Company');
+    }
+
+    /**
+     * Gets a collection of Company objects related by a many-to-many relationship
+     * to the current object by way of the company_email cross-reference table.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Email is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria Optional query object to filter the query
+     * @param PropelPDO $con Optional connection object
+     *
+     * @return PropelObjectCollection|Company[] List of Company objects
+     */
+    public function getCompanies($criteria = null, PropelPDO $con = null)
+    {
+        if (null === $this->collCompanies || null !== $criteria) {
+            if ($this->isNew() && null === $this->collCompanies) {
+                // return empty collection
+                $this->initCompanies();
+            } else {
+                $collCompanies = CompanyQuery::create(null, $criteria)
+                    ->filterByEmail($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    return $collCompanies;
+                }
+                $this->collCompanies = $collCompanies;
+            }
+        }
+
+        return $this->collCompanies;
+    }
+
+    /**
+     * Sets a collection of Company objects related by a many-to-many relationship
+     * to the current object by way of the company_email cross-reference table.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $companies A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Email The current object (for fluent API support)
+     */
+    public function setCompanies(PropelCollection $companies, PropelPDO $con = null)
+    {
+        $this->clearCompanies();
+        $currentCompanies = $this->getCompanies(null, $con);
+
+        $this->companiesScheduledForDeletion = $currentCompanies->diff($companies);
+
+        foreach ($companies as $company) {
+            if (!$currentCompanies->contains($company)) {
+                $this->doAddCompany($company);
+            }
+        }
+
+        $this->collCompanies = $companies;
+
+        return $this;
+    }
+
+    /**
+     * Gets the number of Company objects related by a many-to-many relationship
+     * to the current object by way of the company_email cross-reference table.
+     *
+     * @param Criteria $criteria Optional query object to filter the query
+     * @param boolean $distinct Set to true to force count distinct
+     * @param PropelPDO $con Optional connection object
+     *
+     * @return int the number of related Company objects
+     */
+    public function countCompanies($criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        if (null === $this->collCompanies || null !== $criteria) {
+            if ($this->isNew() && null === $this->collCompanies) {
+                return 0;
+            } else {
+                $query = CompanyQuery::create(null, $criteria);
+                if ($distinct) {
+                    $query->distinct();
+                }
+
+                return $query
+                    ->filterByEmail($this)
+                    ->count($con);
+            }
+        } else {
+            return count($this->collCompanies);
+        }
+    }
+
+    /**
+     * Associate a Company object to this object
+     * through the company_email cross reference table.
+     *
+     * @param  Company $company The CompanyEmail object to relate
+     * @return Email The current object (for fluent API support)
+     */
+    public function addCompany(Company $company)
+    {
+        if ($this->collCompanies === null) {
+            $this->initCompanies();
+        }
+
+        if (!$this->collCompanies->contains($company)) { // only add it if the **same** object is not already associated
+            $this->doAddCompany($company);
+            $this->collCompanies[] = $company;
+
+            if ($this->companiesScheduledForDeletion and $this->companiesScheduledForDeletion->contains($company)) {
+                $this->companiesScheduledForDeletion->remove($this->companiesScheduledForDeletion->search($company));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Company $company The company object to add.
+     */
+    protected function doAddCompany(Company $company)
+    {
+        // set the back reference to this object directly as using provided method either results
+        // in endless loop or in multiple relations
+        if (!$company->getEmails()->contains($this)) { $companyEmail = new CompanyEmail();
+            $companyEmail->setCompany($company);
+            $this->addCompanyEmail($companyEmail);
+
+            $foreignCollection = $company->getEmails();
+            $foreignCollection[] = $this;
+        }
+    }
+
+    /**
+     * Remove a Company object to this object
+     * through the company_email cross reference table.
+     *
+     * @param Company $company The CompanyEmail object to relate
+     * @return Email The current object (for fluent API support)
+     */
+    public function removeCompany(Company $company)
+    {
+        if ($this->getCompanies()->contains($company)) {
+            $this->collCompanies->remove($this->collCompanies->search($company));
+            if (null === $this->companiesScheduledForDeletion) {
+                $this->companiesScheduledForDeletion = clone $this->collCompanies;
+                $this->companiesScheduledForDeletion->clear();
+            }
+            $this->companiesScheduledForDeletion[]= $company;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Clears out the collStores collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Email The current object (for fluent API support)
+     * @see        addStores()
+     */
+    public function clearStores()
+    {
+        $this->collStores = null; // important to set this to null since that means it is uninitialized
+        $this->collStoresPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * Initializes the collStores collection.
+     *
+     * By default this just sets the collStores collection to an empty collection (like clearStores());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @return void
+     */
+    public function initStores()
+    {
+        $this->collStores = new PropelObjectCollection();
+        $this->collStores->setModel('Store');
+    }
+
+    /**
+     * Gets a collection of Store objects related by a many-to-many relationship
+     * to the current object by way of the store_email cross-reference table.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Email is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria Optional query object to filter the query
+     * @param PropelPDO $con Optional connection object
+     *
+     * @return PropelObjectCollection|Store[] List of Store objects
+     */
+    public function getStores($criteria = null, PropelPDO $con = null)
+    {
+        if (null === $this->collStores || null !== $criteria) {
+            if ($this->isNew() && null === $this->collStores) {
+                // return empty collection
+                $this->initStores();
+            } else {
+                $collStores = StoreQuery::create(null, $criteria)
+                    ->filterByEmail($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    return $collStores;
+                }
+                $this->collStores = $collStores;
+            }
+        }
+
+        return $this->collStores;
+    }
+
+    /**
+     * Sets a collection of Store objects related by a many-to-many relationship
+     * to the current object by way of the store_email cross-reference table.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $stores A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Email The current object (for fluent API support)
+     */
+    public function setStores(PropelCollection $stores, PropelPDO $con = null)
+    {
+        $this->clearStores();
+        $currentStores = $this->getStores(null, $con);
+
+        $this->storesScheduledForDeletion = $currentStores->diff($stores);
+
+        foreach ($stores as $store) {
+            if (!$currentStores->contains($store)) {
+                $this->doAddStore($store);
+            }
+        }
+
+        $this->collStores = $stores;
+
+        return $this;
+    }
+
+    /**
+     * Gets the number of Store objects related by a many-to-many relationship
+     * to the current object by way of the store_email cross-reference table.
+     *
+     * @param Criteria $criteria Optional query object to filter the query
+     * @param boolean $distinct Set to true to force count distinct
+     * @param PropelPDO $con Optional connection object
+     *
+     * @return int the number of related Store objects
+     */
+    public function countStores($criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        if (null === $this->collStores || null !== $criteria) {
+            if ($this->isNew() && null === $this->collStores) {
+                return 0;
+            } else {
+                $query = StoreQuery::create(null, $criteria);
+                if ($distinct) {
+                    $query->distinct();
+                }
+
+                return $query
+                    ->filterByEmail($this)
+                    ->count($con);
+            }
+        } else {
+            return count($this->collStores);
+        }
+    }
+
+    /**
+     * Associate a Store object to this object
+     * through the store_email cross reference table.
+     *
+     * @param  Store $store The StoreEmail object to relate
+     * @return Email The current object (for fluent API support)
+     */
+    public function addStore(Store $store)
+    {
+        if ($this->collStores === null) {
+            $this->initStores();
+        }
+
+        if (!$this->collStores->contains($store)) { // only add it if the **same** object is not already associated
+            $this->doAddStore($store);
+            $this->collStores[] = $store;
+
+            if ($this->storesScheduledForDeletion and $this->storesScheduledForDeletion->contains($store)) {
+                $this->storesScheduledForDeletion->remove($this->storesScheduledForDeletion->search($store));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Store $store The store object to add.
+     */
+    protected function doAddStore(Store $store)
+    {
+        // set the back reference to this object directly as using provided method either results
+        // in endless loop or in multiple relations
+        if (!$store->getEmails()->contains($this)) { $storeEmail = new StoreEmail();
+            $storeEmail->setStore($store);
+            $this->addStoreEmail($storeEmail);
+
+            $foreignCollection = $store->getEmails();
+            $foreignCollection[] = $this;
+        }
+    }
+
+    /**
+     * Remove a Store object to this object
+     * through the store_email cross reference table.
+     *
+     * @param Store $store The StoreEmail object to relate
+     * @return Email The current object (for fluent API support)
+     */
+    public function removeStore(Store $store)
+    {
+        if ($this->getStores()->contains($store)) {
+            $this->collStores->remove($this->collStores->search($store));
+            if (null === $this->storesScheduledForDeletion) {
+                $this->storesScheduledForDeletion = clone $this->collStores;
+                $this->storesScheduledForDeletion->clear();
+            }
+            $this->storesScheduledForDeletion[]= $store;
+        }
+
+        return $this;
+    }
+
+    /**
      * Clears out the collUsers collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
@@ -1583,6 +2738,7 @@ abstract class BaseEmail extends BaseObject implements Persistent
     public function clear()
     {
         $this->id = null;
+        $this->primary = null;
         $this->email = null;
         $this->description = null;
         $this->created_at = null;
@@ -1591,6 +2747,7 @@ abstract class BaseEmail extends BaseObject implements Persistent
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
         $this->clearAllReferences();
+        $this->applyDefaultValues();
         $this->resetModified();
         $this->setNew(true);
         $this->setDeleted(false);
@@ -1609,8 +2766,28 @@ abstract class BaseEmail extends BaseObject implements Persistent
     {
         if ($deep && !$this->alreadyInClearAllReferencesDeep) {
             $this->alreadyInClearAllReferencesDeep = true;
+            if ($this->collCompanyEmails) {
+                foreach ($this->collCompanyEmails as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collStoreEmails) {
+                foreach ($this->collStoreEmails as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collUserEmails) {
                 foreach ($this->collUserEmails as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collCompanies) {
+                foreach ($this->collCompanies as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collStores) {
+                foreach ($this->collStores as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
@@ -1623,10 +2800,26 @@ abstract class BaseEmail extends BaseObject implements Persistent
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
 
+        if ($this->collCompanyEmails instanceof PropelCollection) {
+            $this->collCompanyEmails->clearIterator();
+        }
+        $this->collCompanyEmails = null;
+        if ($this->collStoreEmails instanceof PropelCollection) {
+            $this->collStoreEmails->clearIterator();
+        }
+        $this->collStoreEmails = null;
         if ($this->collUserEmails instanceof PropelCollection) {
             $this->collUserEmails->clearIterator();
         }
         $this->collUserEmails = null;
+        if ($this->collCompanies instanceof PropelCollection) {
+            $this->collCompanies->clearIterator();
+        }
+        $this->collCompanies = null;
+        if ($this->collStores instanceof PropelCollection) {
+            $this->collStores->clearIterator();
+        }
+        $this->collStores = null;
         if ($this->collUsers instanceof PropelCollection) {
             $this->collUsers->clearIterator();
         }

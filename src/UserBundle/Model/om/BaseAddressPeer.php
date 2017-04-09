@@ -9,6 +9,8 @@ use \PDOStatement;
 use \Propel;
 use \PropelException;
 use \PropelPDO;
+use CompanyBundle\Model\CompanyAddressPeer;
+use StoreBundle\Model\StoreAddressPeer;
 use UserBundle\Model\Address;
 use UserBundle\Model\AddressPeer;
 use UserBundle\Model\CountriesPeer;
@@ -412,6 +414,12 @@ abstract class BaseAddressPeer
      */
     public static function clearRelatedInstancePool()
     {
+        // Invalidate objects in CompanyAddressPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        CompanyAddressPeer::clearInstancePool();
+        // Invalidate objects in StoreAddressPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        StoreAddressPeer::clearInstancePool();
         // Invalidate objects in UserAddressPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         UserAddressPeer::clearInstancePool();
@@ -986,6 +994,18 @@ abstract class BaseAddressPeer
         $objects = AddressPeer::doSelect($criteria, $con);
         foreach ($objects as $obj) {
 
+
+            // delete related CompanyAddress objects
+            $criteria = new Criteria(CompanyAddressPeer::DATABASE_NAME);
+
+            $criteria->add(CompanyAddressPeer::ADDRESS_ID, $obj->getId());
+            $affectedRows += CompanyAddressPeer::doDelete($criteria, $con);
+
+            // delete related StoreAddress objects
+            $criteria = new Criteria(StoreAddressPeer::DATABASE_NAME);
+
+            $criteria->add(StoreAddressPeer::ADDRESS_ID, $obj->getId());
+            $affectedRows += StoreAddressPeer::doDelete($criteria, $con);
 
             // delete related UserAddress objects
             $criteria = new Criteria(UserAddressPeer::DATABASE_NAME);
