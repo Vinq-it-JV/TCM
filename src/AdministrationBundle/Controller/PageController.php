@@ -6,6 +6,12 @@ use CompanyBundle\Model\Company;
 use CompanyBundle\Model\CompanyQuery;
 use CompanyBundle\Model\Regions;
 use CompanyBundle\Model\RegionsQuery;
+use DeviceBundle\Model\CbInput;
+use DeviceBundle\Model\CbInputQuery;
+use DeviceBundle\Model\ControllerBox;
+use DeviceBundle\Model\ControllerBoxQuery;
+use DeviceBundle\Model\DsTemperatureSensor;
+use DeviceBundle\Model\DsTemperatureSensorQuery;
 use StoreBundle\Model\Store;
 use StoreBundle\Model\StoreQuery;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -20,7 +26,7 @@ class PageController extends Controller
         return $this->render('AdministrationBundle:dashboard:dashboard.html.twig');
     }
 
-    public function usersAction()
+    public function usersAction(Request $request)
     {
         return $this->render('AdministrationBundle:users:users.html.twig');
     }
@@ -29,7 +35,7 @@ class PageController extends Controller
     {
         $user = UserQuery::create()->findOneById($userid);
         if (empty($user))
-            return $this->usersAction();
+            return $this->usersAction($request);
 
         $userArr = $user->getUserDataArray();
 
@@ -47,7 +53,7 @@ class PageController extends Controller
         return $this->render('AdministrationBundle:users:add_user.html.twig', $userArr);
     }
 
-    public function companiesAction()
+    public function companiesAction(Request $request)
     {
         return $this->render('AdministrationBundle:companies:companies.html.twig');
     }
@@ -56,7 +62,7 @@ class PageController extends Controller
     {
         $company = CompanyQuery::create()->findOneById($companyid);
         if (empty($company))
-            return $this->companiesAction();
+            return $this->companiesAction($request);
 
         $companyArr = $company->getCompanyDataArray();
 
@@ -73,7 +79,7 @@ class PageController extends Controller
         return $this->render('AdministrationBundle:companies:add_company.html.twig', $companyArr);
     }
 
-    public function regionsAction()
+    public function regionsAction(Request $request)
     {
         return $this->render('AdministrationBundle:regions:regions.html.twig');
     }
@@ -92,14 +98,14 @@ class PageController extends Controller
     {
         $region = RegionsQuery::create()->findOneById($regionid);
         if (empty($region))
-            return $this->regionsAction();
+            return $this->regionsAction($request);
 
         $regionArr = $region->getRegionDataArray();
 
         return $this->render('AdministrationBundle:regions:edit_region.html.twig', $regionArr);
     }
 
-    public function storesAction()
+    public function storesAction(Request $request)
     {
         return $this->render('AdministrationBundle:stores:stores.html.twig');
     }
@@ -108,7 +114,7 @@ class PageController extends Controller
     {
         $store = StoreQuery::create()->findOneById($storeid);
         if (empty($store))
-            return $this->storesAction();
+            return $this->storesAction($request);
 
         $storeArr = $store->getStoreDataArray();
 
@@ -123,6 +129,55 @@ class PageController extends Controller
         $storeArr = $store->getStoreDataArray();
 
         return $this->render('AdministrationBundle:stores:add_store.html.twig', $storeArr);
+    }
+
+    public function configurationStoresAction(Request $request)
+    {
+        return $this->render('AdministrationBundle:configuration:stores.html.twig');
+    }
+
+    public function editConfigurationStoreAction(Request $request, $storeid)
+    {
+        $store = StoreQuery::create()->findOneById($storeid);
+        if (empty($store))
+            return $this->storesAction($request);
+
+        $storeArr = $store->getStoreDataArray();
+        if (!$store->getDeviceGroups()->isEmpty())
+            foreach ($store->getDeviceGroups() as $group)
+                $storeArr['DeviceGroups'][] = $group->getDeviceGroupDataArray();
+
+        return $this->render('AdministrationBundle:configuration:edit_store.html.twig', $storeArr);
+    }
+
+    public function installationSensorsAction(Request $request)
+    {
+        return $this->render('AdministrationBundle:installation:sensors.html.twig');
+    }
+
+    public function editSensorAction(Request $request, $sensorid, $typeid)
+    {
+        $sensorArr = [];
+
+        switch ($typeid) {
+            case DsTemperatureSensor::TYPE_ID:
+                $sensor = DsTemperatureSensorQuery::create()->findOneById($sensorid);
+                $sensorArr['sensor'] = $sensor->getDsTemperatureSensorDataArray()['dstemperaturesensor'];
+                break;
+            case ControllerBox::TYPE_ID:
+                $controller = ControllerBoxQuery::create()->findOneById($sensorid);
+                $sensorArr['sensor'] = $controller->getControllerBoxDataArray()['controllerbox'];
+                break;
+            case CbInput::TYPE_ID:
+                $input = CbInputQuery::create()->findOneById($sensorid);
+                $sensorArr['sensor'] = $input->getCbInputDataArray()['cbinput'];
+                break;
+        }
+
+        if (empty($sensorArr))
+            return $this->installationSensorsAction($request);
+
+        return $this->render('AdministrationBundle:installation:edit_sensor.html.twig', $sensorArr);
     }
 
 }

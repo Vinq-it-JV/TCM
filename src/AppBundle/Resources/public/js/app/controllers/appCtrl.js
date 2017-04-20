@@ -69,7 +69,6 @@ angular
 
             $scope.showProfile = function () {
 
-                console.log('yes');
                 var modalDefaults = {
                     templateUrl: templatePrefix + "profile.tpl.html"
                 };
@@ -114,7 +113,6 @@ angular
                         address.StreetName = data.street;
                         address.PostalCode = data.zipcode;
                         address.HouseNumber = data.house_number;
-                        console.log(address);
                     }
                 }, function (data) {
                     if ($scope.isValidObject()) {
@@ -166,6 +164,10 @@ angular
 
             $scope.showUrl = function (url) {
                 $window.location.href = url;
+            };
+
+            $scope.reloadPage = function () {
+                $window.location.reload();
             };
 
             $scope.initFail = function (data) {

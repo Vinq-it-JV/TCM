@@ -19,6 +19,14 @@ use CompanyBundle\Model\Company;
 use CompanyBundle\Model\CompanyQuery;
 use CompanyBundle\Model\Regions;
 use CompanyBundle\Model\RegionsQuery;
+use DeviceBundle\Model\CbInput;
+use DeviceBundle\Model\CbInputQuery;
+use DeviceBundle\Model\ControllerBox;
+use DeviceBundle\Model\ControllerBoxQuery;
+use DeviceBundle\Model\DeviceGroup;
+use DeviceBundle\Model\DeviceGroupQuery;
+use DeviceBundle\Model\DsTemperatureSensor;
+use DeviceBundle\Model\DsTemperatureSensorQuery;
 use StoreBundle\Model\Store;
 use StoreBundle\Model\StoreAddress;
 use StoreBundle\Model\StoreAddressQuery;
@@ -145,6 +153,13 @@ abstract class BaseStore extends BaseObject implements Persistent
     protected $coc_number;
 
     /**
+     * The value for the is_maintenance field.
+     * Note: this column has a database default value of: false
+     * @var        boolean
+     */
+    protected $is_maintenance;
+
+    /**
      * The value for the is_enabled field.
      * Note: this column has a database default value of: true
      * @var        boolean
@@ -184,6 +199,30 @@ abstract class BaseStore extends BaseObject implements Persistent
      * @var        Regions
      */
     protected $aRegions;
+
+    /**
+     * @var        PropelObjectCollection|ControllerBox[] Collection to store aggregation of ControllerBox objects.
+     */
+    protected $collControllerBoxen;
+    protected $collControllerBoxenPartial;
+
+    /**
+     * @var        PropelObjectCollection|DeviceGroup[] Collection to store aggregation of DeviceGroup objects.
+     */
+    protected $collDeviceGroups;
+    protected $collDeviceGroupsPartial;
+
+    /**
+     * @var        PropelObjectCollection|DsTemperatureSensor[] Collection to store aggregation of DsTemperatureSensor objects.
+     */
+    protected $collDsTemperatureSensors;
+    protected $collDsTemperatureSensorsPartial;
+
+    /**
+     * @var        PropelObjectCollection|CbInput[] Collection to store aggregation of CbInput objects.
+     */
+    protected $collCbInputs;
+    protected $collCbInputsPartial;
 
     /**
      * @var        PropelObjectCollection|StoreAddress[] Collection to store aggregation of StoreAddress objects.
@@ -311,6 +350,30 @@ abstract class BaseStore extends BaseObject implements Persistent
      * An array of objects scheduled for deletion.
      * @var		PropelObjectCollection
      */
+    protected $controllerBoxenScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $deviceGroupsScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $dsTemperatureSensorsScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $cbInputsScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
     protected $storeAddressesScheduledForDeletion = null;
 
     /**
@@ -351,6 +414,7 @@ abstract class BaseStore extends BaseObject implements Persistent
      */
     public function applyDefaultValues()
     {
+        $this->is_maintenance = false;
         $this->is_enabled = true;
         $this->is_deleted = false;
     }
@@ -506,6 +570,17 @@ abstract class BaseStore extends BaseObject implements Persistent
     {
 
         return $this->coc_number;
+    }
+
+    /**
+     * Get the [is_maintenance] column value.
+     *
+     * @return boolean
+     */
+    public function getIsMaintenance()
+    {
+
+        return $this->is_maintenance;
     }
 
     /**
@@ -896,6 +971,35 @@ abstract class BaseStore extends BaseObject implements Persistent
     } // setCocNumber()
 
     /**
+     * Sets the value of the [is_maintenance] column.
+     * Non-boolean arguments are converted using the following rules:
+     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     *
+     * @param boolean|integer|string $v The new value
+     * @return Store The current object (for fluent API support)
+     */
+    public function setIsMaintenance($v)
+    {
+        if ($v !== null) {
+            if (is_string($v)) {
+                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            } else {
+                $v = (boolean) $v;
+            }
+        }
+
+        if ($this->is_maintenance !== $v) {
+            $this->is_maintenance = $v;
+            $this->modifiedColumns[] = StorePeer::IS_MAINTENANCE;
+        }
+
+
+        return $this;
+    } // setIsMaintenance()
+
+    /**
      * Sets the value of the [is_enabled] column.
      * Non-boolean arguments are converted using the following rules:
      *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
@@ -1009,6 +1113,10 @@ abstract class BaseStore extends BaseObject implements Persistent
      */
     public function hasOnlyDefaultValues()
     {
+            if ($this->is_maintenance !== false) {
+                return false;
+            }
+
             if ($this->is_enabled !== true) {
                 return false;
             }
@@ -1052,10 +1160,11 @@ abstract class BaseStore extends BaseObject implements Persistent
             $this->bank_account_number = ($row[$startcol + 10] !== null) ? (string) $row[$startcol + 10] : null;
             $this->vat_number = ($row[$startcol + 11] !== null) ? (string) $row[$startcol + 11] : null;
             $this->coc_number = ($row[$startcol + 12] !== null) ? (string) $row[$startcol + 12] : null;
-            $this->is_enabled = ($row[$startcol + 13] !== null) ? (boolean) $row[$startcol + 13] : null;
-            $this->is_deleted = ($row[$startcol + 14] !== null) ? (boolean) $row[$startcol + 14] : null;
-            $this->created_at = ($row[$startcol + 15] !== null) ? (string) $row[$startcol + 15] : null;
-            $this->updated_at = ($row[$startcol + 16] !== null) ? (string) $row[$startcol + 16] : null;
+            $this->is_maintenance = ($row[$startcol + 13] !== null) ? (boolean) $row[$startcol + 13] : null;
+            $this->is_enabled = ($row[$startcol + 14] !== null) ? (boolean) $row[$startcol + 14] : null;
+            $this->is_deleted = ($row[$startcol + 15] !== null) ? (boolean) $row[$startcol + 15] : null;
+            $this->created_at = ($row[$startcol + 16] !== null) ? (string) $row[$startcol + 16] : null;
+            $this->updated_at = ($row[$startcol + 17] !== null) ? (string) $row[$startcol + 17] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -1065,7 +1174,7 @@ abstract class BaseStore extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 17; // 17 = StorePeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 18; // 18 = StorePeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Store object", $e);
@@ -1139,6 +1248,14 @@ abstract class BaseStore extends BaseObject implements Persistent
             $this->aCompany = null;
             $this->aStoreType = null;
             $this->aRegions = null;
+            $this->collControllerBoxen = null;
+
+            $this->collDeviceGroups = null;
+
+            $this->collDsTemperatureSensors = null;
+
+            $this->collCbInputs = null;
+
             $this->collStoreAddresses = null;
 
             $this->collStoreEmails = null;
@@ -1474,6 +1591,78 @@ abstract class BaseStore extends BaseObject implements Persistent
                 }
             }
 
+            if ($this->controllerBoxenScheduledForDeletion !== null) {
+                if (!$this->controllerBoxenScheduledForDeletion->isEmpty()) {
+                    foreach ($this->controllerBoxenScheduledForDeletion as $controllerBox) {
+                        // need to save related object because we set the relation to null
+                        $controllerBox->save($con);
+                    }
+                    $this->controllerBoxenScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collControllerBoxen !== null) {
+                foreach ($this->collControllerBoxen as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->deviceGroupsScheduledForDeletion !== null) {
+                if (!$this->deviceGroupsScheduledForDeletion->isEmpty()) {
+                    foreach ($this->deviceGroupsScheduledForDeletion as $deviceGroup) {
+                        // need to save related object because we set the relation to null
+                        $deviceGroup->save($con);
+                    }
+                    $this->deviceGroupsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collDeviceGroups !== null) {
+                foreach ($this->collDeviceGroups as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->dsTemperatureSensorsScheduledForDeletion !== null) {
+                if (!$this->dsTemperatureSensorsScheduledForDeletion->isEmpty()) {
+                    foreach ($this->dsTemperatureSensorsScheduledForDeletion as $dsTemperatureSensor) {
+                        // need to save related object because we set the relation to null
+                        $dsTemperatureSensor->save($con);
+                    }
+                    $this->dsTemperatureSensorsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collDsTemperatureSensors !== null) {
+                foreach ($this->collDsTemperatureSensors as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->cbInputsScheduledForDeletion !== null) {
+                if (!$this->cbInputsScheduledForDeletion->isEmpty()) {
+                    foreach ($this->cbInputsScheduledForDeletion as $cbInput) {
+                        // need to save related object because we set the relation to null
+                        $cbInput->save($con);
+                    }
+                    $this->cbInputsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collCbInputs !== null) {
+                foreach ($this->collCbInputs as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
             if ($this->storeAddressesScheduledForDeletion !== null) {
                 if (!$this->storeAddressesScheduledForDeletion->isEmpty()) {
                     StoreAddressQuery::create()
@@ -1641,6 +1830,9 @@ abstract class BaseStore extends BaseObject implements Persistent
         if ($this->isColumnModified(StorePeer::COC_NUMBER)) {
             $modifiedColumns[':p' . $index++]  = '`coc_number`';
         }
+        if ($this->isColumnModified(StorePeer::IS_MAINTENANCE)) {
+            $modifiedColumns[':p' . $index++]  = '`is_maintenance`';
+        }
         if ($this->isColumnModified(StorePeer::IS_ENABLED)) {
             $modifiedColumns[':p' . $index++]  = '`is_enabled`';
         }
@@ -1702,6 +1894,9 @@ abstract class BaseStore extends BaseObject implements Persistent
                         break;
                     case '`coc_number`':
                         $stmt->bindValue($identifier, $this->coc_number, PDO::PARAM_STR);
+                        break;
+                    case '`is_maintenance`':
+                        $stmt->bindValue($identifier, (int) $this->is_maintenance, PDO::PARAM_INT);
                         break;
                     case '`is_enabled`':
                         $stmt->bindValue($identifier, (int) $this->is_enabled, PDO::PARAM_INT);
@@ -1838,6 +2033,38 @@ abstract class BaseStore extends BaseObject implements Persistent
             }
 
 
+                if ($this->collControllerBoxen !== null) {
+                    foreach ($this->collControllerBoxen as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
+                if ($this->collDeviceGroups !== null) {
+                    foreach ($this->collDeviceGroups as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
+                if ($this->collDsTemperatureSensors !== null) {
+                    foreach ($this->collDsTemperatureSensors as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
+                if ($this->collCbInputs !== null) {
+                    foreach ($this->collCbInputs as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
                 if ($this->collStoreAddresses !== null) {
                     foreach ($this->collStoreAddresses as $referrerFK) {
                         if (!$referrerFK->validate($columns)) {
@@ -1961,15 +2188,18 @@ abstract class BaseStore extends BaseObject implements Persistent
                 return $this->getCocNumber();
                 break;
             case 13:
-                return $this->getIsEnabled();
+                return $this->getIsMaintenance();
                 break;
             case 14:
-                return $this->getIsDeleted();
+                return $this->getIsEnabled();
                 break;
             case 15:
-                return $this->getCreatedAt();
+                return $this->getIsDeleted();
                 break;
             case 16:
+                return $this->getCreatedAt();
+                break;
+            case 17:
                 return $this->getUpdatedAt();
                 break;
             default:
@@ -2014,10 +2244,11 @@ abstract class BaseStore extends BaseObject implements Persistent
             $keys[10] => $this->getBankAccountNumber(),
             $keys[11] => $this->getVatNumber(),
             $keys[12] => $this->getCocNumber(),
-            $keys[13] => $this->getIsEnabled(),
-            $keys[14] => $this->getIsDeleted(),
-            $keys[15] => $this->getCreatedAt(),
-            $keys[16] => $this->getUpdatedAt(),
+            $keys[13] => $this->getIsMaintenance(),
+            $keys[14] => $this->getIsEnabled(),
+            $keys[15] => $this->getIsDeleted(),
+            $keys[16] => $this->getCreatedAt(),
+            $keys[17] => $this->getUpdatedAt(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -2033,6 +2264,18 @@ abstract class BaseStore extends BaseObject implements Persistent
             }
             if (null !== $this->aRegions) {
                 $result['Regions'] = $this->aRegions->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->collControllerBoxen) {
+                $result['ControllerBoxen'] = $this->collControllerBoxen->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collDeviceGroups) {
+                $result['DeviceGroups'] = $this->collDeviceGroups->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collDsTemperatureSensors) {
+                $result['DsTemperatureSensors'] = $this->collDsTemperatureSensors->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collCbInputs) {
+                $result['CbInputs'] = $this->collCbInputs->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collStoreAddresses) {
                 $result['StoreAddresses'] = $this->collStoreAddresses->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
@@ -2126,15 +2369,18 @@ abstract class BaseStore extends BaseObject implements Persistent
                 $this->setCocNumber($value);
                 break;
             case 13:
-                $this->setIsEnabled($value);
+                $this->setIsMaintenance($value);
                 break;
             case 14:
-                $this->setIsDeleted($value);
+                $this->setIsEnabled($value);
                 break;
             case 15:
-                $this->setCreatedAt($value);
+                $this->setIsDeleted($value);
                 break;
             case 16:
+                $this->setCreatedAt($value);
+                break;
+            case 17:
                 $this->setUpdatedAt($value);
                 break;
         } // switch()
@@ -2174,10 +2420,11 @@ abstract class BaseStore extends BaseObject implements Persistent
         if (array_key_exists($keys[10], $arr)) $this->setBankAccountNumber($arr[$keys[10]]);
         if (array_key_exists($keys[11], $arr)) $this->setVatNumber($arr[$keys[11]]);
         if (array_key_exists($keys[12], $arr)) $this->setCocNumber($arr[$keys[12]]);
-        if (array_key_exists($keys[13], $arr)) $this->setIsEnabled($arr[$keys[13]]);
-        if (array_key_exists($keys[14], $arr)) $this->setIsDeleted($arr[$keys[14]]);
-        if (array_key_exists($keys[15], $arr)) $this->setCreatedAt($arr[$keys[15]]);
-        if (array_key_exists($keys[16], $arr)) $this->setUpdatedAt($arr[$keys[16]]);
+        if (array_key_exists($keys[13], $arr)) $this->setIsMaintenance($arr[$keys[13]]);
+        if (array_key_exists($keys[14], $arr)) $this->setIsEnabled($arr[$keys[14]]);
+        if (array_key_exists($keys[15], $arr)) $this->setIsDeleted($arr[$keys[15]]);
+        if (array_key_exists($keys[16], $arr)) $this->setCreatedAt($arr[$keys[16]]);
+        if (array_key_exists($keys[17], $arr)) $this->setUpdatedAt($arr[$keys[17]]);
     }
 
     /**
@@ -2202,6 +2449,7 @@ abstract class BaseStore extends BaseObject implements Persistent
         if ($this->isColumnModified(StorePeer::BANK_ACCOUNT_NUMBER)) $criteria->add(StorePeer::BANK_ACCOUNT_NUMBER, $this->bank_account_number);
         if ($this->isColumnModified(StorePeer::VAT_NUMBER)) $criteria->add(StorePeer::VAT_NUMBER, $this->vat_number);
         if ($this->isColumnModified(StorePeer::COC_NUMBER)) $criteria->add(StorePeer::COC_NUMBER, $this->coc_number);
+        if ($this->isColumnModified(StorePeer::IS_MAINTENANCE)) $criteria->add(StorePeer::IS_MAINTENANCE, $this->is_maintenance);
         if ($this->isColumnModified(StorePeer::IS_ENABLED)) $criteria->add(StorePeer::IS_ENABLED, $this->is_enabled);
         if ($this->isColumnModified(StorePeer::IS_DELETED)) $criteria->add(StorePeer::IS_DELETED, $this->is_deleted);
         if ($this->isColumnModified(StorePeer::CREATED_AT)) $criteria->add(StorePeer::CREATED_AT, $this->created_at);
@@ -2281,6 +2529,7 @@ abstract class BaseStore extends BaseObject implements Persistent
         $copyObj->setBankAccountNumber($this->getBankAccountNumber());
         $copyObj->setVatNumber($this->getVatNumber());
         $copyObj->setCocNumber($this->getCocNumber());
+        $copyObj->setIsMaintenance($this->getIsMaintenance());
         $copyObj->setIsEnabled($this->getIsEnabled());
         $copyObj->setIsDeleted($this->getIsDeleted());
         $copyObj->setCreatedAt($this->getCreatedAt());
@@ -2292,6 +2541,30 @@ abstract class BaseStore extends BaseObject implements Persistent
             $copyObj->setNew(false);
             // store object hash to prevent cycle
             $this->startCopy = true;
+
+            foreach ($this->getControllerBoxen() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addControllerBox($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getDeviceGroups() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addDeviceGroup($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getDsTemperatureSensors() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addDsTemperatureSensor($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getCbInputs() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addCbInput($relObj->copy($deepCopy));
+                }
+            }
 
             foreach ($this->getStoreAddresses() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
@@ -2546,6 +2819,18 @@ abstract class BaseStore extends BaseObject implements Persistent
      */
     public function initRelation($relationName)
     {
+        if ('ControllerBox' == $relationName) {
+            $this->initControllerBoxen();
+        }
+        if ('DeviceGroup' == $relationName) {
+            $this->initDeviceGroups();
+        }
+        if ('DsTemperatureSensor' == $relationName) {
+            $this->initDsTemperatureSensors();
+        }
+        if ('CbInput' == $relationName) {
+            $this->initCbInputs();
+        }
         if ('StoreAddress' == $relationName) {
             $this->initStoreAddresses();
         }
@@ -2564,6 +2849,1031 @@ abstract class BaseStore extends BaseObject implements Persistent
         if ('StoreOwner' == $relationName) {
             $this->initStoreOwners();
         }
+    }
+
+    /**
+     * Clears out the collControllerBoxen collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Store The current object (for fluent API support)
+     * @see        addControllerBoxen()
+     */
+    public function clearControllerBoxen()
+    {
+        $this->collControllerBoxen = null; // important to set this to null since that means it is uninitialized
+        $this->collControllerBoxenPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collControllerBoxen collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialControllerBoxen($v = true)
+    {
+        $this->collControllerBoxenPartial = $v;
+    }
+
+    /**
+     * Initializes the collControllerBoxen collection.
+     *
+     * By default this just sets the collControllerBoxen collection to an empty array (like clearcollControllerBoxen());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initControllerBoxen($overrideExisting = true)
+    {
+        if (null !== $this->collControllerBoxen && !$overrideExisting) {
+            return;
+        }
+        $this->collControllerBoxen = new PropelObjectCollection();
+        $this->collControllerBoxen->setModel('ControllerBox');
+    }
+
+    /**
+     * Gets an array of ControllerBox objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Store is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|ControllerBox[] List of ControllerBox objects
+     * @throws PropelException
+     */
+    public function getControllerBoxen($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collControllerBoxenPartial && !$this->isNew();
+        if (null === $this->collControllerBoxen || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collControllerBoxen) {
+                // return empty collection
+                $this->initControllerBoxen();
+            } else {
+                $collControllerBoxen = ControllerBoxQuery::create(null, $criteria)
+                    ->filterByStore($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collControllerBoxenPartial && count($collControllerBoxen)) {
+                      $this->initControllerBoxen(false);
+
+                      foreach ($collControllerBoxen as $obj) {
+                        if (false == $this->collControllerBoxen->contains($obj)) {
+                          $this->collControllerBoxen->append($obj);
+                        }
+                      }
+
+                      $this->collControllerBoxenPartial = true;
+                    }
+
+                    $collControllerBoxen->getInternalIterator()->rewind();
+
+                    return $collControllerBoxen;
+                }
+
+                if ($partial && $this->collControllerBoxen) {
+                    foreach ($this->collControllerBoxen as $obj) {
+                        if ($obj->isNew()) {
+                            $collControllerBoxen[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collControllerBoxen = $collControllerBoxen;
+                $this->collControllerBoxenPartial = false;
+            }
+        }
+
+        return $this->collControllerBoxen;
+    }
+
+    /**
+     * Sets a collection of ControllerBox objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $controllerBoxen A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Store The current object (for fluent API support)
+     */
+    public function setControllerBoxen(PropelCollection $controllerBoxen, PropelPDO $con = null)
+    {
+        $controllerBoxenToDelete = $this->getControllerBoxen(new Criteria(), $con)->diff($controllerBoxen);
+
+
+        $this->controllerBoxenScheduledForDeletion = $controllerBoxenToDelete;
+
+        foreach ($controllerBoxenToDelete as $controllerBoxRemoved) {
+            $controllerBoxRemoved->setStore(null);
+        }
+
+        $this->collControllerBoxen = null;
+        foreach ($controllerBoxen as $controllerBox) {
+            $this->addControllerBox($controllerBox);
+        }
+
+        $this->collControllerBoxen = $controllerBoxen;
+        $this->collControllerBoxenPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related ControllerBox objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related ControllerBox objects.
+     * @throws PropelException
+     */
+    public function countControllerBoxen(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collControllerBoxenPartial && !$this->isNew();
+        if (null === $this->collControllerBoxen || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collControllerBoxen) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getControllerBoxen());
+            }
+            $query = ControllerBoxQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByStore($this)
+                ->count($con);
+        }
+
+        return count($this->collControllerBoxen);
+    }
+
+    /**
+     * Method called to associate a ControllerBox object to this object
+     * through the ControllerBox foreign key attribute.
+     *
+     * @param    ControllerBox $l ControllerBox
+     * @return Store The current object (for fluent API support)
+     */
+    public function addControllerBox(ControllerBox $l)
+    {
+        if ($this->collControllerBoxen === null) {
+            $this->initControllerBoxen();
+            $this->collControllerBoxenPartial = true;
+        }
+
+        if (!in_array($l, $this->collControllerBoxen->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddControllerBox($l);
+
+            if ($this->controllerBoxenScheduledForDeletion and $this->controllerBoxenScheduledForDeletion->contains($l)) {
+                $this->controllerBoxenScheduledForDeletion->remove($this->controllerBoxenScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	ControllerBox $controllerBox The controllerBox object to add.
+     */
+    protected function doAddControllerBox($controllerBox)
+    {
+        $this->collControllerBoxen[]= $controllerBox;
+        $controllerBox->setStore($this);
+    }
+
+    /**
+     * @param	ControllerBox $controllerBox The controllerBox object to remove.
+     * @return Store The current object (for fluent API support)
+     */
+    public function removeControllerBox($controllerBox)
+    {
+        if ($this->getControllerBoxen()->contains($controllerBox)) {
+            $this->collControllerBoxen->remove($this->collControllerBoxen->search($controllerBox));
+            if (null === $this->controllerBoxenScheduledForDeletion) {
+                $this->controllerBoxenScheduledForDeletion = clone $this->collControllerBoxen;
+                $this->controllerBoxenScheduledForDeletion->clear();
+            }
+            $this->controllerBoxenScheduledForDeletion[]= $controllerBox;
+            $controllerBox->setStore(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Store is new, it will return
+     * an empty collection; or if this Store has previously
+     * been saved, it will retrieve related ControllerBoxen from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Store.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|ControllerBox[] List of ControllerBox objects
+     */
+    public function getControllerBoxenJoinDeviceGroup($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = ControllerBoxQuery::create(null, $criteria);
+        $query->joinWith('DeviceGroup', $join_behavior);
+
+        return $this->getControllerBoxen($query, $con);
+    }
+
+    /**
+     * Clears out the collDeviceGroups collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Store The current object (for fluent API support)
+     * @see        addDeviceGroups()
+     */
+    public function clearDeviceGroups()
+    {
+        $this->collDeviceGroups = null; // important to set this to null since that means it is uninitialized
+        $this->collDeviceGroupsPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collDeviceGroups collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialDeviceGroups($v = true)
+    {
+        $this->collDeviceGroupsPartial = $v;
+    }
+
+    /**
+     * Initializes the collDeviceGroups collection.
+     *
+     * By default this just sets the collDeviceGroups collection to an empty array (like clearcollDeviceGroups());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initDeviceGroups($overrideExisting = true)
+    {
+        if (null !== $this->collDeviceGroups && !$overrideExisting) {
+            return;
+        }
+        $this->collDeviceGroups = new PropelObjectCollection();
+        $this->collDeviceGroups->setModel('DeviceGroup');
+    }
+
+    /**
+     * Gets an array of DeviceGroup objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Store is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|DeviceGroup[] List of DeviceGroup objects
+     * @throws PropelException
+     */
+    public function getDeviceGroups($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collDeviceGroupsPartial && !$this->isNew();
+        if (null === $this->collDeviceGroups || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collDeviceGroups) {
+                // return empty collection
+                $this->initDeviceGroups();
+            } else {
+                $collDeviceGroups = DeviceGroupQuery::create(null, $criteria)
+                    ->filterByStore($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collDeviceGroupsPartial && count($collDeviceGroups)) {
+                      $this->initDeviceGroups(false);
+
+                      foreach ($collDeviceGroups as $obj) {
+                        if (false == $this->collDeviceGroups->contains($obj)) {
+                          $this->collDeviceGroups->append($obj);
+                        }
+                      }
+
+                      $this->collDeviceGroupsPartial = true;
+                    }
+
+                    $collDeviceGroups->getInternalIterator()->rewind();
+
+                    return $collDeviceGroups;
+                }
+
+                if ($partial && $this->collDeviceGroups) {
+                    foreach ($this->collDeviceGroups as $obj) {
+                        if ($obj->isNew()) {
+                            $collDeviceGroups[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collDeviceGroups = $collDeviceGroups;
+                $this->collDeviceGroupsPartial = false;
+            }
+        }
+
+        return $this->collDeviceGroups;
+    }
+
+    /**
+     * Sets a collection of DeviceGroup objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $deviceGroups A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Store The current object (for fluent API support)
+     */
+    public function setDeviceGroups(PropelCollection $deviceGroups, PropelPDO $con = null)
+    {
+        $deviceGroupsToDelete = $this->getDeviceGroups(new Criteria(), $con)->diff($deviceGroups);
+
+
+        $this->deviceGroupsScheduledForDeletion = $deviceGroupsToDelete;
+
+        foreach ($deviceGroupsToDelete as $deviceGroupRemoved) {
+            $deviceGroupRemoved->setStore(null);
+        }
+
+        $this->collDeviceGroups = null;
+        foreach ($deviceGroups as $deviceGroup) {
+            $this->addDeviceGroup($deviceGroup);
+        }
+
+        $this->collDeviceGroups = $deviceGroups;
+        $this->collDeviceGroupsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related DeviceGroup objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related DeviceGroup objects.
+     * @throws PropelException
+     */
+    public function countDeviceGroups(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collDeviceGroupsPartial && !$this->isNew();
+        if (null === $this->collDeviceGroups || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collDeviceGroups) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getDeviceGroups());
+            }
+            $query = DeviceGroupQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByStore($this)
+                ->count($con);
+        }
+
+        return count($this->collDeviceGroups);
+    }
+
+    /**
+     * Method called to associate a DeviceGroup object to this object
+     * through the DeviceGroup foreign key attribute.
+     *
+     * @param    DeviceGroup $l DeviceGroup
+     * @return Store The current object (for fluent API support)
+     */
+    public function addDeviceGroup(DeviceGroup $l)
+    {
+        if ($this->collDeviceGroups === null) {
+            $this->initDeviceGroups();
+            $this->collDeviceGroupsPartial = true;
+        }
+
+        if (!in_array($l, $this->collDeviceGroups->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddDeviceGroup($l);
+
+            if ($this->deviceGroupsScheduledForDeletion and $this->deviceGroupsScheduledForDeletion->contains($l)) {
+                $this->deviceGroupsScheduledForDeletion->remove($this->deviceGroupsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	DeviceGroup $deviceGroup The deviceGroup object to add.
+     */
+    protected function doAddDeviceGroup($deviceGroup)
+    {
+        $this->collDeviceGroups[]= $deviceGroup;
+        $deviceGroup->setStore($this);
+    }
+
+    /**
+     * @param	DeviceGroup $deviceGroup The deviceGroup object to remove.
+     * @return Store The current object (for fluent API support)
+     */
+    public function removeDeviceGroup($deviceGroup)
+    {
+        if ($this->getDeviceGroups()->contains($deviceGroup)) {
+            $this->collDeviceGroups->remove($this->collDeviceGroups->search($deviceGroup));
+            if (null === $this->deviceGroupsScheduledForDeletion) {
+                $this->deviceGroupsScheduledForDeletion = clone $this->collDeviceGroups;
+                $this->deviceGroupsScheduledForDeletion->clear();
+            }
+            $this->deviceGroupsScheduledForDeletion[]= $deviceGroup;
+            $deviceGroup->setStore(null);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Clears out the collDsTemperatureSensors collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Store The current object (for fluent API support)
+     * @see        addDsTemperatureSensors()
+     */
+    public function clearDsTemperatureSensors()
+    {
+        $this->collDsTemperatureSensors = null; // important to set this to null since that means it is uninitialized
+        $this->collDsTemperatureSensorsPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collDsTemperatureSensors collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialDsTemperatureSensors($v = true)
+    {
+        $this->collDsTemperatureSensorsPartial = $v;
+    }
+
+    /**
+     * Initializes the collDsTemperatureSensors collection.
+     *
+     * By default this just sets the collDsTemperatureSensors collection to an empty array (like clearcollDsTemperatureSensors());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initDsTemperatureSensors($overrideExisting = true)
+    {
+        if (null !== $this->collDsTemperatureSensors && !$overrideExisting) {
+            return;
+        }
+        $this->collDsTemperatureSensors = new PropelObjectCollection();
+        $this->collDsTemperatureSensors->setModel('DsTemperatureSensor');
+    }
+
+    /**
+     * Gets an array of DsTemperatureSensor objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Store is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|DsTemperatureSensor[] List of DsTemperatureSensor objects
+     * @throws PropelException
+     */
+    public function getDsTemperatureSensors($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collDsTemperatureSensorsPartial && !$this->isNew();
+        if (null === $this->collDsTemperatureSensors || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collDsTemperatureSensors) {
+                // return empty collection
+                $this->initDsTemperatureSensors();
+            } else {
+                $collDsTemperatureSensors = DsTemperatureSensorQuery::create(null, $criteria)
+                    ->filterByStore($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collDsTemperatureSensorsPartial && count($collDsTemperatureSensors)) {
+                      $this->initDsTemperatureSensors(false);
+
+                      foreach ($collDsTemperatureSensors as $obj) {
+                        if (false == $this->collDsTemperatureSensors->contains($obj)) {
+                          $this->collDsTemperatureSensors->append($obj);
+                        }
+                      }
+
+                      $this->collDsTemperatureSensorsPartial = true;
+                    }
+
+                    $collDsTemperatureSensors->getInternalIterator()->rewind();
+
+                    return $collDsTemperatureSensors;
+                }
+
+                if ($partial && $this->collDsTemperatureSensors) {
+                    foreach ($this->collDsTemperatureSensors as $obj) {
+                        if ($obj->isNew()) {
+                            $collDsTemperatureSensors[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collDsTemperatureSensors = $collDsTemperatureSensors;
+                $this->collDsTemperatureSensorsPartial = false;
+            }
+        }
+
+        return $this->collDsTemperatureSensors;
+    }
+
+    /**
+     * Sets a collection of DsTemperatureSensor objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $dsTemperatureSensors A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Store The current object (for fluent API support)
+     */
+    public function setDsTemperatureSensors(PropelCollection $dsTemperatureSensors, PropelPDO $con = null)
+    {
+        $dsTemperatureSensorsToDelete = $this->getDsTemperatureSensors(new Criteria(), $con)->diff($dsTemperatureSensors);
+
+
+        $this->dsTemperatureSensorsScheduledForDeletion = $dsTemperatureSensorsToDelete;
+
+        foreach ($dsTemperatureSensorsToDelete as $dsTemperatureSensorRemoved) {
+            $dsTemperatureSensorRemoved->setStore(null);
+        }
+
+        $this->collDsTemperatureSensors = null;
+        foreach ($dsTemperatureSensors as $dsTemperatureSensor) {
+            $this->addDsTemperatureSensor($dsTemperatureSensor);
+        }
+
+        $this->collDsTemperatureSensors = $dsTemperatureSensors;
+        $this->collDsTemperatureSensorsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related DsTemperatureSensor objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related DsTemperatureSensor objects.
+     * @throws PropelException
+     */
+    public function countDsTemperatureSensors(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collDsTemperatureSensorsPartial && !$this->isNew();
+        if (null === $this->collDsTemperatureSensors || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collDsTemperatureSensors) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getDsTemperatureSensors());
+            }
+            $query = DsTemperatureSensorQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByStore($this)
+                ->count($con);
+        }
+
+        return count($this->collDsTemperatureSensors);
+    }
+
+    /**
+     * Method called to associate a DsTemperatureSensor object to this object
+     * through the DsTemperatureSensor foreign key attribute.
+     *
+     * @param    DsTemperatureSensor $l DsTemperatureSensor
+     * @return Store The current object (for fluent API support)
+     */
+    public function addDsTemperatureSensor(DsTemperatureSensor $l)
+    {
+        if ($this->collDsTemperatureSensors === null) {
+            $this->initDsTemperatureSensors();
+            $this->collDsTemperatureSensorsPartial = true;
+        }
+
+        if (!in_array($l, $this->collDsTemperatureSensors->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddDsTemperatureSensor($l);
+
+            if ($this->dsTemperatureSensorsScheduledForDeletion and $this->dsTemperatureSensorsScheduledForDeletion->contains($l)) {
+                $this->dsTemperatureSensorsScheduledForDeletion->remove($this->dsTemperatureSensorsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	DsTemperatureSensor $dsTemperatureSensor The dsTemperatureSensor object to add.
+     */
+    protected function doAddDsTemperatureSensor($dsTemperatureSensor)
+    {
+        $this->collDsTemperatureSensors[]= $dsTemperatureSensor;
+        $dsTemperatureSensor->setStore($this);
+    }
+
+    /**
+     * @param	DsTemperatureSensor $dsTemperatureSensor The dsTemperatureSensor object to remove.
+     * @return Store The current object (for fluent API support)
+     */
+    public function removeDsTemperatureSensor($dsTemperatureSensor)
+    {
+        if ($this->getDsTemperatureSensors()->contains($dsTemperatureSensor)) {
+            $this->collDsTemperatureSensors->remove($this->collDsTemperatureSensors->search($dsTemperatureSensor));
+            if (null === $this->dsTemperatureSensorsScheduledForDeletion) {
+                $this->dsTemperatureSensorsScheduledForDeletion = clone $this->collDsTemperatureSensors;
+                $this->dsTemperatureSensorsScheduledForDeletion->clear();
+            }
+            $this->dsTemperatureSensorsScheduledForDeletion[]= $dsTemperatureSensor;
+            $dsTemperatureSensor->setStore(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Store is new, it will return
+     * an empty collection; or if this Store has previously
+     * been saved, it will retrieve related DsTemperatureSensors from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Store.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|DsTemperatureSensor[] List of DsTemperatureSensor objects
+     */
+    public function getDsTemperatureSensorsJoinDeviceGroup($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = DsTemperatureSensorQuery::create(null, $criteria);
+        $query->joinWith('DeviceGroup', $join_behavior);
+
+        return $this->getDsTemperatureSensors($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Store is new, it will return
+     * an empty collection; or if this Store has previously
+     * been saved, it will retrieve related DsTemperatureSensors from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Store.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|DsTemperatureSensor[] List of DsTemperatureSensor objects
+     */
+    public function getDsTemperatureSensorsJoinControllerBox($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = DsTemperatureSensorQuery::create(null, $criteria);
+        $query->joinWith('ControllerBox', $join_behavior);
+
+        return $this->getDsTemperatureSensors($query, $con);
+    }
+
+    /**
+     * Clears out the collCbInputs collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Store The current object (for fluent API support)
+     * @see        addCbInputs()
+     */
+    public function clearCbInputs()
+    {
+        $this->collCbInputs = null; // important to set this to null since that means it is uninitialized
+        $this->collCbInputsPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collCbInputs collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialCbInputs($v = true)
+    {
+        $this->collCbInputsPartial = $v;
+    }
+
+    /**
+     * Initializes the collCbInputs collection.
+     *
+     * By default this just sets the collCbInputs collection to an empty array (like clearcollCbInputs());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initCbInputs($overrideExisting = true)
+    {
+        if (null !== $this->collCbInputs && !$overrideExisting) {
+            return;
+        }
+        $this->collCbInputs = new PropelObjectCollection();
+        $this->collCbInputs->setModel('CbInput');
+    }
+
+    /**
+     * Gets an array of CbInput objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Store is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|CbInput[] List of CbInput objects
+     * @throws PropelException
+     */
+    public function getCbInputs($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collCbInputsPartial && !$this->isNew();
+        if (null === $this->collCbInputs || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collCbInputs) {
+                // return empty collection
+                $this->initCbInputs();
+            } else {
+                $collCbInputs = CbInputQuery::create(null, $criteria)
+                    ->filterByStore($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collCbInputsPartial && count($collCbInputs)) {
+                      $this->initCbInputs(false);
+
+                      foreach ($collCbInputs as $obj) {
+                        if (false == $this->collCbInputs->contains($obj)) {
+                          $this->collCbInputs->append($obj);
+                        }
+                      }
+
+                      $this->collCbInputsPartial = true;
+                    }
+
+                    $collCbInputs->getInternalIterator()->rewind();
+
+                    return $collCbInputs;
+                }
+
+                if ($partial && $this->collCbInputs) {
+                    foreach ($this->collCbInputs as $obj) {
+                        if ($obj->isNew()) {
+                            $collCbInputs[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collCbInputs = $collCbInputs;
+                $this->collCbInputsPartial = false;
+            }
+        }
+
+        return $this->collCbInputs;
+    }
+
+    /**
+     * Sets a collection of CbInput objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $cbInputs A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Store The current object (for fluent API support)
+     */
+    public function setCbInputs(PropelCollection $cbInputs, PropelPDO $con = null)
+    {
+        $cbInputsToDelete = $this->getCbInputs(new Criteria(), $con)->diff($cbInputs);
+
+
+        $this->cbInputsScheduledForDeletion = $cbInputsToDelete;
+
+        foreach ($cbInputsToDelete as $cbInputRemoved) {
+            $cbInputRemoved->setStore(null);
+        }
+
+        $this->collCbInputs = null;
+        foreach ($cbInputs as $cbInput) {
+            $this->addCbInput($cbInput);
+        }
+
+        $this->collCbInputs = $cbInputs;
+        $this->collCbInputsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related CbInput objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related CbInput objects.
+     * @throws PropelException
+     */
+    public function countCbInputs(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collCbInputsPartial && !$this->isNew();
+        if (null === $this->collCbInputs || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collCbInputs) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getCbInputs());
+            }
+            $query = CbInputQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByStore($this)
+                ->count($con);
+        }
+
+        return count($this->collCbInputs);
+    }
+
+    /**
+     * Method called to associate a CbInput object to this object
+     * through the CbInput foreign key attribute.
+     *
+     * @param    CbInput $l CbInput
+     * @return Store The current object (for fluent API support)
+     */
+    public function addCbInput(CbInput $l)
+    {
+        if ($this->collCbInputs === null) {
+            $this->initCbInputs();
+            $this->collCbInputsPartial = true;
+        }
+
+        if (!in_array($l, $this->collCbInputs->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddCbInput($l);
+
+            if ($this->cbInputsScheduledForDeletion and $this->cbInputsScheduledForDeletion->contains($l)) {
+                $this->cbInputsScheduledForDeletion->remove($this->cbInputsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	CbInput $cbInput The cbInput object to add.
+     */
+    protected function doAddCbInput($cbInput)
+    {
+        $this->collCbInputs[]= $cbInput;
+        $cbInput->setStore($this);
+    }
+
+    /**
+     * @param	CbInput $cbInput The cbInput object to remove.
+     * @return Store The current object (for fluent API support)
+     */
+    public function removeCbInput($cbInput)
+    {
+        if ($this->getCbInputs()->contains($cbInput)) {
+            $this->collCbInputs->remove($this->collCbInputs->search($cbInput));
+            if (null === $this->cbInputsScheduledForDeletion) {
+                $this->cbInputsScheduledForDeletion = clone $this->collCbInputs;
+                $this->cbInputsScheduledForDeletion->clear();
+            }
+            $this->cbInputsScheduledForDeletion[]= $cbInput;
+            $cbInput->setStore(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Store is new, it will return
+     * an empty collection; or if this Store has previously
+     * been saved, it will retrieve related CbInputs from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Store.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|CbInput[] List of CbInput objects
+     */
+    public function getCbInputsJoinControllerBox($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = CbInputQuery::create(null, $criteria);
+        $query->joinWith('ControllerBox', $join_behavior);
+
+        return $this->getCbInputs($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Store is new, it will return
+     * an empty collection; or if this Store has previously
+     * been saved, it will retrieve related CbInputs from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Store.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|CbInput[] List of CbInput objects
+     */
+    public function getCbInputsJoinDeviceGroup($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = CbInputQuery::create(null, $criteria);
+        $query->joinWith('DeviceGroup', $join_behavior);
+
+        return $this->getCbInputs($query, $con);
     }
 
     /**
@@ -5224,6 +6534,7 @@ abstract class BaseStore extends BaseObject implements Persistent
         $this->bank_account_number = null;
         $this->vat_number = null;
         $this->coc_number = null;
+        $this->is_maintenance = null;
         $this->is_enabled = null;
         $this->is_deleted = null;
         $this->created_at = null;
@@ -5251,6 +6562,26 @@ abstract class BaseStore extends BaseObject implements Persistent
     {
         if ($deep && !$this->alreadyInClearAllReferencesDeep) {
             $this->alreadyInClearAllReferencesDeep = true;
+            if ($this->collControllerBoxen) {
+                foreach ($this->collControllerBoxen as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collDeviceGroups) {
+                foreach ($this->collDeviceGroups as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collDsTemperatureSensors) {
+                foreach ($this->collDsTemperatureSensors as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collCbInputs) {
+                foreach ($this->collCbInputs as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collStoreAddresses) {
                 foreach ($this->collStoreAddresses as $o) {
                     $o->clearAllReferences($deep);
@@ -5324,6 +6655,22 @@ abstract class BaseStore extends BaseObject implements Persistent
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
 
+        if ($this->collControllerBoxen instanceof PropelCollection) {
+            $this->collControllerBoxen->clearIterator();
+        }
+        $this->collControllerBoxen = null;
+        if ($this->collDeviceGroups instanceof PropelCollection) {
+            $this->collDeviceGroups->clearIterator();
+        }
+        $this->collDeviceGroups = null;
+        if ($this->collDsTemperatureSensors instanceof PropelCollection) {
+            $this->collDsTemperatureSensors->clearIterator();
+        }
+        $this->collDsTemperatureSensors = null;
+        if ($this->collCbInputs instanceof PropelCollection) {
+            $this->collCbInputs->clearIterator();
+        }
+        $this->collCbInputs = null;
         if ($this->collStoreAddresses instanceof PropelCollection) {
             $this->collStoreAddresses->clearIterator();
         }

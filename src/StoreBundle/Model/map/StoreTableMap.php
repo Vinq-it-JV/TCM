@@ -55,6 +55,7 @@ class StoreTableMap extends TableMap
         $this->addColumn('bank_account_number', 'BankAccountNumber', 'VARCHAR', false, 50, null);
         $this->addColumn('vat_number', 'VatNumber', 'VARCHAR', false, 255, null);
         $this->addColumn('coc_number', 'CocNumber', 'VARCHAR', false, 255, null);
+        $this->addColumn('is_maintenance', 'IsMaintenance', 'BOOLEAN', false, 1, false);
         $this->addColumn('is_enabled', 'IsEnabled', 'BOOLEAN', false, 1, true);
         $this->addColumn('is_deleted', 'IsDeleted', 'BOOLEAN', false, 1, false);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
@@ -70,6 +71,10 @@ class StoreTableMap extends TableMap
         $this->addRelation('Company', 'CompanyBundle\\Model\\Company', RelationMap::MANY_TO_ONE, array('main_company' => 'id', ), null, null);
         $this->addRelation('StoreType', 'StoreBundle\\Model\\StoreType', RelationMap::MANY_TO_ONE, array('type' => 'id', ), null, null);
         $this->addRelation('Regions', 'CompanyBundle\\Model\\Regions', RelationMap::MANY_TO_ONE, array('region' => 'id', ), null, null);
+        $this->addRelation('ControllerBox', 'DeviceBundle\\Model\\ControllerBox', RelationMap::ONE_TO_MANY, array('id' => 'main_store', ), null, null, 'ControllerBoxen');
+        $this->addRelation('DeviceGroup', 'DeviceBundle\\Model\\DeviceGroup', RelationMap::ONE_TO_MANY, array('id' => 'main_store', ), null, null, 'DeviceGroups');
+        $this->addRelation('DsTemperatureSensor', 'DeviceBundle\\Model\\DsTemperatureSensor', RelationMap::ONE_TO_MANY, array('id' => 'main_store', ), null, null, 'DsTemperatureSensors');
+        $this->addRelation('CbInput', 'DeviceBundle\\Model\\CbInput', RelationMap::ONE_TO_MANY, array('id' => 'main_store', ), null, null, 'CbInputs');
         $this->addRelation('StoreAddress', 'StoreBundle\\Model\\StoreAddress', RelationMap::ONE_TO_MANY, array('id' => 'store_id', ), 'CASCADE', null, 'StoreAddresses');
         $this->addRelation('StoreEmail', 'StoreBundle\\Model\\StoreEmail', RelationMap::ONE_TO_MANY, array('id' => 'store_id', ), 'CASCADE', null, 'StoreEmails');
         $this->addRelation('StorePhone', 'StoreBundle\\Model\\StorePhone', RelationMap::ONE_TO_MANY, array('id' => 'store_id', ), 'CASCADE', null, 'StorePhones');

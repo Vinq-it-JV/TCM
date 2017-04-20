@@ -172,7 +172,6 @@ angular
                         $scope.users.updRecord(data.contents.user);
                         $scope.users.templateSet(data.contents.template);
                         $scope.users.listsSet(data.contents.lists);
-                        console.log($scope.users.emails().length);
                     }
                     break;
                 case 'deleteUser':

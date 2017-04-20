@@ -5,6 +5,11 @@ namespace AppBundle\Command;
 use CompanyBundle\Model\Company;
 use CompanyBundle\Model\Informant;
 use CompanyBundle\Model\InformantQuery;
+use DeviceBundle\Model\ControllerBox;
+use DeviceBundle\Model\DeviceGroup;
+use DeviceBundle\Model\DeviceGroupQuery;
+use DeviceBundle\Model\DsTemperatureSensor;
+use StoreBundle\Model\StoreQuery;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -37,6 +42,7 @@ class TestCommand extends ContainerAwareCommand {
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln("Test command");
+
         //$this->createUser($output);
         //$this->getUsers($output);
         //$this->getFullUserTemplate($output);
@@ -44,8 +50,54 @@ class TestCommand extends ContainerAwareCommand {
         //$this->userLanguage($output);
         //$this->sendEmail($output);
         //$this->companyTest($output);
-        $this->postcodeApiTest($output);
+        //$this->postcodeApiTest($output);
+        //$this->makeDeviceGroup($output);
+        $this->showDeviceGroup($output);
         $output->writeln("Ready.");
+    }
+
+    protected function showDeviceGroup(OutputInterface $output)
+    {
+
+        $store = StoreQuery::create()
+            ->findOneById(1);
+
+        var_dump($store->getName());
+        $groups = $store->getDeviceGroups();
+
+        foreach ($groups as $group)
+        {
+            var_dump($group->getName());
+            $ds20s = $group->getDsTemperatureSensors();
+            foreach ($ds20s as $ds20)
+                var_dump($ds20->getName());
+        }
+
+    }
+
+    protected function makeDeviceGroup(OutputInterface $output)
+    {
+        $store = StoreQuery::create()
+            ->findOneById(1);
+
+        $group = new DeviceGroup();
+        $group->setName('Bierbar');
+        $group->setDescription('Dit is een lange bierbar');
+        $group->setMainStore($store->getId());
+        $group->save();
+
+        $ds20 = new DsTemperatureSensor();
+        $ds20->setName('Sensor 1');
+        $ds20->setDescription('Sensor 1 test');
+        $ds20->setUid('1234567890');
+        $ds20->setGroup($group->getId());
+        $ds20->save();
+
+        $cbox = new ControllerBox();
+        $cbox->setName('Controller box 1');
+        $cbox->setGroup($group->getId());
+        $cbox->save();
+
     }
 
     protected function postcodeApiTest(OutputInterface $output)

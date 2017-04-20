@@ -18,6 +18,8 @@
     "YES": "Yes",
     "NO": "No",
     "COPY": "Copy",
+    "UNLINK": "Unlink",
+    "REFRESH": "Refresh",
     "ROLE": {
         "USER": "User",
         "ADMIN": "Admin",
@@ -171,7 +173,47 @@
         "OWNERS": "Owners",
         "CONTACTS": "Contacts",
         "INFORMANTS": "Informants",
-        "NOTIFY": "Notify"
+        "NOTIFY": "Notify",
+        "DEVICE_GROUPS": "Groups"
+    },
+    "SENSOR_GROUP": {
+        "LABEL": "Sensor group",
+        "ADD": "Add Group",
+        "NEW_GROUP": "New group",
+        "EDIT_GROUP": "Edit group",
+        "ACTIVE": "Active",
+        "NAME": "Name",
+        "DESCRIPTION": "Description"
+    },
+    "CONFIGURATION": {
+        "LABEL": "Configuration",
+        "STORES": "Stores",
+        "INSTALLATION": "Installation"
+    },
+    "SENSOR": {
+        "LABEL": "Sensor",
+        "STORE": "Store",
+        "ACTIVE": "Active",
+        "EDIT_SENSOR": "Edit sensor",
+        "UID": "UID Number",
+        "NAME": "Name",
+        "INPUT_NUMBER": "Input",
+        "OUTPUT_NUMBER": "Output",
+        "DESCRIPTION": "Description",
+        "TRIP_LOW": "Trip low",
+        "TRIP_HIGH": "Trip high",
+        "SWITCH_WHEN": "Switch when",
+        "HIGH": "High",
+        "LOW": "Low"
+    },
+    "INSTALLATION": {
+        "LABEL": "Installation",
+        "SENSORS": "Sensors",
+        "NAME": "Name",
+        "NUMBER": "#",
+        "UID": "Uid",
+        "TYPE": "Type",
+        "ACTIVE": "Active"
     },
     "REGIONS": {
         "LABEL": "Regions",
@@ -187,7 +229,9 @@
         "DELETE_COMPANY": "Delete company?",
         "DELETE_REGION": "Delete region?",
         "DELETE_STORE": "Delete store?",
-        "COPY_COMPANY_DATA": "Copy all company data?"
+        "COPY_COMPANY_DATA": "Copy all company data?",
+        "DELETE_GROUP": "Delete group?",
+        "UNLINK_SENSOR": "Unlink sensor / device from store?"
     },
     "AUTH": {
         "USERNAME": "Username",

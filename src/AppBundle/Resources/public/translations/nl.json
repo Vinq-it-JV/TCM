@@ -18,6 +18,8 @@
     "YES": "Ja",
     "NO": "Nee",
     "COPY": "Kopieer",
+    "UNLINK": "Loskoppelen",
+    "REFRESH": "Verversen",
     "ROLE": {
         "USER": "Gebruiker",
         "ADMIN": "Admin",
@@ -171,7 +173,47 @@
         "OWNERS": "Eigenaren",
         "CONTACTS": "Contactpersonen",
         "INFORMANTS": "Informanten",
-        "NOTIFY": "Notificeer"
+        "NOTIFY": "Notificeer",
+        "DEVICE_GROUPS": "Groepen"
+    },
+    "SENSOR_GROUP": {
+        "LABEL": "Sensor groep",
+        "ADD": "Groep toevoegen",
+        "NEW_GROUP": "Nieuwe groep",
+        "EDIT_GROUP": "Groep bewerken",
+        "ACTIVE": "Actief",
+        "NAME": "Naam",
+        "DESCRIPTION": "Omschrijving"
+    },
+    "CONFIGURATION": {
+        "LABEL": "Configuratie",
+        "STORES": "Filialen",
+        "INSTALLATION": "Installatie"
+    },
+    "SENSOR": {
+        "LABEL": "Sensor",
+        "STORE": "Filiaal",
+        "ACTIVE": "Actief",
+        "EDIT_SENSOR": "Sensor bewerken",
+        "UID": "UID Number",
+        "NAME": "Naam",
+        "INPUT_NUMBER": "Ingang",
+        "OUTPUT_NUMBER": "Uitgang",
+        "DESCRIPTION": "Omschrijving",
+        "TRIP_LOW": "Omslag laag",
+        "TRIP_HIGH": "Omslag hoog",
+        "SWITCH_WHEN": "Schakel als",
+        "HIGH": "Hoog",
+        "LOW": "Laag"
+    },
+    "INSTALLATION": {
+        "LABEL": "Installatie",
+        "SENSORS": "Sensors",
+        "NAME": "Naam",
+        "NUMBER": "#",
+        "UID": "Uid",
+        "TYPE": "Type",
+        "ACTIVE": "Actief"
     },
     "REGIONS": {
         "LABEL": "Regio's",
@@ -187,7 +229,9 @@
         "DELETE_COMPANY": "Bedrijf verwijderen?",
         "DELETE_REGION": "Regio verwijderen?",
         "DELETE_STORE": "Filiaal verwijderen?",
-        "COPY_COMPANY_DATA": "Bedrijfsdata kopiëren?"
+        "COPY_COMPANY_DATA": "Bedrijfsdata kopiëren?",
+        "DELETE_GROUP": "Groep verwijderen?",
+        "UNLINK_SENSOR": "Sensor loskoppelen van filiaal?"
     },
     "AUTH": {
         "USERNAME": "Gebruikersnaam",

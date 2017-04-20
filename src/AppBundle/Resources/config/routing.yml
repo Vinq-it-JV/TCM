@@ -11,3 +11,11 @@ tcm_profile_change_password:
     defaults: { _controller: UserBundle:Security:changePassword }
     options:
         expose: true
+
+tcm_data_collector:
+    path:     /data/collector
+    #methods:  [PUT, POST]
+    defaults: { _controller: DataCollectorBundle:Data:collectData }
+    options:
+        expose: true
+

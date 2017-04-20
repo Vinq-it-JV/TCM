@@ -14,6 +14,10 @@ use \PropelObjectCollection;
 use \PropelPDO;
 use CompanyBundle\Model\Company;
 use CompanyBundle\Model\Regions;
+use DeviceBundle\Model\CbInput;
+use DeviceBundle\Model\ControllerBox;
+use DeviceBundle\Model\DeviceGroup;
+use DeviceBundle\Model\DsTemperatureSensor;
 use StoreBundle\Model\Store;
 use StoreBundle\Model\StoreAddress;
 use StoreBundle\Model\StoreContact;
@@ -43,6 +47,7 @@ use UserBundle\Model\User;
  * @method StoreQuery orderByBankAccountNumber($order = Criteria::ASC) Order by the bank_account_number column
  * @method StoreQuery orderByVatNumber($order = Criteria::ASC) Order by the vat_number column
  * @method StoreQuery orderByCocNumber($order = Criteria::ASC) Order by the coc_number column
+ * @method StoreQuery orderByIsMaintenance($order = Criteria::ASC) Order by the is_maintenance column
  * @method StoreQuery orderByIsEnabled($order = Criteria::ASC) Order by the is_enabled column
  * @method StoreQuery orderByIsDeleted($order = Criteria::ASC) Order by the is_deleted column
  * @method StoreQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
@@ -61,6 +66,7 @@ use UserBundle\Model\User;
  * @method StoreQuery groupByBankAccountNumber() Group by the bank_account_number column
  * @method StoreQuery groupByVatNumber() Group by the vat_number column
  * @method StoreQuery groupByCocNumber() Group by the coc_number column
+ * @method StoreQuery groupByIsMaintenance() Group by the is_maintenance column
  * @method StoreQuery groupByIsEnabled() Group by the is_enabled column
  * @method StoreQuery groupByIsDeleted() Group by the is_deleted column
  * @method StoreQuery groupByCreatedAt() Group by the created_at column
@@ -81,6 +87,22 @@ use UserBundle\Model\User;
  * @method StoreQuery leftJoinRegions($relationAlias = null) Adds a LEFT JOIN clause to the query using the Regions relation
  * @method StoreQuery rightJoinRegions($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Regions relation
  * @method StoreQuery innerJoinRegions($relationAlias = null) Adds a INNER JOIN clause to the query using the Regions relation
+ *
+ * @method StoreQuery leftJoinControllerBox($relationAlias = null) Adds a LEFT JOIN clause to the query using the ControllerBox relation
+ * @method StoreQuery rightJoinControllerBox($relationAlias = null) Adds a RIGHT JOIN clause to the query using the ControllerBox relation
+ * @method StoreQuery innerJoinControllerBox($relationAlias = null) Adds a INNER JOIN clause to the query using the ControllerBox relation
+ *
+ * @method StoreQuery leftJoinDeviceGroup($relationAlias = null) Adds a LEFT JOIN clause to the query using the DeviceGroup relation
+ * @method StoreQuery rightJoinDeviceGroup($relationAlias = null) Adds a RIGHT JOIN clause to the query using the DeviceGroup relation
+ * @method StoreQuery innerJoinDeviceGroup($relationAlias = null) Adds a INNER JOIN clause to the query using the DeviceGroup relation
+ *
+ * @method StoreQuery leftJoinDsTemperatureSensor($relationAlias = null) Adds a LEFT JOIN clause to the query using the DsTemperatureSensor relation
+ * @method StoreQuery rightJoinDsTemperatureSensor($relationAlias = null) Adds a RIGHT JOIN clause to the query using the DsTemperatureSensor relation
+ * @method StoreQuery innerJoinDsTemperatureSensor($relationAlias = null) Adds a INNER JOIN clause to the query using the DsTemperatureSensor relation
+ *
+ * @method StoreQuery leftJoinCbInput($relationAlias = null) Adds a LEFT JOIN clause to the query using the CbInput relation
+ * @method StoreQuery rightJoinCbInput($relationAlias = null) Adds a RIGHT JOIN clause to the query using the CbInput relation
+ * @method StoreQuery innerJoinCbInput($relationAlias = null) Adds a INNER JOIN clause to the query using the CbInput relation
  *
  * @method StoreQuery leftJoinStoreAddress($relationAlias = null) Adds a LEFT JOIN clause to the query using the StoreAddress relation
  * @method StoreQuery rightJoinStoreAddress($relationAlias = null) Adds a RIGHT JOIN clause to the query using the StoreAddress relation
@@ -121,6 +143,7 @@ use UserBundle\Model\User;
  * @method Store findOneByBankAccountNumber(string $bank_account_number) Return the first Store filtered by the bank_account_number column
  * @method Store findOneByVatNumber(string $vat_number) Return the first Store filtered by the vat_number column
  * @method Store findOneByCocNumber(string $coc_number) Return the first Store filtered by the coc_number column
+ * @method Store findOneByIsMaintenance(boolean $is_maintenance) Return the first Store filtered by the is_maintenance column
  * @method Store findOneByIsEnabled(boolean $is_enabled) Return the first Store filtered by the is_enabled column
  * @method Store findOneByIsDeleted(boolean $is_deleted) Return the first Store filtered by the is_deleted column
  * @method Store findOneByCreatedAt(string $created_at) Return the first Store filtered by the created_at column
@@ -139,6 +162,7 @@ use UserBundle\Model\User;
  * @method array findByBankAccountNumber(string $bank_account_number) Return Store objects filtered by the bank_account_number column
  * @method array findByVatNumber(string $vat_number) Return Store objects filtered by the vat_number column
  * @method array findByCocNumber(string $coc_number) Return Store objects filtered by the coc_number column
+ * @method array findByIsMaintenance(boolean $is_maintenance) Return Store objects filtered by the is_maintenance column
  * @method array findByIsEnabled(boolean $is_enabled) Return Store objects filtered by the is_enabled column
  * @method array findByIsDeleted(boolean $is_deleted) Return Store objects filtered by the is_deleted column
  * @method array findByCreatedAt(string $created_at) Return Store objects filtered by the created_at column
@@ -248,7 +272,7 @@ abstract class BaseStoreQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `main_company`, `name`, `description`, `type`, `code`, `website`, `region`, `remarks`, `payment_method`, `bank_account_number`, `vat_number`, `coc_number`, `is_enabled`, `is_deleted`, `created_at`, `updated_at` FROM `store` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `main_company`, `name`, `description`, `type`, `code`, `website`, `region`, `remarks`, `payment_method`, `bank_account_number`, `vat_number`, `coc_number`, `is_maintenance`, `is_enabled`, `is_deleted`, `created_at`, `updated_at` FROM `store` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -786,6 +810,33 @@ abstract class BaseStoreQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query on the is_maintenance column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByIsMaintenance(true); // WHERE is_maintenance = true
+     * $query->filterByIsMaintenance('yes'); // WHERE is_maintenance = true
+     * </code>
+     *
+     * @param     boolean|string $isMaintenance The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return StoreQuery The current query, for fluid interface
+     */
+    public function filterByIsMaintenance($isMaintenance = null, $comparison = null)
+    {
+        if (is_string($isMaintenance)) {
+            $isMaintenance = in_array(strtolower($isMaintenance), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+
+        return $this->addUsingAlias(StorePeer::IS_MAINTENANCE, $isMaintenance, $comparison);
+    }
+
+    /**
      * Filter the query on the is_enabled column
      *
      * Example usage:
@@ -1151,6 +1202,302 @@ abstract class BaseStoreQuery extends ModelCriteria
         return $this
             ->joinRegions($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Regions', '\CompanyBundle\Model\RegionsQuery');
+    }
+
+    /**
+     * Filter the query by a related ControllerBox object
+     *
+     * @param   ControllerBox|PropelObjectCollection $controllerBox  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 StoreQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByControllerBox($controllerBox, $comparison = null)
+    {
+        if ($controllerBox instanceof ControllerBox) {
+            return $this
+                ->addUsingAlias(StorePeer::ID, $controllerBox->getMainStore(), $comparison);
+        } elseif ($controllerBox instanceof PropelObjectCollection) {
+            return $this
+                ->useControllerBoxQuery()
+                ->filterByPrimaryKeys($controllerBox->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByControllerBox() only accepts arguments of type ControllerBox or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the ControllerBox relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return StoreQuery The current query, for fluid interface
+     */
+    public function joinControllerBox($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('ControllerBox');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'ControllerBox');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the ControllerBox relation ControllerBox object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   \DeviceBundle\Model\ControllerBoxQuery A secondary query class using the current class as primary query
+     */
+    public function useControllerBoxQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinControllerBox($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'ControllerBox', '\DeviceBundle\Model\ControllerBoxQuery');
+    }
+
+    /**
+     * Filter the query by a related DeviceGroup object
+     *
+     * @param   DeviceGroup|PropelObjectCollection $deviceGroup  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 StoreQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByDeviceGroup($deviceGroup, $comparison = null)
+    {
+        if ($deviceGroup instanceof DeviceGroup) {
+            return $this
+                ->addUsingAlias(StorePeer::ID, $deviceGroup->getMainStore(), $comparison);
+        } elseif ($deviceGroup instanceof PropelObjectCollection) {
+            return $this
+                ->useDeviceGroupQuery()
+                ->filterByPrimaryKeys($deviceGroup->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByDeviceGroup() only accepts arguments of type DeviceGroup or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the DeviceGroup relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return StoreQuery The current query, for fluid interface
+     */
+    public function joinDeviceGroup($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('DeviceGroup');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'DeviceGroup');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the DeviceGroup relation DeviceGroup object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   \DeviceBundle\Model\DeviceGroupQuery A secondary query class using the current class as primary query
+     */
+    public function useDeviceGroupQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinDeviceGroup($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'DeviceGroup', '\DeviceBundle\Model\DeviceGroupQuery');
+    }
+
+    /**
+     * Filter the query by a related DsTemperatureSensor object
+     *
+     * @param   DsTemperatureSensor|PropelObjectCollection $dsTemperatureSensor  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 StoreQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByDsTemperatureSensor($dsTemperatureSensor, $comparison = null)
+    {
+        if ($dsTemperatureSensor instanceof DsTemperatureSensor) {
+            return $this
+                ->addUsingAlias(StorePeer::ID, $dsTemperatureSensor->getMainStore(), $comparison);
+        } elseif ($dsTemperatureSensor instanceof PropelObjectCollection) {
+            return $this
+                ->useDsTemperatureSensorQuery()
+                ->filterByPrimaryKeys($dsTemperatureSensor->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByDsTemperatureSensor() only accepts arguments of type DsTemperatureSensor or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the DsTemperatureSensor relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return StoreQuery The current query, for fluid interface
+     */
+    public function joinDsTemperatureSensor($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('DsTemperatureSensor');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'DsTemperatureSensor');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the DsTemperatureSensor relation DsTemperatureSensor object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   \DeviceBundle\Model\DsTemperatureSensorQuery A secondary query class using the current class as primary query
+     */
+    public function useDsTemperatureSensorQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinDsTemperatureSensor($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'DsTemperatureSensor', '\DeviceBundle\Model\DsTemperatureSensorQuery');
+    }
+
+    /**
+     * Filter the query by a related CbInput object
+     *
+     * @param   CbInput|PropelObjectCollection $cbInput  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 StoreQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByCbInput($cbInput, $comparison = null)
+    {
+        if ($cbInput instanceof CbInput) {
+            return $this
+                ->addUsingAlias(StorePeer::ID, $cbInput->getMainStore(), $comparison);
+        } elseif ($cbInput instanceof PropelObjectCollection) {
+            return $this
+                ->useCbInputQuery()
+                ->filterByPrimaryKeys($cbInput->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByCbInput() only accepts arguments of type CbInput or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the CbInput relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return StoreQuery The current query, for fluid interface
+     */
+    public function joinCbInput($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('CbInput');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'CbInput');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the CbInput relation CbInput object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   \DeviceBundle\Model\CbInputQuery A secondary query class using the current class as primary query
+     */
+    public function useCbInputQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinCbInput($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'CbInput', '\DeviceBundle\Model\CbInputQuery');
     }
 
     /**

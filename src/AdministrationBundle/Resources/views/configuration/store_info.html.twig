@@ -1,0 +1,25 @@
+<div class="panel-body">
+    <div class="well">
+        {% verbatim %}
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-2 col-xs-2" ng-cloak><label>{{ 'COMPANY.LABEL' | translate }}:</label></div>
+                <div class="col-md-10 col-xs-10" ng-cloak>{{ stores.store().MainCompany.Name }}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-2 col-xs-2" ng-cloak><label>{{ 'STORE.NAME' | translate }}:</label></div>
+                <div class="col-md-10 col-xs-10" ng-cloak>{{ stores.store().Name }}</div>
+            </div>
+            <div class="row" ng-repeat="address in stores.store().Addresses" ng-if="address.Type.Id == 2">
+                <div class="col-md-2 col-xs-2" ng-cloak><label>{{ 'STORE.ADDRESS' | translate }}:</label></div>
+                <div class="col-md-10 col-xs-10" ng-cloak>
+                        {{ address.StreetName }} {{ address.HouseNumber }} <br>
+                        {{ address.PostalCode }} <br>
+                        {{ address.City }} <br>
+                        {{ address.Country.Name | translate }}
+                </div>
+            </div>
+        </div>
+        {% endverbatim %}
+    </div>
+</div>

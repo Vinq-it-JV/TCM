@@ -1,3 +1,11 @@
+data_collector:
+    resource: "@DataCollectorBundle/Resources/config/routing.yml"
+    prefix:   /
+
+device:
+    resource: "@DeviceBundle/Resources/config/routing.yml"
+    prefix:   /
+
 store:
     resource: "@StoreBundle/Resources/config/routing.yml"
     prefix:   /

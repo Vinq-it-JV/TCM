@@ -1,0 +1,98 @@
+{% extends 'base.html.twig' %}
+
+{% block contents %}
+    {% if app.user %}
+        <div ng-controller="installationCtrl" ng-init="getSensors()">
+            {% block header %}
+                {% include 'AdministrationBundle:header:header.html.twig' %}
+            {% endblock %}
+            {% block page %}
+                <div class="page">
+                    <div class="container">
+                        <div class="row">
+                            <div class="panel-body">
+                                <h4 ng-cloak>
+                                    <i class="fa fa-sitemap"></i> {{ ng.translate('INSTALLATION.SENSORS') }}
+                                </h4>
+                                <hr/>
+                                <div class="well">
+                                    <section st-table="sensorsCollection" st-safe-src="sensors.sensors()">
+                                        <div class="row">
+                                            <div class="col-md-3 col-xs-6">
+                                                <input st-search class="form-control input-sm"
+                                                       placeholder="{{ ng.translate('SEARCH') }}" type="text" ng-cloak/>
+                                            </div>
+                                        </div>
+                                        <br/>
+                                        <div class="row">
+                                            <div class="col-md-12 col-xs-12">
+                                                <table class="table table-striped table-bordered">
+                                                    <thead>
+                                                    <tr>
+                                                        <th st-sort="TypeId" class="st-sortable col-md-1 col-xs-1"
+                                                            ng-cloak>{{ ng.translate('INSTALLATION.TYPE') }}</th>
+                                                        <th st-sort="Name" class="st-sortable col-md-3 col-xs-3"
+                                                            ng-cloak>{{ ng.translate('INSTALLATION.NAME') }}</th>
+                                                        <th st-sort="Name" class="st-sortable col-md-1 col-xs-1"
+                                                            ng-cloak>{{ ng.translate('INSTALLATION.NUMBER') }}</th>
+                                                        <th st-sort="Uid" class="st-sortable col-md-3 col-xs-3"
+                                                            ng-cloak>{{ ng.translate('INSTALLATION.UID') }}</th>
+                                                        <th st-sort="IsEnabled" class="st-sortable col-md-2 col-xs-2 text-right"
+                                                            ng-cloak>{{ ng.translate('INSTALLATION.ACTIVE') }}</th>
+                                                        <th class="st-nosort col-md-2 col-xs-2 text-right"
+                                                            ng-cloak>{{ ng.translate('ACTION') }}</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {% verbatim %}
+                                                        <tr ng-repeat="sensor in sensorsCollection">
+                                                            <td ng-cloak><i class="fa fa-fw fa-2x" ng-class="{ 'fa-cog':sensor.TypeId == 2, 'fa-thermometer':sensor.TypeId == 3, 'fa-sign-in':sensor.TypeId == 4 }"></i></td>
+                                                            <td ng-cloak>{{ sensor.Name }}</td>
+                                                            <td ng-cloak>
+                                                                <div ng-show="sensor.TypeId==3">{{ sensor.OutputNumber }}</div>
+                                                                <div ng-show="sensor.TypeId==4">{{ sensor.InputNumber }}</div>
+                                                            </td>
+                                                            <td ng-cloak>{{ sensor.Uid }}</td>
+                                                            <td ng-cloak class="text-right">
+                                                                <label class="label label-success tag-label" ng-show="sensor.IsEnabled">{{ 'YES' | translate }}</label>
+                                                                <label class="label label-danger tag-label" ng-hide="sensor.IsEnabled">{{ 'NO' | translate }}</label>
+                                                            </td>
+                                                            <td>
+                                                                <div class="pull-right">
+                                                                    <button type="button" ng-click="editSensor(sensor.Id, sensor.TypeId)"
+                                                                            class="btn btn-xs btn-primary">
+                                                                        <i class="fa fa-pencil"></i>
+                                                                    </button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        {% endverbatim %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </section>
+                                </div>
+                            </div>
+                            <div class="panel-footer">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <button ng-click="reloadPage()" class="btn btn-sm btn-primary pull-left">
+                                            <i class="fa fa-refresh" ng-cloak></i> {{ ng.translate('REFRESH') }}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endblock %}
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('bundles/app/js/app/controllers/installationCtrl.js') }}"></script>
+    <script src="{{ asset('bundles/app/js/app/datasets/sensors.js') }}"></script>
+{% endblock %}
+

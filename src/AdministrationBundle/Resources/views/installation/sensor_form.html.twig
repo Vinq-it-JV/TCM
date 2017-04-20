@@ -1,0 +1,112 @@
+<form class="form-horizontal" method="post" name="sensorForm"
+      action="{{ url('installation_sensor_save', { 'sensorid' : sensor.Id, 'typeid' : sensor.TypeId }) }}" novalidate>
+    <div class="panel-body">
+        <div class="well" ng-form="sensorDataForm">
+            {# Sensor information block #}
+            <input name="Id" type="hidden" value="{{ sensor.Id }}"/>
+            <input name="TypeId" type="hidden" value="{{ sensor.TypeId }}"/>
+            <div class="form-group">
+                <label class="control-label col-md-2"
+                       ng-cloak>{{ ng.translate('SENSOR.ACTIVE') }}</label>
+                <div class="col-md-2">
+                    {% verbatim %}
+                    <input type="hidden" name="IsEnabled" value="{{ sensors.sensor().IsEnabled }}">
+                    <toggle-switch
+                            class="switch-small switch-success"
+                            off-class="switch-small switch-danger"
+                            ng-model="sensors.sensor().IsEnabled"
+                            on-label="{{ 'YES' | translate }}"
+                            off-label="{{ 'NO' | translate }}" ng-cloak>
+                    </toggle-switch>
+                    {% endverbatim %}
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-2"
+                       ng-cloak>{{ ng.translate('SENSOR.STORE') }}</label>
+                <div class="col-md-6">
+                    {% verbatim %}
+                    <input type="hidden" name="Store" value="{{ sensors.sensor().MainStore.Id }}">
+                    <ui-select ng-model="sensors.sensor().MainStore" search-enabled="true" theme="select2" style="width:100%;" name="StoreSelect" validation="required">
+                        <ui-select-match placeholder="{{ 'SELECT' | translate }}" ng-cloak>
+                            {{ $select.selected.Name }}
+                        </ui-select-match>
+                        <ui-select-choices group-by="'CompanyName'" repeat="item in sensors.lists().stores | filter: {Name:$select.search}" ng-cloak>
+                            <div ng-bind-html="item.Name | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                    {% endverbatim %}
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-2"
+                       ng-cloak>{{ ng.translate('SENSOR.NAME') }}</label>
+                <div class="col-md-6">
+                    <input class="form-control input-sm" name="Name" type="text"
+                           ng-model="sensors.sensor().Name" validation="min_len:3|required" no-enter/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-2"
+                       ng-cloak>{{ ng.translate('SENSOR.DESCRIPTION') }}</label>
+                <div class="col-md-10">
+                        <textarea class="form-control input-sm no-resize" name="Description"
+                                  ng-model="sensors.sensor().Description" rows="5"></textarea>
+                </div>
+            </div>
+            <div ng-switch="sensors.sensor().TypeId">
+                <div ng-switch-when="3">
+                    <div class="form-group">
+                        <label class="control-label col-md-2"
+                               ng-cloak>{{ ng.translate('SENSOR.TRIP_LOW') }}</label>
+                        <div class="col-md-2">
+                            <input type="hidden" name="LowLimit" value="sensors.sensor().LowLimit">
+                            <input class="form-control input-sm" name="LowLimit" type="text"
+                                   ng-model="sensors.sensor().LowLimit" validation="integer_signed|required" no-enter/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-2"
+                               ng-cloak>{{ ng.translate('SENSOR.TRIP_HIGH') }}</label>
+                        <div class="col-md-2">
+                            <input type="hidden" name="HighLimit" value="sensors.sensor().HighLimit">
+                            <input class="form-control input-sm" name="HighLimit" type="text"
+                                   ng-model="sensors.sensor().HighLimit" validation="integer_signed|required" no-enter/>
+                        </div>
+                    </div>
+                </div>
+                <div ng-switch-when="4">
+                    <div class="form-group">
+                        <label class="control-label col-md-2"
+                               ng-cloak>{{ ng.translate('SENSOR.SWITCH_WHEN') }}</label>
+                        <div class="col-md-2">
+                            {% verbatim %}
+                            <input type="hidden" name="SwitchWhen" value="{{ sensors.sensor().SwitchWhen }}">
+                            <toggle-switch
+                                    class="switch-small switch-danger"
+                                    ng-model="sensors.sensor().SwitchWhen"
+                                    on-label="{{ 'SENSOR.HIGH' | translate }}"
+                                    off-label="{{ 'SENSOR.LOW' | translate }}" ng-cloak>
+                            </toggle-switch>
+                            {% endverbatim %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# Submit form block #}
+    <div class="panel-footer">
+        <div class="row">
+            <div class="col-md-12">
+                <a href="{{ path('configuration_installation') }}" class="btn btn-sm btn-default pull-left"
+                   ng-click="BE.showLoader(true)"><i class="fa fa-close" ng-cloak></i> {{ ng.translate('CANCEL') }}</a>
+                <button type="submit" class="btn btn-sm btn-success pull-right" ng-click="BE.showLoader(true)"
+                        ng-disabled="sensorForm.$invalid" ng-cloak>
+                    <i class="fa fa-floppy-o"></i> {{ ng.translate('SAVE') }}
+                </button>
+            </div>
+        </div>
+    </div>
+</form>

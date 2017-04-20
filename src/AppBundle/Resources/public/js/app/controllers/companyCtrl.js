@@ -181,9 +181,6 @@ angular
                         $scope.companies.updRecord(data.contents.company);
                         $scope.companies.templateSet(data.contents.template);
                         $scope.companies.listsSet(data.contents.lists);
-                        console.log(data.contents.company);
-                        console.log(data.contents.lists);
-                        console.log(data.contents.template);
                     }
                     break;
                 case 'deleteCompany':

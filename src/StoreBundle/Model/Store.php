@@ -51,6 +51,24 @@ class Store extends BaseStore
             foreach ($this->getInformants() as $informant)
                 $data['store']['Informants'][] = $informant->getUserDataArray()['user'];
 
+
+        unset($data['store']['CreatedAt']);
+        unset($data['store']['UpdatedAt']);
+
+        return $data;
+    }
+
+    /**
+     * Get store list array (for ui-select store / company)
+     * @return array
+     */
+    public function getStoreListArray()
+    {
+        $data = [];
+        $data['store'] = $this->toArray();
+        $data['store']['Name'] = $this->getName();
+        $data['store']['CompanyName'] = $this->getMainCompany()['Name'];
+
         unset($data['store']['CreatedAt']);
         unset($data['store']['UpdatedAt']);
 
@@ -167,6 +185,18 @@ class Store extends BaseStore
         foreach ($this->getContacts() as $contact)
             $contactArr[] = $contact->getId();
         return $contactArr;
+    }
+
+    /**
+     * getDeviceGroupsIdArray()
+     * @return array
+     */
+    public function getDeviceGroupsIdArray()
+    {
+        $groupsArr = [];
+        foreach ($this->getDeviceGroups() as $group)
+            $groupsArr[] = $group->getId();
+        return $groupsArr;
     }
 
     /**

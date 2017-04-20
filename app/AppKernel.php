@@ -23,6 +23,8 @@ class AppKernel extends Kernel
             new CompanyBundle\CompanyBundle(),
             new Usoft\PostcodeBundle\UsoftPostcodeBundle(),
             new StoreBundle\StoreBundle(),
+            new DeviceBundle\DeviceBundle(),
+            new DataCollectorBundle\DataCollectorBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'), true)) {

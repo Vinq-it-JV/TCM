@@ -6,6 +6,8 @@ imports:
     - { resource: "@AdministrationBundle/Resources/config/services.yml" }
     - { resource: "@CompanyBundle/Resources/config/services.yml" }
     - { resource: "@StoreBundle/Resources/config/services.yml" }
+    - { resource: "@DeviceBundle/Resources/config/services.yml" }
+    - { resource: "@DataCollectorBundle/Resources/config/services.yml" }
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration

@@ -217,7 +217,6 @@ administration_region_delete:
 #
 # STORES
 #
-
 administration_stores:
     path:     /stores
     defaults: { _controller: AdministrationBundle:Page:stores }
@@ -289,5 +288,79 @@ administration_store_delete_address:
     path:     /store/{storeid}/address/{addressid}/delete
     defaults: { _controller: StoreBundle:Data:deleteStoreAddress }
     methods: [DELETE]
+    options:
+        expose: true
+
+#
+# CONFIGURATION STORES
+#
+configuration_stores:
+    path:     /configuration/stores
+    defaults: { _controller: AdministrationBundle:Page:configurationStores }
+    methods: [GET]
+    options:
+        expose: true
+
+configuration_stores_get:
+    path:     /configuration/stores/get
+    defaults: { _controller: DeviceBundle:Data:getStores }
+    methods: [GET]
+    options:
+        expose: true
+
+configuration_store_get:
+    path:     /configuration/store/{storeid}/get
+    defaults: { _controller: DeviceBundle:Data:getStore }
+    methods: [GET]
+    options:
+        expose: true
+
+configuration_store_edit:
+    path:     /configuration/store/{storeid}/edit
+    defaults: { _controller: AdministrationBundle:Page:editConfigurationStore }
+    options:
+        expose: true
+
+configuration_store_save:
+    path:     /configuration/store/{storeid}/save
+    defaults: { _controller: DeviceBundle:Data:saveStore }
+    methods: [POST, PUT]
+    options:
+        expose: true
+
+#
+# INSTALLATION
+#
+configuration_installation:
+    path:     /installation/sensors
+    defaults: { _controller: AdministrationBundle:Page:installationSensors }
+    methods: [GET]
+    options:
+        expose: true
+
+installation_sensors_get:
+    path:     /installation/sensors/get
+    defaults: { _controller: DeviceBundle:Data:getSensors }
+    methods: [GET]
+    options:
+        expose: true
+
+installation_sensor_get:
+    path:     /installation/sensor/{sensorid}/type/{typeid}/get
+    defaults: { _controller: DeviceBundle:Data:getSensor }
+    methods: [GET]
+    options:
+        expose: true
+
+installation_sensor_edit:
+    path:     /installation/sensor/{sensorid}/type/{typeid}/edit
+    defaults: { _controller: AdministrationBundle:Page:editSensor }
+    options:
+        expose: true
+
+installation_sensor_save:
+    path:     /installation/sensor/{sensorid}/type/{typeid}/save
+    defaults: { _controller: DeviceBundle:Data:saveSensor }
+    methods: [POST, PUT]
     options:
         expose: true

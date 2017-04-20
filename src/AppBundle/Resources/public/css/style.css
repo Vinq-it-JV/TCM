@@ -8,6 +8,7 @@
 @import "select.css";
 @import "select2.css";
 @import "angular-toggle.css";
+@import "angular-ui-tree.min.css";
 
 html {
     width: 100%;
@@ -105,4 +106,96 @@ body {
 input[type=checkbox], input[type=radio] {
     margin: 7px 0 0;
     line-height: normal;
+}
+
+/** UI Tree **/
+
+.angular-ui-tree-handle {
+    background: #f8faff;
+    border: 1px solid #dae2ea;
+    color: #7c9eb2;
+    padding: 10px 10px;
+}
+
+.angular-ui-tree-placeholder {
+    background: #f0f9ff;
+    border: 0px dashed #bed2db;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+tr.angular-ui-tree-empty {
+    height: 100px
+}
+
+.group-title {
+    background-color: #687074 !important;
+    color: #FFF !important;
+}
+
+.tree-node {
+    border: 1px solid #dae2ea;
+    background: #f8faff;
+    color: #7c9eb2;
+}
+
+.nodrop {
+    background-color: #f2dede;
+}
+
+.tree-node-content {
+    margin: 10px;
+}
+
+.group-handle {
+    padding: 10px;
+    background: #429ad9;
+    color: #FFF;
+    margin-right: 10px;
+}
+
+.group-handle:hover {
+    color: #FFF;
+    background: #77caf5;
+    border-color: #428bca;
+}
+
+.sensor-handle {
+    padding: 10px;
+    background: #a1d9f7;
+    color: #FFF;
+    margin-right: 10px;
+}
+
+.sensor-handle:hover {
+    color: #FFF;
+    background: #a1d9f7;
+    border-color: #4a9ffa;
+}
+
+.disabled-handle {
+    padding: 10px;
+    background: #c7c4c7 !important;
+    color: #FFF;
+    margin-right: 10px;
+}
+
+.angular-ui-tree-placeholder {
+    background: #f0f9ff;
+    border: 2px dashed #bed2db;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.angular-ui-tree-empty {
+    background: transparent;
+    border: 1px solid #e3e3e3;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.angular-ui-tree {
 }

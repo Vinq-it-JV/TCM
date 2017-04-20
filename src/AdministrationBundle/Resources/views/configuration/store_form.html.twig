@@ -1,0 +1,11 @@
+<div class="form-horizontal" ng-switch="activePage">
+    <div ng-switch-when="treeView">
+        {% include 'AdministrationBundle:configuration:tree_view.html.twig' %}
+    </div>
+    <div ng-switch-when="editDevice">
+        {% include 'AdministrationBundle:configuration:edit_sensor.html.twig' %}
+    </div>
+    <div ng-switch-when="editGroup">
+        {% include 'AdministrationBundle:configuration:edit_group.html.twig' %}
+    </div>
+</div>

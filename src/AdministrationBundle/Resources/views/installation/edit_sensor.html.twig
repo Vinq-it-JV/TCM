@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% import _self as form %}
+
+{% block contents %}
+    {% if app.user %}
+        {% set ngInit = "getSensor(" ~ sensor.Id ~ "," ~ sensor.TypeId ~ ")" %}
+        <div ng-controller="installationCtrl" ng-init="{{ ngInit }}">
+
+            {% block header %}
+                {% include 'AdministrationBundle:header:header.html.twig' %}
+            {% endblock %}
+
+            {% block page %}
+                <div class="page">
+                    <div class="container">
+                        <div class="row">
+                            <div class="panel-body">
+                                <h4 ng-cloak>
+                                    {% verbatim %}
+                                    <i class="fa fa-fw" ng-class="{ 'fa-cog':sensors.sensor().TypeId == 2, 'fa-thermometer':sensors.sensor().TypeId == 3, 'fa-sign-in':sensors.sensor().TypeId == 4 }"></i> {{ 'SENSOR.LABEL' | translate }}
+                                    {% endverbatim %}
+                                </h4>
+                                <hr/>
+                                {% include 'AdministrationBundle:installation:sensor_form.html.twig' %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endblock %}
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('bundles/app/js/app/controllers/installationCtrl.js') }}"></script>
+    <script src="{{ asset('bundles/app/js/app/datasets/sensors.js') }}"></script>
+{% endblock %}

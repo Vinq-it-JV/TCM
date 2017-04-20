@@ -1,0 +1,137 @@
+<div class="panel-body">
+    <div class="well">
+        <div class="row">
+            <div class="col-md-10">
+                {% verbatim %}
+                <div ui-tree="treeOptions">
+                    <ol ui-tree-nodes ng-model="groupsCollection" data-ui-tree="treeOptions"  data-empty-placeholder-enabled="true">
+                        <li ng-repeat="group in groupsCollection" ui-tree-node data-expand-on-hover="true" ng-if="group.MainStore||group.Group">
+                            <div ui-tree-handle class="tree-node tree-node-content angular-ui-tree-handle"
+                                 ng-class="{ 'disabled-handle': group.isEnabled, 'group-handle': group.TypeId == 1, 'sensor-handle': group.TypeId != 1 }">
+                                <div class="row" ng-show="group.TypeId==1">
+                                    <div class="col-md-10 col-xs-8">
+                                        <span class="btn-group" ng-cloak>
+                                            <a class="btn btn-primary btn-xs pull-left"
+                                               ng-click="toggle(this)"
+                                               data-nodrag>
+                                                <span class="fa fa-caret-down fa-fw" ng-class="{'fa-caret-right': collapsed, 'fa-caret-down': !collapsed}"></span>
+                                            </a>
+                                             <i class="fa fa-cubes fa-2x" style="padding-left: 5px"></i> {{ group.Name }}
+                                        </span>
+                                    </div>
+                                    <div class="col-md-2 col-xs-4" >
+                                        <div class="btn-group pull-right">
+                                            <a class="btn btn-primary btn-xs"
+                                               ng-click="editDeviceGroup(group)"
+                                               data-nodrag>
+                                                <span class="fa fa-pencil fa-fw"></span>
+                                            </a>
+                                            <a class="btn btn-danger btn-xs"
+                                               ng-click="removeGroup(group)"
+                                               data-nodrag>
+                                                <span class="fa fa-remove fa-fw"></span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" ng-show="group.TypeId != 1">
+                                    <div class="col-md-10 col-xs-8" ng-cloak>
+                                        <div class="row">
+                                            <div class="col-md-1 col-xs-2">
+                                                <i class="fa fa-fw fa-2x" ng-class="{ 'fa-cog':group.TypeId == 2, 'fa-thermometer':group.TypeId == 3, 'fa-sign-in':group.TypeId == 4 }"></i>
+                                            </div>
+                                            <div class="col-md-9 col-xs-7">
+                                                 {{ group.Name }}
+                                            </div>
+                                            <div class="col-md-1 col-xs-1">
+                                                <div ng-show="group.TypeId==3">{{ group.OutputNumber }}</div>
+                                                <div ng-show="group.TypeId==4">{{ group.InputNumber }}</div>
+                                            </div>
+                                            <div class="col-md-1 col-xs-1">
+                                                <i class="fa fa-fw" ng-class="{ 'fa-bell': group.IsEnabled, 'fa-bell-slash':!group.IsEnabled }"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2 col-xs-4">
+                                        <div class="btn-group pull-right">
+                                            <a class="btn btn-primary btn-xs"
+                                               ng-click="editDevice(group)"
+                                               data-nodrag>
+                                                <span class="fa fa-pencil fa-fw"></span>
+                                            </a>
+                                            <a class="btn btn-default btn-xs"
+                                               ng-click="unlinkDevice(group)"
+                                               ng-show="group.TypeId==2||group.TypeId==3"
+                                               data-nodrag>
+                                                <span class="fa fa-unlink fa-fw"></span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <ol ui-tree-nodes="" ng-model="group.devices" ng-class="{ hidden: collapsed }">
+                                <li ng-repeat="device in group.devices" ui-tree-node data-expand-on-hover="true" ng-if="device.MainStore||device.Group">
+                                    <div ui-tree-handle class="tree-node tree-node-content angular-ui-tree-handle sensor-handle">
+                                        <div class="row">
+                                            <div class="col-md-10 col-xs-7" ng-cloak>
+                                                <div class="row">
+                                                    <div class="col-md-1 col-xs-2">
+                                                        <i class="fa fa-fw fa-2x" ng-class="{ 'fa-cog': device.TypeId == 2, 'fa-thermometer':device.TypeId == 3, 'fa-sign-in': device.TypeId == 4 }"></i>
+                                                    </div>
+                                                    <div class="col-md-9 col-xs-7">
+                                                         {{ device.Name }}
+                                                    </div>
+                                                    <div class="col-md-1 col-xs-1">
+                                                        <div ng-show="device.TypeId==3">{{ device.OutputNumber }}</div>
+                                                        <div ng-show="device.TypeId==4">{{ device.InputNumber }}</div>
+                                                    </div>
+                                                    <div class="col-md-1 col-xs-1">
+                                                        <i class="fa fa-fw" ng-class="{ 'fa-bell': device.IsEnabled, 'fa-bell-slash':!device.IsEnabled }"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2 col-xs-5">
+                                                <div class="btn-group pull-right">
+                                                    <a class="btn btn-primary btn-xs"
+                                                       ng-click="editDevice(device)"
+                                                       data-nodrag>
+                                                        <span class="fa fa-pencil fa-fw"></span>
+                                                    </a>
+                                                    <a class="btn btn-default btn-xs"
+                                                       ng-click="unlinkDevice(device)"
+                                                       ng-show="device.TypeId==2||device.TypeId==3"
+                                                       data-nodrag>
+                                                        <span class="fa fa-unlink fa-fw"></span>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ol>
+                        </li>
+                    </ol>
+                </div>
+                {% endverbatim %}
+            </div>
+            <div class="col-md-2">
+                <div style="padding-top: 10px">
+                    <button class="btn btn-sm btn-success pull-right" ng-click="addDeviceGroup()" ng-cloak>
+                        <i class="fa fa-plus fa-fw"></i> {{ ng.translate('SENSOR_GROUP.ADD') }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="panel-footer">
+    <div class="row" ng-switch="activePage">
+        <div class="col-md-12" ng-switch-when="treeView">
+            <a href="{{ path('configuration_stores') }}" class="btn btn-sm btn-default pull-left"
+               ng-click="BE.showLoader(true)"><i class="fa fa-close" ng-cloak></i> {{ ng.translate('CANCEL') }}</a>
+            <button type="button" class="btn btn-sm btn-success pull-right" ng-click="saveStore()">
+                <i class="fa fa-floppy-o" ng-cloak></i> {{ ng.translate('SAVE') }}
+            </button>
+        </div>
+    </div>
+</div>

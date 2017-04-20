@@ -38,13 +38,13 @@ abstract class BaseStorePeer
     const TM_CLASS = 'StoreBundle\\Model\\map\\StoreTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 17;
+    const NUM_COLUMNS = 18;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 17;
+    const NUM_HYDRATE_COLUMNS = 18;
 
     /** the column name for the id field */
     const ID = 'store.id';
@@ -85,6 +85,9 @@ abstract class BaseStorePeer
     /** the column name for the coc_number field */
     const COC_NUMBER = 'store.coc_number';
 
+    /** the column name for the is_maintenance field */
+    const IS_MAINTENANCE = 'store.is_maintenance';
+
     /** the column name for the is_enabled field */
     const IS_ENABLED = 'store.is_enabled';
 
@@ -116,12 +119,12 @@ abstract class BaseStorePeer
      * e.g. StorePeer::$fieldNames[StorePeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'MainCompany', 'Name', 'Description', 'Type', 'Code', 'Website', 'Region', 'Remarks', 'PaymentMethod', 'BankAccountNumber', 'VatNumber', 'CocNumber', 'IsEnabled', 'IsDeleted', 'CreatedAt', 'UpdatedAt', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'mainCompany', 'name', 'description', 'type', 'code', 'website', 'region', 'remarks', 'paymentMethod', 'bankAccountNumber', 'vatNumber', 'cocNumber', 'isEnabled', 'isDeleted', 'createdAt', 'updatedAt', ),
-        BasePeer::TYPE_COLNAME => array (StorePeer::ID, StorePeer::MAIN_COMPANY, StorePeer::NAME, StorePeer::DESCRIPTION, StorePeer::TYPE, StorePeer::CODE, StorePeer::WEBSITE, StorePeer::REGION, StorePeer::REMARKS, StorePeer::PAYMENT_METHOD, StorePeer::BANK_ACCOUNT_NUMBER, StorePeer::VAT_NUMBER, StorePeer::COC_NUMBER, StorePeer::IS_ENABLED, StorePeer::IS_DELETED, StorePeer::CREATED_AT, StorePeer::UPDATED_AT, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'MAIN_COMPANY', 'NAME', 'DESCRIPTION', 'TYPE', 'CODE', 'WEBSITE', 'REGION', 'REMARKS', 'PAYMENT_METHOD', 'BANK_ACCOUNT_NUMBER', 'VAT_NUMBER', 'COC_NUMBER', 'IS_ENABLED', 'IS_DELETED', 'CREATED_AT', 'UPDATED_AT', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'main_company', 'name', 'description', 'type', 'code', 'website', 'region', 'remarks', 'payment_method', 'bank_account_number', 'vat_number', 'coc_number', 'is_enabled', 'is_deleted', 'created_at', 'updated_at', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, )
+        BasePeer::TYPE_PHPNAME => array ('Id', 'MainCompany', 'Name', 'Description', 'Type', 'Code', 'Website', 'Region', 'Remarks', 'PaymentMethod', 'BankAccountNumber', 'VatNumber', 'CocNumber', 'IsMaintenance', 'IsEnabled', 'IsDeleted', 'CreatedAt', 'UpdatedAt', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'mainCompany', 'name', 'description', 'type', 'code', 'website', 'region', 'remarks', 'paymentMethod', 'bankAccountNumber', 'vatNumber', 'cocNumber', 'isMaintenance', 'isEnabled', 'isDeleted', 'createdAt', 'updatedAt', ),
+        BasePeer::TYPE_COLNAME => array (StorePeer::ID, StorePeer::MAIN_COMPANY, StorePeer::NAME, StorePeer::DESCRIPTION, StorePeer::TYPE, StorePeer::CODE, StorePeer::WEBSITE, StorePeer::REGION, StorePeer::REMARKS, StorePeer::PAYMENT_METHOD, StorePeer::BANK_ACCOUNT_NUMBER, StorePeer::VAT_NUMBER, StorePeer::COC_NUMBER, StorePeer::IS_MAINTENANCE, StorePeer::IS_ENABLED, StorePeer::IS_DELETED, StorePeer::CREATED_AT, StorePeer::UPDATED_AT, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'MAIN_COMPANY', 'NAME', 'DESCRIPTION', 'TYPE', 'CODE', 'WEBSITE', 'REGION', 'REMARKS', 'PAYMENT_METHOD', 'BANK_ACCOUNT_NUMBER', 'VAT_NUMBER', 'COC_NUMBER', 'IS_MAINTENANCE', 'IS_ENABLED', 'IS_DELETED', 'CREATED_AT', 'UPDATED_AT', ),
+        BasePeer::TYPE_FIELDNAME => array ('id', 'main_company', 'name', 'description', 'type', 'code', 'website', 'region', 'remarks', 'payment_method', 'bank_account_number', 'vat_number', 'coc_number', 'is_maintenance', 'is_enabled', 'is_deleted', 'created_at', 'updated_at', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, )
     );
 
     /**
@@ -131,12 +134,12 @@ abstract class BaseStorePeer
      * e.g. StorePeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'MainCompany' => 1, 'Name' => 2, 'Description' => 3, 'Type' => 4, 'Code' => 5, 'Website' => 6, 'Region' => 7, 'Remarks' => 8, 'PaymentMethod' => 9, 'BankAccountNumber' => 10, 'VatNumber' => 11, 'CocNumber' => 12, 'IsEnabled' => 13, 'IsDeleted' => 14, 'CreatedAt' => 15, 'UpdatedAt' => 16, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'mainCompany' => 1, 'name' => 2, 'description' => 3, 'type' => 4, 'code' => 5, 'website' => 6, 'region' => 7, 'remarks' => 8, 'paymentMethod' => 9, 'bankAccountNumber' => 10, 'vatNumber' => 11, 'cocNumber' => 12, 'isEnabled' => 13, 'isDeleted' => 14, 'createdAt' => 15, 'updatedAt' => 16, ),
-        BasePeer::TYPE_COLNAME => array (StorePeer::ID => 0, StorePeer::MAIN_COMPANY => 1, StorePeer::NAME => 2, StorePeer::DESCRIPTION => 3, StorePeer::TYPE => 4, StorePeer::CODE => 5, StorePeer::WEBSITE => 6, StorePeer::REGION => 7, StorePeer::REMARKS => 8, StorePeer::PAYMENT_METHOD => 9, StorePeer::BANK_ACCOUNT_NUMBER => 10, StorePeer::VAT_NUMBER => 11, StorePeer::COC_NUMBER => 12, StorePeer::IS_ENABLED => 13, StorePeer::IS_DELETED => 14, StorePeer::CREATED_AT => 15, StorePeer::UPDATED_AT => 16, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'MAIN_COMPANY' => 1, 'NAME' => 2, 'DESCRIPTION' => 3, 'TYPE' => 4, 'CODE' => 5, 'WEBSITE' => 6, 'REGION' => 7, 'REMARKS' => 8, 'PAYMENT_METHOD' => 9, 'BANK_ACCOUNT_NUMBER' => 10, 'VAT_NUMBER' => 11, 'COC_NUMBER' => 12, 'IS_ENABLED' => 13, 'IS_DELETED' => 14, 'CREATED_AT' => 15, 'UPDATED_AT' => 16, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'main_company' => 1, 'name' => 2, 'description' => 3, 'type' => 4, 'code' => 5, 'website' => 6, 'region' => 7, 'remarks' => 8, 'payment_method' => 9, 'bank_account_number' => 10, 'vat_number' => 11, 'coc_number' => 12, 'is_enabled' => 13, 'is_deleted' => 14, 'created_at' => 15, 'updated_at' => 16, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, )
+        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'MainCompany' => 1, 'Name' => 2, 'Description' => 3, 'Type' => 4, 'Code' => 5, 'Website' => 6, 'Region' => 7, 'Remarks' => 8, 'PaymentMethod' => 9, 'BankAccountNumber' => 10, 'VatNumber' => 11, 'CocNumber' => 12, 'IsMaintenance' => 13, 'IsEnabled' => 14, 'IsDeleted' => 15, 'CreatedAt' => 16, 'UpdatedAt' => 17, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'mainCompany' => 1, 'name' => 2, 'description' => 3, 'type' => 4, 'code' => 5, 'website' => 6, 'region' => 7, 'remarks' => 8, 'paymentMethod' => 9, 'bankAccountNumber' => 10, 'vatNumber' => 11, 'cocNumber' => 12, 'isMaintenance' => 13, 'isEnabled' => 14, 'isDeleted' => 15, 'createdAt' => 16, 'updatedAt' => 17, ),
+        BasePeer::TYPE_COLNAME => array (StorePeer::ID => 0, StorePeer::MAIN_COMPANY => 1, StorePeer::NAME => 2, StorePeer::DESCRIPTION => 3, StorePeer::TYPE => 4, StorePeer::CODE => 5, StorePeer::WEBSITE => 6, StorePeer::REGION => 7, StorePeer::REMARKS => 8, StorePeer::PAYMENT_METHOD => 9, StorePeer::BANK_ACCOUNT_NUMBER => 10, StorePeer::VAT_NUMBER => 11, StorePeer::COC_NUMBER => 12, StorePeer::IS_MAINTENANCE => 13, StorePeer::IS_ENABLED => 14, StorePeer::IS_DELETED => 15, StorePeer::CREATED_AT => 16, StorePeer::UPDATED_AT => 17, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'MAIN_COMPANY' => 1, 'NAME' => 2, 'DESCRIPTION' => 3, 'TYPE' => 4, 'CODE' => 5, 'WEBSITE' => 6, 'REGION' => 7, 'REMARKS' => 8, 'PAYMENT_METHOD' => 9, 'BANK_ACCOUNT_NUMBER' => 10, 'VAT_NUMBER' => 11, 'COC_NUMBER' => 12, 'IS_MAINTENANCE' => 13, 'IS_ENABLED' => 14, 'IS_DELETED' => 15, 'CREATED_AT' => 16, 'UPDATED_AT' => 17, ),
+        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'main_company' => 1, 'name' => 2, 'description' => 3, 'type' => 4, 'code' => 5, 'website' => 6, 'region' => 7, 'remarks' => 8, 'payment_method' => 9, 'bank_account_number' => 10, 'vat_number' => 11, 'coc_number' => 12, 'is_maintenance' => 13, 'is_enabled' => 14, 'is_deleted' => 15, 'created_at' => 16, 'updated_at' => 17, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, )
     );
 
     /**
@@ -223,6 +226,7 @@ abstract class BaseStorePeer
             $criteria->addSelectColumn(StorePeer::BANK_ACCOUNT_NUMBER);
             $criteria->addSelectColumn(StorePeer::VAT_NUMBER);
             $criteria->addSelectColumn(StorePeer::COC_NUMBER);
+            $criteria->addSelectColumn(StorePeer::IS_MAINTENANCE);
             $criteria->addSelectColumn(StorePeer::IS_ENABLED);
             $criteria->addSelectColumn(StorePeer::IS_DELETED);
             $criteria->addSelectColumn(StorePeer::CREATED_AT);
@@ -241,6 +245,7 @@ abstract class BaseStorePeer
             $criteria->addSelectColumn($alias . '.bank_account_number');
             $criteria->addSelectColumn($alias . '.vat_number');
             $criteria->addSelectColumn($alias . '.coc_number');
+            $criteria->addSelectColumn($alias . '.is_maintenance');
             $criteria->addSelectColumn($alias . '.is_enabled');
             $criteria->addSelectColumn($alias . '.is_deleted');
             $criteria->addSelectColumn($alias . '.created_at');

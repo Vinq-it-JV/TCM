@@ -48,8 +48,6 @@ angular
                 headerText: $translate.instant('COPY'),
                 bodyText: $translate.instant('QUESTION.COPY_COMPANY_DATA'),
                 onExecute: function () {
-                    console.log('copy data from:');
-                    console.log(company);
                     $scope.stores.copyCompanyData(company);
                 }
             };
@@ -198,9 +196,6 @@ angular
                         $scope.stores.updRecord(data.contents.store);
                         $scope.stores.templateSet(data.contents.template);
                         $scope.stores.listsSet(data.contents.lists);
-                        console.log(data.contents.store);
-                        console.log(data.contents.lists);
-                        console.log(data.contents.template);
                     }
                     break;
                 case 'deleteStore':
