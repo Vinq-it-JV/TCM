@@ -43,6 +43,11 @@ class TestCommand extends ContainerAwareCommand {
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln("Test command");
+	$user = UserQuery::create()->findOneById(3);
+	var_dump($user);
+	$email = EmailQuery::create()
+            ->findOneByArray(['Primary' => true, 'User' => $user]);
+	var_dump($email);
 
         //$this->createUser($output);
         //$this->getUsers($output);
