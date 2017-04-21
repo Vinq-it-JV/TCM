@@ -386,9 +386,7 @@ class DataController extends Controller
         $translator->setLocale(strtolower($user->getLanguageCode()));
 
         $email = EmailQuery::create()
-            ->filterByUser($user)
-            ->filterByPrimary(true)
-            ->find();
+            ->findOneByArray(['Primary' => true, 'User' => $user]);
 
         if (empty($email))
             return false;

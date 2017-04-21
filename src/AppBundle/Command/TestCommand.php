@@ -14,6 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+use UserBundle\Model\EmailQuery;
 use UserBundle\Model\User;
 use UserBundle\Model\UserAddress;
 use UserBundle\Model\UserQuery;
@@ -52,7 +53,7 @@ class TestCommand extends ContainerAwareCommand {
         //$this->companyTest($output);
         //$this->postcodeApiTest($output);
         //$this->makeDeviceGroup($output);
-        $this->showDeviceGroup($output);
+        //$this->showDeviceGroup($output);
         $output->writeln("Ready.");
     }
 
