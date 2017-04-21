@@ -385,7 +385,11 @@ class DataController extends Controller
 
         $translator->setLocale(strtolower($user->getLanguageCode()));
 
-        $email = $user->getEmails()->getFirst();
+        $email = EmailQuery::create()
+            ->filterByUser($user)
+            ->filterByPrimary(true)
+            ->find();
+
         if (empty($email))
             return false;
 

@@ -1,4 +1,4 @@
-<?php
+ph<?php
 
 namespace UserBundle\Command;
 
