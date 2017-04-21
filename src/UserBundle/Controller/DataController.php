@@ -361,40 +361,14 @@ class DataController extends Controller
             }
         }
 
+        $user->save();
         if (empty($user->getPassword())) {
+
             $password = $user->generatePassword($encoder);
-            $this->sendCredentialsEmail($user, $password);
+            $helper->sendCredentialsEmail($user, $password);
+            $user->save();
         }
 
-        $user->save();
-        return true;
-    }
-
-    /**
-     * sendCredentialsEmail($user, $password)
-     * @param $user
-     * @param $password
-     * @return bool
-     */
-    public function sendCredentialsEmail($user, $password)
-    {
-        $translator = $this->container->get('translator');
-        $templating = $this->container->get('templating');
-        $mailer = $this->container->get('mailer');
-        $domain = $this->container->getParameter('domain_name');
-
-        $translator->setLocale(strtolower($user->getLanguageCode()));
-
-        if (empty($email))
-            return false;
-
-        $mail = \Swift_Message::newInstance()
-            ->setTo('j.visser@vinq-it.nl', $user->getUsername())
-            ->setFrom('noreply@' . $domain, $translator->trans('email.credentials.from') . $domain)
-            ->setSubject($translator->trans('email.credentials.subject'))
-            ->setBody($templating->render('UserBundle:email:credentials.html.twig', array('User' => $user, 'Password' => $password, 'Domain' => $domain)), 'text/html');
-
-        $mailer->send($mail);
         return true;
     }
 

@@ -1,0 +1,4 @@
+services:
+   class_helper:
+        class: AppBundle\Services\ClassHelper
+        arguments: ['@service_container']

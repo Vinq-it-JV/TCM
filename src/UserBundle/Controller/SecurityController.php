@@ -57,6 +57,7 @@ class SecurityController extends Controller
 
     public function changePasswordAction(Request $request)
     {
+        $helper = $this->getHelper();
         $passworddata = (object)json_decode($request->getContent(), true);
         $user = $this->getUser();
         if (!empty($user))
@@ -67,7 +68,7 @@ class SecurityController extends Controller
             $user->setPassword($encoded);
             $user->save();
 
-            $this->sendCredentialsEmail($user, $password);
+            $helper->sendCredentialsEmail($user, $password);
 
             return JsonResult::create()
                 ->setMessage('PASSWORD_CHANGED')
@@ -100,32 +101,13 @@ class SecurityController extends Controller
     }
 
     /**
-     * sendCredentialsEmail($user, $password)
-     * @param $user
-     * @param $password
-     * @return bool
+     * Get class helper
+     * @return object
      */
-    protected function sendCredentialsEmail($user, $password)
+    private function getHelper()
     {
-        $translator = $this->container->get('translator');
-        $templating = $this->container->get('templating');
-        $mailer = $this->container->get('mailer');
-        $domain = $this->container->getParameter('domain_name');
-
-        $translator->setLocale(strtolower($user->getLanguageCode()));
-
-        $email = $user->getEmails()->getFirst();
-        if (empty($email))
-            return false;
-
-        $mail = \Swift_Message::newInstance()
-            ->setTo($email->getEmail(), $user->getUsername())
-            ->setFrom('noreply@' . $domain, $translator->trans('email.password.from') . $domain)
-            ->setSubject($translator->trans('email.password.subject'))
-            ->setBody($templating->render('UserBundle:email:password.html.twig', array('User' => $user, 'Password' => $password, 'Domain' => $domain)), 'text/html');
-
-        $mailer->send($mail);
-        return true;
+        $helper = $this->container->get('class_helper');
+        return $helper;
     }
 
 }
