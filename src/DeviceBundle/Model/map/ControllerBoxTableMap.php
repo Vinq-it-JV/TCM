@@ -48,7 +48,6 @@ class ControllerBoxTableMap extends TableMap
         $this->addColumn('version', 'Version', 'INTEGER', false, null, null);
         $this->addColumn('name', 'Name', 'VARCHAR', false, 255, 'Controller box');
         $this->addColumn('description', 'Description', 'LONGVARCHAR', false, null, null);
-        $this->addColumn('inputs', 'Inputs', 'INTEGER', false, null, null);
         $this->addColumn('internal_temperature', 'InternalTemperature', 'VARCHAR', false, 10, null);
         $this->addColumn('uid', 'Uid', 'VARCHAR', false, 32, null);
         $this->addColumn('position', 'Position', 'INTEGER', false, null, 0);

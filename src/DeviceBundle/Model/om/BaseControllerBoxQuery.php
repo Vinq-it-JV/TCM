@@ -27,7 +27,6 @@ use StoreBundle\Model\Store;
  * @method ControllerBoxQuery orderByVersion($order = Criteria::ASC) Order by the version column
  * @method ControllerBoxQuery orderByName($order = Criteria::ASC) Order by the name column
  * @method ControllerBoxQuery orderByDescription($order = Criteria::ASC) Order by the description column
- * @method ControllerBoxQuery orderByInputs($order = Criteria::ASC) Order by the inputs column
  * @method ControllerBoxQuery orderByInternalTemperature($order = Criteria::ASC) Order by the internal_temperature column
  * @method ControllerBoxQuery orderByUid($order = Criteria::ASC) Order by the uid column
  * @method ControllerBoxQuery orderByPosition($order = Criteria::ASC) Order by the position column
@@ -42,7 +41,6 @@ use StoreBundle\Model\Store;
  * @method ControllerBoxQuery groupByVersion() Group by the version column
  * @method ControllerBoxQuery groupByName() Group by the name column
  * @method ControllerBoxQuery groupByDescription() Group by the description column
- * @method ControllerBoxQuery groupByInputs() Group by the inputs column
  * @method ControllerBoxQuery groupByInternalTemperature() Group by the internal_temperature column
  * @method ControllerBoxQuery groupByUid() Group by the uid column
  * @method ControllerBoxQuery groupByPosition() Group by the position column
@@ -79,7 +77,6 @@ use StoreBundle\Model\Store;
  * @method ControllerBox findOneByVersion(int $version) Return the first ControllerBox filtered by the version column
  * @method ControllerBox findOneByName(string $name) Return the first ControllerBox filtered by the name column
  * @method ControllerBox findOneByDescription(string $description) Return the first ControllerBox filtered by the description column
- * @method ControllerBox findOneByInputs(int $inputs) Return the first ControllerBox filtered by the inputs column
  * @method ControllerBox findOneByInternalTemperature(string $internal_temperature) Return the first ControllerBox filtered by the internal_temperature column
  * @method ControllerBox findOneByUid(string $uid) Return the first ControllerBox filtered by the uid column
  * @method ControllerBox findOneByPosition(int $position) Return the first ControllerBox filtered by the position column
@@ -94,7 +91,6 @@ use StoreBundle\Model\Store;
  * @method array findByVersion(int $version) Return ControllerBox objects filtered by the version column
  * @method array findByName(string $name) Return ControllerBox objects filtered by the name column
  * @method array findByDescription(string $description) Return ControllerBox objects filtered by the description column
- * @method array findByInputs(int $inputs) Return ControllerBox objects filtered by the inputs column
  * @method array findByInternalTemperature(string $internal_temperature) Return ControllerBox objects filtered by the internal_temperature column
  * @method array findByUid(string $uid) Return ControllerBox objects filtered by the uid column
  * @method array findByPosition(int $position) Return ControllerBox objects filtered by the position column
@@ -207,7 +203,7 @@ abstract class BaseControllerBoxQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `group`, `main_store`, `version`, `name`, `description`, `inputs`, `internal_temperature`, `uid`, `position`, `is_enabled`, `is_deleted`, `created_at`, `updated_at` FROM `controller_box` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `group`, `main_store`, `version`, `name`, `description`, `internal_temperature`, `uid`, `position`, `is_enabled`, `is_deleted`, `created_at`, `updated_at` FROM `controller_box` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -524,48 +520,6 @@ abstract class BaseControllerBoxQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(ControllerBoxPeer::DESCRIPTION, $description, $comparison);
-    }
-
-    /**
-     * Filter the query on the inputs column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByInputs(1234); // WHERE inputs = 1234
-     * $query->filterByInputs(array(12, 34)); // WHERE inputs IN (12, 34)
-     * $query->filterByInputs(array('min' => 12)); // WHERE inputs >= 12
-     * $query->filterByInputs(array('max' => 12)); // WHERE inputs <= 12
-     * </code>
-     *
-     * @param     mixed $inputs The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return ControllerBoxQuery The current query, for fluid interface
-     */
-    public function filterByInputs($inputs = null, $comparison = null)
-    {
-        if (is_array($inputs)) {
-            $useMinMax = false;
-            if (isset($inputs['min'])) {
-                $this->addUsingAlias(ControllerBoxPeer::INPUTS, $inputs['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($inputs['max'])) {
-                $this->addUsingAlias(ControllerBoxPeer::INPUTS, $inputs['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(ControllerBoxPeer::INPUTS, $inputs, $comparison);
     }
 
     /**

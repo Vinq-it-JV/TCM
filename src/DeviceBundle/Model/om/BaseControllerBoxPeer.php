@@ -31,13 +31,13 @@ abstract class BaseControllerBoxPeer
     const TM_CLASS = 'DeviceBundle\\Model\\map\\ControllerBoxTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 14;
+    const NUM_COLUMNS = 13;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 14;
+    const NUM_HYDRATE_COLUMNS = 13;
 
     /** the column name for the id field */
     const ID = 'controller_box.id';
@@ -56,9 +56,6 @@ abstract class BaseControllerBoxPeer
 
     /** the column name for the description field */
     const DESCRIPTION = 'controller_box.description';
-
-    /** the column name for the inputs field */
-    const INPUTS = 'controller_box.inputs';
 
     /** the column name for the internal_temperature field */
     const INTERNAL_TEMPERATURE = 'controller_box.internal_temperature';
@@ -100,12 +97,12 @@ abstract class BaseControllerBoxPeer
      * e.g. ControllerBoxPeer::$fieldNames[ControllerBoxPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'Group', 'MainStore', 'Version', 'Name', 'Description', 'Inputs', 'InternalTemperature', 'Uid', 'Position', 'IsEnabled', 'IsDeleted', 'CreatedAt', 'UpdatedAt', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'group', 'mainStore', 'version', 'name', 'description', 'inputs', 'internalTemperature', 'uid', 'position', 'isEnabled', 'isDeleted', 'createdAt', 'updatedAt', ),
-        BasePeer::TYPE_COLNAME => array (ControllerBoxPeer::ID, ControllerBoxPeer::GROUP, ControllerBoxPeer::MAIN_STORE, ControllerBoxPeer::VERSION, ControllerBoxPeer::NAME, ControllerBoxPeer::DESCRIPTION, ControllerBoxPeer::INPUTS, ControllerBoxPeer::INTERNAL_TEMPERATURE, ControllerBoxPeer::UID, ControllerBoxPeer::POSITION, ControllerBoxPeer::IS_ENABLED, ControllerBoxPeer::IS_DELETED, ControllerBoxPeer::CREATED_AT, ControllerBoxPeer::UPDATED_AT, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'GROUP', 'MAIN_STORE', 'VERSION', 'NAME', 'DESCRIPTION', 'INPUTS', 'INTERNAL_TEMPERATURE', 'UID', 'POSITION', 'IS_ENABLED', 'IS_DELETED', 'CREATED_AT', 'UPDATED_AT', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'group', 'main_store', 'version', 'name', 'description', 'inputs', 'internal_temperature', 'uid', 'position', 'is_enabled', 'is_deleted', 'created_at', 'updated_at', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, )
+        BasePeer::TYPE_PHPNAME => array ('Id', 'Group', 'MainStore', 'Version', 'Name', 'Description', 'InternalTemperature', 'Uid', 'Position', 'IsEnabled', 'IsDeleted', 'CreatedAt', 'UpdatedAt', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'group', 'mainStore', 'version', 'name', 'description', 'internalTemperature', 'uid', 'position', 'isEnabled', 'isDeleted', 'createdAt', 'updatedAt', ),
+        BasePeer::TYPE_COLNAME => array (ControllerBoxPeer::ID, ControllerBoxPeer::GROUP, ControllerBoxPeer::MAIN_STORE, ControllerBoxPeer::VERSION, ControllerBoxPeer::NAME, ControllerBoxPeer::DESCRIPTION, ControllerBoxPeer::INTERNAL_TEMPERATURE, ControllerBoxPeer::UID, ControllerBoxPeer::POSITION, ControllerBoxPeer::IS_ENABLED, ControllerBoxPeer::IS_DELETED, ControllerBoxPeer::CREATED_AT, ControllerBoxPeer::UPDATED_AT, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'GROUP', 'MAIN_STORE', 'VERSION', 'NAME', 'DESCRIPTION', 'INTERNAL_TEMPERATURE', 'UID', 'POSITION', 'IS_ENABLED', 'IS_DELETED', 'CREATED_AT', 'UPDATED_AT', ),
+        BasePeer::TYPE_FIELDNAME => array ('id', 'group', 'main_store', 'version', 'name', 'description', 'internal_temperature', 'uid', 'position', 'is_enabled', 'is_deleted', 'created_at', 'updated_at', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, )
     );
 
     /**
@@ -115,12 +112,12 @@ abstract class BaseControllerBoxPeer
      * e.g. ControllerBoxPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Group' => 1, 'MainStore' => 2, 'Version' => 3, 'Name' => 4, 'Description' => 5, 'Inputs' => 6, 'InternalTemperature' => 7, 'Uid' => 8, 'Position' => 9, 'IsEnabled' => 10, 'IsDeleted' => 11, 'CreatedAt' => 12, 'UpdatedAt' => 13, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'group' => 1, 'mainStore' => 2, 'version' => 3, 'name' => 4, 'description' => 5, 'inputs' => 6, 'internalTemperature' => 7, 'uid' => 8, 'position' => 9, 'isEnabled' => 10, 'isDeleted' => 11, 'createdAt' => 12, 'updatedAt' => 13, ),
-        BasePeer::TYPE_COLNAME => array (ControllerBoxPeer::ID => 0, ControllerBoxPeer::GROUP => 1, ControllerBoxPeer::MAIN_STORE => 2, ControllerBoxPeer::VERSION => 3, ControllerBoxPeer::NAME => 4, ControllerBoxPeer::DESCRIPTION => 5, ControllerBoxPeer::INPUTS => 6, ControllerBoxPeer::INTERNAL_TEMPERATURE => 7, ControllerBoxPeer::UID => 8, ControllerBoxPeer::POSITION => 9, ControllerBoxPeer::IS_ENABLED => 10, ControllerBoxPeer::IS_DELETED => 11, ControllerBoxPeer::CREATED_AT => 12, ControllerBoxPeer::UPDATED_AT => 13, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'GROUP' => 1, 'MAIN_STORE' => 2, 'VERSION' => 3, 'NAME' => 4, 'DESCRIPTION' => 5, 'INPUTS' => 6, 'INTERNAL_TEMPERATURE' => 7, 'UID' => 8, 'POSITION' => 9, 'IS_ENABLED' => 10, 'IS_DELETED' => 11, 'CREATED_AT' => 12, 'UPDATED_AT' => 13, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'group' => 1, 'main_store' => 2, 'version' => 3, 'name' => 4, 'description' => 5, 'inputs' => 6, 'internal_temperature' => 7, 'uid' => 8, 'position' => 9, 'is_enabled' => 10, 'is_deleted' => 11, 'created_at' => 12, 'updated_at' => 13, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, )
+        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Group' => 1, 'MainStore' => 2, 'Version' => 3, 'Name' => 4, 'Description' => 5, 'InternalTemperature' => 6, 'Uid' => 7, 'Position' => 8, 'IsEnabled' => 9, 'IsDeleted' => 10, 'CreatedAt' => 11, 'UpdatedAt' => 12, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'group' => 1, 'mainStore' => 2, 'version' => 3, 'name' => 4, 'description' => 5, 'internalTemperature' => 6, 'uid' => 7, 'position' => 8, 'isEnabled' => 9, 'isDeleted' => 10, 'createdAt' => 11, 'updatedAt' => 12, ),
+        BasePeer::TYPE_COLNAME => array (ControllerBoxPeer::ID => 0, ControllerBoxPeer::GROUP => 1, ControllerBoxPeer::MAIN_STORE => 2, ControllerBoxPeer::VERSION => 3, ControllerBoxPeer::NAME => 4, ControllerBoxPeer::DESCRIPTION => 5, ControllerBoxPeer::INTERNAL_TEMPERATURE => 6, ControllerBoxPeer::UID => 7, ControllerBoxPeer::POSITION => 8, ControllerBoxPeer::IS_ENABLED => 9, ControllerBoxPeer::IS_DELETED => 10, ControllerBoxPeer::CREATED_AT => 11, ControllerBoxPeer::UPDATED_AT => 12, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'GROUP' => 1, 'MAIN_STORE' => 2, 'VERSION' => 3, 'NAME' => 4, 'DESCRIPTION' => 5, 'INTERNAL_TEMPERATURE' => 6, 'UID' => 7, 'POSITION' => 8, 'IS_ENABLED' => 9, 'IS_DELETED' => 10, 'CREATED_AT' => 11, 'UPDATED_AT' => 12, ),
+        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'group' => 1, 'main_store' => 2, 'version' => 3, 'name' => 4, 'description' => 5, 'internal_temperature' => 6, 'uid' => 7, 'position' => 8, 'is_enabled' => 9, 'is_deleted' => 10, 'created_at' => 11, 'updated_at' => 12, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, )
     );
 
     /**
@@ -200,7 +197,6 @@ abstract class BaseControllerBoxPeer
             $criteria->addSelectColumn(ControllerBoxPeer::VERSION);
             $criteria->addSelectColumn(ControllerBoxPeer::NAME);
             $criteria->addSelectColumn(ControllerBoxPeer::DESCRIPTION);
-            $criteria->addSelectColumn(ControllerBoxPeer::INPUTS);
             $criteria->addSelectColumn(ControllerBoxPeer::INTERNAL_TEMPERATURE);
             $criteria->addSelectColumn(ControllerBoxPeer::UID);
             $criteria->addSelectColumn(ControllerBoxPeer::POSITION);
@@ -215,7 +211,6 @@ abstract class BaseControllerBoxPeer
             $criteria->addSelectColumn($alias . '.version');
             $criteria->addSelectColumn($alias . '.name');
             $criteria->addSelectColumn($alias . '.description');
-            $criteria->addSelectColumn($alias . '.inputs');
             $criteria->addSelectColumn($alias . '.internal_temperature');
             $criteria->addSelectColumn($alias . '.uid');
             $criteria->addSelectColumn($alias . '.position');

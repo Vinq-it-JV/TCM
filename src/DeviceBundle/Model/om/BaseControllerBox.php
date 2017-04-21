@@ -86,12 +86,6 @@ abstract class BaseControllerBox extends BaseObject implements Persistent
     protected $description;
 
     /**
-     * The value for the inputs field.
-     * @var        int
-     */
-    protected $inputs;
-
-    /**
      * The value for the internal_temperature field.
      * @var        string
      */
@@ -278,17 +272,6 @@ abstract class BaseControllerBox extends BaseObject implements Persistent
     {
 
         return $this->description;
-    }
-
-    /**
-     * Get the [inputs] column value.
-     *
-     * @return int
-     */
-    public function getInputs()
-    {
-
-        return $this->inputs;
     }
 
     /**
@@ -561,27 +544,6 @@ abstract class BaseControllerBox extends BaseObject implements Persistent
     } // setDescription()
 
     /**
-     * Set the value of [inputs] column.
-     *
-     * @param  int $v new value
-     * @return ControllerBox The current object (for fluent API support)
-     */
-    public function setInputs($v)
-    {
-        if ($v !== null && is_numeric($v)) {
-            $v = (int) $v;
-        }
-
-        if ($this->inputs !== $v) {
-            $this->inputs = $v;
-            $this->modifiedColumns[] = ControllerBoxPeer::INPUTS;
-        }
-
-
-        return $this;
-    } // setInputs()
-
-    /**
      * Set the value of [internal_temperature] column.
      *
      * @param  string $v new value
@@ -802,14 +764,13 @@ abstract class BaseControllerBox extends BaseObject implements Persistent
             $this->version = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
             $this->name = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
             $this->description = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
-            $this->inputs = ($row[$startcol + 6] !== null) ? (int) $row[$startcol + 6] : null;
-            $this->internal_temperature = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
-            $this->uid = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
-            $this->position = ($row[$startcol + 9] !== null) ? (int) $row[$startcol + 9] : null;
-            $this->is_enabled = ($row[$startcol + 10] !== null) ? (boolean) $row[$startcol + 10] : null;
-            $this->is_deleted = ($row[$startcol + 11] !== null) ? (boolean) $row[$startcol + 11] : null;
-            $this->created_at = ($row[$startcol + 12] !== null) ? (string) $row[$startcol + 12] : null;
-            $this->updated_at = ($row[$startcol + 13] !== null) ? (string) $row[$startcol + 13] : null;
+            $this->internal_temperature = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
+            $this->uid = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
+            $this->position = ($row[$startcol + 8] !== null) ? (int) $row[$startcol + 8] : null;
+            $this->is_enabled = ($row[$startcol + 9] !== null) ? (boolean) $row[$startcol + 9] : null;
+            $this->is_deleted = ($row[$startcol + 10] !== null) ? (boolean) $row[$startcol + 10] : null;
+            $this->created_at = ($row[$startcol + 11] !== null) ? (string) $row[$startcol + 11] : null;
+            $this->updated_at = ($row[$startcol + 12] !== null) ? (string) $row[$startcol + 12] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -819,7 +780,7 @@ abstract class BaseControllerBox extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 14; // 14 = ControllerBoxPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 13; // 13 = ControllerBoxPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating ControllerBox object", $e);
@@ -1127,9 +1088,6 @@ abstract class BaseControllerBox extends BaseObject implements Persistent
         if ($this->isColumnModified(ControllerBoxPeer::DESCRIPTION)) {
             $modifiedColumns[':p' . $index++]  = '`description`';
         }
-        if ($this->isColumnModified(ControllerBoxPeer::INPUTS)) {
-            $modifiedColumns[':p' . $index++]  = '`inputs`';
-        }
         if ($this->isColumnModified(ControllerBoxPeer::INTERNAL_TEMPERATURE)) {
             $modifiedColumns[':p' . $index++]  = '`internal_temperature`';
         }
@@ -1179,9 +1137,6 @@ abstract class BaseControllerBox extends BaseObject implements Persistent
                         break;
                     case '`description`':
                         $stmt->bindValue($identifier, $this->description, PDO::PARAM_STR);
-                        break;
-                    case '`inputs`':
-                        $stmt->bindValue($identifier, $this->inputs, PDO::PARAM_INT);
                         break;
                     case '`internal_temperature`':
                         $stmt->bindValue($identifier, $this->internal_temperature, PDO::PARAM_STR);
@@ -1391,27 +1346,24 @@ abstract class BaseControllerBox extends BaseObject implements Persistent
                 return $this->getDescription();
                 break;
             case 6:
-                return $this->getInputs();
-                break;
-            case 7:
                 return $this->getInternalTemperature();
                 break;
-            case 8:
+            case 7:
                 return $this->getUid();
                 break;
-            case 9:
+            case 8:
                 return $this->getPosition();
                 break;
-            case 10:
+            case 9:
                 return $this->getIsEnabled();
                 break;
-            case 11:
+            case 10:
                 return $this->getIsDeleted();
                 break;
-            case 12:
+            case 11:
                 return $this->getCreatedAt();
                 break;
-            case 13:
+            case 12:
                 return $this->getUpdatedAt();
                 break;
             default:
@@ -1449,14 +1401,13 @@ abstract class BaseControllerBox extends BaseObject implements Persistent
             $keys[3] => $this->getVersion(),
             $keys[4] => $this->getName(),
             $keys[5] => $this->getDescription(),
-            $keys[6] => $this->getInputs(),
-            $keys[7] => $this->getInternalTemperature(),
-            $keys[8] => $this->getUid(),
-            $keys[9] => $this->getPosition(),
-            $keys[10] => $this->getIsEnabled(),
-            $keys[11] => $this->getIsDeleted(),
-            $keys[12] => $this->getCreatedAt(),
-            $keys[13] => $this->getUpdatedAt(),
+            $keys[6] => $this->getInternalTemperature(),
+            $keys[7] => $this->getUid(),
+            $keys[8] => $this->getPosition(),
+            $keys[9] => $this->getIsEnabled(),
+            $keys[10] => $this->getIsDeleted(),
+            $keys[11] => $this->getCreatedAt(),
+            $keys[12] => $this->getUpdatedAt(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1529,27 +1480,24 @@ abstract class BaseControllerBox extends BaseObject implements Persistent
                 $this->setDescription($value);
                 break;
             case 6:
-                $this->setInputs($value);
-                break;
-            case 7:
                 $this->setInternalTemperature($value);
                 break;
-            case 8:
+            case 7:
                 $this->setUid($value);
                 break;
-            case 9:
+            case 8:
                 $this->setPosition($value);
                 break;
-            case 10:
+            case 9:
                 $this->setIsEnabled($value);
                 break;
-            case 11:
+            case 10:
                 $this->setIsDeleted($value);
                 break;
-            case 12:
+            case 11:
                 $this->setCreatedAt($value);
                 break;
-            case 13:
+            case 12:
                 $this->setUpdatedAt($value);
                 break;
         } // switch()
@@ -1582,14 +1530,13 @@ abstract class BaseControllerBox extends BaseObject implements Persistent
         if (array_key_exists($keys[3], $arr)) $this->setVersion($arr[$keys[3]]);
         if (array_key_exists($keys[4], $arr)) $this->setName($arr[$keys[4]]);
         if (array_key_exists($keys[5], $arr)) $this->setDescription($arr[$keys[5]]);
-        if (array_key_exists($keys[6], $arr)) $this->setInputs($arr[$keys[6]]);
-        if (array_key_exists($keys[7], $arr)) $this->setInternalTemperature($arr[$keys[7]]);
-        if (array_key_exists($keys[8], $arr)) $this->setUid($arr[$keys[8]]);
-        if (array_key_exists($keys[9], $arr)) $this->setPosition($arr[$keys[9]]);
-        if (array_key_exists($keys[10], $arr)) $this->setIsEnabled($arr[$keys[10]]);
-        if (array_key_exists($keys[11], $arr)) $this->setIsDeleted($arr[$keys[11]]);
-        if (array_key_exists($keys[12], $arr)) $this->setCreatedAt($arr[$keys[12]]);
-        if (array_key_exists($keys[13], $arr)) $this->setUpdatedAt($arr[$keys[13]]);
+        if (array_key_exists($keys[6], $arr)) $this->setInternalTemperature($arr[$keys[6]]);
+        if (array_key_exists($keys[7], $arr)) $this->setUid($arr[$keys[7]]);
+        if (array_key_exists($keys[8], $arr)) $this->setPosition($arr[$keys[8]]);
+        if (array_key_exists($keys[9], $arr)) $this->setIsEnabled($arr[$keys[9]]);
+        if (array_key_exists($keys[10], $arr)) $this->setIsDeleted($arr[$keys[10]]);
+        if (array_key_exists($keys[11], $arr)) $this->setCreatedAt($arr[$keys[11]]);
+        if (array_key_exists($keys[12], $arr)) $this->setUpdatedAt($arr[$keys[12]]);
     }
 
     /**
@@ -1607,7 +1554,6 @@ abstract class BaseControllerBox extends BaseObject implements Persistent
         if ($this->isColumnModified(ControllerBoxPeer::VERSION)) $criteria->add(ControllerBoxPeer::VERSION, $this->version);
         if ($this->isColumnModified(ControllerBoxPeer::NAME)) $criteria->add(ControllerBoxPeer::NAME, $this->name);
         if ($this->isColumnModified(ControllerBoxPeer::DESCRIPTION)) $criteria->add(ControllerBoxPeer::DESCRIPTION, $this->description);
-        if ($this->isColumnModified(ControllerBoxPeer::INPUTS)) $criteria->add(ControllerBoxPeer::INPUTS, $this->inputs);
         if ($this->isColumnModified(ControllerBoxPeer::INTERNAL_TEMPERATURE)) $criteria->add(ControllerBoxPeer::INTERNAL_TEMPERATURE, $this->internal_temperature);
         if ($this->isColumnModified(ControllerBoxPeer::UID)) $criteria->add(ControllerBoxPeer::UID, $this->uid);
         if ($this->isColumnModified(ControllerBoxPeer::POSITION)) $criteria->add(ControllerBoxPeer::POSITION, $this->position);
@@ -1683,7 +1629,6 @@ abstract class BaseControllerBox extends BaseObject implements Persistent
         $copyObj->setVersion($this->getVersion());
         $copyObj->setName($this->getName());
         $copyObj->setDescription($this->getDescription());
-        $copyObj->setInputs($this->getInputs());
         $copyObj->setInternalTemperature($this->getInternalTemperature());
         $copyObj->setUid($this->getUid());
         $copyObj->setPosition($this->getPosition());
@@ -2445,7 +2390,6 @@ abstract class BaseControllerBox extends BaseObject implements Persistent
         $this->version = null;
         $this->name = null;
         $this->description = null;
-        $this->inputs = null;
         $this->internal_temperature = null;
         $this->uid = null;
         $this->position = null;
