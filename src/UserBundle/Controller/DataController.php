@@ -389,7 +389,7 @@ class DataController extends Controller
             return false;
 
         $mail = \Swift_Message::newInstance()
-            ->setTo($email->getEmail(), $user->getUsername())
+            ->setTo('j.visser@vinq-it.nl', $user->getUsername())
             ->setFrom('noreply@' . $domain, $translator->trans('email.credentials.from') . $domain)
             ->setSubject($translator->trans('email.credentials.subject'))
             ->setBody($templating->render('UserBundle:email:credentials.html.twig', array('User' => $user, 'Password' => $password, 'Domain' => $domain)), 'text/html');
