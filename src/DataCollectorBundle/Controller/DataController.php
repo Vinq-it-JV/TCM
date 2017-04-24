@@ -31,7 +31,8 @@ class DataController extends Controller
         $fileDir = '/data/collector';
         $file = '/data.txt';
 
-        $data = $request->query->all();
+        //$data = $request->query->all();
+        $data = $request->request->all();
 
         if (!$fs->exists($rootDir . $fileDir)) {
             try {
