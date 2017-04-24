@@ -91,7 +91,7 @@ class DataController extends Controller
 
         for ($temp = 0; $temp < ControllerBox::CONTROLLER_DS_OUTPUTS; $temp++) {
             $DsTemperatureData = $this->getDsTemperatureData(substr($data, 24 + $temp * 20, 20));
-            $this->updateDsOutputs($DsTemperatureData, $temp, $controller);
+            $this->updateDsOutputs($DsTemperatureData, (ControllerBox::CONTROLLER_DS_OUTPUTS - $temp), $controller);
         }
 
     }
