@@ -151,6 +151,8 @@ class DataController extends Controller
         $temperature->setOutputNumber($output);
         $temperature->setTemperature($data['temperature']);
         $temperature->setControllerBox($controller);
+        if (!empty($controller->getMainStore()))
+            $temperature->setMainStore($controller->getMainStore());
         $temperature->save();
         return true;
     }
