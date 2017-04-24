@@ -139,7 +139,7 @@ class DataController extends Controller
         $uid = $data['uid'];
         $output++;
 
-        if (empty($controller) || empty($uid))
+        if (empty($controller) || empty($uid) || !hexdec($uid))
             return false;
 
         $temperature = DsTemperatureSensorQuery::create()
