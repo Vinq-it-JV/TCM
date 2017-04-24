@@ -103,7 +103,7 @@ class User extends BaseUser implements AdvancedUserInterface
      */
     public function getName()
     {
-        return $this->getFirstname() . $this->getMiddlename() . $this->getLastname();
+        return $this->getFirstname() . ' ' . $this->getMiddlename() . ' ' . $this->getLastname();
     }
 
     /**
@@ -142,7 +142,7 @@ class User extends BaseUser implements AdvancedUserInterface
     {
         $middlename = parent::getMiddlename();
         if (empty($middlename))
-            $middlename = ' ';
+            $middlename = '';
         return $middlename;
     }
 

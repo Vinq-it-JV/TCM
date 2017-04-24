@@ -2,15 +2,18 @@
 
 namespace DataCollectorBundle\Controller;
 
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
+
 use DeviceBundle\Model\CbInput;
 use DeviceBundle\Model\CbInputQuery;
 use DeviceBundle\Model\ControllerBox;
 use DeviceBundle\Model\ControllerBoxQuery;
 use DeviceBundle\Model\DsTemperatureSensor;
 use DeviceBundle\Model\DsTemperatureSensorQuery;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class DataController extends Controller
 {
@@ -21,7 +24,26 @@ class DataController extends Controller
 
     public function collectDataAction(Request $request)
     {
-        $data = "0307E03889AA340D0000C19328FF9E64851604B3002B28FF0B66851604D1009128FF0BB0841603F1002628FF1D61851604B7008628FFB9AE84160310003A28FF22AD8416035F002B";
+        $fs = new Filesystem();
+        $logger = $this->get('logger');
+
+        $rootDir = $this->get('kernel')->getRootDir();
+        $fileDir = '/data/collector';
+        $file = '/data.txt';
+
+        $data = $request->query->all();
+
+        if (!$fs->exists($rootDir . $fileDir)) {
+            try {
+                $fs->mkdir($rootDir . $fileDir, 0700);
+            } catch (IOExceptionInterface $e) {
+                $logger->error('Can not create directory at ' . $e->getPath());
+                return new Response();
+            }
+        }
+        file_put_contents($rootDir . $fileDir . $file, $data);
+
+        //$data = "0307E03889AA340D0000C19328FF9E64851604B3002B28FF0B66851604D1009128FF0BB0841603F1002628FF1D61851604B7008628FFB9AE84160310003A28FF22AD8416035F002B";
 
         $this->collectControllerData($data);
         return new Response();
