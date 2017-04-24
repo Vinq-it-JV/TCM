@@ -137,7 +137,6 @@ class DataController extends Controller
     protected function updateDsOutputs($data, $output, $controller = null)
     {
         $uid = $data['uid'];
-        $output++;
 
         if (empty($controller) || empty($uid) || !hexdec($uid))
             return false;

@@ -39,8 +39,8 @@
       <file leaf-file-name="DataController.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/DataCollectorBundle/Controller/DataController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="124">
-              <caret line="93" column="12" lean-forward="false" selection-start-line="93" selection-start-column="12" selection-end-line="93" selection-end-column="12" />
+            <state relative-caret-position="199">
+              <caret line="139" column="0" lean-forward="true" selection-start-line="139" selection-start-column="0" selection-end-line="139" selection-end-column="0" />
               <folding>
                 <element signature="e#50#107#0#PHP" expanded="true" />
               </folding>
@@ -1638,12 +1638,12 @@
       <workItem from="1489053229952" duration="120406000" />
       <workItem from="1491997882783" duration="9449000" />
       <workItem from="1492082180345" duration="222000" />
-      <workItem from="1492082416730" duration="66664000" />
+      <workItem from="1492082416730" duration="66794000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="436879000" />
+    <option name="totallyTimeSpent" value="437009000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="812" extended-state="6" />
@@ -2286,8 +2286,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/DataCollectorBundle/Controller/DataController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="124">
-          <caret line="93" column="12" lean-forward="false" selection-start-line="93" selection-start-column="12" selection-end-line="93" selection-end-column="12" />
+        <state relative-caret-position="199">
+          <caret line="139" column="0" lean-forward="true" selection-start-line="139" selection-start-column="0" selection-end-line="139" selection-end-column="0" />
           <folding>
             <element signature="e#50#107#0#PHP" expanded="true" />
           </folding>
