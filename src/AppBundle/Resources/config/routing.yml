@@ -14,7 +14,7 @@ tcm_profile_change_password:
 
 tcm_data_collector:
     path:     /data/collector
-    #methods:  [PUT, POST]
+    methods:  [PUT, POST]
     defaults: { _controller: DataCollectorBundle:Data:collectData }
     options:
         expose: true
