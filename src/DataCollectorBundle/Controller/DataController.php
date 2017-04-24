@@ -142,7 +142,7 @@ class DataController extends Controller
             return false;
 
         $temperature = DsTemperatureSensorQuery::create()
-            ->findOneByArray(['Uid' => $uid, 'OutputNumber' => $output]);
+            ->findOneByUid($uid);
 
         if (empty($temperature))
             $temperature = new DsTemperatureSensor();
