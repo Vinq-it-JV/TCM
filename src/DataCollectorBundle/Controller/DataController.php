@@ -22,6 +22,27 @@ class DataController extends Controller
     const CONTROLLER_V3 = 3;
     const CONTROLLER_V3_PACKET_LENGTH = 144;
 
+    public function testPostDataAction(Request $request)
+    {
+        $url = "http://tcm:8888/data/collector";
+
+        $data = "0307E03889AA340D0000C19328FF9E64851604B3002B28FF0B66851604D1009128FF0BB0841603F1002628FF1D61851604B7008628FFB9AE84160310003A28FF22AD8416035F002B";
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: text/plain'));
+
+        curl_exec($ch);
+        curl_close($ch);
+
+        echo printf('Send %s to %s', $data, $url);
+
+        return new Response();
+    }
+
     public function collectDataAction(Request $request)
     {
         $fs = new Filesystem();
@@ -31,8 +52,7 @@ class DataController extends Controller
         $fileDir = '/data/collector';
         $file = '/data.txt';
 
-        //$data = $request->query->all();
-        $data = $request->request->all();
+        $data = $request->getContent();
 
         if (!$fs->exists($rootDir . $fileDir)) {
             try {
@@ -42,10 +62,8 @@ class DataController extends Controller
                 return new Response();
             }
         }
+
         file_put_contents($rootDir . $fileDir . $file, $data);
-
-        //$data = "0307E03889AA340D0000C19328FF9E64851604B3002B28FF0B66851604D1009128FF0BB0841603F1002628FF1D61851604B7008628FFB9AE84160310003A28FF22AD8416035F002B";
-
         $this->collectControllerData($data);
         return new Response();
     }
