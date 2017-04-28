@@ -31,9 +31,9 @@
                                                 <table class="table table-striped table-bordered">
                                                     <thead>
                                                     <tr>
-                                                        <th st-sort="Name" class="st-sortable col-md-10 col-xs-9"
+                                                        <th st-sort="Name" class="st-sortable col-md-10 col-xs-8"
                                                             ng-cloak>{{ ng.translate('USER.NAME') }}</th>
-                                                        <th class="st-nosort text-right col-md-2 col-xs-3"
+                                                        <th class="st-nosort text-right col-md-2 col-xs-4"
                                                             ng-cloak>{{ ng.translate('ACTION') }}</th>
                                                     </tr>
                                                     </thead>
@@ -42,6 +42,10 @@
                                                         <td ng-cloak>{{ '{{ row.Name }}' }}</td>
                                                         <td>
                                                             <div class="pull-right">
+                                                                <button type="button" ng-click="newPassword(row.Id)"
+                                                                        class="btn btn-xs btn-success">
+                                                                    <i class="fa fa-key"></i>
+                                                                </button>
                                                                 <button type="button" ng-click="editUser(row.Id)"
                                                                         class="btn btn-xs btn-primary">
                                                                     <i class="fa fa-pencil"></i>

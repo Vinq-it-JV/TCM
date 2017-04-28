@@ -73,13 +73,13 @@
                                         </div>
                                     </section>
                                 </div>
-                            </div>
-                            <div class="panel-footer">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <button ng-click="reloadPage()" class="btn btn-sm btn-primary pull-left">
-                                            <i class="fa fa-refresh" ng-cloak></i> {{ ng.translate('REFRESH') }}
-                                        </button>
+                                <div class="panel-footer">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <button ng-click="reloadPage()" class="btn btn-sm btn-primary pull-left" ng-cloak>
+                                                <i class="fa fa-refresh"></i> {{ ng.translate('REFRESH') }}
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -94,5 +94,6 @@
 {% block javascripts %}
     <script src="{{ asset('bundles/app/js/app/controllers/installationCtrl.js') }}"></script>
     <script src="{{ asset('bundles/app/js/app/datasets/sensors.js') }}"></script>
+    <script src="{{ asset('bundles/app/js/app/datasets/charts.js') }}"></script>
 {% endblock %}
 

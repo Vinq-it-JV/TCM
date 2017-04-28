@@ -43,6 +43,7 @@ class DataController extends Controller
 
         $companies = CompanyQuery::create()
             ->filterByIsDeleted(false)
+            ->orderByName('ASC')
             ->find();
 
         foreach ($companies as $company) {

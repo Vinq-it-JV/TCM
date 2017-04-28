@@ -29,6 +29,7 @@ angular
                     return true;
                 },
                 beforeDrop: function (event) {
+                    //console.log(event.source.nodeScope.$modelValue);
                     if (!$scope.isValidObject(event.dest.nodesScope.$parent.$modelValue))
                         return true;
                     if ($scope.isValidObject(event.source.nodeScope.$modelValue))

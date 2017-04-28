@@ -1,7 +1,41 @@
-# TCM home / dashboard
-tcm_home:
+# TCM splash
+tcm_splash:
     path:     /
-    defaults: { _controller: AppBundle:Page:index }
+    defaults: { _controller: AppBundle:Page:splash }
+    options:
+        expose: true
+
+tcm_dashboard:
+    path:     /dashboard
+    defaults: { _controller: AppBundle:Page:dashboard }
+    options:
+        expose: true
+
+tcm_stores:
+    path:     /stores
+    defaults: { _controller: AppBundle:Page:stores }
+    options:
+        expose: true
+
+tcm_stores_get:
+    path:     /stores/get
+    defaults: { _controller: AppBundle:Data:getStores }
+    options:
+        expose: true
+
+tcm_store_get:
+    path:     /store/{storeid}/get
+    defaults: { _controller: AppBundle:Data:getStore }
+    options:
+        expose: true
+
+tcm_store_show:
+    path:     /store/{storeid}/show
+    defaults: { _controller: AppBundle:Page:showStore }
+    options:
+        expose: true
+tcm_logout:
+    path:     /logout
     options:
         expose: true
 
@@ -14,7 +48,7 @@ tcm_profile_change_password:
 
 tcm_data_collector:
     path:     /data/collector
-    #methods:  [PUT, POST]
+    methods:  [PUT, POST]
     defaults: { _controller: DataCollectorBundle:Data:collectData }
     options:
         expose: true

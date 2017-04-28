@@ -182,6 +182,11 @@ angular
                     return addressId;
                 },
                 copyCompanyData: function (company) {
+                    d_store.Code = angular.copy(company.Code);
+                    d_store.Name = angular.copy(company.Name);
+                    d_store.Description = angular.copy(company.Description);
+                    d_store.Region = angular.copy(company.Region);
+                    d_store.Website = angular.copy(company.Website);
                     d_store.VatNumber = angular.copy(company.VatNumber);
                     d_store.CocNumber = angular.copy(company.CocNumber);
                     d_store.PaymentMethod = angular.copy(company.PaymentMethod);

@@ -1,4 +1,7 @@
 {
+    "TCM": {
+        "LABEL": "TCM"
+    },
     "CLOSE": "Sluiten",
     "HOME": "Home",
     "INFO": "Info",
@@ -6,7 +9,6 @@
     "PLEASE_WAIT": "Wachten a.u.b...",
     "SHOW_DETAILS": "Toon details",
     "LOCATIONS": "Locaties",
-    "NOTIFICATIONS": "Notificaties",
     "USERS": "Gebruikers",
     "ACTION": "Actie",
     "SEARCH": "Zoeken",
@@ -20,6 +22,7 @@
     "COPY": "Kopieer",
     "UNLINK": "Loskoppelen",
     "REFRESH": "Verversen",
+    "BACK": "Terug",
     "ROLE": {
         "USER": "Gebruiker",
         "ADMIN": "Admin",
@@ -103,7 +106,8 @@
         "COUNTRY": "Land",
         "MAP_URL": "Kaart URL",
         "ROLES": "Rollen",
-        "LANGUAGE": "Taal"
+        "LANGUAGE": "Taal",
+        "NEW_PASSWORD": "Nieuw wachtwoord"
     },
     "HEADER": {
         "USERS": "Gebruikers",
@@ -174,7 +178,8 @@
         "CONTACTS": "Contactpersonen",
         "INFORMANTS": "Informanten",
         "NOTIFY": "Notificeer",
-        "DEVICE_GROUPS": "Groepen"
+        "DEVICE_GROUPS": "Groepen",
+        "INFORMATION": "Informatie"
     },
     "SENSOR_GROUP": {
         "LABEL": "Sensor groep",
@@ -192,6 +197,7 @@
     },
     "SENSOR": {
         "LABEL": "Sensor",
+        "SENSORS": "Sensoren",
         "STORE": "Filiaal",
         "ACTIVE": "Actief",
         "EDIT_SENSOR": "Sensor bewerken",
@@ -200,11 +206,16 @@
         "INPUT_NUMBER": "Ingang",
         "OUTPUT_NUMBER": "Uitgang",
         "DESCRIPTION": "Omschrijving",
+        "TEMPERATURE": "Temperatuur",
+        "INPUT": "Ingang",
         "TRIP_LOW": "Omslag laag",
         "TRIP_HIGH": "Omslag hoog",
         "SWITCH_WHEN": "Schakel als",
         "HIGH": "Hoog",
         "LOW": "Laag"
+    },
+    "NOTIFICATIONS": {
+        "LABEL": "Notificaties"
     },
     "INSTALLATION": {
         "LABEL": "Installatie",
@@ -231,7 +242,8 @@
         "DELETE_STORE": "Filiaal verwijderen?",
         "COPY_COMPANY_DATA": "Bedrijfsdata kopiëren?",
         "DELETE_GROUP": "Groep verwijderen?",
-        "UNLINK_SENSOR": "Sensor loskoppelen van filiaal?"
+        "UNLINK_SENSOR": "Sensor loskoppelen van filiaal?",
+        "NEW_PASSWORD": "Nieuw wachtwoord genereren voor gebuiker?"
     },
     "AUTH": {
         "USERNAME": "Gebruikersnaam",
@@ -280,5 +292,8 @@
         "INFO": "Info",
         "PASSWORD": "Wachtwoord",
         "CONFIRM": "Bevestig"
+    },
+    "SPLASH": {
+        "TCM": "TAP CONTROL MANAGER"
     }
 }

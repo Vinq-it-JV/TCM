@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block contents %}
+    {% if app.user %}
+        {% set ngInit = "getStore(" ~ store.Id ~ ")" %}
+        <div ng-controller="dashboardCtrl" ng-init="{{ ngInit }}">
+
+            {% block header %}
+                {%  include 'AppBundle::header.html.twig' %}
+            {% endblock %}
+
+            {% block page %}
+                <div class="page">
+                    <div ng-switch="activePage">
+                        <div ng-switch-when="dashboard">
+                            {% include 'AppBundle:store:dashboard.html.twig' %}
+                        </div>
+                        <div ng-switch-when="sensors">
+                            {% include 'AppBundle:store:sensors.html.twig' %}
+                        </div>
+                        <div ng-switch-when="groupSensors">
+                            {% include 'AppBundle:store:group_sensors.html.twig' %}
+                        </div>
+                    </div>
+                </div>
+            {% endblock %}
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('bundles/app/js/app/controllers/dashboardCtrl.js') }}"></script>
+    <script src="{{ asset('bundles/app/js/app/datasets/stores.js') }}"></script>
+    <script src="{{ asset('bundles/app/js/app/datasets/sensors.js') }}"></script>
+    <script src="{{ asset('bundles/app/js/app/datasets/charts.js') }}"></script>
+{% endblock %}
+

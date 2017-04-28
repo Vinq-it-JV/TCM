@@ -9,6 +9,8 @@
 @import "select2.css";
 @import "angular-toggle.css";
 @import "angular-ui-tree.min.css";
+@import "animate.css";
+@import "highcharts-ng.css";
 
 html {
     width: 100%;
@@ -37,14 +39,62 @@ body {
 .center-container {
     width: 100%;
     height: 50%;
-
     position: absolute;
     top: 0;
     bottom: 0;
     left: 0;
     right: 0;
-
     margin: auto;
+}
+
+.container-center {
+    display: table;
+    height: inherit;
+}
+
+.vertical-center-row {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.tcmLogo-splash {
+    -webkit-animation-duration: 3s;
+    -webkit-animation-delay: 0s;
+}
+
+.tcmText-splash {
+    -webkit-animation-duration: 2s;
+    -webkit-animation-delay: 3s;
+    font: 18px/24px Arial, Helvetica, sans-serif;
+    font-weight: bold;
+}
+
+.big-button-text {
+    float: left;
+    height: 50px;
+    padding: 8px 15px;
+    font-size: 32px;
+    line-height: 45px
+}
+
+.big-button-icon {
+    display: inline-flex !important;
+}
+
+.big-button-badge {
+    height: 50px;
+    padding-top: 15px;
+}
+
+.group-name {
+    float: left;
+    padding: 2px 15px;
+    font-size: 18px;
+}
+
+.sensor-name {
+    padding-top: 4px;
+    font-size: 18px;
 }
 
 .cg-busy {

@@ -1,0 +1,86 @@
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-md-12 col-lg-12">
+            <div class="panel panel-default cursor-pointer" ng-click="">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-2 text-center big-button-icon">
+                            <i class="fa fa-map-marker fa-5x fa-fw"></i>
+                        </div>
+                        <div class="col-xs-10 text-center big-button-text" style="font-size: 30px;" ng-cloak>
+                            {% verbatim %}
+                                {{ stores.store().Name }}
+                            {% endverbatim %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-md-12 col-lg-12">
+            <div class="panel panel-primary cursor-pointer" ng-click="">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-2 text-center big-button-icon">
+                            <i class="fa fa-cubes fa-2x fa-fw"></i>
+                        </div>
+                        <div class="col-xs-10 text-center group-name" ng-cloak>
+                            {% verbatim %}
+                                {{ sensors.sensor().Name }}
+                            {% endverbatim %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% verbatim %}
+    <div class="row">
+        <div class="col-md-4 col-lg-4" ng-repeat="sensor in sensors.sensor().devices">
+            <div class="panel panel-default" ng-click="">
+                <div class="panel-heading text-center">
+                    <div class="row">
+                        <div class="col-xs-2">
+                            <i class="fa fa-fw fa-thermometer-2 fa-2x"></i>
+                        </div>
+                        <div class="col-xs-10">
+                            <label class="sensor-name">{{ sensor.Name }}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div ng-switch="sensor.TypeId">
+                        <div ng-switch-when="2">
+                            <highchart id="sensor.Name" config="sensor.chartConfig"></highchart>
+                        </div>
+                        <div ng-switch-when="3">
+                            <highchart id="sensor.Name" config="sensor.chartConfig"></highchart>
+                        </div>
+                        <div ng-switch-when="4">
+                            <highchart id="sensor.Name" config="sensor.chartConfig"></highchart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endverbatim %}
+    <div class="row">
+        <div class="col-xs-12 col-md-12 col-lg-12">
+            <div class="panel panel-info cursor-pointer" ng-click="showSensors()">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-10 text-left big-button-text" style="font-size: 30px;" ng-cloak>
+                            {{ ng.translate('BACK') }}
+                        </div>
+                        <div class="col-xs-2 text-center big-button-icon">
+                            <i class="fa fa-chevron-left fa-5x fa-fw"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

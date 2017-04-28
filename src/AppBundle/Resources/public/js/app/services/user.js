@@ -78,13 +78,13 @@ angular
                 },
                 isAdmin: function () {
                     for (index in d_user.Roles)
-                        if (d_user.Roles[index] == "ROLE_ADMIN")
+                        if (d_user.Roles[index].Name == "ROLE_ADMIN")
                             return true;
                     return false;
                 },
                 isSuperAdmin: function () {
                     for (index in d_user.Roles)
-                        if (d_user.Roles[index] == "ROLE_SUPER_ADMIN")
+                        if (d_user.Roles[index].Name == "ROLE_SUPER_ADMIN")
                             return true;
                     return false;
                 },

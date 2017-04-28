@@ -9,8 +9,10 @@
  */
 angular
     .module('tcmApp')
-    .factory('DS_Sensors', ['$rootScope', '$translate',
-        function ($rootScope, $translate) {
+    .factory('DS_Sensors', ['$rootScope', '$translate', 'DS_Charts',
+        function ($rootScope, $translate, DS_Charts) {
+
+            var charts = DS_Charts;
 
             var d_sensors = [];
             var d_sensor = [];
@@ -94,6 +96,19 @@ angular
                 updRecord: function (record_data) {
                     d_sensor = angular.copy(record_data);
                     return d_sensor;
+                },
+                setSensorCharts: function () {
+                    for (group in d_sensors) {
+                        if (d_sensors[group].TypeId == 1) {
+                            for (sensor in d_sensors[group].devices) {
+                                charts.setSensorObject(d_sensors[group].devices[sensor]);
+                            }
+                        }
+                        else {
+                            charts.setSensorObject(d_sensors[group]);
+                            console.log(d_sensors[group]);
+                        }
+                    }
                 },
                 isValidObject: function (object) {
                     return isValidObject(object);

@@ -38,13 +38,11 @@ class SecurityController extends Controller
 
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
-        if (is_object($user))
-        {
+        if (is_object($user)) {
             $dbuser = UserQuery::create()
                 ->findOneByUsername($user->getUsername());
 
-            if (!empty($dbuser))
-            {
+            if (!empty($dbuser)) {
                 $userdata = $dbuser->getUserDataArray();
                 $userdata['user']['IsLoggedin'] = true;
             }
@@ -55,13 +53,36 @@ class SecurityController extends Controller
             ->make();
     }
 
+    public function newPasswordAction(Request $request, $userid)
+    {
+        $helper = $this->getHelper();
+        $user = UserQuery::create()->findOneById($userid);
+
+        if (!empty($user)) {
+            $encoder = $this->container->get('security.password_encoder');
+            $password = $user->generatePassword($encoder);
+            $encoded = $encoder->encodePassword($user, $password);
+            $user->setPassword($encoded);
+            $user->save();
+
+            $helper->sendCredentialsEmail($user, $password);
+
+            return JsonResult::create()
+                ->setMessage('PASSWORD_GENERATED')
+                ->make();
+        }
+        return JsonResult::create()
+            ->setMessage('PASSWORD_NOT_CHANGED')
+            ->setErrorcode(JsonResult::WARNING)
+            ->make();
+    }
+
     public function changePasswordAction(Request $request)
     {
         $helper = $this->getHelper();
         $passworddata = (object)json_decode($request->getContent(), true);
         $user = $this->getUser();
-        if (!empty($user))
-        {
+        if (!empty($user)) {
             $password = $passworddata->password;
             $encoder = $this->container->get('security.password_encoder');
             $encoded = $encoder->encodePassword($user, $password);
@@ -82,8 +103,7 @@ class SecurityController extends Controller
 
     protected function preTranslateErrorMessage($message)
     {
-        switch ($message)
-        {
+        switch ($message) {
             case 'User is locked out':
                 return 'AUTH.USER_LOCKED_OUT';
             case 'User is not activated':

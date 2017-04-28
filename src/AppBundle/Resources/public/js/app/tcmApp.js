@@ -11,7 +11,7 @@
  *
  */
 angular
-    .module('tcmApp', ['ui.router', 'ui.select', 'toggle-switch', 'ui.tree', 'ngResource', 'ngCookies', 'ngSanitize', 'LocalStorageModule', 'smart-table', 'ngAnimate', 'ghiscoding.validation', 'pascalprecht.translate', 'cgBusy', 'mgcrea.ngStrap'])
+    .module('tcmApp', ['ui.router', 'ui.select', 'toggle-switch', 'ui.tree', 'highcharts-ng', 'ngResource', 'ngCookies', 'ngSanitize', 'LocalStorageModule', 'smart-table', 'ngAnimate', 'ghiscoding.validation', 'pascalprecht.translate', 'cgBusy', 'mgcrea.ngStrap'])
     .config(function($translateProvider) {
         $translateProvider.useStaticFilesLoader({
         	files: [{
@@ -34,7 +34,7 @@ angular
     .config(['$urlRouterProvider', '$stateProvider', '$locationProvider', '$translateProvider',
         function ($urlRouterProvider, $stateProvider) {
             $stateProvider
-            .state('home', {
-                url: Routing.generate('tcm_home')
+            .state('tcm_splash', {
+                url: Routing.generate('tcm_splash')
             });
     }]);

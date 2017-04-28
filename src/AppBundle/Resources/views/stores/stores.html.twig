@@ -1,0 +1,113 @@
+{% extends 'base.html.twig' %}
+
+{% block contents %}
+    {% if app.user %}
+        <div ng-controller="dashboardCtrl" ng-init="getStores()">
+
+            {% block header %}
+                {%  include 'AppBundle::header.html.twig' %}
+            {% endblock %}
+
+            {% block page %}
+                <div class="page">
+                    <div class="container">
+                        <div class="row" ng-show="AUTH.isSuperAdmin()">
+                            <div class="panel-body">
+                                <h4 ng-cloak>
+                                    <i class="fa fa-map-marker"></i> {{ ng.translate('STORE.STORES') }}
+                                </h4>
+                                <hr/>
+                                <div class="well">
+                                    <section st-table="storesCollection" st-safe-src="stores.stores()">
+                                        <div class="row">
+                                            <div class="col-md-3 col-xs-6">
+                                                <input st-search class="form-control input-sm"
+                                                       placeholder="{{ ng.translate('SEARCH') }}" type="text" ng-cloak/>
+                                            </div>
+                                        </div>
+                                        <br/>
+                                        <div class="row">
+                                            <div class="col-md-12 col-xs-12">
+                                                <table class="table table-striped table-bordered">
+                                                    <thead>
+                                                    <tr>
+                                                        <th st-sort="Name" class="st-sortable col-md-10 col-xs-9"
+                                                            ng-cloak>{{ ng.translate('STORE.NAME') }}</th>
+                                                        <th class="st-nosort text-right col-md-2 col-xs-3"
+                                                            ng-cloak>{{ ng.translate('ACTION') }}</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {% verbatim %}
+                                                    <tr ng-repeat="store in storesCollection">
+                                                        <td ng-cloak>{{ store.Name }}</td>
+                                                        <td>
+                                                            <div class="pull-right">
+                                                                <button type="button" ng-click="showStore(store.Id)"
+                                                                        class="btn btn-xs btn-success">
+                                                                    <i class="fa fa-eye"></i>
+                                                                </button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    {% endverbatim %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </section>
+                                </div>
+                            </div>
+                        </div>
+                        <div ng-hide="AUTH.isSuperAdmin()">
+                            {% verbatim %}
+                            <div ng-repeat="store in storesCollection">
+                                <div class="row">
+                                    <div class="col-xs-12 col-md-12 col-lg-12">
+                                        <div class="panel panel-primary cursor-pointer" ng-click="showStore(store.Id)">
+                                            <div class="panel-heading">
+                                                <div class="row">
+                                                    <div class="col-xs-10 text-left big-button-text" style="font-size: 30px;" ng-cloak>
+                                                        {{ store.Name }}
+                                                    </div>
+                                                    <div class="col-xs-2 text-center big-button-icon">
+                                                        <i class="fa fa-chevron-right fa-5x fa-fw"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endverbatim %}
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-md-12 col-lg-12">
+                                <div class="panel panel-info cursor-pointer" ng-click="pageBack()">
+                                    <div class="panel-heading">
+                                        <div class="row">
+                                            <div class="col-xs-10 text-left big-button-text" ng-cloak>
+                                                {{ ng.translate('BACK') }}
+                                            </div>
+                                            <div class="col-xs-2 text-center big-button-icon">
+                                                <i class="fa fa-chevron-left fa-5x fa-fw"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endblock %}
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('bundles/app/js/app/controllers/dashboardCtrl.js') }}"></script>
+    <script src="{{ asset('bundles/app/js/app/datasets/stores.js') }}"></script>
+    <script src="{{ asset('bundles/app/js/app/datasets/sensors.js') }}"></script>
+    <script src="{{ asset('bundles/app/js/app/datasets/charts.js') }}"></script>
+{% endblock %}
+

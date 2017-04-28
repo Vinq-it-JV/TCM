@@ -42,6 +42,7 @@ class DataController extends Controller
 
         $stores = StoreQuery::create()
             ->filterByIsDeleted(false)
+            ->orderByName('ASC')
             ->find();
 
         foreach ($stores as $store) {

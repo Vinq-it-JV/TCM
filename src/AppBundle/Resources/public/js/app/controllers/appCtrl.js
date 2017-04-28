@@ -140,6 +140,16 @@ angular
                 Modal.open(modalDefaults, modalOptions);
             };
 
+            $scope.showAdministration = function ()
+            {
+                $scope.showUrl(Routing.generate('administration_dashboard'));
+            };
+
+            $scope.logout = function ()
+            {
+                $scope.showUrl(Routing.generate('tcm_logout'));
+            };
+
             $scope.showHttpError = function (data) {
                 var modalDefaults = {
                     templateUrl: templatePrefix + "httperror.tpl.html"
@@ -166,8 +176,16 @@ angular
                 $window.location.href = url;
             };
 
+            $scope.showRoute = function (route) {
+                $scope.showUrl(Routing.generate(route));
+            };
+
             $scope.reloadPage = function () {
                 $window.location.reload();
+            };
+
+            $scope.pageBack = function () {
+                $window.history.back();
             };
 
             $scope.initFail = function (data) {

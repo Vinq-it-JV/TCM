@@ -1,4 +1,7 @@
 {
+    "TCM": {
+        "LABEL": "TCM"
+    },
     "CLOSE": "Close",
     "HOME": "Home",
     "INFO": "Info",
@@ -6,7 +9,6 @@
     "PLEASE_WAIT": "Please wait...",
     "SHOW_DETAILS": "Show details",
     "LOCATIONS": "Locations",
-    "NOTIFICATIONS": "Notifications",
     "USERS": "Users",
     "ACTION": "Action",
     "SEARCH": "Search",
@@ -20,6 +22,7 @@
     "COPY": "Copy",
     "UNLINK": "Unlink",
     "REFRESH": "Refresh",
+    "BACK": "Back",
     "ROLE": {
         "USER": "User",
         "ADMIN": "Admin",
@@ -103,7 +106,8 @@
         "COUNTRY": "Country",
         "MAP_URL": "Map URL",
         "ROLES": "Roles",
-        "LANGUAGE": "Language"
+        "LANGUAGE": "Language",
+        "NEW_PASSWORD": "New password"
     },
     "HEADER": {
         "USERS": "Users",
@@ -174,7 +178,8 @@
         "CONTACTS": "Contacts",
         "INFORMANTS": "Informants",
         "NOTIFY": "Notify",
-        "DEVICE_GROUPS": "Groups"
+        "DEVICE_GROUPS": "Groups",
+        "INFORMATION": "Information"
     },
     "SENSOR_GROUP": {
         "LABEL": "Sensor group",
@@ -192,6 +197,7 @@
     },
     "SENSOR": {
         "LABEL": "Sensor",
+        "SENSORS": "Sensors",
         "STORE": "Store",
         "ACTIVE": "Active",
         "EDIT_SENSOR": "Edit sensor",
@@ -200,11 +206,16 @@
         "INPUT_NUMBER": "Input",
         "OUTPUT_NUMBER": "Output",
         "DESCRIPTION": "Description",
+        "TEMPERATURE": "Temperature",
+        "INPUT": "Input",
         "TRIP_LOW": "Trip low",
         "TRIP_HIGH": "Trip high",
         "SWITCH_WHEN": "Switch when",
         "HIGH": "High",
         "LOW": "Low"
+    },
+    "NOTIFICATIONS": {
+        "LABEL": "Notifications"
     },
     "INSTALLATION": {
         "LABEL": "Installation",
@@ -231,7 +242,8 @@
         "DELETE_STORE": "Delete store?",
         "COPY_COMPANY_DATA": "Copy all company data?",
         "DELETE_GROUP": "Delete group?",
-        "UNLINK_SENSOR": "Unlink sensor / device from store?"
+        "UNLINK_SENSOR": "Unlink sensor / device from store?",
+        "NEW_PASSWORD": "Generate new password for user?"
     },
     "AUTH": {
         "USERNAME": "Username",
@@ -280,5 +292,8 @@
         "INFO": "Info",
         "PASSWORD": "Password",
         "CONFIRM": "Confirm"
+    },
+    "SPLASH": {
+        "TCM": "TAP CONTROL MANAGER"
     }
 }

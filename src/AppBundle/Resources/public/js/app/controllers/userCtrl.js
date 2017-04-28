@@ -151,6 +151,26 @@ angular
             Modal.open({}, modalOptions);
         };
 
+        $scope.newPassword = function (userid)
+        {
+            var modalOptions = {
+                closeButtonText: $translate.instant('CANCEL'),
+                actionButtonText: $translate.instant('OK'),
+                headerText: $translate.instant('USER.NEW_PASSWORD'),
+                bodyText: $translate.instant('QUESTION.NEW_PASSWORD'),
+                onExecute: function () {
+                    $scope.requestType = 'newPassword';
+                    var passworddata = {
+                        'url': Routing.generate('administration_user_new_password', {'userid':userid}),
+                        'payload': ''
+                    };
+                    $scope.BE.put(passworddata, $scope.fetchDataOk, $scope.fetchDataFail);
+                }
+            };
+
+            Modal.open({}, modalOptions);
+        };
+
         $scope.fetchDataOk = function (data)
         {
         	switch ($scope.requestType)
@@ -178,6 +198,7 @@ angular
                 case 'deleteEmail':
                 case 'deletePhone':
                 case 'deleteAddress':
+                case 'newPassword':
                     break;
                 default:
                     break;

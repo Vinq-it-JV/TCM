@@ -81,6 +81,13 @@ administration_user_delete_address:
     options:
         expose: true
 
+administration_user_new_password:
+    path:     /user/{userid}/new/password
+    defaults: { _controller: UserBundle:Security:newPassword }
+    methods: [POST, PUT]
+    options:
+        expose: true
+
 #
 # COMPANIES
 #
