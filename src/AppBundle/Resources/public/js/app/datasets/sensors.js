@@ -99,19 +99,78 @@ angular
                 },
                 setSensorCharts: function () {
                     for (group in d_sensors) {
-                        if (d_sensors[group].TypeId == 1) {
+                        var _sensor = d_sensors[group];
+                        if (_sensor.TypeId == 1) {
                             for (sensor in d_sensors[group].devices) {
-                                charts.setSensorObject(d_sensors[group].devices[sensor]);
+                                var _sensor = d_sensors[group].devices[sensor];
+                                charts.setSensorObject(_sensor);
                             }
                         }
                         else {
-                            charts.setSensorObject(d_sensors[group]);
-                            console.log(d_sensors[group]);
+                            charts.setSensorObject(_sensor);
                         }
                     }
+                },
+                updateSensors: function (sensordata) {
+                    for (group in sensordata) {
+                        var _sensor = sensordata[group];
+                        if (_sensor.TypeId == 1) {
+                            for (sensor in sensordata[group].devices) {
+                                var _sensor = sensordata[group].devices[sensor];
+                                var __sensor = this.findSensor(_sensor.Id, _sensor.Uid, _sensor.TypeId);
+                                if (this.isValidObject(__sensor)) {
+                                    this.copySensorValues(__sensor, _sensor);
+                                    charts.updateSensorObject(__sensor);
+                                }
+                            }
+                        }
+                        else {
+                            var __sensor = this.findSensor(_sensor.Id, _sensor.Uid, _sensor.TypeId);
+                            if (this.isValidObject(__sensor)) {
+                                this.copySensorValues(__sensor, _sensor);
+                                charts.updateSensorObject(__sensor);
+                            }
+                        }
+                    }
+                },
+                copySensorValues: function (src, dst) {
+                    switch (src.TypeId) {
+                        case 2:
+                            src.InternalTemperature = angular.copy(dst.InternalTemperature);
+                            break;
+                        case 3:
+                            src.Temperature = angular.copy(dst.Temperature);
+                            src.LowLimt = angular.copy(dst.LowLimit);
+                            src.HighLimit = angular.copy(dst.HighLimit);
+                            break;
+                        case 4:
+                            src.SwitchState = angular.copy(dst.SwitchState);
+                            src.SwitchWhen = angular.copy(dst.SwitchWhen);
+                            break;
+                        default:
+                            break;
+                    }
+                },
+                findSensor: function (id, uid, typeid) {
+                    for (group in d_sensors) {
+                        var _sensor = d_sensors[group];
+                        if (_sensor.TypeId == 1) {
+                            for (sensor in d_sensors[group].devices) {
+                                var _sensor = d_sensors[group].devices[sensor];
+                                if ((_sensor.Id == id) && (_sensor.Uid == uid) && (_sensor.TypeId == typeid))
+                                    return _sensor;
+                            }
+                        }
+                        else {
+                            if ((_sensor.Id == id) && (_sensor.Uid == uid) && (_sensor.TypeId == typeid))
+                                return _sensor;
+                        }
+                    }
+                    return null;
                 },
                 isValidObject: function (object) {
                     return isValidObject(object);
                 }
-            };
+            }
+                ;
         }]);

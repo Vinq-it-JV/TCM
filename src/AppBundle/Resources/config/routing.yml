@@ -34,6 +34,13 @@ tcm_store_show:
     defaults: { _controller: AppBundle:Page:showStore }
     options:
         expose: true
+
+tcm_update_sensors:
+    path:     /store/{storeid}/sensors/update
+    defaults: { _controller: AppBundle:Data:updateSensors }
+    options:
+        expose: true
+
 tcm_logout:
     path:     /logout
     options:

@@ -26,7 +26,7 @@ html {
 
 body {
     position: relative;
-    font: 12px/18px Arial, Helvetica, sans-serif;
+    font: 1em Arial, Helvetica, sans-serif;
 }
 
 .page {
@@ -65,15 +65,15 @@ body {
 .tcmText-splash {
     -webkit-animation-duration: 2s;
     -webkit-animation-delay: 3s;
-    font: 18px/24px Arial, Helvetica, sans-serif;
+    font: 1.5em Arial, Helvetica, sans-serif;
     font-weight: bold;
 }
 
 .big-button-text {
     float: left;
     height: 50px;
-    padding: 8px 15px;
-    font-size: 32px;
+    padding: 4px 15px;
+    font-size: 2em;
     line-height: 45px
 }
 
@@ -83,18 +83,18 @@ body {
 
 .big-button-badge {
     height: 50px;
-    padding-top: 15px;
+    padding-top: 12px;
 }
 
 .group-name {
     float: left;
     padding: 2px 15px;
-    font-size: 18px;
+    font-size: 1.5em;
 }
 
 .sensor-name {
     padding-top: 4px;
-    font-size: 18px;
+    font-size: 1.5em;
 }
 
 .cg-busy {
@@ -106,7 +106,7 @@ body {
 }
 
 .user-profile {
-    font-size: 75px;
+    font-size: 4.6875em;
 }
 
 .separator-line {

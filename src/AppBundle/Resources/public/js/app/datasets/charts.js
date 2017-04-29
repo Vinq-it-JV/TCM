@@ -20,7 +20,10 @@ angular
                         plotBackgroundImage: null,
                         plotBorderWidth: 0,
                         plotShadow: false,
-                        height: '200px'
+                        height: '200px',
+                        animation: {
+                            duration: 2000
+                        }
                     },
                     title: {
                         text: ''
@@ -110,7 +113,10 @@ angular
                         plotBackgroundImage: null,
                         plotBorderWidth: 0,
                         plotShadow: false,
-                        height: '200px'
+                        height: '200px',
+                        animation: {
+                            duration: 2000
+                        }
                     },
                     title: {
                         text: ''
@@ -214,11 +220,28 @@ angular
                     {
                         case 2:
                             sensor.chartConfig = angular.copy(d_temperatureChart);
+                            this.updateSensorObject(sensor);
+                            break;
+                        case 3:
+                            sensor.chartConfig = angular.copy(d_temperatureChart);
+                            this.updateSensorObject(sensor);
+                            break;
+                        case 4:
+                            sensor.chartConfig = angular.copy(d_inputChart);
+                            this.updateSensorObject(sensor);
+                            break;
+                        default:
+                            break;
+                    }
+                },
+                updateSensorObject: function (sensor) {
+                    switch (sensor.TypeId)
+                    {
+                        case 2:
                             sensor.chartConfig.series[0].name = $translate.instant('SENSOR.TEMPERATURE');
                             sensor.chartConfig.series[0].data[0] = this.makeDecimal(sensor.InternalTemperature, 2);
                             break;
                         case 3:
-                            sensor.chartConfig = angular.copy(d_temperatureChart);
                             sensor.chartConfig.series[0].name = $translate.instant('SENSOR.TEMPERATURE');
                             sensor.chartConfig.series[0].data[0] = this.makeDecimal(sensor.Temperature, 2);
                             sensor.chartConfig.options.yAxis.plotBands[0].from = this.makeDecimal(sensor.LowLimit);
@@ -227,7 +250,6 @@ angular
                             sensor.chartConfig.options.yAxis.plotBands[2].from = this.makeDecimal(sensor.HighLimit);
                             break;
                         case 4:
-                            sensor.chartConfig = angular.copy(d_inputChart);
                             sensor.chartConfig.series[0].name = $translate.instant('SENSOR.INPUT');
                             sensor.chartConfig.series[0].data[0] = sensor.SwitchState ? 1 : 0;
                             break;

@@ -74,6 +74,26 @@ class DataController extends Controller
     }
 
     /**
+     * Update sensor information
+     * @param Request $request
+     * @param $storeid
+     * @return mixed
+     */
+    public function updateSensorsAction(Request $request, $storeid)
+    {
+        $dataArr = [];
+
+        $store = StoreQuery::create()->findOneById($storeid);
+        if (!empty($store))
+            $dataArr = $this->getStoreDeviceGroups($store);
+
+        return JsonResult::create()
+            ->setContents($dataArr)
+            ->setErrorcode(JsonResult::SUCCESS)
+            ->make();
+    }
+
+    /**
      * getStoreData($store)
      * @param $store
      * @return array

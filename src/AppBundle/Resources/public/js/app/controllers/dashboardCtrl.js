@@ -16,6 +16,9 @@ angular
             $scope.sensors = DS_Sensors;
             $scope.charts = DS_Charts;
 
+            $scope.updateTimer = null;
+            $scope.updateTimeout = 10000;
+
             $scope.storesCollection = [];
 
             $scope.activePage = 'dashboard';
@@ -54,11 +57,31 @@ angular
                 $scope.activePage = 'sensors';
             };
 
+            $scope.updateSensors = function () {
+                $scope.updateTimer = $timeout(function () {
+                    switch ($scope.activePage) {
+                        case 'sensors':
+                        case 'groupSensors':
+                            $scope.requestType = 'updateSensors';
+
+                            var getdata = {
+                                'url': Routing.generate('tcm_update_sensors', {'storeid': $scope.stores.store().Id}),
+                                'payload': '',
+                                'loaderdelay': 1000
+                            };
+
+                            $scope.BE.get(getdata, $scope.fetchDataOk, $scope.fetchDataFail);
+                            break;
+                        default:
+                            break;
+                    }
+                }, $scope.updateTimeout);
+            };
+
             $scope.showGroupSensors = function (groupid) {
                 $scope.sensors.getRecord(groupid);
                 if ($scope.isValidObject($scope.sensors.sensor()))
                     $scope.activePage = 'groupSensors';
-                console.log($scope.sensors.sensor());
             };
 
             $scope.fetchDataOk = function (data) {
@@ -71,21 +94,29 @@ angular
                             $scope.storesCollection = [].concat(data.contents.stores);
                         }
                         break;
-
                     case 'getStore':
                         if (!$scope.isValidObject(data))
                             break;
                         if (!data.errorcode) {
-                            console.log(data.contents);
                             $scope.stores.updRecord(data.contents.store);
                             $scope.stores.listsSet(data.contents.lists);
                             $scope.sensors.sensorsSet(data.contents.devicegroups);
                             $scope.sensors.setSensorCharts();
+                            $scope.updateSensors();
+                        }
+                        break;
+                    case 'updateSensors':
+                        if (!$scope.isValidObject(data)) {
+                            $timeout.cancel($scope.updateTimer);
+                            break;
+                        }
+                        if (!data.errorcode) {
+                            $scope.sensors.updateSensors(data.contents.devicegroups);
+                            $scope.updateSensors();
                         }
                         break;
                     default:
                         break;
                 }
             };
-
         }]);
