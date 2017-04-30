@@ -73,7 +73,7 @@
         <column name="description" type="longvarchar" />
         <column name="state" type="integer" />
         <column name="switch_when" type="boolean" default="true" />
-        <column name="switch_state" type="boolean" default="0" />
+        <column name="switch_state" type="boolean" default="false" />
         <column name="position" type="integer" default="0" />
         <column name="is_enabled" type='boolean' default='true'/>
         <behavior name="timestampable" />

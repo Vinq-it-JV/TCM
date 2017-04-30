@@ -67,7 +67,7 @@ angular
                             var getdata = {
                                 'url': Routing.generate('tcm_update_sensors', {'storeid': $scope.stores.store().Id}),
                                 'payload': '',
-                                'loaderdelay': 1000
+                                'loaderdelay': 2000
                             };
 
                             $scope.BE.get(getdata, $scope.fetchDataOk, $scope.fetchDataFail);
