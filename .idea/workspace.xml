@@ -3,14 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="282e9c36-730e-4d16-a19d-353a62e794e2" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Controller/DataController.php" afterPath="$PROJECT_DIR$/src/AppBundle/Controller/DataController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Resources/config/routing.yml" afterPath="$PROJECT_DIR$/src/AppBundle/Resources/config/routing.yml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Resources/public/css/style.css" afterPath="$PROJECT_DIR$/src/AppBundle/Resources/public/css/style.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/dashboardCtrl.js" afterPath="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/dashboardCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/datasets/charts.js" afterPath="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/datasets/charts.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/datasets/sensors.js" afterPath="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/datasets/sensors.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/services/backend.js" afterPath="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/services/backend.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/app.php" afterPath="$PROJECT_DIR$/web/app.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/js/fos_js_routes.js" afterPath="$PROJECT_DIR$/web/js/fos_js_routes.js" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -44,7 +37,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="dashboardCtrl.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="dashboardCtrl.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/dashboardCtrl.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-161">
@@ -117,38 +110,19 @@
       <file leaf-file-name="DataController.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/AppBundle/Controller/DataController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="325">
-              <caret line="76" column="32" lean-forward="false" selection-start-line="76" selection-start-column="32" selection-end-line="76" selection-end-column="32" />
+            <state relative-caret-position="-52">
+              <caret line="118" column="21" lean-forward="false" selection-start-line="118" selection-start-column="21" selection-end-line="118" selection-end-column="21" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="sensors.html.twig" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/views/store/sensors.html.twig">
+      <file leaf-file-name="style.css" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/public/css/style.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="46" column="26" lean-forward="false" selection-start-line="46" selection-start-column="26" selection-end-line="46" selection-end-column="26" />
-              <folding>
-                <marker date="1493396949000" expanded="true" signature="854:3072" ph="..." />
-                <marker date="1493396949000" expanded="true" signature="934:3061" ph="..." />
-                <marker date="1493396949000" expanded="true" signature="1063:3046" ph="..." />
-                <marker date="1493396949000" expanded="true" signature="1119:1664" ph="..." />
-                <marker date="1493396949000" expanded="true" signature="1157:1641" ph="..." />
-                <marker date="1493396949000" expanded="true" signature="1204:1454" ph="..." />
-                <marker date="1493396949000" expanded="true" signature="1502:1614" ph="..." />
-                <marker date="1493396949000" expanded="true" signature="1705:2418" ph="..." />
-                <marker date="1493396949000" expanded="true" signature="1757:2395" ph="..." />
-                <marker date="1493396949000" expanded="true" signature="1806:1837" ph="..." />
-                <marker date="1493396949000" expanded="true" signature="1886:2014" ph="..." />
-                <marker date="1493396949000" expanded="true" signature="2063:2191" ph="..." />
-                <marker date="1493396949000" expanded="true" signature="2240:2368" ph="..." />
-                <marker date="1493396949000" expanded="true" signature="2466:3027" ph="..." />
-                <marker date="1493396949000" expanded="true" signature="2532:3004" ph="..." />
-                <marker date="1493396949000" expanded="true" signature="2574:2977" ph="..." />
-                <marker date="1493396949000" expanded="true" signature="2646:2946" ph="..." />
-                <marker date="1493396949000" expanded="true" signature="2768:2911" ph="..." />
-              </folding>
+            <state relative-caret-position="330">
+              <caret line="28" column="14" lean-forward="false" selection-start-line="28" selection-start-column="14" selection-end-line="28" selection-end-column="14" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -272,14 +246,14 @@
         <option value="$PROJECT_DIR$/src/AppBundle/Resources/public/translations/nl.json" />
         <option value="$PROJECT_DIR$/src/AppBundle/Resources/views/store/sensors.html.twig" />
         <option value="$PROJECT_DIR$/src/AppBundle/Resources/views/splash/splash.html.twig" />
-        <option value="$PROJECT_DIR$/src/AppBundle/Resources/public/css/style.css" />
-        <option value="$PROJECT_DIR$/src/AppBundle/Controller/DataController.php" />
         <option value="$PROJECT_DIR$/src/AppBundle/Resources/config/routing.yml" />
         <option value="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/services/backend.js" />
         <option value="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/datasets/sensors.js" />
         <option value="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/datasets/charts.js" />
         <option value="$PROJECT_DIR$/web/app.php" />
         <option value="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/dashboardCtrl.js" />
+        <option value="$PROJECT_DIR$/src/AppBundle/Controller/DataController.php" />
+        <option value="$PROJECT_DIR$/src/AppBundle/Resources/public/css/style.css" />
       </list>
     </option>
   </component>
@@ -1996,12 +1970,12 @@
       <workItem from="1489053229952" duration="120406000" />
       <workItem from="1491997882783" duration="9449000" />
       <workItem from="1492082180345" duration="222000" />
-      <workItem from="1492082416730" duration="107681000" />
+      <workItem from="1492082416730" duration="108367000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="477896000" />
+    <option name="totallyTimeSpent" value="478582000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="812" extended-state="6" />
@@ -2615,22 +2589,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/public/css/style.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="85" column="19" lean-forward="false" selection-start-line="85" selection-start-column="19" selection-end-line="85" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/AppBundle/Controller/DataController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="325">
-          <caret line="76" column="32" lean-forward="false" selection-start-line="76" selection-start-column="32" selection-end-line="76" selection-end-column="32" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/views/store/sensors.html.twig">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="165">
@@ -2718,6 +2676,22 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-161">
           <caret line="84" column="0" lean-forward="false" selection-start-line="84" selection-start-column="0" selection-end-line="84" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/AppBundle/Controller/DataController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-52">
+          <caret line="118" column="21" lean-forward="false" selection-start-line="118" selection-start-column="21" selection-end-line="118" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/public/css/style.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="28" column="14" lean-forward="false" selection-start-line="28" selection-start-column="14" selection-end-line="28" selection-end-column="14" />
           <folding />
         </state>
       </provider>
