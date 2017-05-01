@@ -1,7 +1,7 @@
 <div class="container">
     <div class="row">
         <div class="col-xs-12 col-md-12 col-lg-12">
-            <div class="panel panel-default cursor-pointer" ng-click="">
+            <div class="panel panel-default" ng-click="">
                 <div class="panel-heading">
                     <div class="row">
                         <div class="col-xs-2 text-center big-button-icon">
@@ -19,13 +19,13 @@
     </div>
     <div class="row">
         <div class="col-xs-12 col-md-12 col-lg-12">
-            <div class="panel panel-primary cursor-pointer" ng-click="">
+            <div class="panel panel-primary" ng-click="">
                 <div class="panel-heading">
                     <div class="row">
                         <div class="col-xs-2 text-center big-button-icon">
                             <i class="fa fa-cubes fa-2x fa-fw"></i>
                         </div>
-                        <div class="col-xs-10 text-center group-name" ng-cloak>
+                        <div class="col-xs-10 text-left group-name" ng-cloak>
                             {% verbatim %}
                                 {{ sensors.sensor().Name }}
                             {% endverbatim %}
@@ -37,9 +37,9 @@
     </div>
     {% verbatim %}
     <div class="row">
-        <div class="col-md-4 col-lg-4" ng-repeat="sensor in sensors.sensor().devices">
+        <div class="col-md-4 col-lg-4" ng-repeat="sensor in sensors.sensor().devices" ng-if="sensor.IsEnabled">
             <div class="panel panel-default" ng-click="">
-                <div class="panel-heading text-center">
+                <div class="panel-heading text-left">
                     <div class="row">
                         <div class="col-xs-2">
                             <i class="fa fa-fw fa-2x" ng-class="{ 'fa-thermometer-2': sensor.TypeId == 2, 'fa-thermometer-2': sensor.TypeId == 3, 'fa-sign-in': sensor.TypeId == 4 }"></i>

@@ -1,7 +1,7 @@
 <div class="container">
     <div class="row">
         <div class="col-xs-12 col-md-12 col-lg-12">
-            <div class="panel panel-default cursor-pointer" ng-click="">
+            <div class="panel panel-default" ng-click="">
                 <div class="panel-heading">
                     <div class="row">
                         <div class="col-xs-2 text-center big-button-icon">
@@ -19,9 +19,9 @@
     </div>
     {% verbatim %}
     <div class="row">
-        <div class="col-md-4 col-lg-4" ng-repeat="sensor in sensors.sensors()">
+        <div class="col-md-4 col-lg-4" ng-repeat="sensor in sensors.sensors()" ng-if="sensor.IsEnabled">
             <div class="panel" ng-class="{ 'panel-primary': sensor.TypeId == 1, 'panel-info': sensor.TypeId != 1 }" ng-click="">
-                <div class="panel-heading text-center">
+                <div class="panel-heading text-left">
                     <div class="row">
                         <div class="col-xs-2">
                             <i class="fa fa-fw fa-2x" ng-class="{ 'fa-cubes': sensor.TypeId == 1, 'fa-thermometer-2': sensor.TypeId == 2, 'fa-thermometer-2': sensor.TypeId == 3, 'fa-sign-in': sensor.TypeId == 4 }"></i>
