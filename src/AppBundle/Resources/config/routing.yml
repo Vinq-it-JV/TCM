@@ -33,28 +33,3 @@ tcm_update_sensors:
     defaults: { _controller: AppBundle:Data:updateSensors }
     options:
         expose: true
-
-tcm_logout:
-    path:     /logout
-    options:
-        expose: true
-
-tcm_profile_change_password:
-    path:     /profile/change/password
-    methods:  [POST]
-    defaults: { _controller: UserBundle:Security:changePassword }
-    options:
-        expose: true
-
-tcm_data_collector:
-    path:     /data/collector
-    methods:  [PUT, POST]
-    defaults: { _controller: DataCollectorBundle:Data:collectData }
-    options:
-        expose: true
-
-tcm_data_collector_test:
-    path:     /data/collector/test
-    defaults: { _controller: DataCollectorBundle:Data:testPostData }
-    options:
-        expose: true

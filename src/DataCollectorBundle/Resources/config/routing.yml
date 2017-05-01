@@ -1,0 +1,12 @@
+tcm_data_collector:
+    path:     /data/collector
+    methods:  [PUT, POST]
+    defaults: { _controller: DataCollectorBundle:Data:collectData }
+    options:
+        expose: true
+
+tcm_data_collector_test:
+    path:     /data/collector/test
+    defaults: { _controller: DataCollectorBundle:Data:testPostData }
+    options:
+        expose: true

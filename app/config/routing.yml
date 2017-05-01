@@ -14,6 +14,10 @@ app:
     resource: "@AppBundle/Resources/config/routing.yml"
     prefix:   /dashboard
 
+datacollector:
+    resource: "@DataCollectorBundle/Resources/config/routing.yml"
+    prefix:   /
+
 fos_js_routing:
     resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
 
