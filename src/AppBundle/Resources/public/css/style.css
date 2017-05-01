@@ -60,6 +60,7 @@ body {
 .tcmLogo-splash {
     -webkit-animation-duration: 3s;
     -webkit-animation-delay: 0s;
+    width: 250px;
 }
 
 .tcmText-splash {
