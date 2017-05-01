@@ -1,12 +1,5 @@
-# TCM splash
-tcm_splash:
-    path:     /
-    defaults: { _controller: AppBundle:Page:splash }
-    options:
-        expose: true
-
 tcm_dashboard:
-    path:     /dashboard
+    path:     /
     defaults: { _controller: AppBundle:Page:dashboard }
     options:
         expose: true

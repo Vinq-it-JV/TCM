@@ -2,18 +2,6 @@ data_collector:
     resource: "@DataCollectorBundle/Resources/config/routing.yml"
     prefix:   /
 
-device:
-    resource: "@DeviceBundle/Resources/config/routing.yml"
-    prefix:   /
-
-store:
-    resource: "@StoreBundle/Resources/config/routing.yml"
-    prefix:   /
-
-company:
-    resource: "@CompanyBundle/Resources/config/routing.yml"
-    prefix:   /
-
 administration:
     resource: "@AdministrationBundle/Resources/config/routing.yml"
     prefix:   /administration
@@ -24,7 +12,7 @@ user:
 
 app:
     resource: "@AppBundle/Resources/config/routing.yml"
-    prefix:   /
+    prefix:   /dashboard
 
 fos_js_routing:
     resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
