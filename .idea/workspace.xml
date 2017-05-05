@@ -2,46 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="282e9c36-730e-4d16-a19d-353a62e794e2" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/DataCollectorBundle/Command/CheckDeviceCommand.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/NotificationBundle/Resources/config/schema.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/AppKernel.php" afterPath="$PROJECT_DIR$/app/AppKernel.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/config/config.yml" afterPath="$PROJECT_DIR$/app/config/config.yml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/config/routing.yml" afterPath="$PROJECT_DIR$/app/config/routing.yml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Command/TestCommand.php" afterPath="$PROJECT_DIR$/src/AppBundle/Command/TestCommand.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Resources/public/css/style.css" afterPath="$PROJECT_DIR$/src/AppBundle/Resources/public/css/style.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/appCtrl.js" afterPath="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/appCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/filters/gmt.js" afterPath="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/filters/gmt.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/services/http.js" afterPath="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/services/http.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Resources/public/translations/en.json" afterPath="$PROJECT_DIR$/src/AppBundle/Resources/public/translations/en.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Resources/public/translations/nl.json" afterPath="$PROJECT_DIR$/src/AppBundle/Resources/public/translations/nl.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Resources/views/dashboard/dashboard.html.twig" afterPath="$PROJECT_DIR$/src/AppBundle/Resources/views/dashboard/dashboard.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Resources/views/store/group_sensors.html.twig" afterPath="$PROJECT_DIR$/src/AppBundle/Resources/views/store/group_sensors.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Resources/views/store/sensors.html.twig" afterPath="$PROJECT_DIR$/src/AppBundle/Resources/views/store/sensors.html.twig" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DataCollectorBundle/Controller/DataController.php" afterPath="$PROJECT_DIR$/src/DataCollectorBundle/Controller/DataController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DeviceBundle/Model/CbInput.php" afterPath="$PROJECT_DIR$/src/DeviceBundle/Model/CbInput.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DeviceBundle/Model/ControllerBox.php" afterPath="$PROJECT_DIR$/src/DeviceBundle/Model/ControllerBox.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DeviceBundle/Model/DsTemperatureSensor.php" afterPath="$PROJECT_DIR$/src/DeviceBundle/Model/DsTemperatureSensor.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DeviceBundle/Model/map/CbInputTableMap.php" afterPath="$PROJECT_DIR$/src/DeviceBundle/Model/map/CbInputTableMap.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DeviceBundle/Model/map/ControllerBoxTableMap.php" afterPath="$PROJECT_DIR$/src/DeviceBundle/Model/map/ControllerBoxTableMap.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DeviceBundle/Model/map/DeviceGroupTableMap.php" afterPath="$PROJECT_DIR$/src/DeviceBundle/Model/map/DeviceGroupTableMap.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DeviceBundle/Model/map/DsTemperatureSensorTableMap.php" afterPath="$PROJECT_DIR$/src/DeviceBundle/Model/map/DsTemperatureSensorTableMap.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DeviceBundle/Model/om/BaseCbInput.php" afterPath="$PROJECT_DIR$/src/DeviceBundle/Model/om/BaseCbInput.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DeviceBundle/Model/om/BaseCbInputPeer.php" afterPath="$PROJECT_DIR$/src/DeviceBundle/Model/om/BaseCbInputPeer.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DeviceBundle/Model/om/BaseCbInputQuery.php" afterPath="$PROJECT_DIR$/src/DeviceBundle/Model/om/BaseCbInputQuery.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DeviceBundle/Model/om/BaseControllerBox.php" afterPath="$PROJECT_DIR$/src/DeviceBundle/Model/om/BaseControllerBox.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DeviceBundle/Model/om/BaseControllerBoxPeer.php" afterPath="$PROJECT_DIR$/src/DeviceBundle/Model/om/BaseControllerBoxPeer.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DeviceBundle/Model/om/BaseControllerBoxQuery.php" afterPath="$PROJECT_DIR$/src/DeviceBundle/Model/om/BaseControllerBoxQuery.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DeviceBundle/Model/om/BaseDeviceGroup.php" afterPath="$PROJECT_DIR$/src/DeviceBundle/Model/om/BaseDeviceGroup.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DeviceBundle/Model/om/BaseDsTemperatureSensor.php" afterPath="$PROJECT_DIR$/src/DeviceBundle/Model/om/BaseDsTemperatureSensor.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DeviceBundle/Model/om/BaseDsTemperatureSensorPeer.php" afterPath="$PROJECT_DIR$/src/DeviceBundle/Model/om/BaseDsTemperatureSensorPeer.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DeviceBundle/Model/om/BaseDsTemperatureSensorQuery.php" afterPath="$PROJECT_DIR$/src/DeviceBundle/Model/om/BaseDsTemperatureSensorQuery.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DeviceBundle/Resources/config/schema.xml" afterPath="$PROJECT_DIR$/src/DeviceBundle/Resources/config/schema.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/UserBundle/Controller/DataController.php" afterPath="$PROJECT_DIR$/src/UserBundle/Controller/DataController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/UserBundle/Controller/SecurityController.php" afterPath="$PROJECT_DIR$/src/UserBundle/Controller/SecurityController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/UserBundle/Model/map/UserTableMap.php" afterPath="$PROJECT_DIR$/src/UserBundle/Model/map/UserTableMap.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/UserBundle/Model/om/BaseUser.php" afterPath="$PROJECT_DIR$/src/UserBundle/Model/om/BaseUser.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/UserBundle/Model/om/BaseUserQuery.php" afterPath="$PROJECT_DIR$/src/UserBundle/Model/om/BaseUserQuery.php" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -77,10 +38,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CbInput.php" pinned="false" current-in-tab="false">
+      <file leaf-file-name="CbInput.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/DeviceBundle/Model/CbInput.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="300">
+            <state relative-caret-position="915">
               <caret line="105" column="71" lean-forward="false" selection-start-line="105" selection-start-column="71" selection-end-line="105" selection-end-column="71" />
               <folding>
                 <element signature="e#38#76#0#PHP" expanded="true" />
@@ -180,7 +141,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="app.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="app.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/web/app.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="120">
@@ -190,11 +151,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="en.json" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/public/translations/en.json">
+      <file leaf-file-name="DataController.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/DataCollectorBundle/Controller/DataController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="153">
-              <caret line="215" column="44" lean-forward="false" selection-start-line="215" selection-start-column="44" selection-end-line="215" selection-end-column="44" />
+            <state relative-caret-position="-45">
+              <caret line="116" column="31" lean-forward="true" selection-start-line="116" selection-start-column="31" selection-end-line="116" selection-end-column="31" />
               <folding />
             </state>
           </provider>
@@ -333,7 +294,6 @@
         <option value="$PROJECT_DIR$/src/AppBundle/Command/TestCommand.php" />
         <option value="$PROJECT_DIR$/src/DataCollectorBundle/Command/CheckCommand.php" />
         <option value="$PROJECT_DIR$/src/DeviceBundle/Resources/config/schema.xml" />
-        <option value="$PROJECT_DIR$/src/DataCollectorBundle/Controller/DataController.php" />
         <option value="$PROJECT_DIR$/src/DataCollectorBundle/Command/CheckDeviceCommand.php" />
         <option value="$PROJECT_DIR$/src/NotificationBundle/Resources/config/schema.xml" />
         <option value="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/filters/gmt.js" />
@@ -347,6 +307,7 @@
         <option value="$PROJECT_DIR$/src/AppBundle/Resources/views/store/group_sensors.html.twig" />
         <option value="$PROJECT_DIR$/src/AppBundle/Resources/views/store/sensors.html.twig" />
         <option value="$PROJECT_DIR$/web/app.php" />
+        <option value="$PROJECT_DIR$/src/DataCollectorBundle/Controller/DataController.php" />
       </list>
     </option>
   </component>
@@ -1803,12 +1764,12 @@
       <workItem from="1489053229952" duration="120406000" />
       <workItem from="1491997882783" duration="9449000" />
       <workItem from="1492082180345" duration="222000" />
-      <workItem from="1492082416730" duration="147966000" />
+      <workItem from="1492082416730" duration="148276000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="518181000" />
+    <option name="totallyTimeSpent" value="518491000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="812" extended-state="6" />
@@ -2144,14 +2105,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/DataCollectorBundle/Controller/DataController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-60">
-          <caret line="168" column="5" lean-forward="false" selection-start-line="168" selection-start-column="5" selection-end-line="168" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/DataCollectorBundle/Command/CheckDeviceCommand.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-540">
@@ -2250,16 +2203,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/DeviceBundle/Model/CbInput.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="105" column="71" lean-forward="false" selection-start-line="105" selection-start-column="71" selection-end-line="105" selection-end-column="71" />
-          <folding>
-            <element signature="e#38#76#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/views/store/group_sensors.html.twig">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="345">
@@ -2340,6 +2283,24 @@
         <state relative-caret-position="120">
           <caret line="8" column="2" lean-forward="false" selection-start-line="8" selection-start-column="2" selection-end-line="8" selection-end-column="2" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/DataCollectorBundle/Controller/DataController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-45">
+          <caret line="116" column="31" lean-forward="true" selection-start-line="116" selection-start-column="31" selection-end-line="116" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/DeviceBundle/Model/CbInput.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="915">
+          <caret line="105" column="71" lean-forward="false" selection-start-line="105" selection-start-column="71" selection-end-line="105" selection-end-column="71" />
+          <folding>
+            <element signature="e#38#76#0#PHP" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

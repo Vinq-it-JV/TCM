@@ -98,10 +98,15 @@ class DataController extends Controller
 
     protected function updateControllerBox($uid, $temperature)
     {
+        $date = new \DateTime();
+
         $controller = ControllerBoxQuery::create()->findOneByUid($uid);
+
         if (empty($controller))
             $controller = new ControllerBox();
         $controller->setUid($uid);
+        $controller->setState(ControllerBox::STATE_ACTIVE);
+        $controller->setDataCollectedAt($date);
         $controller->setInternalTemperature($temperature);
         $controller->save();
         return $controller;
