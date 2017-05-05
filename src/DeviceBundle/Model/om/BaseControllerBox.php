@@ -86,6 +86,13 @@ abstract class BaseControllerBox extends BaseObject implements Persistent
     protected $description;
 
     /**
+     * The value for the state field.
+     * Note: this column has a database default value of: 0
+     * @var        int
+     */
+    protected $state;
+
+    /**
      * The value for the internal_temperature field.
      * @var        string
      */
@@ -103,6 +110,31 @@ abstract class BaseControllerBox extends BaseObject implements Persistent
      * @var        int
      */
     protected $position;
+
+    /**
+     * The value for the data_collected_at field.
+     * @var        string
+     */
+    protected $data_collected_at;
+
+    /**
+     * The value for the notify_after field.
+     * Note: this column has a database default value of: 0
+     * @var        int
+     */
+    protected $notify_after;
+
+    /**
+     * The value for the notify_started_at field.
+     * @var        string
+     */
+    protected $notify_started_at;
+
+    /**
+     * The value for the notification field.
+     * @var        int
+     */
+    protected $notification;
 
     /**
      * The value for the is_enabled field.
@@ -193,7 +225,9 @@ abstract class BaseControllerBox extends BaseObject implements Persistent
     public function applyDefaultValues()
     {
         $this->name = 'Controller box';
+        $this->state = 0;
         $this->position = 0;
+        $this->notify_after = 0;
         $this->is_enabled = true;
         $this->is_deleted = false;
     }
@@ -275,6 +309,17 @@ abstract class BaseControllerBox extends BaseObject implements Persistent
     }
 
     /**
+     * Get the [state] column value.
+     *
+     * @return int
+     */
+    public function getState()
+    {
+
+        return $this->state;
+    }
+
+    /**
      * Get the [internal_temperature] column value.
      *
      * @return string
@@ -305,6 +350,108 @@ abstract class BaseControllerBox extends BaseObject implements Persistent
     {
 
         return $this->position;
+    }
+
+    /**
+     * Get the [optionally formatted] temporal [data_collected_at] column value.
+     *
+     *
+     * @param string $format The date/time format string (either date()-style or strftime()-style).
+     *				 If format is null, then the raw DateTime object will be returned.
+     * @return mixed Formatted date/time value as string or DateTime object (if format is null), null if column is null, and 0 if column value is 0000-00-00 00:00:00
+     * @throws PropelException - if unable to parse/validate the date/time value.
+     */
+    public function getDataCollectedAt($format = null)
+    {
+        if ($this->data_collected_at === null) {
+            return null;
+        }
+
+        if ($this->data_collected_at === '0000-00-00 00:00:00') {
+            // while technically this is not a default value of null,
+            // this seems to be closest in meaning.
+            return null;
+        }
+
+        try {
+            $dt = new DateTime($this->data_collected_at);
+        } catch (Exception $x) {
+            throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->data_collected_at, true), $x);
+        }
+
+        if ($format === null) {
+            // Because propel.useDateTimeClass is true, we return a DateTime object.
+            return $dt;
+        }
+
+        if (strpos($format, '%') !== false) {
+            return strftime($format, $dt->format('U'));
+        }
+
+        return $dt->format($format);
+
+    }
+
+    /**
+     * Get the [notify_after] column value.
+     *
+     * @return int
+     */
+    public function getNotifyAfter()
+    {
+
+        return $this->notify_after;
+    }
+
+    /**
+     * Get the [optionally formatted] temporal [notify_started_at] column value.
+     *
+     *
+     * @param string $format The date/time format string (either date()-style or strftime()-style).
+     *				 If format is null, then the raw DateTime object will be returned.
+     * @return mixed Formatted date/time value as string or DateTime object (if format is null), null if column is null, and 0 if column value is 0000-00-00 00:00:00
+     * @throws PropelException - if unable to parse/validate the date/time value.
+     */
+    public function getNotifyStartedAt($format = null)
+    {
+        if ($this->notify_started_at === null) {
+            return null;
+        }
+
+        if ($this->notify_started_at === '0000-00-00 00:00:00') {
+            // while technically this is not a default value of null,
+            // this seems to be closest in meaning.
+            return null;
+        }
+
+        try {
+            $dt = new DateTime($this->notify_started_at);
+        } catch (Exception $x) {
+            throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->notify_started_at, true), $x);
+        }
+
+        if ($format === null) {
+            // Because propel.useDateTimeClass is true, we return a DateTime object.
+            return $dt;
+        }
+
+        if (strpos($format, '%') !== false) {
+            return strftime($format, $dt->format('U'));
+        }
+
+        return $dt->format($format);
+
+    }
+
+    /**
+     * Get the [notification] column value.
+     *
+     * @return int
+     */
+    public function getNotification()
+    {
+
+        return $this->notification;
     }
 
     /**
@@ -544,6 +691,27 @@ abstract class BaseControllerBox extends BaseObject implements Persistent
     } // setDescription()
 
     /**
+     * Set the value of [state] column.
+     *
+     * @param  int $v new value
+     * @return ControllerBox The current object (for fluent API support)
+     */
+    public function setState($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->state !== $v) {
+            $this->state = $v;
+            $this->modifiedColumns[] = ControllerBoxPeer::STATE;
+        }
+
+
+        return $this;
+    } // setState()
+
+    /**
      * Set the value of [internal_temperature] column.
      *
      * @param  string $v new value
@@ -605,6 +773,94 @@ abstract class BaseControllerBox extends BaseObject implements Persistent
 
         return $this;
     } // setPosition()
+
+    /**
+     * Sets the value of [data_collected_at] column to a normalized version of the date/time value specified.
+     *
+     * @param mixed $v string, integer (timestamp), or DateTime value.
+     *               Empty strings are treated as null.
+     * @return ControllerBox The current object (for fluent API support)
+     */
+    public function setDataCollectedAt($v)
+    {
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->data_collected_at !== null || $dt !== null) {
+            $currentDateAsString = ($this->data_collected_at !== null && $tmpDt = new DateTime($this->data_collected_at)) ? $tmpDt->format('Y-m-d H:i:s') : null;
+            $newDateAsString = $dt ? $dt->format('Y-m-d H:i:s') : null;
+            if ($currentDateAsString !== $newDateAsString) {
+                $this->data_collected_at = $newDateAsString;
+                $this->modifiedColumns[] = ControllerBoxPeer::DATA_COLLECTED_AT;
+            }
+        } // if either are not null
+
+
+        return $this;
+    } // setDataCollectedAt()
+
+    /**
+     * Set the value of [notify_after] column.
+     *
+     * @param  int $v new value
+     * @return ControllerBox The current object (for fluent API support)
+     */
+    public function setNotifyAfter($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->notify_after !== $v) {
+            $this->notify_after = $v;
+            $this->modifiedColumns[] = ControllerBoxPeer::NOTIFY_AFTER;
+        }
+
+
+        return $this;
+    } // setNotifyAfter()
+
+    /**
+     * Sets the value of [notify_started_at] column to a normalized version of the date/time value specified.
+     *
+     * @param mixed $v string, integer (timestamp), or DateTime value.
+     *               Empty strings are treated as null.
+     * @return ControllerBox The current object (for fluent API support)
+     */
+    public function setNotifyStartedAt($v)
+    {
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->notify_started_at !== null || $dt !== null) {
+            $currentDateAsString = ($this->notify_started_at !== null && $tmpDt = new DateTime($this->notify_started_at)) ? $tmpDt->format('Y-m-d H:i:s') : null;
+            $newDateAsString = $dt ? $dt->format('Y-m-d H:i:s') : null;
+            if ($currentDateAsString !== $newDateAsString) {
+                $this->notify_started_at = $newDateAsString;
+                $this->modifiedColumns[] = ControllerBoxPeer::NOTIFY_STARTED_AT;
+            }
+        } // if either are not null
+
+
+        return $this;
+    } // setNotifyStartedAt()
+
+    /**
+     * Set the value of [notification] column.
+     *
+     * @param  int $v new value
+     * @return ControllerBox The current object (for fluent API support)
+     */
+    public function setNotification($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->notification !== $v) {
+            $this->notification = $v;
+            $this->modifiedColumns[] = ControllerBoxPeer::NOTIFICATION;
+        }
+
+
+        return $this;
+    } // setNotification()
 
     /**
      * Sets the value of the [is_enabled] column.
@@ -724,7 +980,15 @@ abstract class BaseControllerBox extends BaseObject implements Persistent
                 return false;
             }
 
+            if ($this->state !== 0) {
+                return false;
+            }
+
             if ($this->position !== 0) {
+                return false;
+            }
+
+            if ($this->notify_after !== 0) {
                 return false;
             }
 
@@ -764,13 +1028,18 @@ abstract class BaseControllerBox extends BaseObject implements Persistent
             $this->version = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
             $this->name = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
             $this->description = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
-            $this->internal_temperature = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
-            $this->uid = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
-            $this->position = ($row[$startcol + 8] !== null) ? (int) $row[$startcol + 8] : null;
-            $this->is_enabled = ($row[$startcol + 9] !== null) ? (boolean) $row[$startcol + 9] : null;
-            $this->is_deleted = ($row[$startcol + 10] !== null) ? (boolean) $row[$startcol + 10] : null;
-            $this->created_at = ($row[$startcol + 11] !== null) ? (string) $row[$startcol + 11] : null;
-            $this->updated_at = ($row[$startcol + 12] !== null) ? (string) $row[$startcol + 12] : null;
+            $this->state = ($row[$startcol + 6] !== null) ? (int) $row[$startcol + 6] : null;
+            $this->internal_temperature = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
+            $this->uid = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
+            $this->position = ($row[$startcol + 9] !== null) ? (int) $row[$startcol + 9] : null;
+            $this->data_collected_at = ($row[$startcol + 10] !== null) ? (string) $row[$startcol + 10] : null;
+            $this->notify_after = ($row[$startcol + 11] !== null) ? (int) $row[$startcol + 11] : null;
+            $this->notify_started_at = ($row[$startcol + 12] !== null) ? (string) $row[$startcol + 12] : null;
+            $this->notification = ($row[$startcol + 13] !== null) ? (int) $row[$startcol + 13] : null;
+            $this->is_enabled = ($row[$startcol + 14] !== null) ? (boolean) $row[$startcol + 14] : null;
+            $this->is_deleted = ($row[$startcol + 15] !== null) ? (boolean) $row[$startcol + 15] : null;
+            $this->created_at = ($row[$startcol + 16] !== null) ? (string) $row[$startcol + 16] : null;
+            $this->updated_at = ($row[$startcol + 17] !== null) ? (string) $row[$startcol + 17] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -780,7 +1049,7 @@ abstract class BaseControllerBox extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 13; // 13 = ControllerBoxPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 18; // 18 = ControllerBoxPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating ControllerBox object", $e);
@@ -1088,6 +1357,9 @@ abstract class BaseControllerBox extends BaseObject implements Persistent
         if ($this->isColumnModified(ControllerBoxPeer::DESCRIPTION)) {
             $modifiedColumns[':p' . $index++]  = '`description`';
         }
+        if ($this->isColumnModified(ControllerBoxPeer::STATE)) {
+            $modifiedColumns[':p' . $index++]  = '`state`';
+        }
         if ($this->isColumnModified(ControllerBoxPeer::INTERNAL_TEMPERATURE)) {
             $modifiedColumns[':p' . $index++]  = '`internal_temperature`';
         }
@@ -1096,6 +1368,18 @@ abstract class BaseControllerBox extends BaseObject implements Persistent
         }
         if ($this->isColumnModified(ControllerBoxPeer::POSITION)) {
             $modifiedColumns[':p' . $index++]  = '`position`';
+        }
+        if ($this->isColumnModified(ControllerBoxPeer::DATA_COLLECTED_AT)) {
+            $modifiedColumns[':p' . $index++]  = '`data_collected_at`';
+        }
+        if ($this->isColumnModified(ControllerBoxPeer::NOTIFY_AFTER)) {
+            $modifiedColumns[':p' . $index++]  = '`notify_after`';
+        }
+        if ($this->isColumnModified(ControllerBoxPeer::NOTIFY_STARTED_AT)) {
+            $modifiedColumns[':p' . $index++]  = '`notify_started_at`';
+        }
+        if ($this->isColumnModified(ControllerBoxPeer::NOTIFICATION)) {
+            $modifiedColumns[':p' . $index++]  = '`notification`';
         }
         if ($this->isColumnModified(ControllerBoxPeer::IS_ENABLED)) {
             $modifiedColumns[':p' . $index++]  = '`is_enabled`';
@@ -1138,6 +1422,9 @@ abstract class BaseControllerBox extends BaseObject implements Persistent
                     case '`description`':
                         $stmt->bindValue($identifier, $this->description, PDO::PARAM_STR);
                         break;
+                    case '`state`':
+                        $stmt->bindValue($identifier, $this->state, PDO::PARAM_INT);
+                        break;
                     case '`internal_temperature`':
                         $stmt->bindValue($identifier, $this->internal_temperature, PDO::PARAM_STR);
                         break;
@@ -1146,6 +1433,18 @@ abstract class BaseControllerBox extends BaseObject implements Persistent
                         break;
                     case '`position`':
                         $stmt->bindValue($identifier, $this->position, PDO::PARAM_INT);
+                        break;
+                    case '`data_collected_at`':
+                        $stmt->bindValue($identifier, $this->data_collected_at, PDO::PARAM_STR);
+                        break;
+                    case '`notify_after`':
+                        $stmt->bindValue($identifier, $this->notify_after, PDO::PARAM_INT);
+                        break;
+                    case '`notify_started_at`':
+                        $stmt->bindValue($identifier, $this->notify_started_at, PDO::PARAM_STR);
+                        break;
+                    case '`notification`':
+                        $stmt->bindValue($identifier, $this->notification, PDO::PARAM_INT);
                         break;
                     case '`is_enabled`':
                         $stmt->bindValue($identifier, (int) $this->is_enabled, PDO::PARAM_INT);
@@ -1346,24 +1645,39 @@ abstract class BaseControllerBox extends BaseObject implements Persistent
                 return $this->getDescription();
                 break;
             case 6:
-                return $this->getInternalTemperature();
+                return $this->getState();
                 break;
             case 7:
-                return $this->getUid();
+                return $this->getInternalTemperature();
                 break;
             case 8:
-                return $this->getPosition();
+                return $this->getUid();
                 break;
             case 9:
-                return $this->getIsEnabled();
+                return $this->getPosition();
                 break;
             case 10:
-                return $this->getIsDeleted();
+                return $this->getDataCollectedAt();
                 break;
             case 11:
-                return $this->getCreatedAt();
+                return $this->getNotifyAfter();
                 break;
             case 12:
+                return $this->getNotifyStartedAt();
+                break;
+            case 13:
+                return $this->getNotification();
+                break;
+            case 14:
+                return $this->getIsEnabled();
+                break;
+            case 15:
+                return $this->getIsDeleted();
+                break;
+            case 16:
+                return $this->getCreatedAt();
+                break;
+            case 17:
                 return $this->getUpdatedAt();
                 break;
             default:
@@ -1401,13 +1715,18 @@ abstract class BaseControllerBox extends BaseObject implements Persistent
             $keys[3] => $this->getVersion(),
             $keys[4] => $this->getName(),
             $keys[5] => $this->getDescription(),
-            $keys[6] => $this->getInternalTemperature(),
-            $keys[7] => $this->getUid(),
-            $keys[8] => $this->getPosition(),
-            $keys[9] => $this->getIsEnabled(),
-            $keys[10] => $this->getIsDeleted(),
-            $keys[11] => $this->getCreatedAt(),
-            $keys[12] => $this->getUpdatedAt(),
+            $keys[6] => $this->getState(),
+            $keys[7] => $this->getInternalTemperature(),
+            $keys[8] => $this->getUid(),
+            $keys[9] => $this->getPosition(),
+            $keys[10] => $this->getDataCollectedAt(),
+            $keys[11] => $this->getNotifyAfter(),
+            $keys[12] => $this->getNotifyStartedAt(),
+            $keys[13] => $this->getNotification(),
+            $keys[14] => $this->getIsEnabled(),
+            $keys[15] => $this->getIsDeleted(),
+            $keys[16] => $this->getCreatedAt(),
+            $keys[17] => $this->getUpdatedAt(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1480,24 +1799,39 @@ abstract class BaseControllerBox extends BaseObject implements Persistent
                 $this->setDescription($value);
                 break;
             case 6:
-                $this->setInternalTemperature($value);
+                $this->setState($value);
                 break;
             case 7:
-                $this->setUid($value);
+                $this->setInternalTemperature($value);
                 break;
             case 8:
-                $this->setPosition($value);
+                $this->setUid($value);
                 break;
             case 9:
-                $this->setIsEnabled($value);
+                $this->setPosition($value);
                 break;
             case 10:
-                $this->setIsDeleted($value);
+                $this->setDataCollectedAt($value);
                 break;
             case 11:
-                $this->setCreatedAt($value);
+                $this->setNotifyAfter($value);
                 break;
             case 12:
+                $this->setNotifyStartedAt($value);
+                break;
+            case 13:
+                $this->setNotification($value);
+                break;
+            case 14:
+                $this->setIsEnabled($value);
+                break;
+            case 15:
+                $this->setIsDeleted($value);
+                break;
+            case 16:
+                $this->setCreatedAt($value);
+                break;
+            case 17:
                 $this->setUpdatedAt($value);
                 break;
         } // switch()
@@ -1530,13 +1864,18 @@ abstract class BaseControllerBox extends BaseObject implements Persistent
         if (array_key_exists($keys[3], $arr)) $this->setVersion($arr[$keys[3]]);
         if (array_key_exists($keys[4], $arr)) $this->setName($arr[$keys[4]]);
         if (array_key_exists($keys[5], $arr)) $this->setDescription($arr[$keys[5]]);
-        if (array_key_exists($keys[6], $arr)) $this->setInternalTemperature($arr[$keys[6]]);
-        if (array_key_exists($keys[7], $arr)) $this->setUid($arr[$keys[7]]);
-        if (array_key_exists($keys[8], $arr)) $this->setPosition($arr[$keys[8]]);
-        if (array_key_exists($keys[9], $arr)) $this->setIsEnabled($arr[$keys[9]]);
-        if (array_key_exists($keys[10], $arr)) $this->setIsDeleted($arr[$keys[10]]);
-        if (array_key_exists($keys[11], $arr)) $this->setCreatedAt($arr[$keys[11]]);
-        if (array_key_exists($keys[12], $arr)) $this->setUpdatedAt($arr[$keys[12]]);
+        if (array_key_exists($keys[6], $arr)) $this->setState($arr[$keys[6]]);
+        if (array_key_exists($keys[7], $arr)) $this->setInternalTemperature($arr[$keys[7]]);
+        if (array_key_exists($keys[8], $arr)) $this->setUid($arr[$keys[8]]);
+        if (array_key_exists($keys[9], $arr)) $this->setPosition($arr[$keys[9]]);
+        if (array_key_exists($keys[10], $arr)) $this->setDataCollectedAt($arr[$keys[10]]);
+        if (array_key_exists($keys[11], $arr)) $this->setNotifyAfter($arr[$keys[11]]);
+        if (array_key_exists($keys[12], $arr)) $this->setNotifyStartedAt($arr[$keys[12]]);
+        if (array_key_exists($keys[13], $arr)) $this->setNotification($arr[$keys[13]]);
+        if (array_key_exists($keys[14], $arr)) $this->setIsEnabled($arr[$keys[14]]);
+        if (array_key_exists($keys[15], $arr)) $this->setIsDeleted($arr[$keys[15]]);
+        if (array_key_exists($keys[16], $arr)) $this->setCreatedAt($arr[$keys[16]]);
+        if (array_key_exists($keys[17], $arr)) $this->setUpdatedAt($arr[$keys[17]]);
     }
 
     /**
@@ -1554,9 +1893,14 @@ abstract class BaseControllerBox extends BaseObject implements Persistent
         if ($this->isColumnModified(ControllerBoxPeer::VERSION)) $criteria->add(ControllerBoxPeer::VERSION, $this->version);
         if ($this->isColumnModified(ControllerBoxPeer::NAME)) $criteria->add(ControllerBoxPeer::NAME, $this->name);
         if ($this->isColumnModified(ControllerBoxPeer::DESCRIPTION)) $criteria->add(ControllerBoxPeer::DESCRIPTION, $this->description);
+        if ($this->isColumnModified(ControllerBoxPeer::STATE)) $criteria->add(ControllerBoxPeer::STATE, $this->state);
         if ($this->isColumnModified(ControllerBoxPeer::INTERNAL_TEMPERATURE)) $criteria->add(ControllerBoxPeer::INTERNAL_TEMPERATURE, $this->internal_temperature);
         if ($this->isColumnModified(ControllerBoxPeer::UID)) $criteria->add(ControllerBoxPeer::UID, $this->uid);
         if ($this->isColumnModified(ControllerBoxPeer::POSITION)) $criteria->add(ControllerBoxPeer::POSITION, $this->position);
+        if ($this->isColumnModified(ControllerBoxPeer::DATA_COLLECTED_AT)) $criteria->add(ControllerBoxPeer::DATA_COLLECTED_AT, $this->data_collected_at);
+        if ($this->isColumnModified(ControllerBoxPeer::NOTIFY_AFTER)) $criteria->add(ControllerBoxPeer::NOTIFY_AFTER, $this->notify_after);
+        if ($this->isColumnModified(ControllerBoxPeer::NOTIFY_STARTED_AT)) $criteria->add(ControllerBoxPeer::NOTIFY_STARTED_AT, $this->notify_started_at);
+        if ($this->isColumnModified(ControllerBoxPeer::NOTIFICATION)) $criteria->add(ControllerBoxPeer::NOTIFICATION, $this->notification);
         if ($this->isColumnModified(ControllerBoxPeer::IS_ENABLED)) $criteria->add(ControllerBoxPeer::IS_ENABLED, $this->is_enabled);
         if ($this->isColumnModified(ControllerBoxPeer::IS_DELETED)) $criteria->add(ControllerBoxPeer::IS_DELETED, $this->is_deleted);
         if ($this->isColumnModified(ControllerBoxPeer::CREATED_AT)) $criteria->add(ControllerBoxPeer::CREATED_AT, $this->created_at);
@@ -1629,9 +1973,14 @@ abstract class BaseControllerBox extends BaseObject implements Persistent
         $copyObj->setVersion($this->getVersion());
         $copyObj->setName($this->getName());
         $copyObj->setDescription($this->getDescription());
+        $copyObj->setState($this->getState());
         $copyObj->setInternalTemperature($this->getInternalTemperature());
         $copyObj->setUid($this->getUid());
         $copyObj->setPosition($this->getPosition());
+        $copyObj->setDataCollectedAt($this->getDataCollectedAt());
+        $copyObj->setNotifyAfter($this->getNotifyAfter());
+        $copyObj->setNotifyStartedAt($this->getNotifyStartedAt());
+        $copyObj->setNotification($this->getNotification());
         $copyObj->setIsEnabled($this->getIsEnabled());
         $copyObj->setIsDeleted($this->getIsDeleted());
         $copyObj->setCreatedAt($this->getCreatedAt());
@@ -2390,9 +2739,14 @@ abstract class BaseControllerBox extends BaseObject implements Persistent
         $this->version = null;
         $this->name = null;
         $this->description = null;
+        $this->state = null;
         $this->internal_temperature = null;
         $this->uid = null;
         $this->position = null;
+        $this->data_collected_at = null;
+        $this->notify_after = null;
+        $this->notify_started_at = null;
+        $this->notification = null;
         $this->is_enabled = null;
         $this->is_deleted = null;
         $this->created_at = null;

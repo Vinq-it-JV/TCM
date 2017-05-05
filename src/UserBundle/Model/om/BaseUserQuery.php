@@ -16,6 +16,8 @@ use CompanyBundle\Model\Company;
 use CompanyBundle\Model\CompanyContact;
 use CompanyBundle\Model\CompanyInformant;
 use CompanyBundle\Model\CompanyOwner;
+use NotificationBundle\Model\CbInputNotification;
+use NotificationBundle\Model\DsTemperatureNotification;
 use StoreBundle\Model\Store;
 use StoreBundle\Model\StoreContact;
 use StoreBundle\Model\StoreInformant;
@@ -107,6 +109,14 @@ use UserBundle\Model\UserTitle;
  * @method UserQuery leftJoinCompanyOwner($relationAlias = null) Adds a LEFT JOIN clause to the query using the CompanyOwner relation
  * @method UserQuery rightJoinCompanyOwner($relationAlias = null) Adds a RIGHT JOIN clause to the query using the CompanyOwner relation
  * @method UserQuery innerJoinCompanyOwner($relationAlias = null) Adds a INNER JOIN clause to the query using the CompanyOwner relation
+ *
+ * @method UserQuery leftJoinDsTemperatureNotification($relationAlias = null) Adds a LEFT JOIN clause to the query using the DsTemperatureNotification relation
+ * @method UserQuery rightJoinDsTemperatureNotification($relationAlias = null) Adds a RIGHT JOIN clause to the query using the DsTemperatureNotification relation
+ * @method UserQuery innerJoinDsTemperatureNotification($relationAlias = null) Adds a INNER JOIN clause to the query using the DsTemperatureNotification relation
+ *
+ * @method UserQuery leftJoinCbInputNotification($relationAlias = null) Adds a LEFT JOIN clause to the query using the CbInputNotification relation
+ * @method UserQuery rightJoinCbInputNotification($relationAlias = null) Adds a RIGHT JOIN clause to the query using the CbInputNotification relation
+ * @method UserQuery innerJoinCbInputNotification($relationAlias = null) Adds a INNER JOIN clause to the query using the CbInputNotification relation
  *
  * @method UserQuery leftJoinStoreContact($relationAlias = null) Adds a LEFT JOIN clause to the query using the StoreContact relation
  * @method UserQuery rightJoinStoreContact($relationAlias = null) Adds a RIGHT JOIN clause to the query using the StoreContact relation
@@ -1566,6 +1576,154 @@ abstract class BaseUserQuery extends ModelCriteria
         return $this
             ->joinCompanyOwner($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'CompanyOwner', '\CompanyBundle\Model\CompanyOwnerQuery');
+    }
+
+    /**
+     * Filter the query by a related DsTemperatureNotification object
+     *
+     * @param   DsTemperatureNotification|PropelObjectCollection $dsTemperatureNotification  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 UserQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByDsTemperatureNotification($dsTemperatureNotification, $comparison = null)
+    {
+        if ($dsTemperatureNotification instanceof DsTemperatureNotification) {
+            return $this
+                ->addUsingAlias(UserPeer::ID, $dsTemperatureNotification->getHandledBy(), $comparison);
+        } elseif ($dsTemperatureNotification instanceof PropelObjectCollection) {
+            return $this
+                ->useDsTemperatureNotificationQuery()
+                ->filterByPrimaryKeys($dsTemperatureNotification->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByDsTemperatureNotification() only accepts arguments of type DsTemperatureNotification or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the DsTemperatureNotification relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return UserQuery The current query, for fluid interface
+     */
+    public function joinDsTemperatureNotification($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('DsTemperatureNotification');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'DsTemperatureNotification');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the DsTemperatureNotification relation DsTemperatureNotification object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   \NotificationBundle\Model\DsTemperatureNotificationQuery A secondary query class using the current class as primary query
+     */
+    public function useDsTemperatureNotificationQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinDsTemperatureNotification($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'DsTemperatureNotification', '\NotificationBundle\Model\DsTemperatureNotificationQuery');
+    }
+
+    /**
+     * Filter the query by a related CbInputNotification object
+     *
+     * @param   CbInputNotification|PropelObjectCollection $cbInputNotification  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 UserQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByCbInputNotification($cbInputNotification, $comparison = null)
+    {
+        if ($cbInputNotification instanceof CbInputNotification) {
+            return $this
+                ->addUsingAlias(UserPeer::ID, $cbInputNotification->getHandledBy(), $comparison);
+        } elseif ($cbInputNotification instanceof PropelObjectCollection) {
+            return $this
+                ->useCbInputNotificationQuery()
+                ->filterByPrimaryKeys($cbInputNotification->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByCbInputNotification() only accepts arguments of type CbInputNotification or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the CbInputNotification relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return UserQuery The current query, for fluid interface
+     */
+    public function joinCbInputNotification($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('CbInputNotification');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'CbInputNotification');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the CbInputNotification relation CbInputNotification object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   \NotificationBundle\Model\CbInputNotificationQuery A secondary query class using the current class as primary query
+     */
+    public function useCbInputNotificationQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinCbInputNotification($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'CbInputNotification', '\NotificationBundle\Model\CbInputNotificationQuery');
     }
 
     /**

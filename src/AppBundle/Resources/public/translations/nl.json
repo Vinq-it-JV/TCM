@@ -212,7 +212,14 @@
         "TRIP_HIGH": "Omslag hoog",
         "SWITCH_WHEN": "Schakel als",
         "HIGH": "Hoog",
-        "LOW": "Laag"
+        "LOW": "Laag",
+        "LAST_UPDATED": "Laatste update op: ",
+        "STATE": {
+            "LABEL": "Status",
+            "ACTIVE": "Actief",
+            "INACTIVE": "Inactief",
+            "NOTIFIED": "Notificatie"
+        }
     },
     "NOTIFICATIONS": {
         "LABEL": "Notificaties"

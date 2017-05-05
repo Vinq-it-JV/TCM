@@ -91,7 +91,7 @@ class DataController extends Controller
 
         for ($temp = 0; $temp < ControllerBox::CONTROLLER_DS_OUTPUTS; $temp++) {
             $DsTemperatureData = $this->getDsTemperatureData(substr($data, 24 + $temp * 20, 20));
-            $this->updateDsOutputs($DsTemperatureData, (ControllerBox::CONTROLLER_DS_OUTPUTS - $temp), $controller);
+            $this->updateDsOutput($DsTemperatureData, (ControllerBox::CONTROLLER_DS_OUTPUTS - $temp), $controller);
         }
 
     }
@@ -112,6 +112,8 @@ class DataController extends Controller
         if (empty($controller))
             return false;
 
+        $date = new \DateTime();
+
         $bit = 0x01;
 
         for ($inp = 1; $inp <= ControllerBox::CONTROLLER_INPUTS; $inp++) {
@@ -128,18 +130,22 @@ class DataController extends Controller
             else
                 $input->setSwitchState(false);
             $input->setControllerBox($controller);
+            $input->setDataCollectedAt($date);
             $input->save();
+            $input->checkSensorStatus();
             $bit <<= 1;
         }
         return true;
     }
 
-    protected function updateDsOutputs($data, $output, $controller = null)
+    protected function updateDsOutput($data, $output, $controller = null)
     {
         $uid = $data['uid'];
 
         if (empty($controller) || empty($uid) || !hexdec($uid))
             return false;
+
+        $date = new \DateTime();
 
         $temperature = DsTemperatureSensorQuery::create()
             ->findOneByUid($uid);
@@ -153,7 +159,9 @@ class DataController extends Controller
         $temperature->setControllerBox($controller);
         if (!empty($controller->getMainStore()))
             $temperature->setMainStore($controller->getMainStore());
+        $temperature->setDataCollectedAt($date);
         $temperature->save();
+        $temperature->checkSensorStatus();
         return true;
     }
 

@@ -151,6 +151,9 @@ angular
             };
 
             $scope.showHttpError = function (data) {
+
+                console.log(data);
+
                 var modalDefaults = {
                     templateUrl: templatePrefix + "httperror.tpl.html"
                 };

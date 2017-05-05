@@ -17,6 +17,7 @@ use DeviceBundle\Model\CbInputPeer;
 use DeviceBundle\Model\CbInputQuery;
 use DeviceBundle\Model\ControllerBox;
 use DeviceBundle\Model\DeviceGroup;
+use NotificationBundle\Model\CbInputNotification;
 use StoreBundle\Model\Store;
 
 /**
@@ -32,6 +33,10 @@ use StoreBundle\Model\Store;
  * @method CbInputQuery orderBySwitchWhen($order = Criteria::ASC) Order by the switch_when column
  * @method CbInputQuery orderBySwitchState($order = Criteria::ASC) Order by the switch_state column
  * @method CbInputQuery orderByPosition($order = Criteria::ASC) Order by the position column
+ * @method CbInputQuery orderByDataCollectedAt($order = Criteria::ASC) Order by the data_collected_at column
+ * @method CbInputQuery orderByNotifyAfter($order = Criteria::ASC) Order by the notify_after column
+ * @method CbInputQuery orderByNotifyStartedAt($order = Criteria::ASC) Order by the notify_started_at column
+ * @method CbInputQuery orderByNotification($order = Criteria::ASC) Order by the notification column
  * @method CbInputQuery orderByIsEnabled($order = Criteria::ASC) Order by the is_enabled column
  * @method CbInputQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
  * @method CbInputQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
@@ -48,6 +53,10 @@ use StoreBundle\Model\Store;
  * @method CbInputQuery groupBySwitchWhen() Group by the switch_when column
  * @method CbInputQuery groupBySwitchState() Group by the switch_state column
  * @method CbInputQuery groupByPosition() Group by the position column
+ * @method CbInputQuery groupByDataCollectedAt() Group by the data_collected_at column
+ * @method CbInputQuery groupByNotifyAfter() Group by the notify_after column
+ * @method CbInputQuery groupByNotifyStartedAt() Group by the notify_started_at column
+ * @method CbInputQuery groupByNotification() Group by the notification column
  * @method CbInputQuery groupByIsEnabled() Group by the is_enabled column
  * @method CbInputQuery groupByCreatedAt() Group by the created_at column
  * @method CbInputQuery groupByUpdatedAt() Group by the updated_at column
@@ -68,6 +77,10 @@ use StoreBundle\Model\Store;
  * @method CbInputQuery rightJoinDeviceGroup($relationAlias = null) Adds a RIGHT JOIN clause to the query using the DeviceGroup relation
  * @method CbInputQuery innerJoinDeviceGroup($relationAlias = null) Adds a INNER JOIN clause to the query using the DeviceGroup relation
  *
+ * @method CbInputQuery leftJoinCbInputNotification($relationAlias = null) Adds a LEFT JOIN clause to the query using the CbInputNotification relation
+ * @method CbInputQuery rightJoinCbInputNotification($relationAlias = null) Adds a RIGHT JOIN clause to the query using the CbInputNotification relation
+ * @method CbInputQuery innerJoinCbInputNotification($relationAlias = null) Adds a INNER JOIN clause to the query using the CbInputNotification relation
+ *
  * @method CbInput findOne(PropelPDO $con = null) Return the first CbInput matching the query
  * @method CbInput findOneOrCreate(PropelPDO $con = null) Return the first CbInput matching the query, or a new CbInput object populated from the query conditions when no match is found
  *
@@ -82,6 +95,10 @@ use StoreBundle\Model\Store;
  * @method CbInput findOneBySwitchWhen(boolean $switch_when) Return the first CbInput filtered by the switch_when column
  * @method CbInput findOneBySwitchState(boolean $switch_state) Return the first CbInput filtered by the switch_state column
  * @method CbInput findOneByPosition(int $position) Return the first CbInput filtered by the position column
+ * @method CbInput findOneByDataCollectedAt(string $data_collected_at) Return the first CbInput filtered by the data_collected_at column
+ * @method CbInput findOneByNotifyAfter(int $notify_after) Return the first CbInput filtered by the notify_after column
+ * @method CbInput findOneByNotifyStartedAt(string $notify_started_at) Return the first CbInput filtered by the notify_started_at column
+ * @method CbInput findOneByNotification(int $notification) Return the first CbInput filtered by the notification column
  * @method CbInput findOneByIsEnabled(boolean $is_enabled) Return the first CbInput filtered by the is_enabled column
  * @method CbInput findOneByCreatedAt(string $created_at) Return the first CbInput filtered by the created_at column
  * @method CbInput findOneByUpdatedAt(string $updated_at) Return the first CbInput filtered by the updated_at column
@@ -98,6 +115,10 @@ use StoreBundle\Model\Store;
  * @method array findBySwitchWhen(boolean $switch_when) Return CbInput objects filtered by the switch_when column
  * @method array findBySwitchState(boolean $switch_state) Return CbInput objects filtered by the switch_state column
  * @method array findByPosition(int $position) Return CbInput objects filtered by the position column
+ * @method array findByDataCollectedAt(string $data_collected_at) Return CbInput objects filtered by the data_collected_at column
+ * @method array findByNotifyAfter(int $notify_after) Return CbInput objects filtered by the notify_after column
+ * @method array findByNotifyStartedAt(string $notify_started_at) Return CbInput objects filtered by the notify_started_at column
+ * @method array findByNotification(int $notification) Return CbInput objects filtered by the notification column
  * @method array findByIsEnabled(boolean $is_enabled) Return CbInput objects filtered by the is_enabled column
  * @method array findByCreatedAt(string $created_at) Return CbInput objects filtered by the created_at column
  * @method array findByUpdatedAt(string $updated_at) Return CbInput objects filtered by the updated_at column
@@ -206,7 +227,7 @@ abstract class BaseCbInputQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `uid`, `input_number`, `group`, `controller`, `main_store`, `name`, `description`, `state`, `switch_when`, `switch_state`, `position`, `is_enabled`, `created_at`, `updated_at` FROM `cb_input` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `uid`, `input_number`, `group`, `controller`, `main_store`, `name`, `description`, `state`, `switch_when`, `switch_state`, `position`, `data_collected_at`, `notify_after`, `notify_started_at`, `notification`, `is_enabled`, `created_at`, `updated_at` FROM `cb_input` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -737,6 +758,176 @@ abstract class BaseCbInputQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query on the data_collected_at column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByDataCollectedAt('2011-03-14'); // WHERE data_collected_at = '2011-03-14'
+     * $query->filterByDataCollectedAt('now'); // WHERE data_collected_at = '2011-03-14'
+     * $query->filterByDataCollectedAt(array('max' => 'yesterday')); // WHERE data_collected_at < '2011-03-13'
+     * </code>
+     *
+     * @param     mixed $dataCollectedAt The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return CbInputQuery The current query, for fluid interface
+     */
+    public function filterByDataCollectedAt($dataCollectedAt = null, $comparison = null)
+    {
+        if (is_array($dataCollectedAt)) {
+            $useMinMax = false;
+            if (isset($dataCollectedAt['min'])) {
+                $this->addUsingAlias(CbInputPeer::DATA_COLLECTED_AT, $dataCollectedAt['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($dataCollectedAt['max'])) {
+                $this->addUsingAlias(CbInputPeer::DATA_COLLECTED_AT, $dataCollectedAt['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(CbInputPeer::DATA_COLLECTED_AT, $dataCollectedAt, $comparison);
+    }
+
+    /**
+     * Filter the query on the notify_after column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByNotifyAfter(1234); // WHERE notify_after = 1234
+     * $query->filterByNotifyAfter(array(12, 34)); // WHERE notify_after IN (12, 34)
+     * $query->filterByNotifyAfter(array('min' => 12)); // WHERE notify_after >= 12
+     * $query->filterByNotifyAfter(array('max' => 12)); // WHERE notify_after <= 12
+     * </code>
+     *
+     * @param     mixed $notifyAfter The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return CbInputQuery The current query, for fluid interface
+     */
+    public function filterByNotifyAfter($notifyAfter = null, $comparison = null)
+    {
+        if (is_array($notifyAfter)) {
+            $useMinMax = false;
+            if (isset($notifyAfter['min'])) {
+                $this->addUsingAlias(CbInputPeer::NOTIFY_AFTER, $notifyAfter['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($notifyAfter['max'])) {
+                $this->addUsingAlias(CbInputPeer::NOTIFY_AFTER, $notifyAfter['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(CbInputPeer::NOTIFY_AFTER, $notifyAfter, $comparison);
+    }
+
+    /**
+     * Filter the query on the notify_started_at column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByNotifyStartedAt('2011-03-14'); // WHERE notify_started_at = '2011-03-14'
+     * $query->filterByNotifyStartedAt('now'); // WHERE notify_started_at = '2011-03-14'
+     * $query->filterByNotifyStartedAt(array('max' => 'yesterday')); // WHERE notify_started_at < '2011-03-13'
+     * </code>
+     *
+     * @param     mixed $notifyStartedAt The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return CbInputQuery The current query, for fluid interface
+     */
+    public function filterByNotifyStartedAt($notifyStartedAt = null, $comparison = null)
+    {
+        if (is_array($notifyStartedAt)) {
+            $useMinMax = false;
+            if (isset($notifyStartedAt['min'])) {
+                $this->addUsingAlias(CbInputPeer::NOTIFY_STARTED_AT, $notifyStartedAt['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($notifyStartedAt['max'])) {
+                $this->addUsingAlias(CbInputPeer::NOTIFY_STARTED_AT, $notifyStartedAt['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(CbInputPeer::NOTIFY_STARTED_AT, $notifyStartedAt, $comparison);
+    }
+
+    /**
+     * Filter the query on the notification column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByNotification(1234); // WHERE notification = 1234
+     * $query->filterByNotification(array(12, 34)); // WHERE notification IN (12, 34)
+     * $query->filterByNotification(array('min' => 12)); // WHERE notification >= 12
+     * $query->filterByNotification(array('max' => 12)); // WHERE notification <= 12
+     * </code>
+     *
+     * @param     mixed $notification The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return CbInputQuery The current query, for fluid interface
+     */
+    public function filterByNotification($notification = null, $comparison = null)
+    {
+        if (is_array($notification)) {
+            $useMinMax = false;
+            if (isset($notification['min'])) {
+                $this->addUsingAlias(CbInputPeer::NOTIFICATION, $notification['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($notification['max'])) {
+                $this->addUsingAlias(CbInputPeer::NOTIFICATION, $notification['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(CbInputPeer::NOTIFICATION, $notification, $comparison);
+    }
+
+    /**
      * Filter the query on the is_enabled column
      *
      * Example usage:
@@ -1075,6 +1266,80 @@ abstract class BaseCbInputQuery extends ModelCriteria
         return $this
             ->joinDeviceGroup($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'DeviceGroup', '\DeviceBundle\Model\DeviceGroupQuery');
+    }
+
+    /**
+     * Filter the query by a related CbInputNotification object
+     *
+     * @param   CbInputNotification|PropelObjectCollection $cbInputNotification  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 CbInputQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByCbInputNotification($cbInputNotification, $comparison = null)
+    {
+        if ($cbInputNotification instanceof CbInputNotification) {
+            return $this
+                ->addUsingAlias(CbInputPeer::ID, $cbInputNotification->getSensor(), $comparison);
+        } elseif ($cbInputNotification instanceof PropelObjectCollection) {
+            return $this
+                ->useCbInputNotificationQuery()
+                ->filterByPrimaryKeys($cbInputNotification->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByCbInputNotification() only accepts arguments of type CbInputNotification or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the CbInputNotification relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return CbInputQuery The current query, for fluid interface
+     */
+    public function joinCbInputNotification($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('CbInputNotification');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'CbInputNotification');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the CbInputNotification relation CbInputNotification object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   \NotificationBundle\Model\CbInputNotificationQuery A secondary query class using the current class as primary query
+     */
+    public function useCbInputNotificationQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinCbInputNotification($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'CbInputNotification', '\NotificationBundle\Model\CbInputNotificationQuery');
     }
 
     /**

@@ -50,11 +50,14 @@ class DsTemperatureSensorTableMap extends TableMap
         $this->addColumn('output_number', 'OutputNumber', 'INTEGER', false, null, null);
         $this->addColumn('name', 'Name', 'VARCHAR', false, 255, 'Temperature');
         $this->addColumn('description', 'Description', 'LONGVARCHAR', false, null, null);
-        $this->addColumn('state', 'State', 'INTEGER', false, null, null);
+        $this->addColumn('state', 'State', 'INTEGER', false, null, 0);
         $this->addColumn('low_limit', 'LowLimit', 'VARCHAR', false, 10, '0');
         $this->addColumn('temperature', 'Temperature', 'VARCHAR', false, 10, '0');
         $this->addColumn('high_limit', 'HighLimit', 'VARCHAR', false, 10, '30');
         $this->addColumn('position', 'Position', 'INTEGER', false, null, 0);
+        $this->addColumn('data_collected_at', 'DataCollectedAt', 'TIMESTAMP', false, null, null);
+        $this->addColumn('notify_after', 'NotifyAfter', 'INTEGER', false, null, 0);
+        $this->addColumn('notify_started_at', 'NotifyStartedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('is_enabled', 'IsEnabled', 'BOOLEAN', false, 1, true);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
@@ -69,6 +72,7 @@ class DsTemperatureSensorTableMap extends TableMap
         $this->addRelation('Store', 'StoreBundle\\Model\\Store', RelationMap::MANY_TO_ONE, array('main_store' => 'id', ), null, null);
         $this->addRelation('DeviceGroup', 'DeviceBundle\\Model\\DeviceGroup', RelationMap::MANY_TO_ONE, array('group' => 'id', ), null, null);
         $this->addRelation('ControllerBox', 'DeviceBundle\\Model\\ControllerBox', RelationMap::MANY_TO_ONE, array('controller' => 'id', ), null, null);
+        $this->addRelation('DsTemperatureNotification', 'NotificationBundle\\Model\\DsTemperatureNotification', RelationMap::ONE_TO_MANY, array('id' => 'sensor', ), null, null, 'DsTemperatureNotifications');
     } // buildRelations()
 
     /**

@@ -74,6 +74,7 @@ abstract class BaseDeviceGroup extends BaseObject implements Persistent
 
     /**
      * The value for the state field.
+     * Note: this column has a database default value of: 0
      * @var        int
      */
     protected $state;
@@ -173,6 +174,7 @@ abstract class BaseDeviceGroup extends BaseObject implements Persistent
      */
     public function applyDefaultValues()
     {
+        $this->state = 0;
         $this->position = 0;
         $this->is_enabled = true;
     }
@@ -559,6 +561,10 @@ abstract class BaseDeviceGroup extends BaseObject implements Persistent
      */
     public function hasOnlyDefaultValues()
     {
+            if ($this->state !== 0) {
+                return false;
+            }
+
             if ($this->position !== 0) {
                 return false;
             }

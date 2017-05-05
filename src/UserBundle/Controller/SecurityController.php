@@ -62,6 +62,7 @@ class SecurityController extends Controller
             $encoder = $this->container->get('security.password_encoder');
             $password = $user->generatePassword($encoder);
             $encoded = $encoder->encodePassword($user, $password);
+            $user->setLogins($this->container->getParameter('logins'));
             $user->setPassword($encoded);
             $user->save();
 

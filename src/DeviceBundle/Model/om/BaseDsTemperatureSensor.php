@@ -10,8 +10,10 @@ use \Exception;
 use \PDO;
 use \Persistent;
 use \Propel;
+use \PropelCollection;
 use \PropelDateTime;
 use \PropelException;
+use \PropelObjectCollection;
 use \PropelPDO;
 use DeviceBundle\Model\ControllerBox;
 use DeviceBundle\Model\ControllerBoxQuery;
@@ -20,6 +22,8 @@ use DeviceBundle\Model\DeviceGroupQuery;
 use DeviceBundle\Model\DsTemperatureSensor;
 use DeviceBundle\Model\DsTemperatureSensorPeer;
 use DeviceBundle\Model\DsTemperatureSensorQuery;
+use NotificationBundle\Model\DsTemperatureNotification;
+use NotificationBundle\Model\DsTemperatureNotificationQuery;
 use StoreBundle\Model\Store;
 use StoreBundle\Model\StoreQuery;
 
@@ -95,6 +99,7 @@ abstract class BaseDsTemperatureSensor extends BaseObject implements Persistent
 
     /**
      * The value for the state field.
+     * Note: this column has a database default value of: 0
      * @var        int
      */
     protected $state;
@@ -126,6 +131,25 @@ abstract class BaseDsTemperatureSensor extends BaseObject implements Persistent
      * @var        int
      */
     protected $position;
+
+    /**
+     * The value for the data_collected_at field.
+     * @var        string
+     */
+    protected $data_collected_at;
+
+    /**
+     * The value for the notify_after field.
+     * Note: this column has a database default value of: 0
+     * @var        int
+     */
+    protected $notify_after;
+
+    /**
+     * The value for the notify_started_at field.
+     * @var        string
+     */
+    protected $notify_started_at;
 
     /**
      * The value for the is_enabled field.
@@ -162,6 +186,12 @@ abstract class BaseDsTemperatureSensor extends BaseObject implements Persistent
     protected $aControllerBox;
 
     /**
+     * @var        PropelObjectCollection|DsTemperatureNotification[] Collection to store aggregation of DsTemperatureNotification objects.
+     */
+    protected $collDsTemperatureNotifications;
+    protected $collDsTemperatureNotificationsPartial;
+
+    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      * @var        boolean
@@ -182,6 +212,12 @@ abstract class BaseDsTemperatureSensor extends BaseObject implements Persistent
     protected $alreadyInClearAllReferencesDeep = false;
 
     /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $dsTemperatureNotificationsScheduledForDeletion = null;
+
+    /**
      * Applies default values to this object.
      * This method should be called from the object's constructor (or
      * equivalent initialization method).
@@ -190,10 +226,12 @@ abstract class BaseDsTemperatureSensor extends BaseObject implements Persistent
     public function applyDefaultValues()
     {
         $this->name = 'Temperature';
+        $this->state = 0;
         $this->low_limit = '0';
         $this->temperature = '0';
         $this->high_limit = '30';
         $this->position = 0;
+        $this->notify_after = 0;
         $this->is_enabled = true;
     }
 
@@ -348,6 +386,97 @@ abstract class BaseDsTemperatureSensor extends BaseObject implements Persistent
     {
 
         return $this->position;
+    }
+
+    /**
+     * Get the [optionally formatted] temporal [data_collected_at] column value.
+     *
+     *
+     * @param string $format The date/time format string (either date()-style or strftime()-style).
+     *				 If format is null, then the raw DateTime object will be returned.
+     * @return mixed Formatted date/time value as string or DateTime object (if format is null), null if column is null, and 0 if column value is 0000-00-00 00:00:00
+     * @throws PropelException - if unable to parse/validate the date/time value.
+     */
+    public function getDataCollectedAt($format = null)
+    {
+        if ($this->data_collected_at === null) {
+            return null;
+        }
+
+        if ($this->data_collected_at === '0000-00-00 00:00:00') {
+            // while technically this is not a default value of null,
+            // this seems to be closest in meaning.
+            return null;
+        }
+
+        try {
+            $dt = new DateTime($this->data_collected_at);
+        } catch (Exception $x) {
+            throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->data_collected_at, true), $x);
+        }
+
+        if ($format === null) {
+            // Because propel.useDateTimeClass is true, we return a DateTime object.
+            return $dt;
+        }
+
+        if (strpos($format, '%') !== false) {
+            return strftime($format, $dt->format('U'));
+        }
+
+        return $dt->format($format);
+
+    }
+
+    /**
+     * Get the [notify_after] column value.
+     *
+     * @return int
+     */
+    public function getNotifyAfter()
+    {
+
+        return $this->notify_after;
+    }
+
+    /**
+     * Get the [optionally formatted] temporal [notify_started_at] column value.
+     *
+     *
+     * @param string $format The date/time format string (either date()-style or strftime()-style).
+     *				 If format is null, then the raw DateTime object will be returned.
+     * @return mixed Formatted date/time value as string or DateTime object (if format is null), null if column is null, and 0 if column value is 0000-00-00 00:00:00
+     * @throws PropelException - if unable to parse/validate the date/time value.
+     */
+    public function getNotifyStartedAt($format = null)
+    {
+        if ($this->notify_started_at === null) {
+            return null;
+        }
+
+        if ($this->notify_started_at === '0000-00-00 00:00:00') {
+            // while technically this is not a default value of null,
+            // this seems to be closest in meaning.
+            return null;
+        }
+
+        try {
+            $dt = new DateTime($this->notify_started_at);
+        } catch (Exception $x) {
+            throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->notify_started_at, true), $x);
+        }
+
+        if ($format === null) {
+            // Because propel.useDateTimeClass is true, we return a DateTime object.
+            return $dt;
+        }
+
+        if (strpos($format, '%') !== false) {
+            return strftime($format, $dt->format('U'));
+        }
+
+        return $dt->format($format);
+
     }
 
     /**
@@ -727,6 +856,73 @@ abstract class BaseDsTemperatureSensor extends BaseObject implements Persistent
     } // setPosition()
 
     /**
+     * Sets the value of [data_collected_at] column to a normalized version of the date/time value specified.
+     *
+     * @param mixed $v string, integer (timestamp), or DateTime value.
+     *               Empty strings are treated as null.
+     * @return DsTemperatureSensor The current object (for fluent API support)
+     */
+    public function setDataCollectedAt($v)
+    {
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->data_collected_at !== null || $dt !== null) {
+            $currentDateAsString = ($this->data_collected_at !== null && $tmpDt = new DateTime($this->data_collected_at)) ? $tmpDt->format('Y-m-d H:i:s') : null;
+            $newDateAsString = $dt ? $dt->format('Y-m-d H:i:s') : null;
+            if ($currentDateAsString !== $newDateAsString) {
+                $this->data_collected_at = $newDateAsString;
+                $this->modifiedColumns[] = DsTemperatureSensorPeer::DATA_COLLECTED_AT;
+            }
+        } // if either are not null
+
+
+        return $this;
+    } // setDataCollectedAt()
+
+    /**
+     * Set the value of [notify_after] column.
+     *
+     * @param  int $v new value
+     * @return DsTemperatureSensor The current object (for fluent API support)
+     */
+    public function setNotifyAfter($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->notify_after !== $v) {
+            $this->notify_after = $v;
+            $this->modifiedColumns[] = DsTemperatureSensorPeer::NOTIFY_AFTER;
+        }
+
+
+        return $this;
+    } // setNotifyAfter()
+
+    /**
+     * Sets the value of [notify_started_at] column to a normalized version of the date/time value specified.
+     *
+     * @param mixed $v string, integer (timestamp), or DateTime value.
+     *               Empty strings are treated as null.
+     * @return DsTemperatureSensor The current object (for fluent API support)
+     */
+    public function setNotifyStartedAt($v)
+    {
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->notify_started_at !== null || $dt !== null) {
+            $currentDateAsString = ($this->notify_started_at !== null && $tmpDt = new DateTime($this->notify_started_at)) ? $tmpDt->format('Y-m-d H:i:s') : null;
+            $newDateAsString = $dt ? $dt->format('Y-m-d H:i:s') : null;
+            if ($currentDateAsString !== $newDateAsString) {
+                $this->notify_started_at = $newDateAsString;
+                $this->modifiedColumns[] = DsTemperatureSensorPeer::NOTIFY_STARTED_AT;
+            }
+        } // if either are not null
+
+
+        return $this;
+    } // setNotifyStartedAt()
+
+    /**
      * Sets the value of the [is_enabled] column.
      * Non-boolean arguments are converted using the following rules:
      *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
@@ -815,6 +1011,10 @@ abstract class BaseDsTemperatureSensor extends BaseObject implements Persistent
                 return false;
             }
 
+            if ($this->state !== 0) {
+                return false;
+            }
+
             if ($this->low_limit !== '0') {
                 return false;
             }
@@ -828,6 +1028,10 @@ abstract class BaseDsTemperatureSensor extends BaseObject implements Persistent
             }
 
             if ($this->position !== 0) {
+                return false;
+            }
+
+            if ($this->notify_after !== 0) {
                 return false;
             }
 
@@ -870,9 +1074,12 @@ abstract class BaseDsTemperatureSensor extends BaseObject implements Persistent
             $this->temperature = ($row[$startcol + 10] !== null) ? (string) $row[$startcol + 10] : null;
             $this->high_limit = ($row[$startcol + 11] !== null) ? (string) $row[$startcol + 11] : null;
             $this->position = ($row[$startcol + 12] !== null) ? (int) $row[$startcol + 12] : null;
-            $this->is_enabled = ($row[$startcol + 13] !== null) ? (boolean) $row[$startcol + 13] : null;
-            $this->created_at = ($row[$startcol + 14] !== null) ? (string) $row[$startcol + 14] : null;
-            $this->updated_at = ($row[$startcol + 15] !== null) ? (string) $row[$startcol + 15] : null;
+            $this->data_collected_at = ($row[$startcol + 13] !== null) ? (string) $row[$startcol + 13] : null;
+            $this->notify_after = ($row[$startcol + 14] !== null) ? (int) $row[$startcol + 14] : null;
+            $this->notify_started_at = ($row[$startcol + 15] !== null) ? (string) $row[$startcol + 15] : null;
+            $this->is_enabled = ($row[$startcol + 16] !== null) ? (boolean) $row[$startcol + 16] : null;
+            $this->created_at = ($row[$startcol + 17] !== null) ? (string) $row[$startcol + 17] : null;
+            $this->updated_at = ($row[$startcol + 18] !== null) ? (string) $row[$startcol + 18] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -882,7 +1089,7 @@ abstract class BaseDsTemperatureSensor extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 16; // 16 = DsTemperatureSensorPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 19; // 19 = DsTemperatureSensorPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating DsTemperatureSensor object", $e);
@@ -956,6 +1163,8 @@ abstract class BaseDsTemperatureSensor extends BaseObject implements Persistent
             $this->aStore = null;
             $this->aDeviceGroup = null;
             $this->aControllerBox = null;
+            $this->collDsTemperatureNotifications = null;
+
         } // if (deep)
     }
 
@@ -1117,6 +1326,24 @@ abstract class BaseDsTemperatureSensor extends BaseObject implements Persistent
                 $this->resetModified();
             }
 
+            if ($this->dsTemperatureNotificationsScheduledForDeletion !== null) {
+                if (!$this->dsTemperatureNotificationsScheduledForDeletion->isEmpty()) {
+                    foreach ($this->dsTemperatureNotificationsScheduledForDeletion as $dsTemperatureNotification) {
+                        // need to save related object because we set the relation to null
+                        $dsTemperatureNotification->save($con);
+                    }
+                    $this->dsTemperatureNotificationsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collDsTemperatureNotifications !== null) {
+                foreach ($this->collDsTemperatureNotifications as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
             $this->alreadyInSave = false;
 
         }
@@ -1182,6 +1409,15 @@ abstract class BaseDsTemperatureSensor extends BaseObject implements Persistent
         if ($this->isColumnModified(DsTemperatureSensorPeer::POSITION)) {
             $modifiedColumns[':p' . $index++]  = '`position`';
         }
+        if ($this->isColumnModified(DsTemperatureSensorPeer::DATA_COLLECTED_AT)) {
+            $modifiedColumns[':p' . $index++]  = '`data_collected_at`';
+        }
+        if ($this->isColumnModified(DsTemperatureSensorPeer::NOTIFY_AFTER)) {
+            $modifiedColumns[':p' . $index++]  = '`notify_after`';
+        }
+        if ($this->isColumnModified(DsTemperatureSensorPeer::NOTIFY_STARTED_AT)) {
+            $modifiedColumns[':p' . $index++]  = '`notify_started_at`';
+        }
         if ($this->isColumnModified(DsTemperatureSensorPeer::IS_ENABLED)) {
             $modifiedColumns[':p' . $index++]  = '`is_enabled`';
         }
@@ -1240,6 +1476,15 @@ abstract class BaseDsTemperatureSensor extends BaseObject implements Persistent
                         break;
                     case '`position`':
                         $stmt->bindValue($identifier, $this->position, PDO::PARAM_INT);
+                        break;
+                    case '`data_collected_at`':
+                        $stmt->bindValue($identifier, $this->data_collected_at, PDO::PARAM_STR);
+                        break;
+                    case '`notify_after`':
+                        $stmt->bindValue($identifier, $this->notify_after, PDO::PARAM_INT);
+                        break;
+                    case '`notify_started_at`':
+                        $stmt->bindValue($identifier, $this->notify_started_at, PDO::PARAM_STR);
                         break;
                     case '`is_enabled`':
                         $stmt->bindValue($identifier, (int) $this->is_enabled, PDO::PARAM_INT);
@@ -1373,6 +1618,14 @@ abstract class BaseDsTemperatureSensor extends BaseObject implements Persistent
             }
 
 
+                if ($this->collDsTemperatureNotifications !== null) {
+                    foreach ($this->collDsTemperatureNotifications as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
 
             $this->alreadyInValidation = false;
         }
@@ -1448,12 +1701,21 @@ abstract class BaseDsTemperatureSensor extends BaseObject implements Persistent
                 return $this->getPosition();
                 break;
             case 13:
-                return $this->getIsEnabled();
+                return $this->getDataCollectedAt();
                 break;
             case 14:
-                return $this->getCreatedAt();
+                return $this->getNotifyAfter();
                 break;
             case 15:
+                return $this->getNotifyStartedAt();
+                break;
+            case 16:
+                return $this->getIsEnabled();
+                break;
+            case 17:
+                return $this->getCreatedAt();
+                break;
+            case 18:
                 return $this->getUpdatedAt();
                 break;
             default:
@@ -1498,9 +1760,12 @@ abstract class BaseDsTemperatureSensor extends BaseObject implements Persistent
             $keys[10] => $this->getTemperature(),
             $keys[11] => $this->getHighLimit(),
             $keys[12] => $this->getPosition(),
-            $keys[13] => $this->getIsEnabled(),
-            $keys[14] => $this->getCreatedAt(),
-            $keys[15] => $this->getUpdatedAt(),
+            $keys[13] => $this->getDataCollectedAt(),
+            $keys[14] => $this->getNotifyAfter(),
+            $keys[15] => $this->getNotifyStartedAt(),
+            $keys[16] => $this->getIsEnabled(),
+            $keys[17] => $this->getCreatedAt(),
+            $keys[18] => $this->getUpdatedAt(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1516,6 +1781,9 @@ abstract class BaseDsTemperatureSensor extends BaseObject implements Persistent
             }
             if (null !== $this->aControllerBox) {
                 $result['ControllerBox'] = $this->aControllerBox->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->collDsTemperatureNotifications) {
+                $result['DsTemperatureNotifications'] = $this->collDsTemperatureNotifications->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
 
@@ -1591,12 +1859,21 @@ abstract class BaseDsTemperatureSensor extends BaseObject implements Persistent
                 $this->setPosition($value);
                 break;
             case 13:
-                $this->setIsEnabled($value);
+                $this->setDataCollectedAt($value);
                 break;
             case 14:
-                $this->setCreatedAt($value);
+                $this->setNotifyAfter($value);
                 break;
             case 15:
+                $this->setNotifyStartedAt($value);
+                break;
+            case 16:
+                $this->setIsEnabled($value);
+                break;
+            case 17:
+                $this->setCreatedAt($value);
+                break;
+            case 18:
                 $this->setUpdatedAt($value);
                 break;
         } // switch()
@@ -1636,9 +1913,12 @@ abstract class BaseDsTemperatureSensor extends BaseObject implements Persistent
         if (array_key_exists($keys[10], $arr)) $this->setTemperature($arr[$keys[10]]);
         if (array_key_exists($keys[11], $arr)) $this->setHighLimit($arr[$keys[11]]);
         if (array_key_exists($keys[12], $arr)) $this->setPosition($arr[$keys[12]]);
-        if (array_key_exists($keys[13], $arr)) $this->setIsEnabled($arr[$keys[13]]);
-        if (array_key_exists($keys[14], $arr)) $this->setCreatedAt($arr[$keys[14]]);
-        if (array_key_exists($keys[15], $arr)) $this->setUpdatedAt($arr[$keys[15]]);
+        if (array_key_exists($keys[13], $arr)) $this->setDataCollectedAt($arr[$keys[13]]);
+        if (array_key_exists($keys[14], $arr)) $this->setNotifyAfter($arr[$keys[14]]);
+        if (array_key_exists($keys[15], $arr)) $this->setNotifyStartedAt($arr[$keys[15]]);
+        if (array_key_exists($keys[16], $arr)) $this->setIsEnabled($arr[$keys[16]]);
+        if (array_key_exists($keys[17], $arr)) $this->setCreatedAt($arr[$keys[17]]);
+        if (array_key_exists($keys[18], $arr)) $this->setUpdatedAt($arr[$keys[18]]);
     }
 
     /**
@@ -1663,6 +1943,9 @@ abstract class BaseDsTemperatureSensor extends BaseObject implements Persistent
         if ($this->isColumnModified(DsTemperatureSensorPeer::TEMPERATURE)) $criteria->add(DsTemperatureSensorPeer::TEMPERATURE, $this->temperature);
         if ($this->isColumnModified(DsTemperatureSensorPeer::HIGH_LIMIT)) $criteria->add(DsTemperatureSensorPeer::HIGH_LIMIT, $this->high_limit);
         if ($this->isColumnModified(DsTemperatureSensorPeer::POSITION)) $criteria->add(DsTemperatureSensorPeer::POSITION, $this->position);
+        if ($this->isColumnModified(DsTemperatureSensorPeer::DATA_COLLECTED_AT)) $criteria->add(DsTemperatureSensorPeer::DATA_COLLECTED_AT, $this->data_collected_at);
+        if ($this->isColumnModified(DsTemperatureSensorPeer::NOTIFY_AFTER)) $criteria->add(DsTemperatureSensorPeer::NOTIFY_AFTER, $this->notify_after);
+        if ($this->isColumnModified(DsTemperatureSensorPeer::NOTIFY_STARTED_AT)) $criteria->add(DsTemperatureSensorPeer::NOTIFY_STARTED_AT, $this->notify_started_at);
         if ($this->isColumnModified(DsTemperatureSensorPeer::IS_ENABLED)) $criteria->add(DsTemperatureSensorPeer::IS_ENABLED, $this->is_enabled);
         if ($this->isColumnModified(DsTemperatureSensorPeer::CREATED_AT)) $criteria->add(DsTemperatureSensorPeer::CREATED_AT, $this->created_at);
         if ($this->isColumnModified(DsTemperatureSensorPeer::UPDATED_AT)) $criteria->add(DsTemperatureSensorPeer::UPDATED_AT, $this->updated_at);
@@ -1741,6 +2024,9 @@ abstract class BaseDsTemperatureSensor extends BaseObject implements Persistent
         $copyObj->setTemperature($this->getTemperature());
         $copyObj->setHighLimit($this->getHighLimit());
         $copyObj->setPosition($this->getPosition());
+        $copyObj->setDataCollectedAt($this->getDataCollectedAt());
+        $copyObj->setNotifyAfter($this->getNotifyAfter());
+        $copyObj->setNotifyStartedAt($this->getNotifyStartedAt());
         $copyObj->setIsEnabled($this->getIsEnabled());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
@@ -1751,6 +2037,12 @@ abstract class BaseDsTemperatureSensor extends BaseObject implements Persistent
             $copyObj->setNew(false);
             // store object hash to prevent cycle
             $this->startCopy = true;
+
+            foreach ($this->getDsTemperatureNotifications() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addDsTemperatureNotification($relObj->copy($deepCopy));
+                }
+            }
 
             //unflag object copy
             $this->startCopy = false;
@@ -1958,6 +2250,272 @@ abstract class BaseDsTemperatureSensor extends BaseObject implements Persistent
         return $this->aControllerBox;
     }
 
+
+    /**
+     * Initializes a collection based on the name of a relation.
+     * Avoids crafting an 'init[$relationName]s' method name
+     * that wouldn't work when StandardEnglishPluralizer is used.
+     *
+     * @param string $relationName The name of the relation to initialize
+     * @return void
+     */
+    public function initRelation($relationName)
+    {
+        if ('DsTemperatureNotification' == $relationName) {
+            $this->initDsTemperatureNotifications();
+        }
+    }
+
+    /**
+     * Clears out the collDsTemperatureNotifications collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return DsTemperatureSensor The current object (for fluent API support)
+     * @see        addDsTemperatureNotifications()
+     */
+    public function clearDsTemperatureNotifications()
+    {
+        $this->collDsTemperatureNotifications = null; // important to set this to null since that means it is uninitialized
+        $this->collDsTemperatureNotificationsPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collDsTemperatureNotifications collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialDsTemperatureNotifications($v = true)
+    {
+        $this->collDsTemperatureNotificationsPartial = $v;
+    }
+
+    /**
+     * Initializes the collDsTemperatureNotifications collection.
+     *
+     * By default this just sets the collDsTemperatureNotifications collection to an empty array (like clearcollDsTemperatureNotifications());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initDsTemperatureNotifications($overrideExisting = true)
+    {
+        if (null !== $this->collDsTemperatureNotifications && !$overrideExisting) {
+            return;
+        }
+        $this->collDsTemperatureNotifications = new PropelObjectCollection();
+        $this->collDsTemperatureNotifications->setModel('DsTemperatureNotification');
+    }
+
+    /**
+     * Gets an array of DsTemperatureNotification objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this DsTemperatureSensor is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|DsTemperatureNotification[] List of DsTemperatureNotification objects
+     * @throws PropelException
+     */
+    public function getDsTemperatureNotifications($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collDsTemperatureNotificationsPartial && !$this->isNew();
+        if (null === $this->collDsTemperatureNotifications || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collDsTemperatureNotifications) {
+                // return empty collection
+                $this->initDsTemperatureNotifications();
+            } else {
+                $collDsTemperatureNotifications = DsTemperatureNotificationQuery::create(null, $criteria)
+                    ->filterByDsTemperatureSensor($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collDsTemperatureNotificationsPartial && count($collDsTemperatureNotifications)) {
+                      $this->initDsTemperatureNotifications(false);
+
+                      foreach ($collDsTemperatureNotifications as $obj) {
+                        if (false == $this->collDsTemperatureNotifications->contains($obj)) {
+                          $this->collDsTemperatureNotifications->append($obj);
+                        }
+                      }
+
+                      $this->collDsTemperatureNotificationsPartial = true;
+                    }
+
+                    $collDsTemperatureNotifications->getInternalIterator()->rewind();
+
+                    return $collDsTemperatureNotifications;
+                }
+
+                if ($partial && $this->collDsTemperatureNotifications) {
+                    foreach ($this->collDsTemperatureNotifications as $obj) {
+                        if ($obj->isNew()) {
+                            $collDsTemperatureNotifications[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collDsTemperatureNotifications = $collDsTemperatureNotifications;
+                $this->collDsTemperatureNotificationsPartial = false;
+            }
+        }
+
+        return $this->collDsTemperatureNotifications;
+    }
+
+    /**
+     * Sets a collection of DsTemperatureNotification objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $dsTemperatureNotifications A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return DsTemperatureSensor The current object (for fluent API support)
+     */
+    public function setDsTemperatureNotifications(PropelCollection $dsTemperatureNotifications, PropelPDO $con = null)
+    {
+        $dsTemperatureNotificationsToDelete = $this->getDsTemperatureNotifications(new Criteria(), $con)->diff($dsTemperatureNotifications);
+
+
+        $this->dsTemperatureNotificationsScheduledForDeletion = $dsTemperatureNotificationsToDelete;
+
+        foreach ($dsTemperatureNotificationsToDelete as $dsTemperatureNotificationRemoved) {
+            $dsTemperatureNotificationRemoved->setDsTemperatureSensor(null);
+        }
+
+        $this->collDsTemperatureNotifications = null;
+        foreach ($dsTemperatureNotifications as $dsTemperatureNotification) {
+            $this->addDsTemperatureNotification($dsTemperatureNotification);
+        }
+
+        $this->collDsTemperatureNotifications = $dsTemperatureNotifications;
+        $this->collDsTemperatureNotificationsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related DsTemperatureNotification objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related DsTemperatureNotification objects.
+     * @throws PropelException
+     */
+    public function countDsTemperatureNotifications(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collDsTemperatureNotificationsPartial && !$this->isNew();
+        if (null === $this->collDsTemperatureNotifications || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collDsTemperatureNotifications) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getDsTemperatureNotifications());
+            }
+            $query = DsTemperatureNotificationQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByDsTemperatureSensor($this)
+                ->count($con);
+        }
+
+        return count($this->collDsTemperatureNotifications);
+    }
+
+    /**
+     * Method called to associate a DsTemperatureNotification object to this object
+     * through the DsTemperatureNotification foreign key attribute.
+     *
+     * @param    DsTemperatureNotification $l DsTemperatureNotification
+     * @return DsTemperatureSensor The current object (for fluent API support)
+     */
+    public function addDsTemperatureNotification(DsTemperatureNotification $l)
+    {
+        if ($this->collDsTemperatureNotifications === null) {
+            $this->initDsTemperatureNotifications();
+            $this->collDsTemperatureNotificationsPartial = true;
+        }
+
+        if (!in_array($l, $this->collDsTemperatureNotifications->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddDsTemperatureNotification($l);
+
+            if ($this->dsTemperatureNotificationsScheduledForDeletion and $this->dsTemperatureNotificationsScheduledForDeletion->contains($l)) {
+                $this->dsTemperatureNotificationsScheduledForDeletion->remove($this->dsTemperatureNotificationsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	DsTemperatureNotification $dsTemperatureNotification The dsTemperatureNotification object to add.
+     */
+    protected function doAddDsTemperatureNotification($dsTemperatureNotification)
+    {
+        $this->collDsTemperatureNotifications[]= $dsTemperatureNotification;
+        $dsTemperatureNotification->setDsTemperatureSensor($this);
+    }
+
+    /**
+     * @param	DsTemperatureNotification $dsTemperatureNotification The dsTemperatureNotification object to remove.
+     * @return DsTemperatureSensor The current object (for fluent API support)
+     */
+    public function removeDsTemperatureNotification($dsTemperatureNotification)
+    {
+        if ($this->getDsTemperatureNotifications()->contains($dsTemperatureNotification)) {
+            $this->collDsTemperatureNotifications->remove($this->collDsTemperatureNotifications->search($dsTemperatureNotification));
+            if (null === $this->dsTemperatureNotificationsScheduledForDeletion) {
+                $this->dsTemperatureNotificationsScheduledForDeletion = clone $this->collDsTemperatureNotifications;
+                $this->dsTemperatureNotificationsScheduledForDeletion->clear();
+            }
+            $this->dsTemperatureNotificationsScheduledForDeletion[]= $dsTemperatureNotification;
+            $dsTemperatureNotification->setDsTemperatureSensor(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this DsTemperatureSensor is new, it will return
+     * an empty collection; or if this DsTemperatureSensor has previously
+     * been saved, it will retrieve related DsTemperatureNotifications from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in DsTemperatureSensor.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|DsTemperatureNotification[] List of DsTemperatureNotification objects
+     */
+    public function getDsTemperatureNotificationsJoinUser($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = DsTemperatureNotificationQuery::create(null, $criteria);
+        $query->joinWith('User', $join_behavior);
+
+        return $this->getDsTemperatureNotifications($query, $con);
+    }
+
     /**
      * Clears the current object and sets all attributes to their default values
      */
@@ -1976,6 +2534,9 @@ abstract class BaseDsTemperatureSensor extends BaseObject implements Persistent
         $this->temperature = null;
         $this->high_limit = null;
         $this->position = null;
+        $this->data_collected_at = null;
+        $this->notify_after = null;
+        $this->notify_started_at = null;
         $this->is_enabled = null;
         $this->created_at = null;
         $this->updated_at = null;
@@ -2002,6 +2563,11 @@ abstract class BaseDsTemperatureSensor extends BaseObject implements Persistent
     {
         if ($deep && !$this->alreadyInClearAllReferencesDeep) {
             $this->alreadyInClearAllReferencesDeep = true;
+            if ($this->collDsTemperatureNotifications) {
+                foreach ($this->collDsTemperatureNotifications as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->aStore instanceof Persistent) {
               $this->aStore->clearAllReferences($deep);
             }
@@ -2015,6 +2581,10 @@ abstract class BaseDsTemperatureSensor extends BaseObject implements Persistent
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
 
+        if ($this->collDsTemperatureNotifications instanceof PropelCollection) {
+            $this->collDsTemperatureNotifications->clearIterator();
+        }
+        $this->collDsTemperatureNotifications = null;
         $this->aStore = null;
         $this->aDeviceGroup = null;
         $this->aControllerBox = null;

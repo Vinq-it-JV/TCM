@@ -212,7 +212,14 @@
         "TRIP_HIGH": "Trip high",
         "SWITCH_WHEN": "Switch when",
         "HIGH": "High",
-        "LOW": "Low"
+        "LOW": "Low",
+        "LAST_UPDATED": "Last updated on: ",
+        "STATE": {
+            "LABEL": "State",
+            "ACTIVE": "Active",
+            "INACTIVE": "Inactive",
+            "NOTIFIED": "Notified"
+        }
     },
     "NOTIFICATIONS": {
         "LABEL": "Notifications"

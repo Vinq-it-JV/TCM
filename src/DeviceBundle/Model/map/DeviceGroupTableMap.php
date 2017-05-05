@@ -46,7 +46,7 @@ class DeviceGroupTableMap extends TableMap
         $this->addForeignKey('main_store', 'MainStore', 'INTEGER', 'store', 'id', false, null, null);
         $this->addColumn('name', 'Name', 'VARCHAR', false, 255, null);
         $this->addColumn('description', 'Description', 'LONGVARCHAR', false, null, null);
-        $this->addColumn('state', 'State', 'INTEGER', false, null, null);
+        $this->addColumn('state', 'State', 'INTEGER', false, null, 0);
         $this->addColumn('position', 'Position', 'INTEGER', false, null, 0);
         $this->addColumn('is_enabled', 'IsEnabled', 'BOOLEAN', false, 1, true);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);

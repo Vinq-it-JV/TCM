@@ -31,13 +31,13 @@ abstract class BaseControllerBoxPeer
     const TM_CLASS = 'DeviceBundle\\Model\\map\\ControllerBoxTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 13;
+    const NUM_COLUMNS = 18;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 13;
+    const NUM_HYDRATE_COLUMNS = 18;
 
     /** the column name for the id field */
     const ID = 'controller_box.id';
@@ -57,6 +57,9 @@ abstract class BaseControllerBoxPeer
     /** the column name for the description field */
     const DESCRIPTION = 'controller_box.description';
 
+    /** the column name for the state field */
+    const STATE = 'controller_box.state';
+
     /** the column name for the internal_temperature field */
     const INTERNAL_TEMPERATURE = 'controller_box.internal_temperature';
 
@@ -65,6 +68,18 @@ abstract class BaseControllerBoxPeer
 
     /** the column name for the position field */
     const POSITION = 'controller_box.position';
+
+    /** the column name for the data_collected_at field */
+    const DATA_COLLECTED_AT = 'controller_box.data_collected_at';
+
+    /** the column name for the notify_after field */
+    const NOTIFY_AFTER = 'controller_box.notify_after';
+
+    /** the column name for the notify_started_at field */
+    const NOTIFY_STARTED_AT = 'controller_box.notify_started_at';
+
+    /** the column name for the notification field */
+    const NOTIFICATION = 'controller_box.notification';
 
     /** the column name for the is_enabled field */
     const IS_ENABLED = 'controller_box.is_enabled';
@@ -97,12 +112,12 @@ abstract class BaseControllerBoxPeer
      * e.g. ControllerBoxPeer::$fieldNames[ControllerBoxPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'Group', 'MainStore', 'Version', 'Name', 'Description', 'InternalTemperature', 'Uid', 'Position', 'IsEnabled', 'IsDeleted', 'CreatedAt', 'UpdatedAt', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'group', 'mainStore', 'version', 'name', 'description', 'internalTemperature', 'uid', 'position', 'isEnabled', 'isDeleted', 'createdAt', 'updatedAt', ),
-        BasePeer::TYPE_COLNAME => array (ControllerBoxPeer::ID, ControllerBoxPeer::GROUP, ControllerBoxPeer::MAIN_STORE, ControllerBoxPeer::VERSION, ControllerBoxPeer::NAME, ControllerBoxPeer::DESCRIPTION, ControllerBoxPeer::INTERNAL_TEMPERATURE, ControllerBoxPeer::UID, ControllerBoxPeer::POSITION, ControllerBoxPeer::IS_ENABLED, ControllerBoxPeer::IS_DELETED, ControllerBoxPeer::CREATED_AT, ControllerBoxPeer::UPDATED_AT, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'GROUP', 'MAIN_STORE', 'VERSION', 'NAME', 'DESCRIPTION', 'INTERNAL_TEMPERATURE', 'UID', 'POSITION', 'IS_ENABLED', 'IS_DELETED', 'CREATED_AT', 'UPDATED_AT', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'group', 'main_store', 'version', 'name', 'description', 'internal_temperature', 'uid', 'position', 'is_enabled', 'is_deleted', 'created_at', 'updated_at', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, )
+        BasePeer::TYPE_PHPNAME => array ('Id', 'Group', 'MainStore', 'Version', 'Name', 'Description', 'State', 'InternalTemperature', 'Uid', 'Position', 'DataCollectedAt', 'NotifyAfter', 'NotifyStartedAt', 'Notification', 'IsEnabled', 'IsDeleted', 'CreatedAt', 'UpdatedAt', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'group', 'mainStore', 'version', 'name', 'description', 'state', 'internalTemperature', 'uid', 'position', 'dataCollectedAt', 'notifyAfter', 'notifyStartedAt', 'notification', 'isEnabled', 'isDeleted', 'createdAt', 'updatedAt', ),
+        BasePeer::TYPE_COLNAME => array (ControllerBoxPeer::ID, ControllerBoxPeer::GROUP, ControllerBoxPeer::MAIN_STORE, ControllerBoxPeer::VERSION, ControllerBoxPeer::NAME, ControllerBoxPeer::DESCRIPTION, ControllerBoxPeer::STATE, ControllerBoxPeer::INTERNAL_TEMPERATURE, ControllerBoxPeer::UID, ControllerBoxPeer::POSITION, ControllerBoxPeer::DATA_COLLECTED_AT, ControllerBoxPeer::NOTIFY_AFTER, ControllerBoxPeer::NOTIFY_STARTED_AT, ControllerBoxPeer::NOTIFICATION, ControllerBoxPeer::IS_ENABLED, ControllerBoxPeer::IS_DELETED, ControllerBoxPeer::CREATED_AT, ControllerBoxPeer::UPDATED_AT, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'GROUP', 'MAIN_STORE', 'VERSION', 'NAME', 'DESCRIPTION', 'STATE', 'INTERNAL_TEMPERATURE', 'UID', 'POSITION', 'DATA_COLLECTED_AT', 'NOTIFY_AFTER', 'NOTIFY_STARTED_AT', 'NOTIFICATION', 'IS_ENABLED', 'IS_DELETED', 'CREATED_AT', 'UPDATED_AT', ),
+        BasePeer::TYPE_FIELDNAME => array ('id', 'group', 'main_store', 'version', 'name', 'description', 'state', 'internal_temperature', 'uid', 'position', 'data_collected_at', 'notify_after', 'notify_started_at', 'notification', 'is_enabled', 'is_deleted', 'created_at', 'updated_at', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, )
     );
 
     /**
@@ -112,12 +127,12 @@ abstract class BaseControllerBoxPeer
      * e.g. ControllerBoxPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Group' => 1, 'MainStore' => 2, 'Version' => 3, 'Name' => 4, 'Description' => 5, 'InternalTemperature' => 6, 'Uid' => 7, 'Position' => 8, 'IsEnabled' => 9, 'IsDeleted' => 10, 'CreatedAt' => 11, 'UpdatedAt' => 12, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'group' => 1, 'mainStore' => 2, 'version' => 3, 'name' => 4, 'description' => 5, 'internalTemperature' => 6, 'uid' => 7, 'position' => 8, 'isEnabled' => 9, 'isDeleted' => 10, 'createdAt' => 11, 'updatedAt' => 12, ),
-        BasePeer::TYPE_COLNAME => array (ControllerBoxPeer::ID => 0, ControllerBoxPeer::GROUP => 1, ControllerBoxPeer::MAIN_STORE => 2, ControllerBoxPeer::VERSION => 3, ControllerBoxPeer::NAME => 4, ControllerBoxPeer::DESCRIPTION => 5, ControllerBoxPeer::INTERNAL_TEMPERATURE => 6, ControllerBoxPeer::UID => 7, ControllerBoxPeer::POSITION => 8, ControllerBoxPeer::IS_ENABLED => 9, ControllerBoxPeer::IS_DELETED => 10, ControllerBoxPeer::CREATED_AT => 11, ControllerBoxPeer::UPDATED_AT => 12, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'GROUP' => 1, 'MAIN_STORE' => 2, 'VERSION' => 3, 'NAME' => 4, 'DESCRIPTION' => 5, 'INTERNAL_TEMPERATURE' => 6, 'UID' => 7, 'POSITION' => 8, 'IS_ENABLED' => 9, 'IS_DELETED' => 10, 'CREATED_AT' => 11, 'UPDATED_AT' => 12, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'group' => 1, 'main_store' => 2, 'version' => 3, 'name' => 4, 'description' => 5, 'internal_temperature' => 6, 'uid' => 7, 'position' => 8, 'is_enabled' => 9, 'is_deleted' => 10, 'created_at' => 11, 'updated_at' => 12, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, )
+        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Group' => 1, 'MainStore' => 2, 'Version' => 3, 'Name' => 4, 'Description' => 5, 'State' => 6, 'InternalTemperature' => 7, 'Uid' => 8, 'Position' => 9, 'DataCollectedAt' => 10, 'NotifyAfter' => 11, 'NotifyStartedAt' => 12, 'Notification' => 13, 'IsEnabled' => 14, 'IsDeleted' => 15, 'CreatedAt' => 16, 'UpdatedAt' => 17, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'group' => 1, 'mainStore' => 2, 'version' => 3, 'name' => 4, 'description' => 5, 'state' => 6, 'internalTemperature' => 7, 'uid' => 8, 'position' => 9, 'dataCollectedAt' => 10, 'notifyAfter' => 11, 'notifyStartedAt' => 12, 'notification' => 13, 'isEnabled' => 14, 'isDeleted' => 15, 'createdAt' => 16, 'updatedAt' => 17, ),
+        BasePeer::TYPE_COLNAME => array (ControllerBoxPeer::ID => 0, ControllerBoxPeer::GROUP => 1, ControllerBoxPeer::MAIN_STORE => 2, ControllerBoxPeer::VERSION => 3, ControllerBoxPeer::NAME => 4, ControllerBoxPeer::DESCRIPTION => 5, ControllerBoxPeer::STATE => 6, ControllerBoxPeer::INTERNAL_TEMPERATURE => 7, ControllerBoxPeer::UID => 8, ControllerBoxPeer::POSITION => 9, ControllerBoxPeer::DATA_COLLECTED_AT => 10, ControllerBoxPeer::NOTIFY_AFTER => 11, ControllerBoxPeer::NOTIFY_STARTED_AT => 12, ControllerBoxPeer::NOTIFICATION => 13, ControllerBoxPeer::IS_ENABLED => 14, ControllerBoxPeer::IS_DELETED => 15, ControllerBoxPeer::CREATED_AT => 16, ControllerBoxPeer::UPDATED_AT => 17, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'GROUP' => 1, 'MAIN_STORE' => 2, 'VERSION' => 3, 'NAME' => 4, 'DESCRIPTION' => 5, 'STATE' => 6, 'INTERNAL_TEMPERATURE' => 7, 'UID' => 8, 'POSITION' => 9, 'DATA_COLLECTED_AT' => 10, 'NOTIFY_AFTER' => 11, 'NOTIFY_STARTED_AT' => 12, 'NOTIFICATION' => 13, 'IS_ENABLED' => 14, 'IS_DELETED' => 15, 'CREATED_AT' => 16, 'UPDATED_AT' => 17, ),
+        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'group' => 1, 'main_store' => 2, 'version' => 3, 'name' => 4, 'description' => 5, 'state' => 6, 'internal_temperature' => 7, 'uid' => 8, 'position' => 9, 'data_collected_at' => 10, 'notify_after' => 11, 'notify_started_at' => 12, 'notification' => 13, 'is_enabled' => 14, 'is_deleted' => 15, 'created_at' => 16, 'updated_at' => 17, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, )
     );
 
     /**
@@ -197,9 +212,14 @@ abstract class BaseControllerBoxPeer
             $criteria->addSelectColumn(ControllerBoxPeer::VERSION);
             $criteria->addSelectColumn(ControllerBoxPeer::NAME);
             $criteria->addSelectColumn(ControllerBoxPeer::DESCRIPTION);
+            $criteria->addSelectColumn(ControllerBoxPeer::STATE);
             $criteria->addSelectColumn(ControllerBoxPeer::INTERNAL_TEMPERATURE);
             $criteria->addSelectColumn(ControllerBoxPeer::UID);
             $criteria->addSelectColumn(ControllerBoxPeer::POSITION);
+            $criteria->addSelectColumn(ControllerBoxPeer::DATA_COLLECTED_AT);
+            $criteria->addSelectColumn(ControllerBoxPeer::NOTIFY_AFTER);
+            $criteria->addSelectColumn(ControllerBoxPeer::NOTIFY_STARTED_AT);
+            $criteria->addSelectColumn(ControllerBoxPeer::NOTIFICATION);
             $criteria->addSelectColumn(ControllerBoxPeer::IS_ENABLED);
             $criteria->addSelectColumn(ControllerBoxPeer::IS_DELETED);
             $criteria->addSelectColumn(ControllerBoxPeer::CREATED_AT);
@@ -211,9 +231,14 @@ abstract class BaseControllerBoxPeer
             $criteria->addSelectColumn($alias . '.version');
             $criteria->addSelectColumn($alias . '.name');
             $criteria->addSelectColumn($alias . '.description');
+            $criteria->addSelectColumn($alias . '.state');
             $criteria->addSelectColumn($alias . '.internal_temperature');
             $criteria->addSelectColumn($alias . '.uid');
             $criteria->addSelectColumn($alias . '.position');
+            $criteria->addSelectColumn($alias . '.data_collected_at');
+            $criteria->addSelectColumn($alias . '.notify_after');
+            $criteria->addSelectColumn($alias . '.notify_started_at');
+            $criteria->addSelectColumn($alias . '.notification');
             $criteria->addSelectColumn($alias . '.is_enabled');
             $criteria->addSelectColumn($alias . '.is_deleted');
             $criteria->addSelectColumn($alias . '.created_at');

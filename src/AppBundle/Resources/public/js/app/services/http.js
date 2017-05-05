@@ -36,8 +36,7 @@ angular
 		        {
 		        	if (data.substring(0,1) == "<" && data.indexOf('loginForm') != -1)
 			    	{	
-		        		//$window.location.reload();
-			    		$window.location.href = Routing.generate('gaming_login');
+			    		$window.location.href = Routing.generate('tcm_splash');
 			    		return {};
 			    	}
 		        	

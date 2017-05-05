@@ -6,6 +6,6 @@ angular
     .module('tcmApp')
     .filter('GMT', function () {
     return function (input, format) {
-        return moment(input, "YYYYMMDD h:mm:ss").format(format);
+        return moment(input, "YYYYMMDD H:mm:ss").format(format);
     };
 });

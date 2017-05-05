@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<database name="default" defaultIdMethod="native" namespace="NotificationBundle\Model">
+    <table name="ds_temperature_notification">
+        <column name="id" type="integer" primaryKey="true" autoIncrement="true"/>
+        <column name="sensor" type="integer"/>
+        <column name="temperature" type="varchar" size="10" default="0"/>
+        <column name="reason" type="integer" default="0"/>
+        <column name="is_handled" type='boolean' default='false'/>
+        <column name="handled_by" type='integer'/>
+        <behavior name="timestampable"/>
+        <foreign-key foreignTable="user">
+            <reference local="handled_by" foreign="id"/>
+        </foreign-key>
+        <foreign-key foreignTable='ds_temperature_sensor'>
+            <reference local='sensor' foreign='id'/>
+        </foreign-key>
+    </table>
+
+    <table name="cb_input_notification">
+        <column name="id" type="integer" primaryKey="true" autoIncrement="true"/>
+        <column name="sensor" type="integer"/>
+        <column name="switch_state" type="varchar" size="10" default="0"/>
+        <column name="reason" type="integer" default="0"/>
+        <column name="is_handled" type='boolean' default='false'/>
+        <column name="handled_by" type='integer'/>
+        <behavior name="timestampable"/>
+        <foreign-key foreignTable="user">
+            <reference local="handled_by" foreign="id"/>
+        </foreign-key>
+        <foreign-key foreignTable='cb_input'>
+            <reference local='sensor' foreign='id'/>
+        </foreign-key>
+    </table>
+</database>

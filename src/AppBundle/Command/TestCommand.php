@@ -5,10 +5,16 @@ namespace AppBundle\Command;
 use CompanyBundle\Model\Company;
 use CompanyBundle\Model\Informant;
 use CompanyBundle\Model\InformantQuery;
+use DeviceBundle\Model\CbInputQuery;
 use DeviceBundle\Model\ControllerBox;
 use DeviceBundle\Model\DeviceGroup;
 use DeviceBundle\Model\DeviceGroupQuery;
 use DeviceBundle\Model\DsTemperatureSensor;
+use DeviceBundle\Model\DsTemperatureSensorQuery;
+use NotificationBundle\Model\CbInputNotificationQuery;
+use NotificationBundle\Model\DeviceNotification;
+use NotificationBundle\Model\DsTemperatureNotification;
+use NotificationBundle\Model\DsTemperatureNotificationQuery;
 use StoreBundle\Model\StoreQuery;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -27,12 +33,15 @@ use UserBundle\Model\Address;
 use UserBundle\Model\Phone;
 use StoreBundle\Model\Store;
 
+use \Criteria;
+
 
 /**
  * Class TestCommand
  * @package AppBundle\Command
  */
-class TestCommand extends ContainerAwareCommand {
+class TestCommand extends ContainerAwareCommand
+{
 
     protected function configure()
     {
@@ -43,12 +52,6 @@ class TestCommand extends ContainerAwareCommand {
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln("Test command");
-	$user = UserQuery::create()->findOneById(3);
-	var_dump($user);
-	$email = EmailQuery::create()
-            ->findOneByArray(['Primary' => true, 'User' => $user]);
-	var_dump($email);
-
         //$this->createUser($output);
         //$this->getUsers($output);
         //$this->getFullUserTemplate($output);
@@ -59,7 +62,63 @@ class TestCommand extends ContainerAwareCommand {
         //$this->postcodeApiTest($output);
         //$this->makeDeviceGroup($output);
         //$this->showDeviceGroup($output);
+        //$this->checkInputs($output);
+        $this->checkSensorStatus($output);
+        $this->showNotifications($output);
         $output->writeln("Ready.");
+    }
+
+    protected function checkSensorStatus(OutputInterface $output)
+    {
+        $output->writeln('Start sensor status check.');
+        $input = CbInputQuery::create()->findOneById(1);
+        $input->checkSensorStatus();
+        $output->writeln('End sensor status check.');
+    }
+
+    protected function showNotifications(OutputInterface $output)
+    {
+        $output->writeln('Show notifications:');
+        $user = UserQuery::create()->findOneById(1);
+
+        $notifications = CbInputNotificationQuery::create()->findByIsHandled(false);
+        foreach ($notifications as $notification) {
+            $this->showNotification($output, $notification);
+            if (!empty($user)) {
+                $notification->handleNotification($user);
+                $output->writeln(sprintf('handled by: %s', $notification->getHandledBy()->getName()));
+            }
+        }
+        $notifications = DsTemperatureNotificationQuery::create()->findByIsHandled(false);
+        foreach ($notifications as $notification) {
+            $this->showNotification($output, $notification);
+            if (!empty($user))
+                $notification->handleNotification($user);
+        }
+    }
+
+    protected function showNotification(OutputInterface $output, $notification)
+    {
+        $output->writeln(sprintf('%s on %s', $notification->getSensor()->getName(), $notification->getCreatedAt('d-m-Y H:i:s')));
+    }
+
+    protected function checkInputs(OutputInterface $output)
+    {
+        $output->writeln('start input test');
+
+        $inputs = "07";
+
+        $output->writeln(sprintf('Inputs set to: %s (decimal=%d)', $inputs, hexdec($inputs)));
+
+        $inputs = hexdec($inputs);
+
+        $bit = 0x01;
+
+        for ($inp = 1; $inp <= 3; $inp++) {
+            if ($inputs & $bit)
+                $output->writeln(sprintf('input %d is set', $inp));
+            $bit <<= 1;
+        }
     }
 
     protected function showDeviceGroup(OutputInterface $output)
@@ -71,8 +130,7 @@ class TestCommand extends ContainerAwareCommand {
         var_dump($store->getName());
         $groups = $store->getDeviceGroups();
 
-        foreach ($groups as $group)
-        {
+        foreach ($groups as $group) {
             var_dump($group->getName());
             $ds20s = $group->getDsTemperatureSensors();
             foreach ($ds20s as $ds20)
@@ -146,8 +204,7 @@ class TestCommand extends ContainerAwareCommand {
         $translator->setLocale(strtolower($user->getLanguageCode()));
 
         $email = $user->getEmails()->getFirst();
-        if (empty($email))
-        {
+        if (empty($email)) {
             $output->writeln('User has no email address!');
             return;
         }

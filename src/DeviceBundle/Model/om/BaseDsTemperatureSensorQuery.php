@@ -17,6 +17,7 @@ use DeviceBundle\Model\DeviceGroup;
 use DeviceBundle\Model\DsTemperatureSensor;
 use DeviceBundle\Model\DsTemperatureSensorPeer;
 use DeviceBundle\Model\DsTemperatureSensorQuery;
+use NotificationBundle\Model\DsTemperatureNotification;
 use StoreBundle\Model\Store;
 
 /**
@@ -33,6 +34,9 @@ use StoreBundle\Model\Store;
  * @method DsTemperatureSensorQuery orderByTemperature($order = Criteria::ASC) Order by the temperature column
  * @method DsTemperatureSensorQuery orderByHighLimit($order = Criteria::ASC) Order by the high_limit column
  * @method DsTemperatureSensorQuery orderByPosition($order = Criteria::ASC) Order by the position column
+ * @method DsTemperatureSensorQuery orderByDataCollectedAt($order = Criteria::ASC) Order by the data_collected_at column
+ * @method DsTemperatureSensorQuery orderByNotifyAfter($order = Criteria::ASC) Order by the notify_after column
+ * @method DsTemperatureSensorQuery orderByNotifyStartedAt($order = Criteria::ASC) Order by the notify_started_at column
  * @method DsTemperatureSensorQuery orderByIsEnabled($order = Criteria::ASC) Order by the is_enabled column
  * @method DsTemperatureSensorQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
  * @method DsTemperatureSensorQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
@@ -50,6 +54,9 @@ use StoreBundle\Model\Store;
  * @method DsTemperatureSensorQuery groupByTemperature() Group by the temperature column
  * @method DsTemperatureSensorQuery groupByHighLimit() Group by the high_limit column
  * @method DsTemperatureSensorQuery groupByPosition() Group by the position column
+ * @method DsTemperatureSensorQuery groupByDataCollectedAt() Group by the data_collected_at column
+ * @method DsTemperatureSensorQuery groupByNotifyAfter() Group by the notify_after column
+ * @method DsTemperatureSensorQuery groupByNotifyStartedAt() Group by the notify_started_at column
  * @method DsTemperatureSensorQuery groupByIsEnabled() Group by the is_enabled column
  * @method DsTemperatureSensorQuery groupByCreatedAt() Group by the created_at column
  * @method DsTemperatureSensorQuery groupByUpdatedAt() Group by the updated_at column
@@ -70,6 +77,10 @@ use StoreBundle\Model\Store;
  * @method DsTemperatureSensorQuery rightJoinControllerBox($relationAlias = null) Adds a RIGHT JOIN clause to the query using the ControllerBox relation
  * @method DsTemperatureSensorQuery innerJoinControllerBox($relationAlias = null) Adds a INNER JOIN clause to the query using the ControllerBox relation
  *
+ * @method DsTemperatureSensorQuery leftJoinDsTemperatureNotification($relationAlias = null) Adds a LEFT JOIN clause to the query using the DsTemperatureNotification relation
+ * @method DsTemperatureSensorQuery rightJoinDsTemperatureNotification($relationAlias = null) Adds a RIGHT JOIN clause to the query using the DsTemperatureNotification relation
+ * @method DsTemperatureSensorQuery innerJoinDsTemperatureNotification($relationAlias = null) Adds a INNER JOIN clause to the query using the DsTemperatureNotification relation
+ *
  * @method DsTemperatureSensor findOne(PropelPDO $con = null) Return the first DsTemperatureSensor matching the query
  * @method DsTemperatureSensor findOneOrCreate(PropelPDO $con = null) Return the first DsTemperatureSensor matching the query, or a new DsTemperatureSensor object populated from the query conditions when no match is found
  *
@@ -85,6 +96,9 @@ use StoreBundle\Model\Store;
  * @method DsTemperatureSensor findOneByTemperature(string $temperature) Return the first DsTemperatureSensor filtered by the temperature column
  * @method DsTemperatureSensor findOneByHighLimit(string $high_limit) Return the first DsTemperatureSensor filtered by the high_limit column
  * @method DsTemperatureSensor findOneByPosition(int $position) Return the first DsTemperatureSensor filtered by the position column
+ * @method DsTemperatureSensor findOneByDataCollectedAt(string $data_collected_at) Return the first DsTemperatureSensor filtered by the data_collected_at column
+ * @method DsTemperatureSensor findOneByNotifyAfter(int $notify_after) Return the first DsTemperatureSensor filtered by the notify_after column
+ * @method DsTemperatureSensor findOneByNotifyStartedAt(string $notify_started_at) Return the first DsTemperatureSensor filtered by the notify_started_at column
  * @method DsTemperatureSensor findOneByIsEnabled(boolean $is_enabled) Return the first DsTemperatureSensor filtered by the is_enabled column
  * @method DsTemperatureSensor findOneByCreatedAt(string $created_at) Return the first DsTemperatureSensor filtered by the created_at column
  * @method DsTemperatureSensor findOneByUpdatedAt(string $updated_at) Return the first DsTemperatureSensor filtered by the updated_at column
@@ -102,6 +116,9 @@ use StoreBundle\Model\Store;
  * @method array findByTemperature(string $temperature) Return DsTemperatureSensor objects filtered by the temperature column
  * @method array findByHighLimit(string $high_limit) Return DsTemperatureSensor objects filtered by the high_limit column
  * @method array findByPosition(int $position) Return DsTemperatureSensor objects filtered by the position column
+ * @method array findByDataCollectedAt(string $data_collected_at) Return DsTemperatureSensor objects filtered by the data_collected_at column
+ * @method array findByNotifyAfter(int $notify_after) Return DsTemperatureSensor objects filtered by the notify_after column
+ * @method array findByNotifyStartedAt(string $notify_started_at) Return DsTemperatureSensor objects filtered by the notify_started_at column
  * @method array findByIsEnabled(boolean $is_enabled) Return DsTemperatureSensor objects filtered by the is_enabled column
  * @method array findByCreatedAt(string $created_at) Return DsTemperatureSensor objects filtered by the created_at column
  * @method array findByUpdatedAt(string $updated_at) Return DsTemperatureSensor objects filtered by the updated_at column
@@ -210,7 +227,7 @@ abstract class BaseDsTemperatureSensorQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `uid`, `group`, `controller`, `main_store`, `output_number`, `name`, `description`, `state`, `low_limit`, `temperature`, `high_limit`, `position`, `is_enabled`, `created_at`, `updated_at` FROM `ds_temperature_sensor` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `uid`, `group`, `controller`, `main_store`, `output_number`, `name`, `description`, `state`, `low_limit`, `temperature`, `high_limit`, `position`, `data_collected_at`, `notify_after`, `notify_started_at`, `is_enabled`, `created_at`, `updated_at` FROM `ds_temperature_sensor` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -774,6 +791,134 @@ abstract class BaseDsTemperatureSensorQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query on the data_collected_at column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByDataCollectedAt('2011-03-14'); // WHERE data_collected_at = '2011-03-14'
+     * $query->filterByDataCollectedAt('now'); // WHERE data_collected_at = '2011-03-14'
+     * $query->filterByDataCollectedAt(array('max' => 'yesterday')); // WHERE data_collected_at < '2011-03-13'
+     * </code>
+     *
+     * @param     mixed $dataCollectedAt The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return DsTemperatureSensorQuery The current query, for fluid interface
+     */
+    public function filterByDataCollectedAt($dataCollectedAt = null, $comparison = null)
+    {
+        if (is_array($dataCollectedAt)) {
+            $useMinMax = false;
+            if (isset($dataCollectedAt['min'])) {
+                $this->addUsingAlias(DsTemperatureSensorPeer::DATA_COLLECTED_AT, $dataCollectedAt['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($dataCollectedAt['max'])) {
+                $this->addUsingAlias(DsTemperatureSensorPeer::DATA_COLLECTED_AT, $dataCollectedAt['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(DsTemperatureSensorPeer::DATA_COLLECTED_AT, $dataCollectedAt, $comparison);
+    }
+
+    /**
+     * Filter the query on the notify_after column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByNotifyAfter(1234); // WHERE notify_after = 1234
+     * $query->filterByNotifyAfter(array(12, 34)); // WHERE notify_after IN (12, 34)
+     * $query->filterByNotifyAfter(array('min' => 12)); // WHERE notify_after >= 12
+     * $query->filterByNotifyAfter(array('max' => 12)); // WHERE notify_after <= 12
+     * </code>
+     *
+     * @param     mixed $notifyAfter The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return DsTemperatureSensorQuery The current query, for fluid interface
+     */
+    public function filterByNotifyAfter($notifyAfter = null, $comparison = null)
+    {
+        if (is_array($notifyAfter)) {
+            $useMinMax = false;
+            if (isset($notifyAfter['min'])) {
+                $this->addUsingAlias(DsTemperatureSensorPeer::NOTIFY_AFTER, $notifyAfter['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($notifyAfter['max'])) {
+                $this->addUsingAlias(DsTemperatureSensorPeer::NOTIFY_AFTER, $notifyAfter['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(DsTemperatureSensorPeer::NOTIFY_AFTER, $notifyAfter, $comparison);
+    }
+
+    /**
+     * Filter the query on the notify_started_at column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByNotifyStartedAt('2011-03-14'); // WHERE notify_started_at = '2011-03-14'
+     * $query->filterByNotifyStartedAt('now'); // WHERE notify_started_at = '2011-03-14'
+     * $query->filterByNotifyStartedAt(array('max' => 'yesterday')); // WHERE notify_started_at < '2011-03-13'
+     * </code>
+     *
+     * @param     mixed $notifyStartedAt The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return DsTemperatureSensorQuery The current query, for fluid interface
+     */
+    public function filterByNotifyStartedAt($notifyStartedAt = null, $comparison = null)
+    {
+        if (is_array($notifyStartedAt)) {
+            $useMinMax = false;
+            if (isset($notifyStartedAt['min'])) {
+                $this->addUsingAlias(DsTemperatureSensorPeer::NOTIFY_STARTED_AT, $notifyStartedAt['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($notifyStartedAt['max'])) {
+                $this->addUsingAlias(DsTemperatureSensorPeer::NOTIFY_STARTED_AT, $notifyStartedAt['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(DsTemperatureSensorPeer::NOTIFY_STARTED_AT, $notifyStartedAt, $comparison);
+    }
+
+    /**
      * Filter the query on the is_enabled column
      *
      * Example usage:
@@ -1112,6 +1257,80 @@ abstract class BaseDsTemperatureSensorQuery extends ModelCriteria
         return $this
             ->joinControllerBox($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'ControllerBox', '\DeviceBundle\Model\ControllerBoxQuery');
+    }
+
+    /**
+     * Filter the query by a related DsTemperatureNotification object
+     *
+     * @param   DsTemperatureNotification|PropelObjectCollection $dsTemperatureNotification  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 DsTemperatureSensorQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByDsTemperatureNotification($dsTemperatureNotification, $comparison = null)
+    {
+        if ($dsTemperatureNotification instanceof DsTemperatureNotification) {
+            return $this
+                ->addUsingAlias(DsTemperatureSensorPeer::ID, $dsTemperatureNotification->getSensor(), $comparison);
+        } elseif ($dsTemperatureNotification instanceof PropelObjectCollection) {
+            return $this
+                ->useDsTemperatureNotificationQuery()
+                ->filterByPrimaryKeys($dsTemperatureNotification->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByDsTemperatureNotification() only accepts arguments of type DsTemperatureNotification or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the DsTemperatureNotification relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return DsTemperatureSensorQuery The current query, for fluid interface
+     */
+    public function joinDsTemperatureNotification($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('DsTemperatureNotification');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'DsTemperatureNotification');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the DsTemperatureNotification relation DsTemperatureNotification object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   \NotificationBundle\Model\DsTemperatureNotificationQuery A secondary query class using the current class as primary query
+     */
+    public function useDsTemperatureNotificationQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinDsTemperatureNotification($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'DsTemperatureNotification', '\NotificationBundle\Model\DsTemperatureNotificationQuery');
     }
 
     /**

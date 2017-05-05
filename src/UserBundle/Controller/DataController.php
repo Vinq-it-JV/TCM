@@ -363,7 +363,7 @@ class DataController extends Controller
 
         $user->save();
         if (empty($user->getPassword())) {
-
+            $user->setLogins($this->container->getParameter('logins'));
             $password = $user->generatePassword($encoder);
             $helper->sendCredentialsEmail($user, $password);
             $user->save();

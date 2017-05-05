@@ -1,3 +1,7 @@
+notification:
+    resource: "@NotificationBundle/Resources/config/routing.yml"
+    prefix:   /
+
 data_collector:
     resource: "@DataCollectorBundle/Resources/config/routing.yml"
     prefix:   /

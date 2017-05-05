@@ -10,6 +10,10 @@ class ControllerBox extends BaseControllerBox
     const CONTROLLER_INPUTS = 3;
     const CONTROLLER_DS_OUTPUTS = 6;
 
+    const STATE_ACTIVE = 0;
+    const STATE_INACTIVE = 1;
+    const STATE_NOTIFY = 2;
+
     /**
      * getControllerBoxDataArray()
      * @return array
@@ -45,12 +49,24 @@ class ControllerBox extends BaseControllerBox
         $inputs = $this->getCbInputs();
         $temperatures = $this->getDsTemperatureSensors();
 
+        $group = $this->getDeviceGroup();
+        if (empty($group)) {
+            $group = new DeviceGroup();
+            $group->setName($this->getUid());
+            $group->setStore($store);
+            $group->save();
+            $this->setDeviceGroup($group);
+        }
         if (!empty($store)) {
             $this->setStore($store);
-            foreach ($inputs as $input)
+            foreach ($inputs as $input) {
                 $input->setStore($store);
-            foreach ($temperatures as $temperature)
+                $input->setDeviceGroup($group);
+            }
+            foreach ($temperatures as $temperature) {
                 $temperature->setStore($store);
+                $temperature->setDeviceGroup($group);
+            }
             $this->save();
         }
     }

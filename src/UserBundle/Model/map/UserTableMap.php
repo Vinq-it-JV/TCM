@@ -76,6 +76,8 @@ class UserTableMap extends TableMap
         $this->addRelation('CompanyContact', 'CompanyBundle\\Model\\CompanyContact', RelationMap::ONE_TO_MANY, array('id' => 'contact_id', ), null, null, 'CompanyContacts');
         $this->addRelation('CompanyInformant', 'CompanyBundle\\Model\\CompanyInformant', RelationMap::ONE_TO_MANY, array('id' => 'informant_id', ), null, null, 'CompanyInformants');
         $this->addRelation('CompanyOwner', 'CompanyBundle\\Model\\CompanyOwner', RelationMap::ONE_TO_MANY, array('id' => 'owner_id', ), null, null, 'CompanyOwners');
+        $this->addRelation('DsTemperatureNotification', 'NotificationBundle\\Model\\DsTemperatureNotification', RelationMap::ONE_TO_MANY, array('id' => 'handled_by', ), null, null, 'DsTemperatureNotifications');
+        $this->addRelation('CbInputNotification', 'NotificationBundle\\Model\\CbInputNotification', RelationMap::ONE_TO_MANY, array('id' => 'handled_by', ), null, null, 'CbInputNotifications');
         $this->addRelation('StoreContact', 'StoreBundle\\Model\\StoreContact', RelationMap::ONE_TO_MANY, array('id' => 'contact_id', ), null, null, 'StoreContacts');
         $this->addRelation('StoreInformant', 'StoreBundle\\Model\\StoreInformant', RelationMap::ONE_TO_MANY, array('id' => 'informant_id', ), null, null, 'StoreInformants');
         $this->addRelation('StoreOwner', 'StoreBundle\\Model\\StoreOwner', RelationMap::ONE_TO_MANY, array('id' => 'owner_id', ), null, null, 'StoreOwners');

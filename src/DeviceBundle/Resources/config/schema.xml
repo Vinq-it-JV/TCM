@@ -7,9 +7,14 @@
         <column name="version" type="integer" />
         <column name="name" type="varchar" size="255" default="Controller box"/>
         <column name="description" type="longvarchar" />
+        <column name="state" type="integer" default="0" />
         <column name="internal_temperature" type="varchar" size="10" />
         <column name="uid" type="varchar" size="32"/>
         <column name="position" type="integer" default="0" />
+        <column name="data_collected_at" type="timestamp" default="NULL" />
+        <column name="notify_after" type="integer" default="0" />
+        <column name="notify_started_at" type="timestamp" default="NULL" />
+        <column name="notification" type="integer" />
         <column name="is_enabled" type='boolean' default='true'/>
         <column name="is_deleted" type='boolean' default='false'/>
         <behavior name="timestampable" />
@@ -26,7 +31,7 @@
         <column name="main_store" type="integer" />
         <column name="name" type="varchar" size="255" />
         <column name="description" type="longvarchar" />
-        <column name="state" type="integer" />
+        <column name="state" type="integer" default="0" />
         <column name="position" type="integer" default="0" />
         <column name="is_enabled" type='boolean' default='true'/>
         <behavior name="timestampable" />
@@ -44,11 +49,14 @@
         <column name="output_number" type="integer" />
         <column name="name" type="varchar" size="255" default="Temperature"/>
         <column name="description" type="longvarchar" />
-        <column name="state" type="integer" />
+        <column name="state" type="integer" default="0" />
         <column name="low_limit" type="varchar" size="10" default="0" />
         <column name="temperature" type="varchar" size="10" default="0" />
         <column name="high_limit" type="varchar" size="10" default="30" />
         <column name="position" type="integer" default="0" />
+        <column name="data_collected_at" type="timestamp" default="NULL" />
+        <column name="notify_after" type="integer" default="0" />
+        <column name="notify_started_at" type="timestamp" default="NULL" />
         <column name="is_enabled" type='boolean' default='true'/>
         <behavior name="timestampable" />
         <foreign-key foreignTable="store">
@@ -71,10 +79,14 @@
         <column name="main_store" type="integer" />
         <column name="name" type="varchar" size="255" default="Input" />
         <column name="description" type="longvarchar" />
-        <column name="state" type="integer" />
+        <column name="state" type="integer" default="0" />
         <column name="switch_when" type="boolean" default="true" />
         <column name="switch_state" type="boolean" default="false" />
         <column name="position" type="integer" default="0" />
+        <column name="data_collected_at" type="timestamp" default="NULL" />
+        <column name="notify_after" type="integer" default="0" />
+        <column name="notify_started_at" type="timestamp" default="NULL" />
+        <column name="notification" type="integer" />
         <column name="is_enabled" type='boolean' default='true'/>
         <behavior name="timestampable" />
         <foreign-key foreignTable="store">

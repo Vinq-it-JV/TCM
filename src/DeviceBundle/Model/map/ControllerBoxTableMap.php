@@ -48,9 +48,14 @@ class ControllerBoxTableMap extends TableMap
         $this->addColumn('version', 'Version', 'INTEGER', false, null, null);
         $this->addColumn('name', 'Name', 'VARCHAR', false, 255, 'Controller box');
         $this->addColumn('description', 'Description', 'LONGVARCHAR', false, null, null);
+        $this->addColumn('state', 'State', 'INTEGER', false, null, 0);
         $this->addColumn('internal_temperature', 'InternalTemperature', 'VARCHAR', false, 10, null);
         $this->addColumn('uid', 'Uid', 'VARCHAR', false, 32, null);
         $this->addColumn('position', 'Position', 'INTEGER', false, null, 0);
+        $this->addColumn('data_collected_at', 'DataCollectedAt', 'TIMESTAMP', false, null, null);
+        $this->addColumn('notify_after', 'NotifyAfter', 'INTEGER', false, null, 0);
+        $this->addColumn('notify_started_at', 'NotifyStartedAt', 'TIMESTAMP', false, null, null);
+        $this->addColumn('notification', 'Notification', 'INTEGER', false, null, null);
         $this->addColumn('is_enabled', 'IsEnabled', 'BOOLEAN', false, 1, true);
         $this->addColumn('is_deleted', 'IsDeleted', 'BOOLEAN', false, 1, false);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);

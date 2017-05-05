@@ -25,6 +25,7 @@ class AppKernel extends Kernel
             new StoreBundle\StoreBundle(),
             new DeviceBundle\DeviceBundle(),
             new DataCollectorBundle\DataCollectorBundle(),
+            new NotificationBundle\NotificationBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'), true)) {

@@ -32,13 +32,13 @@ abstract class BaseCbInputPeer
     const TM_CLASS = 'DeviceBundle\\Model\\map\\CbInputTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 15;
+    const NUM_COLUMNS = 19;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 15;
+    const NUM_HYDRATE_COLUMNS = 19;
 
     /** the column name for the id field */
     const ID = 'cb_input.id';
@@ -76,6 +76,18 @@ abstract class BaseCbInputPeer
     /** the column name for the position field */
     const POSITION = 'cb_input.position';
 
+    /** the column name for the data_collected_at field */
+    const DATA_COLLECTED_AT = 'cb_input.data_collected_at';
+
+    /** the column name for the notify_after field */
+    const NOTIFY_AFTER = 'cb_input.notify_after';
+
+    /** the column name for the notify_started_at field */
+    const NOTIFY_STARTED_AT = 'cb_input.notify_started_at';
+
+    /** the column name for the notification field */
+    const NOTIFICATION = 'cb_input.notification';
+
     /** the column name for the is_enabled field */
     const IS_ENABLED = 'cb_input.is_enabled';
 
@@ -104,12 +116,12 @@ abstract class BaseCbInputPeer
      * e.g. CbInputPeer::$fieldNames[CbInputPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'Uid', 'InputNumber', 'Group', 'Controller', 'MainStore', 'Name', 'Description', 'State', 'SwitchWhen', 'SwitchState', 'Position', 'IsEnabled', 'CreatedAt', 'UpdatedAt', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'uid', 'inputNumber', 'group', 'controller', 'mainStore', 'name', 'description', 'state', 'switchWhen', 'switchState', 'position', 'isEnabled', 'createdAt', 'updatedAt', ),
-        BasePeer::TYPE_COLNAME => array (CbInputPeer::ID, CbInputPeer::UID, CbInputPeer::INPUT_NUMBER, CbInputPeer::GROUP, CbInputPeer::CONTROLLER, CbInputPeer::MAIN_STORE, CbInputPeer::NAME, CbInputPeer::DESCRIPTION, CbInputPeer::STATE, CbInputPeer::SWITCH_WHEN, CbInputPeer::SWITCH_STATE, CbInputPeer::POSITION, CbInputPeer::IS_ENABLED, CbInputPeer::CREATED_AT, CbInputPeer::UPDATED_AT, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'UID', 'INPUT_NUMBER', 'GROUP', 'CONTROLLER', 'MAIN_STORE', 'NAME', 'DESCRIPTION', 'STATE', 'SWITCH_WHEN', 'SWITCH_STATE', 'POSITION', 'IS_ENABLED', 'CREATED_AT', 'UPDATED_AT', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'uid', 'input_number', 'group', 'controller', 'main_store', 'name', 'description', 'state', 'switch_when', 'switch_state', 'position', 'is_enabled', 'created_at', 'updated_at', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, )
+        BasePeer::TYPE_PHPNAME => array ('Id', 'Uid', 'InputNumber', 'Group', 'Controller', 'MainStore', 'Name', 'Description', 'State', 'SwitchWhen', 'SwitchState', 'Position', 'DataCollectedAt', 'NotifyAfter', 'NotifyStartedAt', 'Notification', 'IsEnabled', 'CreatedAt', 'UpdatedAt', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'uid', 'inputNumber', 'group', 'controller', 'mainStore', 'name', 'description', 'state', 'switchWhen', 'switchState', 'position', 'dataCollectedAt', 'notifyAfter', 'notifyStartedAt', 'notification', 'isEnabled', 'createdAt', 'updatedAt', ),
+        BasePeer::TYPE_COLNAME => array (CbInputPeer::ID, CbInputPeer::UID, CbInputPeer::INPUT_NUMBER, CbInputPeer::GROUP, CbInputPeer::CONTROLLER, CbInputPeer::MAIN_STORE, CbInputPeer::NAME, CbInputPeer::DESCRIPTION, CbInputPeer::STATE, CbInputPeer::SWITCH_WHEN, CbInputPeer::SWITCH_STATE, CbInputPeer::POSITION, CbInputPeer::DATA_COLLECTED_AT, CbInputPeer::NOTIFY_AFTER, CbInputPeer::NOTIFY_STARTED_AT, CbInputPeer::NOTIFICATION, CbInputPeer::IS_ENABLED, CbInputPeer::CREATED_AT, CbInputPeer::UPDATED_AT, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'UID', 'INPUT_NUMBER', 'GROUP', 'CONTROLLER', 'MAIN_STORE', 'NAME', 'DESCRIPTION', 'STATE', 'SWITCH_WHEN', 'SWITCH_STATE', 'POSITION', 'DATA_COLLECTED_AT', 'NOTIFY_AFTER', 'NOTIFY_STARTED_AT', 'NOTIFICATION', 'IS_ENABLED', 'CREATED_AT', 'UPDATED_AT', ),
+        BasePeer::TYPE_FIELDNAME => array ('id', 'uid', 'input_number', 'group', 'controller', 'main_store', 'name', 'description', 'state', 'switch_when', 'switch_state', 'position', 'data_collected_at', 'notify_after', 'notify_started_at', 'notification', 'is_enabled', 'created_at', 'updated_at', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, )
     );
 
     /**
@@ -119,12 +131,12 @@ abstract class BaseCbInputPeer
      * e.g. CbInputPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Uid' => 1, 'InputNumber' => 2, 'Group' => 3, 'Controller' => 4, 'MainStore' => 5, 'Name' => 6, 'Description' => 7, 'State' => 8, 'SwitchWhen' => 9, 'SwitchState' => 10, 'Position' => 11, 'IsEnabled' => 12, 'CreatedAt' => 13, 'UpdatedAt' => 14, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'uid' => 1, 'inputNumber' => 2, 'group' => 3, 'controller' => 4, 'mainStore' => 5, 'name' => 6, 'description' => 7, 'state' => 8, 'switchWhen' => 9, 'switchState' => 10, 'position' => 11, 'isEnabled' => 12, 'createdAt' => 13, 'updatedAt' => 14, ),
-        BasePeer::TYPE_COLNAME => array (CbInputPeer::ID => 0, CbInputPeer::UID => 1, CbInputPeer::INPUT_NUMBER => 2, CbInputPeer::GROUP => 3, CbInputPeer::CONTROLLER => 4, CbInputPeer::MAIN_STORE => 5, CbInputPeer::NAME => 6, CbInputPeer::DESCRIPTION => 7, CbInputPeer::STATE => 8, CbInputPeer::SWITCH_WHEN => 9, CbInputPeer::SWITCH_STATE => 10, CbInputPeer::POSITION => 11, CbInputPeer::IS_ENABLED => 12, CbInputPeer::CREATED_AT => 13, CbInputPeer::UPDATED_AT => 14, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'UID' => 1, 'INPUT_NUMBER' => 2, 'GROUP' => 3, 'CONTROLLER' => 4, 'MAIN_STORE' => 5, 'NAME' => 6, 'DESCRIPTION' => 7, 'STATE' => 8, 'SWITCH_WHEN' => 9, 'SWITCH_STATE' => 10, 'POSITION' => 11, 'IS_ENABLED' => 12, 'CREATED_AT' => 13, 'UPDATED_AT' => 14, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'uid' => 1, 'input_number' => 2, 'group' => 3, 'controller' => 4, 'main_store' => 5, 'name' => 6, 'description' => 7, 'state' => 8, 'switch_when' => 9, 'switch_state' => 10, 'position' => 11, 'is_enabled' => 12, 'created_at' => 13, 'updated_at' => 14, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, )
+        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Uid' => 1, 'InputNumber' => 2, 'Group' => 3, 'Controller' => 4, 'MainStore' => 5, 'Name' => 6, 'Description' => 7, 'State' => 8, 'SwitchWhen' => 9, 'SwitchState' => 10, 'Position' => 11, 'DataCollectedAt' => 12, 'NotifyAfter' => 13, 'NotifyStartedAt' => 14, 'Notification' => 15, 'IsEnabled' => 16, 'CreatedAt' => 17, 'UpdatedAt' => 18, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'uid' => 1, 'inputNumber' => 2, 'group' => 3, 'controller' => 4, 'mainStore' => 5, 'name' => 6, 'description' => 7, 'state' => 8, 'switchWhen' => 9, 'switchState' => 10, 'position' => 11, 'dataCollectedAt' => 12, 'notifyAfter' => 13, 'notifyStartedAt' => 14, 'notification' => 15, 'isEnabled' => 16, 'createdAt' => 17, 'updatedAt' => 18, ),
+        BasePeer::TYPE_COLNAME => array (CbInputPeer::ID => 0, CbInputPeer::UID => 1, CbInputPeer::INPUT_NUMBER => 2, CbInputPeer::GROUP => 3, CbInputPeer::CONTROLLER => 4, CbInputPeer::MAIN_STORE => 5, CbInputPeer::NAME => 6, CbInputPeer::DESCRIPTION => 7, CbInputPeer::STATE => 8, CbInputPeer::SWITCH_WHEN => 9, CbInputPeer::SWITCH_STATE => 10, CbInputPeer::POSITION => 11, CbInputPeer::DATA_COLLECTED_AT => 12, CbInputPeer::NOTIFY_AFTER => 13, CbInputPeer::NOTIFY_STARTED_AT => 14, CbInputPeer::NOTIFICATION => 15, CbInputPeer::IS_ENABLED => 16, CbInputPeer::CREATED_AT => 17, CbInputPeer::UPDATED_AT => 18, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'UID' => 1, 'INPUT_NUMBER' => 2, 'GROUP' => 3, 'CONTROLLER' => 4, 'MAIN_STORE' => 5, 'NAME' => 6, 'DESCRIPTION' => 7, 'STATE' => 8, 'SWITCH_WHEN' => 9, 'SWITCH_STATE' => 10, 'POSITION' => 11, 'DATA_COLLECTED_AT' => 12, 'NOTIFY_AFTER' => 13, 'NOTIFY_STARTED_AT' => 14, 'NOTIFICATION' => 15, 'IS_ENABLED' => 16, 'CREATED_AT' => 17, 'UPDATED_AT' => 18, ),
+        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'uid' => 1, 'input_number' => 2, 'group' => 3, 'controller' => 4, 'main_store' => 5, 'name' => 6, 'description' => 7, 'state' => 8, 'switch_when' => 9, 'switch_state' => 10, 'position' => 11, 'data_collected_at' => 12, 'notify_after' => 13, 'notify_started_at' => 14, 'notification' => 15, 'is_enabled' => 16, 'created_at' => 17, 'updated_at' => 18, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, )
     );
 
     /**
@@ -210,6 +222,10 @@ abstract class BaseCbInputPeer
             $criteria->addSelectColumn(CbInputPeer::SWITCH_WHEN);
             $criteria->addSelectColumn(CbInputPeer::SWITCH_STATE);
             $criteria->addSelectColumn(CbInputPeer::POSITION);
+            $criteria->addSelectColumn(CbInputPeer::DATA_COLLECTED_AT);
+            $criteria->addSelectColumn(CbInputPeer::NOTIFY_AFTER);
+            $criteria->addSelectColumn(CbInputPeer::NOTIFY_STARTED_AT);
+            $criteria->addSelectColumn(CbInputPeer::NOTIFICATION);
             $criteria->addSelectColumn(CbInputPeer::IS_ENABLED);
             $criteria->addSelectColumn(CbInputPeer::CREATED_AT);
             $criteria->addSelectColumn(CbInputPeer::UPDATED_AT);
@@ -226,6 +242,10 @@ abstract class BaseCbInputPeer
             $criteria->addSelectColumn($alias . '.switch_when');
             $criteria->addSelectColumn($alias . '.switch_state');
             $criteria->addSelectColumn($alias . '.position');
+            $criteria->addSelectColumn($alias . '.data_collected_at');
+            $criteria->addSelectColumn($alias . '.notify_after');
+            $criteria->addSelectColumn($alias . '.notify_started_at');
+            $criteria->addSelectColumn($alias . '.notification');
             $criteria->addSelectColumn($alias . '.is_enabled');
             $criteria->addSelectColumn($alias . '.created_at');
             $criteria->addSelectColumn($alias . '.updated_at');

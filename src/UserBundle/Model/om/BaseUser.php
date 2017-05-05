@@ -23,6 +23,10 @@ use CompanyBundle\Model\CompanyInformantQuery;
 use CompanyBundle\Model\CompanyOwner;
 use CompanyBundle\Model\CompanyOwnerQuery;
 use CompanyBundle\Model\CompanyQuery;
+use NotificationBundle\Model\CbInputNotification;
+use NotificationBundle\Model\CbInputNotificationQuery;
+use NotificationBundle\Model\DsTemperatureNotification;
+use NotificationBundle\Model\DsTemperatureNotificationQuery;
 use StoreBundle\Model\Store;
 use StoreBundle\Model\StoreContact;
 use StoreBundle\Model\StoreContactQuery;
@@ -236,6 +240,18 @@ abstract class BaseUser extends BaseObject implements Persistent
     protected $collCompanyOwnersPartial;
 
     /**
+     * @var        PropelObjectCollection|DsTemperatureNotification[] Collection to store aggregation of DsTemperatureNotification objects.
+     */
+    protected $collDsTemperatureNotifications;
+    protected $collDsTemperatureNotificationsPartial;
+
+    /**
+     * @var        PropelObjectCollection|CbInputNotification[] Collection to store aggregation of CbInputNotification objects.
+     */
+    protected $collCbInputNotifications;
+    protected $collCbInputNotificationsPartial;
+
+    /**
      * @var        PropelObjectCollection|StoreContact[] Collection to store aggregation of StoreContact objects.
      */
     protected $collStoreContacts;
@@ -424,6 +440,18 @@ abstract class BaseUser extends BaseObject implements Persistent
      * @var		PropelObjectCollection
      */
     protected $companyOwnersScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $dsTemperatureNotificationsScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $cbInputNotificationsScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -1405,6 +1433,10 @@ abstract class BaseUser extends BaseObject implements Persistent
 
             $this->collCompanyOwners = null;
 
+            $this->collDsTemperatureNotifications = null;
+
+            $this->collCbInputNotifications = null;
+
             $this->collStoreContacts = null;
 
             $this->collStoreInformants = null;
@@ -1908,6 +1940,42 @@ abstract class BaseUser extends BaseObject implements Persistent
                 }
             }
 
+            if ($this->dsTemperatureNotificationsScheduledForDeletion !== null) {
+                if (!$this->dsTemperatureNotificationsScheduledForDeletion->isEmpty()) {
+                    foreach ($this->dsTemperatureNotificationsScheduledForDeletion as $dsTemperatureNotification) {
+                        // need to save related object because we set the relation to null
+                        $dsTemperatureNotification->save($con);
+                    }
+                    $this->dsTemperatureNotificationsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collDsTemperatureNotifications !== null) {
+                foreach ($this->collDsTemperatureNotifications as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->cbInputNotificationsScheduledForDeletion !== null) {
+                if (!$this->cbInputNotificationsScheduledForDeletion->isEmpty()) {
+                    foreach ($this->cbInputNotificationsScheduledForDeletion as $cbInputNotification) {
+                        // need to save related object because we set the relation to null
+                        $cbInputNotification->save($con);
+                    }
+                    $this->cbInputNotificationsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collCbInputNotifications !== null) {
+                foreach ($this->collCbInputNotifications as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
             if ($this->storeContactsScheduledForDeletion !== null) {
                 if (!$this->storeContactsScheduledForDeletion->isEmpty()) {
                     StoreContactQuery::create()
@@ -2331,6 +2399,22 @@ abstract class BaseUser extends BaseObject implements Persistent
                     }
                 }
 
+                if ($this->collDsTemperatureNotifications !== null) {
+                    foreach ($this->collDsTemperatureNotifications as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
+                if ($this->collCbInputNotifications !== null) {
+                    foreach ($this->collCbInputNotifications as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
                 if ($this->collStoreContacts !== null) {
                     foreach ($this->collStoreContacts as $referrerFK) {
                         if (!$referrerFK->validate($columns)) {
@@ -2554,6 +2638,12 @@ abstract class BaseUser extends BaseObject implements Persistent
             }
             if (null !== $this->collCompanyOwners) {
                 $result['CompanyOwners'] = $this->collCompanyOwners->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collDsTemperatureNotifications) {
+                $result['DsTemperatureNotifications'] = $this->collDsTemperatureNotifications->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collCbInputNotifications) {
+                $result['CbInputNotifications'] = $this->collCbInputNotifications->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collStoreContacts) {
                 $result['StoreContacts'] = $this->collStoreContacts->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
@@ -2844,6 +2934,18 @@ abstract class BaseUser extends BaseObject implements Persistent
             foreach ($this->getCompanyOwners() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addCompanyOwner($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getDsTemperatureNotifications() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addDsTemperatureNotification($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getCbInputNotifications() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addCbInputNotification($relObj->copy($deepCopy));
                 }
             }
 
@@ -3166,6 +3268,12 @@ abstract class BaseUser extends BaseObject implements Persistent
         }
         if ('CompanyOwner' == $relationName) {
             $this->initCompanyOwners();
+        }
+        if ('DsTemperatureNotification' == $relationName) {
+            $this->initDsTemperatureNotifications();
+        }
+        if ('CbInputNotification' == $relationName) {
+            $this->initCbInputNotifications();
         }
         if ('StoreContact' == $relationName) {
             $this->initStoreContacts();
@@ -3947,6 +4055,506 @@ abstract class BaseUser extends BaseObject implements Persistent
         $query->joinWith('OwnerCompany', $join_behavior);
 
         return $this->getCompanyOwners($query, $con);
+    }
+
+    /**
+     * Clears out the collDsTemperatureNotifications collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return User The current object (for fluent API support)
+     * @see        addDsTemperatureNotifications()
+     */
+    public function clearDsTemperatureNotifications()
+    {
+        $this->collDsTemperatureNotifications = null; // important to set this to null since that means it is uninitialized
+        $this->collDsTemperatureNotificationsPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collDsTemperatureNotifications collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialDsTemperatureNotifications($v = true)
+    {
+        $this->collDsTemperatureNotificationsPartial = $v;
+    }
+
+    /**
+     * Initializes the collDsTemperatureNotifications collection.
+     *
+     * By default this just sets the collDsTemperatureNotifications collection to an empty array (like clearcollDsTemperatureNotifications());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initDsTemperatureNotifications($overrideExisting = true)
+    {
+        if (null !== $this->collDsTemperatureNotifications && !$overrideExisting) {
+            return;
+        }
+        $this->collDsTemperatureNotifications = new PropelObjectCollection();
+        $this->collDsTemperatureNotifications->setModel('DsTemperatureNotification');
+    }
+
+    /**
+     * Gets an array of DsTemperatureNotification objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this User is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|DsTemperatureNotification[] List of DsTemperatureNotification objects
+     * @throws PropelException
+     */
+    public function getDsTemperatureNotifications($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collDsTemperatureNotificationsPartial && !$this->isNew();
+        if (null === $this->collDsTemperatureNotifications || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collDsTemperatureNotifications) {
+                // return empty collection
+                $this->initDsTemperatureNotifications();
+            } else {
+                $collDsTemperatureNotifications = DsTemperatureNotificationQuery::create(null, $criteria)
+                    ->filterByUser($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collDsTemperatureNotificationsPartial && count($collDsTemperatureNotifications)) {
+                      $this->initDsTemperatureNotifications(false);
+
+                      foreach ($collDsTemperatureNotifications as $obj) {
+                        if (false == $this->collDsTemperatureNotifications->contains($obj)) {
+                          $this->collDsTemperatureNotifications->append($obj);
+                        }
+                      }
+
+                      $this->collDsTemperatureNotificationsPartial = true;
+                    }
+
+                    $collDsTemperatureNotifications->getInternalIterator()->rewind();
+
+                    return $collDsTemperatureNotifications;
+                }
+
+                if ($partial && $this->collDsTemperatureNotifications) {
+                    foreach ($this->collDsTemperatureNotifications as $obj) {
+                        if ($obj->isNew()) {
+                            $collDsTemperatureNotifications[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collDsTemperatureNotifications = $collDsTemperatureNotifications;
+                $this->collDsTemperatureNotificationsPartial = false;
+            }
+        }
+
+        return $this->collDsTemperatureNotifications;
+    }
+
+    /**
+     * Sets a collection of DsTemperatureNotification objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $dsTemperatureNotifications A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return User The current object (for fluent API support)
+     */
+    public function setDsTemperatureNotifications(PropelCollection $dsTemperatureNotifications, PropelPDO $con = null)
+    {
+        $dsTemperatureNotificationsToDelete = $this->getDsTemperatureNotifications(new Criteria(), $con)->diff($dsTemperatureNotifications);
+
+
+        $this->dsTemperatureNotificationsScheduledForDeletion = $dsTemperatureNotificationsToDelete;
+
+        foreach ($dsTemperatureNotificationsToDelete as $dsTemperatureNotificationRemoved) {
+            $dsTemperatureNotificationRemoved->setUser(null);
+        }
+
+        $this->collDsTemperatureNotifications = null;
+        foreach ($dsTemperatureNotifications as $dsTemperatureNotification) {
+            $this->addDsTemperatureNotification($dsTemperatureNotification);
+        }
+
+        $this->collDsTemperatureNotifications = $dsTemperatureNotifications;
+        $this->collDsTemperatureNotificationsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related DsTemperatureNotification objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related DsTemperatureNotification objects.
+     * @throws PropelException
+     */
+    public function countDsTemperatureNotifications(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collDsTemperatureNotificationsPartial && !$this->isNew();
+        if (null === $this->collDsTemperatureNotifications || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collDsTemperatureNotifications) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getDsTemperatureNotifications());
+            }
+            $query = DsTemperatureNotificationQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByUser($this)
+                ->count($con);
+        }
+
+        return count($this->collDsTemperatureNotifications);
+    }
+
+    /**
+     * Method called to associate a DsTemperatureNotification object to this object
+     * through the DsTemperatureNotification foreign key attribute.
+     *
+     * @param    DsTemperatureNotification $l DsTemperatureNotification
+     * @return User The current object (for fluent API support)
+     */
+    public function addDsTemperatureNotification(DsTemperatureNotification $l)
+    {
+        if ($this->collDsTemperatureNotifications === null) {
+            $this->initDsTemperatureNotifications();
+            $this->collDsTemperatureNotificationsPartial = true;
+        }
+
+        if (!in_array($l, $this->collDsTemperatureNotifications->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddDsTemperatureNotification($l);
+
+            if ($this->dsTemperatureNotificationsScheduledForDeletion and $this->dsTemperatureNotificationsScheduledForDeletion->contains($l)) {
+                $this->dsTemperatureNotificationsScheduledForDeletion->remove($this->dsTemperatureNotificationsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	DsTemperatureNotification $dsTemperatureNotification The dsTemperatureNotification object to add.
+     */
+    protected function doAddDsTemperatureNotification($dsTemperatureNotification)
+    {
+        $this->collDsTemperatureNotifications[]= $dsTemperatureNotification;
+        $dsTemperatureNotification->setUser($this);
+    }
+
+    /**
+     * @param	DsTemperatureNotification $dsTemperatureNotification The dsTemperatureNotification object to remove.
+     * @return User The current object (for fluent API support)
+     */
+    public function removeDsTemperatureNotification($dsTemperatureNotification)
+    {
+        if ($this->getDsTemperatureNotifications()->contains($dsTemperatureNotification)) {
+            $this->collDsTemperatureNotifications->remove($this->collDsTemperatureNotifications->search($dsTemperatureNotification));
+            if (null === $this->dsTemperatureNotificationsScheduledForDeletion) {
+                $this->dsTemperatureNotificationsScheduledForDeletion = clone $this->collDsTemperatureNotifications;
+                $this->dsTemperatureNotificationsScheduledForDeletion->clear();
+            }
+            $this->dsTemperatureNotificationsScheduledForDeletion[]= $dsTemperatureNotification;
+            $dsTemperatureNotification->setUser(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this User is new, it will return
+     * an empty collection; or if this User has previously
+     * been saved, it will retrieve related DsTemperatureNotifications from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in User.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|DsTemperatureNotification[] List of DsTemperatureNotification objects
+     */
+    public function getDsTemperatureNotificationsJoinDsTemperatureSensor($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = DsTemperatureNotificationQuery::create(null, $criteria);
+        $query->joinWith('DsTemperatureSensor', $join_behavior);
+
+        return $this->getDsTemperatureNotifications($query, $con);
+    }
+
+    /**
+     * Clears out the collCbInputNotifications collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return User The current object (for fluent API support)
+     * @see        addCbInputNotifications()
+     */
+    public function clearCbInputNotifications()
+    {
+        $this->collCbInputNotifications = null; // important to set this to null since that means it is uninitialized
+        $this->collCbInputNotificationsPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collCbInputNotifications collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialCbInputNotifications($v = true)
+    {
+        $this->collCbInputNotificationsPartial = $v;
+    }
+
+    /**
+     * Initializes the collCbInputNotifications collection.
+     *
+     * By default this just sets the collCbInputNotifications collection to an empty array (like clearcollCbInputNotifications());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initCbInputNotifications($overrideExisting = true)
+    {
+        if (null !== $this->collCbInputNotifications && !$overrideExisting) {
+            return;
+        }
+        $this->collCbInputNotifications = new PropelObjectCollection();
+        $this->collCbInputNotifications->setModel('CbInputNotification');
+    }
+
+    /**
+     * Gets an array of CbInputNotification objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this User is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|CbInputNotification[] List of CbInputNotification objects
+     * @throws PropelException
+     */
+    public function getCbInputNotifications($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collCbInputNotificationsPartial && !$this->isNew();
+        if (null === $this->collCbInputNotifications || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collCbInputNotifications) {
+                // return empty collection
+                $this->initCbInputNotifications();
+            } else {
+                $collCbInputNotifications = CbInputNotificationQuery::create(null, $criteria)
+                    ->filterByUser($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collCbInputNotificationsPartial && count($collCbInputNotifications)) {
+                      $this->initCbInputNotifications(false);
+
+                      foreach ($collCbInputNotifications as $obj) {
+                        if (false == $this->collCbInputNotifications->contains($obj)) {
+                          $this->collCbInputNotifications->append($obj);
+                        }
+                      }
+
+                      $this->collCbInputNotificationsPartial = true;
+                    }
+
+                    $collCbInputNotifications->getInternalIterator()->rewind();
+
+                    return $collCbInputNotifications;
+                }
+
+                if ($partial && $this->collCbInputNotifications) {
+                    foreach ($this->collCbInputNotifications as $obj) {
+                        if ($obj->isNew()) {
+                            $collCbInputNotifications[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collCbInputNotifications = $collCbInputNotifications;
+                $this->collCbInputNotificationsPartial = false;
+            }
+        }
+
+        return $this->collCbInputNotifications;
+    }
+
+    /**
+     * Sets a collection of CbInputNotification objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $cbInputNotifications A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return User The current object (for fluent API support)
+     */
+    public function setCbInputNotifications(PropelCollection $cbInputNotifications, PropelPDO $con = null)
+    {
+        $cbInputNotificationsToDelete = $this->getCbInputNotifications(new Criteria(), $con)->diff($cbInputNotifications);
+
+
+        $this->cbInputNotificationsScheduledForDeletion = $cbInputNotificationsToDelete;
+
+        foreach ($cbInputNotificationsToDelete as $cbInputNotificationRemoved) {
+            $cbInputNotificationRemoved->setUser(null);
+        }
+
+        $this->collCbInputNotifications = null;
+        foreach ($cbInputNotifications as $cbInputNotification) {
+            $this->addCbInputNotification($cbInputNotification);
+        }
+
+        $this->collCbInputNotifications = $cbInputNotifications;
+        $this->collCbInputNotificationsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related CbInputNotification objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related CbInputNotification objects.
+     * @throws PropelException
+     */
+    public function countCbInputNotifications(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collCbInputNotificationsPartial && !$this->isNew();
+        if (null === $this->collCbInputNotifications || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collCbInputNotifications) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getCbInputNotifications());
+            }
+            $query = CbInputNotificationQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByUser($this)
+                ->count($con);
+        }
+
+        return count($this->collCbInputNotifications);
+    }
+
+    /**
+     * Method called to associate a CbInputNotification object to this object
+     * through the CbInputNotification foreign key attribute.
+     *
+     * @param    CbInputNotification $l CbInputNotification
+     * @return User The current object (for fluent API support)
+     */
+    public function addCbInputNotification(CbInputNotification $l)
+    {
+        if ($this->collCbInputNotifications === null) {
+            $this->initCbInputNotifications();
+            $this->collCbInputNotificationsPartial = true;
+        }
+
+        if (!in_array($l, $this->collCbInputNotifications->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddCbInputNotification($l);
+
+            if ($this->cbInputNotificationsScheduledForDeletion and $this->cbInputNotificationsScheduledForDeletion->contains($l)) {
+                $this->cbInputNotificationsScheduledForDeletion->remove($this->cbInputNotificationsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	CbInputNotification $cbInputNotification The cbInputNotification object to add.
+     */
+    protected function doAddCbInputNotification($cbInputNotification)
+    {
+        $this->collCbInputNotifications[]= $cbInputNotification;
+        $cbInputNotification->setUser($this);
+    }
+
+    /**
+     * @param	CbInputNotification $cbInputNotification The cbInputNotification object to remove.
+     * @return User The current object (for fluent API support)
+     */
+    public function removeCbInputNotification($cbInputNotification)
+    {
+        if ($this->getCbInputNotifications()->contains($cbInputNotification)) {
+            $this->collCbInputNotifications->remove($this->collCbInputNotifications->search($cbInputNotification));
+            if (null === $this->cbInputNotificationsScheduledForDeletion) {
+                $this->cbInputNotificationsScheduledForDeletion = clone $this->collCbInputNotifications;
+                $this->cbInputNotificationsScheduledForDeletion->clear();
+            }
+            $this->cbInputNotificationsScheduledForDeletion[]= $cbInputNotification;
+            $cbInputNotification->setUser(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this User is new, it will return
+     * an empty collection; or if this User has previously
+     * been saved, it will retrieve related CbInputNotifications from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in User.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|CbInputNotification[] List of CbInputNotification objects
+     */
+    public function getCbInputNotificationsJoinCbInput($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = CbInputNotificationQuery::create(null, $criteria);
+        $query->joinWith('CbInput', $join_behavior);
+
+        return $this->getCbInputNotifications($query, $con);
     }
 
     /**
@@ -7652,6 +8260,16 @@ abstract class BaseUser extends BaseObject implements Persistent
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collDsTemperatureNotifications) {
+                foreach ($this->collDsTemperatureNotifications as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collCbInputNotifications) {
+                foreach ($this->collCbInputNotifications as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collStoreContacts) {
                 foreach ($this->collStoreContacts as $o) {
                     $o->clearAllReferences($deep);
@@ -7765,6 +8383,14 @@ abstract class BaseUser extends BaseObject implements Persistent
             $this->collCompanyOwners->clearIterator();
         }
         $this->collCompanyOwners = null;
+        if ($this->collDsTemperatureNotifications instanceof PropelCollection) {
+            $this->collDsTemperatureNotifications->clearIterator();
+        }
+        $this->collDsTemperatureNotifications = null;
+        if ($this->collCbInputNotifications instanceof PropelCollection) {
+            $this->collCbInputNotifications->clearIterator();
+        }
+        $this->collCbInputNotifications = null;
         if ($this->collStoreContacts instanceof PropelCollection) {
             $this->collStoreContacts->clearIterator();
         }

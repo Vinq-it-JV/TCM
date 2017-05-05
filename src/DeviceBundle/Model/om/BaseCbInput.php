@@ -10,8 +10,10 @@ use \Exception;
 use \PDO;
 use \Persistent;
 use \Propel;
+use \PropelCollection;
 use \PropelDateTime;
 use \PropelException;
+use \PropelObjectCollection;
 use \PropelPDO;
 use DeviceBundle\Model\CbInput;
 use DeviceBundle\Model\CbInputPeer;
@@ -20,6 +22,8 @@ use DeviceBundle\Model\ControllerBox;
 use DeviceBundle\Model\ControllerBoxQuery;
 use DeviceBundle\Model\DeviceGroup;
 use DeviceBundle\Model\DeviceGroupQuery;
+use NotificationBundle\Model\CbInputNotification;
+use NotificationBundle\Model\CbInputNotificationQuery;
 use StoreBundle\Model\Store;
 use StoreBundle\Model\StoreQuery;
 
@@ -95,6 +99,7 @@ abstract class BaseCbInput extends BaseObject implements Persistent
 
     /**
      * The value for the state field.
+     * Note: this column has a database default value of: 0
      * @var        int
      */
     protected $state;
@@ -119,6 +124,31 @@ abstract class BaseCbInput extends BaseObject implements Persistent
      * @var        int
      */
     protected $position;
+
+    /**
+     * The value for the data_collected_at field.
+     * @var        string
+     */
+    protected $data_collected_at;
+
+    /**
+     * The value for the notify_after field.
+     * Note: this column has a database default value of: 0
+     * @var        int
+     */
+    protected $notify_after;
+
+    /**
+     * The value for the notify_started_at field.
+     * @var        string
+     */
+    protected $notify_started_at;
+
+    /**
+     * The value for the notification field.
+     * @var        int
+     */
+    protected $notification;
 
     /**
      * The value for the is_enabled field.
@@ -155,6 +185,12 @@ abstract class BaseCbInput extends BaseObject implements Persistent
     protected $aDeviceGroup;
 
     /**
+     * @var        PropelObjectCollection|CbInputNotification[] Collection to store aggregation of CbInputNotification objects.
+     */
+    protected $collCbInputNotifications;
+    protected $collCbInputNotificationsPartial;
+
+    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      * @var        boolean
@@ -175,6 +211,12 @@ abstract class BaseCbInput extends BaseObject implements Persistent
     protected $alreadyInClearAllReferencesDeep = false;
 
     /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $cbInputNotificationsScheduledForDeletion = null;
+
+    /**
      * Applies default values to this object.
      * This method should be called from the object's constructor (or
      * equivalent initialization method).
@@ -183,9 +225,11 @@ abstract class BaseCbInput extends BaseObject implements Persistent
     public function applyDefaultValues()
     {
         $this->name = 'Input';
+        $this->state = 0;
         $this->switch_when = true;
         $this->switch_state = false;
         $this->position = 0;
+        $this->notify_after = 0;
         $this->is_enabled = true;
     }
 
@@ -329,6 +373,108 @@ abstract class BaseCbInput extends BaseObject implements Persistent
     {
 
         return $this->position;
+    }
+
+    /**
+     * Get the [optionally formatted] temporal [data_collected_at] column value.
+     *
+     *
+     * @param string $format The date/time format string (either date()-style or strftime()-style).
+     *				 If format is null, then the raw DateTime object will be returned.
+     * @return mixed Formatted date/time value as string or DateTime object (if format is null), null if column is null, and 0 if column value is 0000-00-00 00:00:00
+     * @throws PropelException - if unable to parse/validate the date/time value.
+     */
+    public function getDataCollectedAt($format = null)
+    {
+        if ($this->data_collected_at === null) {
+            return null;
+        }
+
+        if ($this->data_collected_at === '0000-00-00 00:00:00') {
+            // while technically this is not a default value of null,
+            // this seems to be closest in meaning.
+            return null;
+        }
+
+        try {
+            $dt = new DateTime($this->data_collected_at);
+        } catch (Exception $x) {
+            throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->data_collected_at, true), $x);
+        }
+
+        if ($format === null) {
+            // Because propel.useDateTimeClass is true, we return a DateTime object.
+            return $dt;
+        }
+
+        if (strpos($format, '%') !== false) {
+            return strftime($format, $dt->format('U'));
+        }
+
+        return $dt->format($format);
+
+    }
+
+    /**
+     * Get the [notify_after] column value.
+     *
+     * @return int
+     */
+    public function getNotifyAfter()
+    {
+
+        return $this->notify_after;
+    }
+
+    /**
+     * Get the [optionally formatted] temporal [notify_started_at] column value.
+     *
+     *
+     * @param string $format The date/time format string (either date()-style or strftime()-style).
+     *				 If format is null, then the raw DateTime object will be returned.
+     * @return mixed Formatted date/time value as string or DateTime object (if format is null), null if column is null, and 0 if column value is 0000-00-00 00:00:00
+     * @throws PropelException - if unable to parse/validate the date/time value.
+     */
+    public function getNotifyStartedAt($format = null)
+    {
+        if ($this->notify_started_at === null) {
+            return null;
+        }
+
+        if ($this->notify_started_at === '0000-00-00 00:00:00') {
+            // while technically this is not a default value of null,
+            // this seems to be closest in meaning.
+            return null;
+        }
+
+        try {
+            $dt = new DateTime($this->notify_started_at);
+        } catch (Exception $x) {
+            throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->notify_started_at, true), $x);
+        }
+
+        if ($format === null) {
+            // Because propel.useDateTimeClass is true, we return a DateTime object.
+            return $dt;
+        }
+
+        if (strpos($format, '%') !== false) {
+            return strftime($format, $dt->format('U'));
+        }
+
+        return $dt->format($format);
+
+    }
+
+    /**
+     * Get the [notification] column value.
+     *
+     * @return int
+     */
+    public function getNotification()
+    {
+
+        return $this->notification;
     }
 
     /**
@@ -703,6 +849,94 @@ abstract class BaseCbInput extends BaseObject implements Persistent
     } // setPosition()
 
     /**
+     * Sets the value of [data_collected_at] column to a normalized version of the date/time value specified.
+     *
+     * @param mixed $v string, integer (timestamp), or DateTime value.
+     *               Empty strings are treated as null.
+     * @return CbInput The current object (for fluent API support)
+     */
+    public function setDataCollectedAt($v)
+    {
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->data_collected_at !== null || $dt !== null) {
+            $currentDateAsString = ($this->data_collected_at !== null && $tmpDt = new DateTime($this->data_collected_at)) ? $tmpDt->format('Y-m-d H:i:s') : null;
+            $newDateAsString = $dt ? $dt->format('Y-m-d H:i:s') : null;
+            if ($currentDateAsString !== $newDateAsString) {
+                $this->data_collected_at = $newDateAsString;
+                $this->modifiedColumns[] = CbInputPeer::DATA_COLLECTED_AT;
+            }
+        } // if either are not null
+
+
+        return $this;
+    } // setDataCollectedAt()
+
+    /**
+     * Set the value of [notify_after] column.
+     *
+     * @param  int $v new value
+     * @return CbInput The current object (for fluent API support)
+     */
+    public function setNotifyAfter($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->notify_after !== $v) {
+            $this->notify_after = $v;
+            $this->modifiedColumns[] = CbInputPeer::NOTIFY_AFTER;
+        }
+
+
+        return $this;
+    } // setNotifyAfter()
+
+    /**
+     * Sets the value of [notify_started_at] column to a normalized version of the date/time value specified.
+     *
+     * @param mixed $v string, integer (timestamp), or DateTime value.
+     *               Empty strings are treated as null.
+     * @return CbInput The current object (for fluent API support)
+     */
+    public function setNotifyStartedAt($v)
+    {
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->notify_started_at !== null || $dt !== null) {
+            $currentDateAsString = ($this->notify_started_at !== null && $tmpDt = new DateTime($this->notify_started_at)) ? $tmpDt->format('Y-m-d H:i:s') : null;
+            $newDateAsString = $dt ? $dt->format('Y-m-d H:i:s') : null;
+            if ($currentDateAsString !== $newDateAsString) {
+                $this->notify_started_at = $newDateAsString;
+                $this->modifiedColumns[] = CbInputPeer::NOTIFY_STARTED_AT;
+            }
+        } // if either are not null
+
+
+        return $this;
+    } // setNotifyStartedAt()
+
+    /**
+     * Set the value of [notification] column.
+     *
+     * @param  int $v new value
+     * @return CbInput The current object (for fluent API support)
+     */
+    public function setNotification($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->notification !== $v) {
+            $this->notification = $v;
+            $this->modifiedColumns[] = CbInputPeer::NOTIFICATION;
+        }
+
+
+        return $this;
+    } // setNotification()
+
+    /**
      * Sets the value of the [is_enabled] column.
      * Non-boolean arguments are converted using the following rules:
      *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
@@ -791,6 +1025,10 @@ abstract class BaseCbInput extends BaseObject implements Persistent
                 return false;
             }
 
+            if ($this->state !== 0) {
+                return false;
+            }
+
             if ($this->switch_when !== true) {
                 return false;
             }
@@ -800,6 +1038,10 @@ abstract class BaseCbInput extends BaseObject implements Persistent
             }
 
             if ($this->position !== 0) {
+                return false;
+            }
+
+            if ($this->notify_after !== 0) {
                 return false;
             }
 
@@ -841,9 +1083,13 @@ abstract class BaseCbInput extends BaseObject implements Persistent
             $this->switch_when = ($row[$startcol + 9] !== null) ? (boolean) $row[$startcol + 9] : null;
             $this->switch_state = ($row[$startcol + 10] !== null) ? (boolean) $row[$startcol + 10] : null;
             $this->position = ($row[$startcol + 11] !== null) ? (int) $row[$startcol + 11] : null;
-            $this->is_enabled = ($row[$startcol + 12] !== null) ? (boolean) $row[$startcol + 12] : null;
-            $this->created_at = ($row[$startcol + 13] !== null) ? (string) $row[$startcol + 13] : null;
-            $this->updated_at = ($row[$startcol + 14] !== null) ? (string) $row[$startcol + 14] : null;
+            $this->data_collected_at = ($row[$startcol + 12] !== null) ? (string) $row[$startcol + 12] : null;
+            $this->notify_after = ($row[$startcol + 13] !== null) ? (int) $row[$startcol + 13] : null;
+            $this->notify_started_at = ($row[$startcol + 14] !== null) ? (string) $row[$startcol + 14] : null;
+            $this->notification = ($row[$startcol + 15] !== null) ? (int) $row[$startcol + 15] : null;
+            $this->is_enabled = ($row[$startcol + 16] !== null) ? (boolean) $row[$startcol + 16] : null;
+            $this->created_at = ($row[$startcol + 17] !== null) ? (string) $row[$startcol + 17] : null;
+            $this->updated_at = ($row[$startcol + 18] !== null) ? (string) $row[$startcol + 18] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -853,7 +1099,7 @@ abstract class BaseCbInput extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 15; // 15 = CbInputPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 19; // 19 = CbInputPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating CbInput object", $e);
@@ -927,6 +1173,8 @@ abstract class BaseCbInput extends BaseObject implements Persistent
             $this->aStore = null;
             $this->aControllerBox = null;
             $this->aDeviceGroup = null;
+            $this->collCbInputNotifications = null;
+
         } // if (deep)
     }
 
@@ -1088,6 +1336,24 @@ abstract class BaseCbInput extends BaseObject implements Persistent
                 $this->resetModified();
             }
 
+            if ($this->cbInputNotificationsScheduledForDeletion !== null) {
+                if (!$this->cbInputNotificationsScheduledForDeletion->isEmpty()) {
+                    foreach ($this->cbInputNotificationsScheduledForDeletion as $cbInputNotification) {
+                        // need to save related object because we set the relation to null
+                        $cbInputNotification->save($con);
+                    }
+                    $this->cbInputNotificationsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collCbInputNotifications !== null) {
+                foreach ($this->collCbInputNotifications as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
             $this->alreadyInSave = false;
 
         }
@@ -1150,6 +1416,18 @@ abstract class BaseCbInput extends BaseObject implements Persistent
         if ($this->isColumnModified(CbInputPeer::POSITION)) {
             $modifiedColumns[':p' . $index++]  = '`position`';
         }
+        if ($this->isColumnModified(CbInputPeer::DATA_COLLECTED_AT)) {
+            $modifiedColumns[':p' . $index++]  = '`data_collected_at`';
+        }
+        if ($this->isColumnModified(CbInputPeer::NOTIFY_AFTER)) {
+            $modifiedColumns[':p' . $index++]  = '`notify_after`';
+        }
+        if ($this->isColumnModified(CbInputPeer::NOTIFY_STARTED_AT)) {
+            $modifiedColumns[':p' . $index++]  = '`notify_started_at`';
+        }
+        if ($this->isColumnModified(CbInputPeer::NOTIFICATION)) {
+            $modifiedColumns[':p' . $index++]  = '`notification`';
+        }
         if ($this->isColumnModified(CbInputPeer::IS_ENABLED)) {
             $modifiedColumns[':p' . $index++]  = '`is_enabled`';
         }
@@ -1205,6 +1483,18 @@ abstract class BaseCbInput extends BaseObject implements Persistent
                         break;
                     case '`position`':
                         $stmt->bindValue($identifier, $this->position, PDO::PARAM_INT);
+                        break;
+                    case '`data_collected_at`':
+                        $stmt->bindValue($identifier, $this->data_collected_at, PDO::PARAM_STR);
+                        break;
+                    case '`notify_after`':
+                        $stmt->bindValue($identifier, $this->notify_after, PDO::PARAM_INT);
+                        break;
+                    case '`notify_started_at`':
+                        $stmt->bindValue($identifier, $this->notify_started_at, PDO::PARAM_STR);
+                        break;
+                    case '`notification`':
+                        $stmt->bindValue($identifier, $this->notification, PDO::PARAM_INT);
                         break;
                     case '`is_enabled`':
                         $stmt->bindValue($identifier, (int) $this->is_enabled, PDO::PARAM_INT);
@@ -1338,6 +1628,14 @@ abstract class BaseCbInput extends BaseObject implements Persistent
             }
 
 
+                if ($this->collCbInputNotifications !== null) {
+                    foreach ($this->collCbInputNotifications as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
 
             $this->alreadyInValidation = false;
         }
@@ -1410,12 +1708,24 @@ abstract class BaseCbInput extends BaseObject implements Persistent
                 return $this->getPosition();
                 break;
             case 12:
-                return $this->getIsEnabled();
+                return $this->getDataCollectedAt();
                 break;
             case 13:
-                return $this->getCreatedAt();
+                return $this->getNotifyAfter();
                 break;
             case 14:
+                return $this->getNotifyStartedAt();
+                break;
+            case 15:
+                return $this->getNotification();
+                break;
+            case 16:
+                return $this->getIsEnabled();
+                break;
+            case 17:
+                return $this->getCreatedAt();
+                break;
+            case 18:
                 return $this->getUpdatedAt();
                 break;
             default:
@@ -1459,9 +1769,13 @@ abstract class BaseCbInput extends BaseObject implements Persistent
             $keys[9] => $this->getSwitchWhen(),
             $keys[10] => $this->getSwitchState(),
             $keys[11] => $this->getPosition(),
-            $keys[12] => $this->getIsEnabled(),
-            $keys[13] => $this->getCreatedAt(),
-            $keys[14] => $this->getUpdatedAt(),
+            $keys[12] => $this->getDataCollectedAt(),
+            $keys[13] => $this->getNotifyAfter(),
+            $keys[14] => $this->getNotifyStartedAt(),
+            $keys[15] => $this->getNotification(),
+            $keys[16] => $this->getIsEnabled(),
+            $keys[17] => $this->getCreatedAt(),
+            $keys[18] => $this->getUpdatedAt(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1477,6 +1791,9 @@ abstract class BaseCbInput extends BaseObject implements Persistent
             }
             if (null !== $this->aDeviceGroup) {
                 $result['DeviceGroup'] = $this->aDeviceGroup->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->collCbInputNotifications) {
+                $result['CbInputNotifications'] = $this->collCbInputNotifications->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
 
@@ -1549,12 +1866,24 @@ abstract class BaseCbInput extends BaseObject implements Persistent
                 $this->setPosition($value);
                 break;
             case 12:
-                $this->setIsEnabled($value);
+                $this->setDataCollectedAt($value);
                 break;
             case 13:
-                $this->setCreatedAt($value);
+                $this->setNotifyAfter($value);
                 break;
             case 14:
+                $this->setNotifyStartedAt($value);
+                break;
+            case 15:
+                $this->setNotification($value);
+                break;
+            case 16:
+                $this->setIsEnabled($value);
+                break;
+            case 17:
+                $this->setCreatedAt($value);
+                break;
+            case 18:
                 $this->setUpdatedAt($value);
                 break;
         } // switch()
@@ -1593,9 +1922,13 @@ abstract class BaseCbInput extends BaseObject implements Persistent
         if (array_key_exists($keys[9], $arr)) $this->setSwitchWhen($arr[$keys[9]]);
         if (array_key_exists($keys[10], $arr)) $this->setSwitchState($arr[$keys[10]]);
         if (array_key_exists($keys[11], $arr)) $this->setPosition($arr[$keys[11]]);
-        if (array_key_exists($keys[12], $arr)) $this->setIsEnabled($arr[$keys[12]]);
-        if (array_key_exists($keys[13], $arr)) $this->setCreatedAt($arr[$keys[13]]);
-        if (array_key_exists($keys[14], $arr)) $this->setUpdatedAt($arr[$keys[14]]);
+        if (array_key_exists($keys[12], $arr)) $this->setDataCollectedAt($arr[$keys[12]]);
+        if (array_key_exists($keys[13], $arr)) $this->setNotifyAfter($arr[$keys[13]]);
+        if (array_key_exists($keys[14], $arr)) $this->setNotifyStartedAt($arr[$keys[14]]);
+        if (array_key_exists($keys[15], $arr)) $this->setNotification($arr[$keys[15]]);
+        if (array_key_exists($keys[16], $arr)) $this->setIsEnabled($arr[$keys[16]]);
+        if (array_key_exists($keys[17], $arr)) $this->setCreatedAt($arr[$keys[17]]);
+        if (array_key_exists($keys[18], $arr)) $this->setUpdatedAt($arr[$keys[18]]);
     }
 
     /**
@@ -1619,6 +1952,10 @@ abstract class BaseCbInput extends BaseObject implements Persistent
         if ($this->isColumnModified(CbInputPeer::SWITCH_WHEN)) $criteria->add(CbInputPeer::SWITCH_WHEN, $this->switch_when);
         if ($this->isColumnModified(CbInputPeer::SWITCH_STATE)) $criteria->add(CbInputPeer::SWITCH_STATE, $this->switch_state);
         if ($this->isColumnModified(CbInputPeer::POSITION)) $criteria->add(CbInputPeer::POSITION, $this->position);
+        if ($this->isColumnModified(CbInputPeer::DATA_COLLECTED_AT)) $criteria->add(CbInputPeer::DATA_COLLECTED_AT, $this->data_collected_at);
+        if ($this->isColumnModified(CbInputPeer::NOTIFY_AFTER)) $criteria->add(CbInputPeer::NOTIFY_AFTER, $this->notify_after);
+        if ($this->isColumnModified(CbInputPeer::NOTIFY_STARTED_AT)) $criteria->add(CbInputPeer::NOTIFY_STARTED_AT, $this->notify_started_at);
+        if ($this->isColumnModified(CbInputPeer::NOTIFICATION)) $criteria->add(CbInputPeer::NOTIFICATION, $this->notification);
         if ($this->isColumnModified(CbInputPeer::IS_ENABLED)) $criteria->add(CbInputPeer::IS_ENABLED, $this->is_enabled);
         if ($this->isColumnModified(CbInputPeer::CREATED_AT)) $criteria->add(CbInputPeer::CREATED_AT, $this->created_at);
         if ($this->isColumnModified(CbInputPeer::UPDATED_AT)) $criteria->add(CbInputPeer::UPDATED_AT, $this->updated_at);
@@ -1696,6 +2033,10 @@ abstract class BaseCbInput extends BaseObject implements Persistent
         $copyObj->setSwitchWhen($this->getSwitchWhen());
         $copyObj->setSwitchState($this->getSwitchState());
         $copyObj->setPosition($this->getPosition());
+        $copyObj->setDataCollectedAt($this->getDataCollectedAt());
+        $copyObj->setNotifyAfter($this->getNotifyAfter());
+        $copyObj->setNotifyStartedAt($this->getNotifyStartedAt());
+        $copyObj->setNotification($this->getNotification());
         $copyObj->setIsEnabled($this->getIsEnabled());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
@@ -1706,6 +2047,12 @@ abstract class BaseCbInput extends BaseObject implements Persistent
             $copyObj->setNew(false);
             // store object hash to prevent cycle
             $this->startCopy = true;
+
+            foreach ($this->getCbInputNotifications() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addCbInputNotification($relObj->copy($deepCopy));
+                }
+            }
 
             //unflag object copy
             $this->startCopy = false;
@@ -1913,6 +2260,272 @@ abstract class BaseCbInput extends BaseObject implements Persistent
         return $this->aDeviceGroup;
     }
 
+
+    /**
+     * Initializes a collection based on the name of a relation.
+     * Avoids crafting an 'init[$relationName]s' method name
+     * that wouldn't work when StandardEnglishPluralizer is used.
+     *
+     * @param string $relationName The name of the relation to initialize
+     * @return void
+     */
+    public function initRelation($relationName)
+    {
+        if ('CbInputNotification' == $relationName) {
+            $this->initCbInputNotifications();
+        }
+    }
+
+    /**
+     * Clears out the collCbInputNotifications collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return CbInput The current object (for fluent API support)
+     * @see        addCbInputNotifications()
+     */
+    public function clearCbInputNotifications()
+    {
+        $this->collCbInputNotifications = null; // important to set this to null since that means it is uninitialized
+        $this->collCbInputNotificationsPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collCbInputNotifications collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialCbInputNotifications($v = true)
+    {
+        $this->collCbInputNotificationsPartial = $v;
+    }
+
+    /**
+     * Initializes the collCbInputNotifications collection.
+     *
+     * By default this just sets the collCbInputNotifications collection to an empty array (like clearcollCbInputNotifications());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initCbInputNotifications($overrideExisting = true)
+    {
+        if (null !== $this->collCbInputNotifications && !$overrideExisting) {
+            return;
+        }
+        $this->collCbInputNotifications = new PropelObjectCollection();
+        $this->collCbInputNotifications->setModel('CbInputNotification');
+    }
+
+    /**
+     * Gets an array of CbInputNotification objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this CbInput is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|CbInputNotification[] List of CbInputNotification objects
+     * @throws PropelException
+     */
+    public function getCbInputNotifications($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collCbInputNotificationsPartial && !$this->isNew();
+        if (null === $this->collCbInputNotifications || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collCbInputNotifications) {
+                // return empty collection
+                $this->initCbInputNotifications();
+            } else {
+                $collCbInputNotifications = CbInputNotificationQuery::create(null, $criteria)
+                    ->filterByCbInput($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collCbInputNotificationsPartial && count($collCbInputNotifications)) {
+                      $this->initCbInputNotifications(false);
+
+                      foreach ($collCbInputNotifications as $obj) {
+                        if (false == $this->collCbInputNotifications->contains($obj)) {
+                          $this->collCbInputNotifications->append($obj);
+                        }
+                      }
+
+                      $this->collCbInputNotificationsPartial = true;
+                    }
+
+                    $collCbInputNotifications->getInternalIterator()->rewind();
+
+                    return $collCbInputNotifications;
+                }
+
+                if ($partial && $this->collCbInputNotifications) {
+                    foreach ($this->collCbInputNotifications as $obj) {
+                        if ($obj->isNew()) {
+                            $collCbInputNotifications[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collCbInputNotifications = $collCbInputNotifications;
+                $this->collCbInputNotificationsPartial = false;
+            }
+        }
+
+        return $this->collCbInputNotifications;
+    }
+
+    /**
+     * Sets a collection of CbInputNotification objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $cbInputNotifications A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return CbInput The current object (for fluent API support)
+     */
+    public function setCbInputNotifications(PropelCollection $cbInputNotifications, PropelPDO $con = null)
+    {
+        $cbInputNotificationsToDelete = $this->getCbInputNotifications(new Criteria(), $con)->diff($cbInputNotifications);
+
+
+        $this->cbInputNotificationsScheduledForDeletion = $cbInputNotificationsToDelete;
+
+        foreach ($cbInputNotificationsToDelete as $cbInputNotificationRemoved) {
+            $cbInputNotificationRemoved->setCbInput(null);
+        }
+
+        $this->collCbInputNotifications = null;
+        foreach ($cbInputNotifications as $cbInputNotification) {
+            $this->addCbInputNotification($cbInputNotification);
+        }
+
+        $this->collCbInputNotifications = $cbInputNotifications;
+        $this->collCbInputNotificationsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related CbInputNotification objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related CbInputNotification objects.
+     * @throws PropelException
+     */
+    public function countCbInputNotifications(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collCbInputNotificationsPartial && !$this->isNew();
+        if (null === $this->collCbInputNotifications || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collCbInputNotifications) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getCbInputNotifications());
+            }
+            $query = CbInputNotificationQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByCbInput($this)
+                ->count($con);
+        }
+
+        return count($this->collCbInputNotifications);
+    }
+
+    /**
+     * Method called to associate a CbInputNotification object to this object
+     * through the CbInputNotification foreign key attribute.
+     *
+     * @param    CbInputNotification $l CbInputNotification
+     * @return CbInput The current object (for fluent API support)
+     */
+    public function addCbInputNotification(CbInputNotification $l)
+    {
+        if ($this->collCbInputNotifications === null) {
+            $this->initCbInputNotifications();
+            $this->collCbInputNotificationsPartial = true;
+        }
+
+        if (!in_array($l, $this->collCbInputNotifications->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddCbInputNotification($l);
+
+            if ($this->cbInputNotificationsScheduledForDeletion and $this->cbInputNotificationsScheduledForDeletion->contains($l)) {
+                $this->cbInputNotificationsScheduledForDeletion->remove($this->cbInputNotificationsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	CbInputNotification $cbInputNotification The cbInputNotification object to add.
+     */
+    protected function doAddCbInputNotification($cbInputNotification)
+    {
+        $this->collCbInputNotifications[]= $cbInputNotification;
+        $cbInputNotification->setCbInput($this);
+    }
+
+    /**
+     * @param	CbInputNotification $cbInputNotification The cbInputNotification object to remove.
+     * @return CbInput The current object (for fluent API support)
+     */
+    public function removeCbInputNotification($cbInputNotification)
+    {
+        if ($this->getCbInputNotifications()->contains($cbInputNotification)) {
+            $this->collCbInputNotifications->remove($this->collCbInputNotifications->search($cbInputNotification));
+            if (null === $this->cbInputNotificationsScheduledForDeletion) {
+                $this->cbInputNotificationsScheduledForDeletion = clone $this->collCbInputNotifications;
+                $this->cbInputNotificationsScheduledForDeletion->clear();
+            }
+            $this->cbInputNotificationsScheduledForDeletion[]= $cbInputNotification;
+            $cbInputNotification->setCbInput(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this CbInput is new, it will return
+     * an empty collection; or if this CbInput has previously
+     * been saved, it will retrieve related CbInputNotifications from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in CbInput.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|CbInputNotification[] List of CbInputNotification objects
+     */
+    public function getCbInputNotificationsJoinUser($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = CbInputNotificationQuery::create(null, $criteria);
+        $query->joinWith('User', $join_behavior);
+
+        return $this->getCbInputNotifications($query, $con);
+    }
+
     /**
      * Clears the current object and sets all attributes to their default values
      */
@@ -1930,6 +2543,10 @@ abstract class BaseCbInput extends BaseObject implements Persistent
         $this->switch_when = null;
         $this->switch_state = null;
         $this->position = null;
+        $this->data_collected_at = null;
+        $this->notify_after = null;
+        $this->notify_started_at = null;
+        $this->notification = null;
         $this->is_enabled = null;
         $this->created_at = null;
         $this->updated_at = null;
@@ -1956,6 +2573,11 @@ abstract class BaseCbInput extends BaseObject implements Persistent
     {
         if ($deep && !$this->alreadyInClearAllReferencesDeep) {
             $this->alreadyInClearAllReferencesDeep = true;
+            if ($this->collCbInputNotifications) {
+                foreach ($this->collCbInputNotifications as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->aStore instanceof Persistent) {
               $this->aStore->clearAllReferences($deep);
             }
@@ -1969,6 +2591,10 @@ abstract class BaseCbInput extends BaseObject implements Persistent
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
 
+        if ($this->collCbInputNotifications instanceof PropelCollection) {
+            $this->collCbInputNotifications->clearIterator();
+        }
+        $this->collCbInputNotifications = null;
         $this->aStore = null;
         $this->aControllerBox = null;
         $this->aDeviceGroup = null;

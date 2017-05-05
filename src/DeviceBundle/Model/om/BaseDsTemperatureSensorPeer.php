@@ -32,13 +32,13 @@ abstract class BaseDsTemperatureSensorPeer
     const TM_CLASS = 'DeviceBundle\\Model\\map\\DsTemperatureSensorTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 16;
+    const NUM_COLUMNS = 19;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 16;
+    const NUM_HYDRATE_COLUMNS = 19;
 
     /** the column name for the id field */
     const ID = 'ds_temperature_sensor.id';
@@ -79,6 +79,15 @@ abstract class BaseDsTemperatureSensorPeer
     /** the column name for the position field */
     const POSITION = 'ds_temperature_sensor.position';
 
+    /** the column name for the data_collected_at field */
+    const DATA_COLLECTED_AT = 'ds_temperature_sensor.data_collected_at';
+
+    /** the column name for the notify_after field */
+    const NOTIFY_AFTER = 'ds_temperature_sensor.notify_after';
+
+    /** the column name for the notify_started_at field */
+    const NOTIFY_STARTED_AT = 'ds_temperature_sensor.notify_started_at';
+
     /** the column name for the is_enabled field */
     const IS_ENABLED = 'ds_temperature_sensor.is_enabled';
 
@@ -107,12 +116,12 @@ abstract class BaseDsTemperatureSensorPeer
      * e.g. DsTemperatureSensorPeer::$fieldNames[DsTemperatureSensorPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'Uid', 'Group', 'Controller', 'MainStore', 'OutputNumber', 'Name', 'Description', 'State', 'LowLimit', 'Temperature', 'HighLimit', 'Position', 'IsEnabled', 'CreatedAt', 'UpdatedAt', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'uid', 'group', 'controller', 'mainStore', 'outputNumber', 'name', 'description', 'state', 'lowLimit', 'temperature', 'highLimit', 'position', 'isEnabled', 'createdAt', 'updatedAt', ),
-        BasePeer::TYPE_COLNAME => array (DsTemperatureSensorPeer::ID, DsTemperatureSensorPeer::UID, DsTemperatureSensorPeer::GROUP, DsTemperatureSensorPeer::CONTROLLER, DsTemperatureSensorPeer::MAIN_STORE, DsTemperatureSensorPeer::OUTPUT_NUMBER, DsTemperatureSensorPeer::NAME, DsTemperatureSensorPeer::DESCRIPTION, DsTemperatureSensorPeer::STATE, DsTemperatureSensorPeer::LOW_LIMIT, DsTemperatureSensorPeer::TEMPERATURE, DsTemperatureSensorPeer::HIGH_LIMIT, DsTemperatureSensorPeer::POSITION, DsTemperatureSensorPeer::IS_ENABLED, DsTemperatureSensorPeer::CREATED_AT, DsTemperatureSensorPeer::UPDATED_AT, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'UID', 'GROUP', 'CONTROLLER', 'MAIN_STORE', 'OUTPUT_NUMBER', 'NAME', 'DESCRIPTION', 'STATE', 'LOW_LIMIT', 'TEMPERATURE', 'HIGH_LIMIT', 'POSITION', 'IS_ENABLED', 'CREATED_AT', 'UPDATED_AT', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'uid', 'group', 'controller', 'main_store', 'output_number', 'name', 'description', 'state', 'low_limit', 'temperature', 'high_limit', 'position', 'is_enabled', 'created_at', 'updated_at', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, )
+        BasePeer::TYPE_PHPNAME => array ('Id', 'Uid', 'Group', 'Controller', 'MainStore', 'OutputNumber', 'Name', 'Description', 'State', 'LowLimit', 'Temperature', 'HighLimit', 'Position', 'DataCollectedAt', 'NotifyAfter', 'NotifyStartedAt', 'IsEnabled', 'CreatedAt', 'UpdatedAt', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'uid', 'group', 'controller', 'mainStore', 'outputNumber', 'name', 'description', 'state', 'lowLimit', 'temperature', 'highLimit', 'position', 'dataCollectedAt', 'notifyAfter', 'notifyStartedAt', 'isEnabled', 'createdAt', 'updatedAt', ),
+        BasePeer::TYPE_COLNAME => array (DsTemperatureSensorPeer::ID, DsTemperatureSensorPeer::UID, DsTemperatureSensorPeer::GROUP, DsTemperatureSensorPeer::CONTROLLER, DsTemperatureSensorPeer::MAIN_STORE, DsTemperatureSensorPeer::OUTPUT_NUMBER, DsTemperatureSensorPeer::NAME, DsTemperatureSensorPeer::DESCRIPTION, DsTemperatureSensorPeer::STATE, DsTemperatureSensorPeer::LOW_LIMIT, DsTemperatureSensorPeer::TEMPERATURE, DsTemperatureSensorPeer::HIGH_LIMIT, DsTemperatureSensorPeer::POSITION, DsTemperatureSensorPeer::DATA_COLLECTED_AT, DsTemperatureSensorPeer::NOTIFY_AFTER, DsTemperatureSensorPeer::NOTIFY_STARTED_AT, DsTemperatureSensorPeer::IS_ENABLED, DsTemperatureSensorPeer::CREATED_AT, DsTemperatureSensorPeer::UPDATED_AT, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'UID', 'GROUP', 'CONTROLLER', 'MAIN_STORE', 'OUTPUT_NUMBER', 'NAME', 'DESCRIPTION', 'STATE', 'LOW_LIMIT', 'TEMPERATURE', 'HIGH_LIMIT', 'POSITION', 'DATA_COLLECTED_AT', 'NOTIFY_AFTER', 'NOTIFY_STARTED_AT', 'IS_ENABLED', 'CREATED_AT', 'UPDATED_AT', ),
+        BasePeer::TYPE_FIELDNAME => array ('id', 'uid', 'group', 'controller', 'main_store', 'output_number', 'name', 'description', 'state', 'low_limit', 'temperature', 'high_limit', 'position', 'data_collected_at', 'notify_after', 'notify_started_at', 'is_enabled', 'created_at', 'updated_at', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, )
     );
 
     /**
@@ -122,12 +131,12 @@ abstract class BaseDsTemperatureSensorPeer
      * e.g. DsTemperatureSensorPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Uid' => 1, 'Group' => 2, 'Controller' => 3, 'MainStore' => 4, 'OutputNumber' => 5, 'Name' => 6, 'Description' => 7, 'State' => 8, 'LowLimit' => 9, 'Temperature' => 10, 'HighLimit' => 11, 'Position' => 12, 'IsEnabled' => 13, 'CreatedAt' => 14, 'UpdatedAt' => 15, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'uid' => 1, 'group' => 2, 'controller' => 3, 'mainStore' => 4, 'outputNumber' => 5, 'name' => 6, 'description' => 7, 'state' => 8, 'lowLimit' => 9, 'temperature' => 10, 'highLimit' => 11, 'position' => 12, 'isEnabled' => 13, 'createdAt' => 14, 'updatedAt' => 15, ),
-        BasePeer::TYPE_COLNAME => array (DsTemperatureSensorPeer::ID => 0, DsTemperatureSensorPeer::UID => 1, DsTemperatureSensorPeer::GROUP => 2, DsTemperatureSensorPeer::CONTROLLER => 3, DsTemperatureSensorPeer::MAIN_STORE => 4, DsTemperatureSensorPeer::OUTPUT_NUMBER => 5, DsTemperatureSensorPeer::NAME => 6, DsTemperatureSensorPeer::DESCRIPTION => 7, DsTemperatureSensorPeer::STATE => 8, DsTemperatureSensorPeer::LOW_LIMIT => 9, DsTemperatureSensorPeer::TEMPERATURE => 10, DsTemperatureSensorPeer::HIGH_LIMIT => 11, DsTemperatureSensorPeer::POSITION => 12, DsTemperatureSensorPeer::IS_ENABLED => 13, DsTemperatureSensorPeer::CREATED_AT => 14, DsTemperatureSensorPeer::UPDATED_AT => 15, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'UID' => 1, 'GROUP' => 2, 'CONTROLLER' => 3, 'MAIN_STORE' => 4, 'OUTPUT_NUMBER' => 5, 'NAME' => 6, 'DESCRIPTION' => 7, 'STATE' => 8, 'LOW_LIMIT' => 9, 'TEMPERATURE' => 10, 'HIGH_LIMIT' => 11, 'POSITION' => 12, 'IS_ENABLED' => 13, 'CREATED_AT' => 14, 'UPDATED_AT' => 15, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'uid' => 1, 'group' => 2, 'controller' => 3, 'main_store' => 4, 'output_number' => 5, 'name' => 6, 'description' => 7, 'state' => 8, 'low_limit' => 9, 'temperature' => 10, 'high_limit' => 11, 'position' => 12, 'is_enabled' => 13, 'created_at' => 14, 'updated_at' => 15, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, )
+        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Uid' => 1, 'Group' => 2, 'Controller' => 3, 'MainStore' => 4, 'OutputNumber' => 5, 'Name' => 6, 'Description' => 7, 'State' => 8, 'LowLimit' => 9, 'Temperature' => 10, 'HighLimit' => 11, 'Position' => 12, 'DataCollectedAt' => 13, 'NotifyAfter' => 14, 'NotifyStartedAt' => 15, 'IsEnabled' => 16, 'CreatedAt' => 17, 'UpdatedAt' => 18, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'uid' => 1, 'group' => 2, 'controller' => 3, 'mainStore' => 4, 'outputNumber' => 5, 'name' => 6, 'description' => 7, 'state' => 8, 'lowLimit' => 9, 'temperature' => 10, 'highLimit' => 11, 'position' => 12, 'dataCollectedAt' => 13, 'notifyAfter' => 14, 'notifyStartedAt' => 15, 'isEnabled' => 16, 'createdAt' => 17, 'updatedAt' => 18, ),
+        BasePeer::TYPE_COLNAME => array (DsTemperatureSensorPeer::ID => 0, DsTemperatureSensorPeer::UID => 1, DsTemperatureSensorPeer::GROUP => 2, DsTemperatureSensorPeer::CONTROLLER => 3, DsTemperatureSensorPeer::MAIN_STORE => 4, DsTemperatureSensorPeer::OUTPUT_NUMBER => 5, DsTemperatureSensorPeer::NAME => 6, DsTemperatureSensorPeer::DESCRIPTION => 7, DsTemperatureSensorPeer::STATE => 8, DsTemperatureSensorPeer::LOW_LIMIT => 9, DsTemperatureSensorPeer::TEMPERATURE => 10, DsTemperatureSensorPeer::HIGH_LIMIT => 11, DsTemperatureSensorPeer::POSITION => 12, DsTemperatureSensorPeer::DATA_COLLECTED_AT => 13, DsTemperatureSensorPeer::NOTIFY_AFTER => 14, DsTemperatureSensorPeer::NOTIFY_STARTED_AT => 15, DsTemperatureSensorPeer::IS_ENABLED => 16, DsTemperatureSensorPeer::CREATED_AT => 17, DsTemperatureSensorPeer::UPDATED_AT => 18, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'UID' => 1, 'GROUP' => 2, 'CONTROLLER' => 3, 'MAIN_STORE' => 4, 'OUTPUT_NUMBER' => 5, 'NAME' => 6, 'DESCRIPTION' => 7, 'STATE' => 8, 'LOW_LIMIT' => 9, 'TEMPERATURE' => 10, 'HIGH_LIMIT' => 11, 'POSITION' => 12, 'DATA_COLLECTED_AT' => 13, 'NOTIFY_AFTER' => 14, 'NOTIFY_STARTED_AT' => 15, 'IS_ENABLED' => 16, 'CREATED_AT' => 17, 'UPDATED_AT' => 18, ),
+        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'uid' => 1, 'group' => 2, 'controller' => 3, 'main_store' => 4, 'output_number' => 5, 'name' => 6, 'description' => 7, 'state' => 8, 'low_limit' => 9, 'temperature' => 10, 'high_limit' => 11, 'position' => 12, 'data_collected_at' => 13, 'notify_after' => 14, 'notify_started_at' => 15, 'is_enabled' => 16, 'created_at' => 17, 'updated_at' => 18, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, )
     );
 
     /**
@@ -214,6 +223,9 @@ abstract class BaseDsTemperatureSensorPeer
             $criteria->addSelectColumn(DsTemperatureSensorPeer::TEMPERATURE);
             $criteria->addSelectColumn(DsTemperatureSensorPeer::HIGH_LIMIT);
             $criteria->addSelectColumn(DsTemperatureSensorPeer::POSITION);
+            $criteria->addSelectColumn(DsTemperatureSensorPeer::DATA_COLLECTED_AT);
+            $criteria->addSelectColumn(DsTemperatureSensorPeer::NOTIFY_AFTER);
+            $criteria->addSelectColumn(DsTemperatureSensorPeer::NOTIFY_STARTED_AT);
             $criteria->addSelectColumn(DsTemperatureSensorPeer::IS_ENABLED);
             $criteria->addSelectColumn(DsTemperatureSensorPeer::CREATED_AT);
             $criteria->addSelectColumn(DsTemperatureSensorPeer::UPDATED_AT);
@@ -231,6 +243,9 @@ abstract class BaseDsTemperatureSensorPeer
             $criteria->addSelectColumn($alias . '.temperature');
             $criteria->addSelectColumn($alias . '.high_limit');
             $criteria->addSelectColumn($alias . '.position');
+            $criteria->addSelectColumn($alias . '.data_collected_at');
+            $criteria->addSelectColumn($alias . '.notify_after');
+            $criteria->addSelectColumn($alias . '.notify_started_at');
             $criteria->addSelectColumn($alias . '.is_enabled');
             $criteria->addSelectColumn($alias . '.created_at');
             $criteria->addSelectColumn($alias . '.updated_at');

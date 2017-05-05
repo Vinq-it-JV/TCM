@@ -27,9 +27,14 @@ use StoreBundle\Model\Store;
  * @method ControllerBoxQuery orderByVersion($order = Criteria::ASC) Order by the version column
  * @method ControllerBoxQuery orderByName($order = Criteria::ASC) Order by the name column
  * @method ControllerBoxQuery orderByDescription($order = Criteria::ASC) Order by the description column
+ * @method ControllerBoxQuery orderByState($order = Criteria::ASC) Order by the state column
  * @method ControllerBoxQuery orderByInternalTemperature($order = Criteria::ASC) Order by the internal_temperature column
  * @method ControllerBoxQuery orderByUid($order = Criteria::ASC) Order by the uid column
  * @method ControllerBoxQuery orderByPosition($order = Criteria::ASC) Order by the position column
+ * @method ControllerBoxQuery orderByDataCollectedAt($order = Criteria::ASC) Order by the data_collected_at column
+ * @method ControllerBoxQuery orderByNotifyAfter($order = Criteria::ASC) Order by the notify_after column
+ * @method ControllerBoxQuery orderByNotifyStartedAt($order = Criteria::ASC) Order by the notify_started_at column
+ * @method ControllerBoxQuery orderByNotification($order = Criteria::ASC) Order by the notification column
  * @method ControllerBoxQuery orderByIsEnabled($order = Criteria::ASC) Order by the is_enabled column
  * @method ControllerBoxQuery orderByIsDeleted($order = Criteria::ASC) Order by the is_deleted column
  * @method ControllerBoxQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
@@ -41,9 +46,14 @@ use StoreBundle\Model\Store;
  * @method ControllerBoxQuery groupByVersion() Group by the version column
  * @method ControllerBoxQuery groupByName() Group by the name column
  * @method ControllerBoxQuery groupByDescription() Group by the description column
+ * @method ControllerBoxQuery groupByState() Group by the state column
  * @method ControllerBoxQuery groupByInternalTemperature() Group by the internal_temperature column
  * @method ControllerBoxQuery groupByUid() Group by the uid column
  * @method ControllerBoxQuery groupByPosition() Group by the position column
+ * @method ControllerBoxQuery groupByDataCollectedAt() Group by the data_collected_at column
+ * @method ControllerBoxQuery groupByNotifyAfter() Group by the notify_after column
+ * @method ControllerBoxQuery groupByNotifyStartedAt() Group by the notify_started_at column
+ * @method ControllerBoxQuery groupByNotification() Group by the notification column
  * @method ControllerBoxQuery groupByIsEnabled() Group by the is_enabled column
  * @method ControllerBoxQuery groupByIsDeleted() Group by the is_deleted column
  * @method ControllerBoxQuery groupByCreatedAt() Group by the created_at column
@@ -77,9 +87,14 @@ use StoreBundle\Model\Store;
  * @method ControllerBox findOneByVersion(int $version) Return the first ControllerBox filtered by the version column
  * @method ControllerBox findOneByName(string $name) Return the first ControllerBox filtered by the name column
  * @method ControllerBox findOneByDescription(string $description) Return the first ControllerBox filtered by the description column
+ * @method ControllerBox findOneByState(int $state) Return the first ControllerBox filtered by the state column
  * @method ControllerBox findOneByInternalTemperature(string $internal_temperature) Return the first ControllerBox filtered by the internal_temperature column
  * @method ControllerBox findOneByUid(string $uid) Return the first ControllerBox filtered by the uid column
  * @method ControllerBox findOneByPosition(int $position) Return the first ControllerBox filtered by the position column
+ * @method ControllerBox findOneByDataCollectedAt(string $data_collected_at) Return the first ControllerBox filtered by the data_collected_at column
+ * @method ControllerBox findOneByNotifyAfter(int $notify_after) Return the first ControllerBox filtered by the notify_after column
+ * @method ControllerBox findOneByNotifyStartedAt(string $notify_started_at) Return the first ControllerBox filtered by the notify_started_at column
+ * @method ControllerBox findOneByNotification(int $notification) Return the first ControllerBox filtered by the notification column
  * @method ControllerBox findOneByIsEnabled(boolean $is_enabled) Return the first ControllerBox filtered by the is_enabled column
  * @method ControllerBox findOneByIsDeleted(boolean $is_deleted) Return the first ControllerBox filtered by the is_deleted column
  * @method ControllerBox findOneByCreatedAt(string $created_at) Return the first ControllerBox filtered by the created_at column
@@ -91,9 +106,14 @@ use StoreBundle\Model\Store;
  * @method array findByVersion(int $version) Return ControllerBox objects filtered by the version column
  * @method array findByName(string $name) Return ControllerBox objects filtered by the name column
  * @method array findByDescription(string $description) Return ControllerBox objects filtered by the description column
+ * @method array findByState(int $state) Return ControllerBox objects filtered by the state column
  * @method array findByInternalTemperature(string $internal_temperature) Return ControllerBox objects filtered by the internal_temperature column
  * @method array findByUid(string $uid) Return ControllerBox objects filtered by the uid column
  * @method array findByPosition(int $position) Return ControllerBox objects filtered by the position column
+ * @method array findByDataCollectedAt(string $data_collected_at) Return ControllerBox objects filtered by the data_collected_at column
+ * @method array findByNotifyAfter(int $notify_after) Return ControllerBox objects filtered by the notify_after column
+ * @method array findByNotifyStartedAt(string $notify_started_at) Return ControllerBox objects filtered by the notify_started_at column
+ * @method array findByNotification(int $notification) Return ControllerBox objects filtered by the notification column
  * @method array findByIsEnabled(boolean $is_enabled) Return ControllerBox objects filtered by the is_enabled column
  * @method array findByIsDeleted(boolean $is_deleted) Return ControllerBox objects filtered by the is_deleted column
  * @method array findByCreatedAt(string $created_at) Return ControllerBox objects filtered by the created_at column
@@ -203,7 +223,7 @@ abstract class BaseControllerBoxQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `group`, `main_store`, `version`, `name`, `description`, `internal_temperature`, `uid`, `position`, `is_enabled`, `is_deleted`, `created_at`, `updated_at` FROM `controller_box` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `group`, `main_store`, `version`, `name`, `description`, `state`, `internal_temperature`, `uid`, `position`, `data_collected_at`, `notify_after`, `notify_started_at`, `notification`, `is_enabled`, `is_deleted`, `created_at`, `updated_at` FROM `controller_box` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -523,6 +543,48 @@ abstract class BaseControllerBoxQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query on the state column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByState(1234); // WHERE state = 1234
+     * $query->filterByState(array(12, 34)); // WHERE state IN (12, 34)
+     * $query->filterByState(array('min' => 12)); // WHERE state >= 12
+     * $query->filterByState(array('max' => 12)); // WHERE state <= 12
+     * </code>
+     *
+     * @param     mixed $state The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ControllerBoxQuery The current query, for fluid interface
+     */
+    public function filterByState($state = null, $comparison = null)
+    {
+        if (is_array($state)) {
+            $useMinMax = false;
+            if (isset($state['min'])) {
+                $this->addUsingAlias(ControllerBoxPeer::STATE, $state['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($state['max'])) {
+                $this->addUsingAlias(ControllerBoxPeer::STATE, $state['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(ControllerBoxPeer::STATE, $state, $comparison);
+    }
+
+    /**
      * Filter the query on the internal_temperature column
      *
      * Example usage:
@@ -620,6 +682,176 @@ abstract class BaseControllerBoxQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(ControllerBoxPeer::POSITION, $position, $comparison);
+    }
+
+    /**
+     * Filter the query on the data_collected_at column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByDataCollectedAt('2011-03-14'); // WHERE data_collected_at = '2011-03-14'
+     * $query->filterByDataCollectedAt('now'); // WHERE data_collected_at = '2011-03-14'
+     * $query->filterByDataCollectedAt(array('max' => 'yesterday')); // WHERE data_collected_at < '2011-03-13'
+     * </code>
+     *
+     * @param     mixed $dataCollectedAt The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ControllerBoxQuery The current query, for fluid interface
+     */
+    public function filterByDataCollectedAt($dataCollectedAt = null, $comparison = null)
+    {
+        if (is_array($dataCollectedAt)) {
+            $useMinMax = false;
+            if (isset($dataCollectedAt['min'])) {
+                $this->addUsingAlias(ControllerBoxPeer::DATA_COLLECTED_AT, $dataCollectedAt['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($dataCollectedAt['max'])) {
+                $this->addUsingAlias(ControllerBoxPeer::DATA_COLLECTED_AT, $dataCollectedAt['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(ControllerBoxPeer::DATA_COLLECTED_AT, $dataCollectedAt, $comparison);
+    }
+
+    /**
+     * Filter the query on the notify_after column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByNotifyAfter(1234); // WHERE notify_after = 1234
+     * $query->filterByNotifyAfter(array(12, 34)); // WHERE notify_after IN (12, 34)
+     * $query->filterByNotifyAfter(array('min' => 12)); // WHERE notify_after >= 12
+     * $query->filterByNotifyAfter(array('max' => 12)); // WHERE notify_after <= 12
+     * </code>
+     *
+     * @param     mixed $notifyAfter The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ControllerBoxQuery The current query, for fluid interface
+     */
+    public function filterByNotifyAfter($notifyAfter = null, $comparison = null)
+    {
+        if (is_array($notifyAfter)) {
+            $useMinMax = false;
+            if (isset($notifyAfter['min'])) {
+                $this->addUsingAlias(ControllerBoxPeer::NOTIFY_AFTER, $notifyAfter['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($notifyAfter['max'])) {
+                $this->addUsingAlias(ControllerBoxPeer::NOTIFY_AFTER, $notifyAfter['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(ControllerBoxPeer::NOTIFY_AFTER, $notifyAfter, $comparison);
+    }
+
+    /**
+     * Filter the query on the notify_started_at column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByNotifyStartedAt('2011-03-14'); // WHERE notify_started_at = '2011-03-14'
+     * $query->filterByNotifyStartedAt('now'); // WHERE notify_started_at = '2011-03-14'
+     * $query->filterByNotifyStartedAt(array('max' => 'yesterday')); // WHERE notify_started_at < '2011-03-13'
+     * </code>
+     *
+     * @param     mixed $notifyStartedAt The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ControllerBoxQuery The current query, for fluid interface
+     */
+    public function filterByNotifyStartedAt($notifyStartedAt = null, $comparison = null)
+    {
+        if (is_array($notifyStartedAt)) {
+            $useMinMax = false;
+            if (isset($notifyStartedAt['min'])) {
+                $this->addUsingAlias(ControllerBoxPeer::NOTIFY_STARTED_AT, $notifyStartedAt['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($notifyStartedAt['max'])) {
+                $this->addUsingAlias(ControllerBoxPeer::NOTIFY_STARTED_AT, $notifyStartedAt['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(ControllerBoxPeer::NOTIFY_STARTED_AT, $notifyStartedAt, $comparison);
+    }
+
+    /**
+     * Filter the query on the notification column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByNotification(1234); // WHERE notification = 1234
+     * $query->filterByNotification(array(12, 34)); // WHERE notification IN (12, 34)
+     * $query->filterByNotification(array('min' => 12)); // WHERE notification >= 12
+     * $query->filterByNotification(array('max' => 12)); // WHERE notification <= 12
+     * </code>
+     *
+     * @param     mixed $notification The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ControllerBoxQuery The current query, for fluid interface
+     */
+    public function filterByNotification($notification = null, $comparison = null)
+    {
+        if (is_array($notification)) {
+            $useMinMax = false;
+            if (isset($notification['min'])) {
+                $this->addUsingAlias(ControllerBoxPeer::NOTIFICATION, $notification['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($notification['max'])) {
+                $this->addUsingAlias(ControllerBoxPeer::NOTIFICATION, $notification['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(ControllerBoxPeer::NOTIFICATION, $notification, $comparison);
     }
 
     /**
