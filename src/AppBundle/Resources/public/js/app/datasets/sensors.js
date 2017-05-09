@@ -137,15 +137,18 @@ angular
                     switch (src.TypeId) {
                         case 2:
                             src.InternalTemperature = angular.copy(dst.InternalTemperature);
+                            src.DataCollectedAt = angular.copy(dst.DataCollectedAt);
                             break;
                         case 3:
                             src.Temperature = angular.copy(dst.Temperature);
                             src.LowLimt = angular.copy(dst.LowLimit);
                             src.HighLimit = angular.copy(dst.HighLimit);
+                            src.DataCollectedAt = angular.copy(dst.DataCollectedAt);
                             break;
                         case 4:
                             src.SwitchState = angular.copy(dst.SwitchState);
                             src.SwitchWhen = angular.copy(dst.SwitchWhen);
+                            src.DataCollectedAt = angular.copy(dst.DataCollectedAt);
                             break;
                         default:
                             break;
