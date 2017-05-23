@@ -121,6 +121,47 @@ class DsTemperatureSensor extends BaseDsTemperatureSensor
     }
 
     /**
+     * getNotificationAfterListArray()
+     * @return array
+     */
+    static public function getNotificationAfterListArray()
+    {
+        $list = [];
+        $list[0]['Name'] = 'NOTIFY_AFTER.DIRECTLY';
+        $list[0]['Value'] = 0;
+        $list[1]['Name'] = 'NOTIFY_AFTER.30_SEC';
+        $list[1]['Value'] = 30;
+        $list[2]['Name'] = 'NOTIFY_AFTER.1_MIN';
+        $list[2]['Value'] = 60;
+        $list[3]['Name'] = 'NOTIFY_AFTER.2_MIN';
+        $list[3]['Value'] = 120;
+        $list[4]['Name'] = 'NOTIFY_AFTER.5_MIN';
+        $list[4]['Value'] = 300;
+        $list[5]['Name'] = 'NOTIFY_AFTER.10_MIN';
+        $list[5]['Value'] = 600;
+        $list[6]['Name'] = 'NOTIFY_AFTER.15_MIN';
+        $list[6]['Value'] = 900;
+        $list[7]['Name'] = 'NOTIFY_AFTER.30_MIN';
+        $list[7]['Value'] = 1800;
+        $list[8]['Name'] = 'NOTIFY_AFTER.1_HOUR';
+        $list[8]['Value'] = 3600;
+        $list[9]['Name'] = 'NOTIFY_AFTER.2_HOUR';
+        $list[9]['Value'] = 7200;
+        $list[10]['Name'] = 'NOTIFY_AFTER.5_HOUR';
+        $list[10]['Value'] = 18000;
+        $list[11]['Name'] = 'NOTIFY_AFTER.10_HOUR';
+        $list[11]['Value'] = 36000;
+        $list[12]['Name'] = 'NOTIFY_AFTER.1_DAY';
+        $list[12]['Value'] = 86400;
+        $list[13]['Name'] = 'NOTIFY_AFTER.NEVER';
+        $list[13]['Value'] = -1;
+
+        $arr = [];
+        $arr['notify_after'] = $list;
+        return $arr;
+    }
+
+    /**
      * hasOpenNotification
      * @return bool
      */

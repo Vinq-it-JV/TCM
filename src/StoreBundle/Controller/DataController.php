@@ -7,7 +7,6 @@ use CompanyBundle\Model\Company;
 use CompanyBundle\Model\CompanyQuery;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use StoreBundle\Model\Store;
 use StoreBundle\Model\StoreQuery;
 use StoreBundle\Model\StoreType;
@@ -342,7 +341,7 @@ class DataController extends Controller
                     $country = CountriesQuery::create()->findOneByCountryCode($address->Country);
                     if (!empty($country))
                         $_address->setCountry($country->getId());
-                    $_address->setMapUrl($address->MapUrl);
+                    $_address->setMapCoordinates($address->MapCoordinates);
                     $_address->save();
                     $store->addAddress($_address);
                 }

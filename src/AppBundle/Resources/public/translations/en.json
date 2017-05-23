@@ -5,6 +5,7 @@
     "CLOSE": "Close",
     "HOME": "Home",
     "INFO": "Info",
+    "DETAILS": "Details",
     "MENU": "Menu",
     "PLEASE_WAIT": "Please wait...",
     "SHOW_DETAILS": "Show details",
@@ -75,6 +76,10 @@
         "BAR": {
             "NAME": "Bar",
             "DESCRIPTION": "This is a bar."
+        },
+        "SERVICE": {
+            "NAME": "Service",
+            "DESCRIPTION": "This is a service company."
         }
     },
     "STORE_TYPE": {
@@ -82,6 +87,22 @@
             "NAME": "Bar",
             "DESCRIPTION": "This is a bar."
         }
+    },
+    "NOTIFY_AFTER": {
+        "DIRECTLY": "Directly",
+        "30_SEC": "30 sec.",
+        "1_MIN": "1 min.",
+        "2_MIN": "2 min.",
+        "5_MIN": "5 min.",
+        "10_MIN": "10 min.",
+        "15_MIN": "15 min.",
+        "30_MIN": "30 min.",
+        "1_HOUR": "1 hr.",
+        "2_HOUR": "2 hr.",
+        "5_HOUR": "5 hr.",
+        "10_HOUR": "10 hr.",
+        "1_DAY": "1 day.",
+        "NEVER": "Never"
     },
     "USER": {
         "LABEL": "User",
@@ -104,7 +125,7 @@
         "POSTAL_CODE": "Postal code",
         "CITY": "City",
         "COUNTRY": "Country",
-        "MAP_URL": "Map URL",
+        "MAP_COORDINATES": "Map coordinates",
         "ROLES": "Roles",
         "LANGUAGE": "Language",
         "NEW_PASSWORD": "New password"
@@ -134,7 +155,9 @@
         "REGION": "Region",
         "NAME": "Name",
         "EMAIL": "Email",
+        "EMAILS": "Emails",
         "PHONE": "Phone number",
+        "PHONES": "Phone numbers",
         "ADDRESS": "Address",
         "ADDRESS_TYPE": "Address type",
         "ADDRESSES": "Addresses",
@@ -142,7 +165,8 @@
         "POSTAL_CODE": "Postal code",
         "CITY": "City",
         "COUNTRY": "Country",
-        "MAP_URL": "Map URL",
+        "MAP": "Map",
+        "MAP_COORDINATES": "Map coordinates",
         "OWNERS": "Owners",
         "CONTACTS": "Contacts",
         "INFORMANTS": "Informants",
@@ -164,8 +188,10 @@
         "REGIONS": "Regions",
         "REGION": "Region",
         "NAME": "Name",
+        "EMAILS": "Emails",
         "EMAIL": "Email",
         "PHONE": "Phone number",
+        "PHONES": "Phone numbers",
         "ADDRESS": "Address",
         "ADDRESS_TYPE": "Address type",
         "ADDRESSES": "Addresses",
@@ -173,7 +199,8 @@
         "POSTAL_CODE": "Postal code",
         "CITY": "City",
         "COUNTRY": "Country",
-        "MAP_URL": "Map URL",
+        "MAP": "Map",
+        "MAP_COORDINATES": "Map coordinates",
         "OWNERS": "Owners",
         "CONTACTS": "Contacts",
         "INFORMANTS": "Informants",
@@ -214,6 +241,7 @@
         "HIGH": "High",
         "LOW": "Low",
         "LAST_UPDATED": "Last updated on: ",
+        "NOTIFY_AFTER": "Notify after",
         "STATE": {
             "LABEL": "State",
             "ACTIVE": "Active",

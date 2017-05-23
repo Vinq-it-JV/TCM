@@ -79,6 +79,18 @@
                                    ng-model="currentDevice.HighLimit" validation="integer_signed|required" no-enter/>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-2"
+                               ng-cloak>{{ ng.translate('SENSOR.NOTIFY_AFTER') }}</label>
+                        <div class="col-md-2">
+                            {% verbatim %}
+                            <ui-select ng-model="currentDevice.NotifyAfter" search-enabled="false" theme="select2" style="width:100%;">
+                                <ui-select-match placeholder="{{ 'SELECT' | translate }}" ng-cloak>{{ $select.selected.Name | translate }}</ui-select-match>
+                                <ui-select-choices repeat="item.Value as item in stores.lists().notify_after" ng-cloak>{{ item.Name | translate }}</ui-select-choices>
+                            </ui-select>
+                            {% endverbatim %}
+                        </div>
+                    </div>
                 </div>
                 <div ng-switch-when="4">
                     <div class="form-group">
@@ -92,6 +104,18 @@
                                     on-label="{{ 'SENSOR.HIGH' | translate }}"
                                     off-label="{{ 'SENSOR.LOW' | translate }}" ng-cloak>
                             </toggle-switch>
+                            {% endverbatim %}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-2"
+                               ng-cloak>{{ ng.translate('SENSOR.NOTIFY_AFTER') }}</label>
+                        <div class="col-md-2">
+                            {% verbatim %}
+                            <ui-select ng-model="currentDevice.NotifyAfter" search-enabled="false" theme="select2" style="width:100%;">
+                                <ui-select-match placeholder="{{ 'SELECT' | translate }}" ng-cloak>{{ $select.selected.Name | translate }}</ui-select-match>
+                                <ui-select-choices repeat="item.Value as item in stores.lists().notify_after" ng-cloak>{{ item.Name | translate }}</ui-select-choices>
+                            </ui-select>
                             {% endverbatim %}
                         </div>
                     </div>

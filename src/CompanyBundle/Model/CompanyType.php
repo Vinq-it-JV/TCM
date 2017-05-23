@@ -6,8 +6,13 @@ use CompanyBundle\Model\om\BaseCompanyType;
 
 class CompanyType extends BaseCompanyType
 {
+    const BAR_ID = 1;
     const BAR_NAME = "COMPANY_TYPE.BAR.NAME";
     const BAR_DESCRIPTION = "COMPANY_TYPE.BAR.DESCRIPTION";
+
+    const SERVICE_ID = 2;
+    const SERVICE_NAME = "COMPANY_TYPE.SERVICE.NAME";
+    const SERVICE_DESCRIPTION = "COMPANY_TYPE.SERVICE.DESCRIPTION";
 
     /**
      * getCompanyTypeListArray()

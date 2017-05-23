@@ -206,7 +206,7 @@
 
         {# Addresses block #}
         <h5 ng-cloak>
-            <i class="fa fa-envelope fa-fw"></i> {{ ng.translate('STORE.ADDRESSES') }}
+            <i class="fa fa-map-marker fa-fw"></i> {{ ng.translate('STORE.ADDRESSES') }}
         </h5>
         <hr/>
         {% verbatim %}
@@ -304,13 +304,13 @@
                     </div>
                     <div class="form-group">
                         <label class="control-label col-md-2 col-xs-12"
-                               ng-cloak>{{ 'STORE.MAP_URL' | translate }}</label>
+                               ng-cloak>{{ 'STORE.MAP_COORDINATES' | translate }}</label>
                         <div class="col-md-10 col-xs-12">
                             <div class="row">
                                 <div class="col-md-12 col-xs-12">
                                     <input class="form-control input-sm"
-                                           name="addresses[{{ address.Id }}][MapUrl]"
-                                           ng-model="address.MapUrl" no-enter/>
+                                           name="addresses[{{ address.Id }}][MapCoordinates]"
+                                           ng-model="address.MapCoordinates" no-enter/>
                                 </div>
                             </div>
                         </div>

@@ -28,8 +28,10 @@ class DBaseCommand extends ContainerAwareCommand
 
     protected function configCompanyTypeList()
     {
-        $this->companyTypeArr['BAR']['Name'] = CompanyType::BAR_NAME;
-        $this->companyTypeArr['BAR']['Description'] = CompanyType::BAR_DESCRIPTION;
+        $this->companyTypeArr[CompanyType::BAR_ID]['Name'] = CompanyType::BAR_NAME;
+        $this->companyTypeArr[CompanyType::BAR_ID]['Description'] = CompanyType::BAR_DESCRIPTION;
+        $this->companyTypeArr[CompanyType::SERVICE_ID]['Name'] = CompanyType::SERVICE_NAME;
+        $this->companyTypeArr[CompanyType::SERVICE_ID]['Description'] = CompanyType::SERVICE_DESCRIPTION;
     }
 
     protected function configPaymentMethodsList()
@@ -58,7 +60,7 @@ class DBaseCommand extends ContainerAwareCommand
     {
         foreach ($this->companyTypeArr as $k => $type) {
             $_type = CompanyTypeQuery::create()
-                ->findOneByName($type['Name']);
+                ->findOneById($k);
             if (empty($_type)) {
                 $_type = new CompanyType();
                 $_type

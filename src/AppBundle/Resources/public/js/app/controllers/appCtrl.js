@@ -28,6 +28,8 @@ angular
             $scope.requestType = '';
             $scope.callBack = null;
 
+            $scope.googleMapsUrl="https://maps.googleapis.com/maps/api/js?key=AIzaSyBymcDVdM8D5fZP4PGEksuxj8UqMzrS7bA";
+
             $rootScope.$on("$translateChangeSuccess", function () {
                 $scope.languageLoaded = true;
                 $rootScope.$broadcast("languageLoaded");

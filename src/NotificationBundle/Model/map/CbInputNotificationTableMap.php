@@ -44,7 +44,7 @@ class CbInputNotificationTableMap extends TableMap
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
         $this->addForeignKey('sensor', 'Sensor', 'INTEGER', 'cb_input', 'id', false, null, null);
-        $this->addColumn('switch_state', 'SwitchState', 'VARCHAR', false, 10, '0');
+        $this->addColumn('switch_state', 'SwitchState', 'BOOLEAN', false, 1, false);
         $this->addColumn('reason', 'Reason', 'INTEGER', false, null, 0);
         $this->addColumn('is_handled', 'IsHandled', 'BOOLEAN', false, 1, false);
         $this->addForeignKey('handled_by', 'HandledBy', 'INTEGER', 'user', 'id', false, null, null);

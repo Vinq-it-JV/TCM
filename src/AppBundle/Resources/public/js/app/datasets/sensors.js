@@ -49,6 +49,12 @@ angular
                 sensors: function () {
                     return d_sensors;
                 },
+                sensorGroup: function (id) {
+                    var index = recordOnIndex(id);
+                    if (index === -1)
+                        return null;
+                    return d_sensors[index];
+                },
                 sensor: function () {
                     return d_sensor;
                 },
@@ -119,7 +125,7 @@ angular
                                 var _sensor = sensordata[group].devices[sensor];
                                 var __sensor = this.findSensor(_sensor.Id, _sensor.Uid, _sensor.TypeId);
                                 if (this.isValidObject(__sensor)) {
-                                    this.copySensorValues(__sensor, _sensor);
+                                    this.copySensorValues(_sensor, __sensor);
                                     charts.updateSensorObject(__sensor);
                                 }
                             }
@@ -127,7 +133,7 @@ angular
                         else {
                             var __sensor = this.findSensor(_sensor.Id, _sensor.Uid, _sensor.TypeId);
                             if (this.isValidObject(__sensor)) {
-                                this.copySensorValues(__sensor, _sensor);
+                                this.copySensorValues(_sensor, __sensor);
                                 charts.updateSensorObject(__sensor);
                             }
                         }
@@ -136,19 +142,21 @@ angular
                 copySensorValues: function (src, dst) {
                     switch (src.TypeId) {
                         case 2:
-                            src.InternalTemperature = angular.copy(dst.InternalTemperature);
-                            src.DataCollectedAt = angular.copy(dst.DataCollectedAt);
+                            dst.Name = angular.copy(src.Name);
+                            dst.InternalTemperature = angular.copy(src.InternalTemperature);
+                            dst.DataCollectedAt = angular.copy(src.DataCollectedAt);
                             break;
                         case 3:
-                            src.Temperature = angular.copy(dst.Temperature);
-                            src.LowLimt = angular.copy(dst.LowLimit);
-                            src.HighLimit = angular.copy(dst.HighLimit);
-                            src.DataCollectedAt = angular.copy(dst.DataCollectedAt);
+                            dst.Name = angular.copy(src.Name);
+                            dst.Temperature = angular.copy(src.Temperature);
+                            dst.LowLimt = angular.copy(src.LowLimit);
+                            dst.HighLimit = angular.copy(src.HighLimit);
+                            dst.DataCollectedAt = angular.copy(src.DataCollectedAt);
                             break;
                         case 4:
-                            src.SwitchState = angular.copy(dst.SwitchState);
-                            src.SwitchWhen = angular.copy(dst.SwitchWhen);
-                            src.DataCollectedAt = angular.copy(dst.DataCollectedAt);
+                            dst.SwitchState = angular.copy(src.SwitchState);
+                            dst.SwitchWhen = angular.copy(src.SwitchWhen);
+                            dst.DataCollectedAt = angular.copy(src.DataCollectedAt);
                             break;
                         default:
                             break;
@@ -160,8 +168,9 @@ angular
                         if (_sensor.TypeId == 1) {
                             for (sensor in d_sensors[group].devices) {
                                 var _sensor = d_sensors[group].devices[sensor];
-                                if ((_sensor.Id == id) && (_sensor.Uid == uid) && (_sensor.TypeId == typeid))
+                                if ((_sensor.Id == id) && (_sensor.Uid == uid) && (_sensor.TypeId == typeid)) {
                                     return _sensor;
+                                }
                             }
                         }
                         else {

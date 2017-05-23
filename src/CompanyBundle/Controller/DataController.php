@@ -335,7 +335,7 @@ class DataController extends Controller
                     $country = CountriesQuery::create()->findOneByCountryCode($address->Country);
                     if (!empty($country))
                         $_address->setCountry($country->getId());
-                    $_address->setMapUrl($address->MapUrl);
+                    $_address->setMapCoordinates($address->MapCoordinates);
                     $_address->save();
                     $company->addAddress($_address);
                 }

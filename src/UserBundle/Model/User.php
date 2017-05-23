@@ -2,7 +2,10 @@
 
 namespace UserBundle\Model;
 
+use CompanyBundle\Model\Company;
 use CompanyBundle\Model\CompanyQuery;
+use CompanyBundle\Model\CompanyType;
+use CompanyBundle\Model\CompanyTypeQuery;
 use \PropelPDO;
 use UserBundle\Model\om\BaseUser;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
@@ -318,8 +321,11 @@ class User extends BaseUser implements AdvancedUserInterface
     static public function getInformantsListArray()
     {
         $informantsArr = [];
+
+        $companyType = CompanyTypeQuery::create()->findOneById(CompanyType::SERVICE_ID);
         $companies = CompanyQuery::create()
             ->filterByIsEnabled(true)
+            ->filterByCompanyType($companyType)
                 ->useCompanyInformantQuery()
                     ->useInformantQuery()
                         ->useUserRoleQuery()

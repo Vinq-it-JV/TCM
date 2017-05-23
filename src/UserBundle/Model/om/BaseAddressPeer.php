@@ -65,8 +65,8 @@ abstract class BaseAddressPeer
     /** the column name for the country field */
     const COUNTRY = 'address.country';
 
-    /** the column name for the map_url field */
-    const MAP_URL = 'address.map_url';
+    /** the column name for the map_coordinates field */
+    const MAP_COORDINATES = 'address.map_coordinates';
 
     /** the column name for the created_at field */
     const CREATED_AT = 'address.created_at';
@@ -93,11 +93,11 @@ abstract class BaseAddressPeer
      * e.g. AddressPeer::$fieldNames[AddressPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'Type', 'StreetName', 'HouseNumber', 'ExtraInfo', 'PostalCode', 'City', 'Country', 'MapUrl', 'CreatedAt', 'UpdatedAt', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'type', 'streetName', 'houseNumber', 'extraInfo', 'postalCode', 'city', 'country', 'mapUrl', 'createdAt', 'updatedAt', ),
-        BasePeer::TYPE_COLNAME => array (AddressPeer::ID, AddressPeer::TYPE, AddressPeer::STREET_NAME, AddressPeer::HOUSE_NUMBER, AddressPeer::EXTRA_INFO, AddressPeer::POSTAL_CODE, AddressPeer::CITY, AddressPeer::COUNTRY, AddressPeer::MAP_URL, AddressPeer::CREATED_AT, AddressPeer::UPDATED_AT, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'TYPE', 'STREET_NAME', 'HOUSE_NUMBER', 'EXTRA_INFO', 'POSTAL_CODE', 'CITY', 'COUNTRY', 'MAP_URL', 'CREATED_AT', 'UPDATED_AT', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'type', 'street_name', 'house_number', 'extra_info', 'postal_code', 'city', 'country', 'map_url', 'created_at', 'updated_at', ),
+        BasePeer::TYPE_PHPNAME => array ('Id', 'Type', 'StreetName', 'HouseNumber', 'ExtraInfo', 'PostalCode', 'City', 'Country', 'MapCoordinates', 'CreatedAt', 'UpdatedAt', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'type', 'streetName', 'houseNumber', 'extraInfo', 'postalCode', 'city', 'country', 'mapCoordinates', 'createdAt', 'updatedAt', ),
+        BasePeer::TYPE_COLNAME => array (AddressPeer::ID, AddressPeer::TYPE, AddressPeer::STREET_NAME, AddressPeer::HOUSE_NUMBER, AddressPeer::EXTRA_INFO, AddressPeer::POSTAL_CODE, AddressPeer::CITY, AddressPeer::COUNTRY, AddressPeer::MAP_COORDINATES, AddressPeer::CREATED_AT, AddressPeer::UPDATED_AT, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'TYPE', 'STREET_NAME', 'HOUSE_NUMBER', 'EXTRA_INFO', 'POSTAL_CODE', 'CITY', 'COUNTRY', 'MAP_COORDINATES', 'CREATED_AT', 'UPDATED_AT', ),
+        BasePeer::TYPE_FIELDNAME => array ('id', 'type', 'street_name', 'house_number', 'extra_info', 'postal_code', 'city', 'country', 'map_coordinates', 'created_at', 'updated_at', ),
         BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
     );
 
@@ -108,11 +108,11 @@ abstract class BaseAddressPeer
      * e.g. AddressPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Type' => 1, 'StreetName' => 2, 'HouseNumber' => 3, 'ExtraInfo' => 4, 'PostalCode' => 5, 'City' => 6, 'Country' => 7, 'MapUrl' => 8, 'CreatedAt' => 9, 'UpdatedAt' => 10, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'type' => 1, 'streetName' => 2, 'houseNumber' => 3, 'extraInfo' => 4, 'postalCode' => 5, 'city' => 6, 'country' => 7, 'mapUrl' => 8, 'createdAt' => 9, 'updatedAt' => 10, ),
-        BasePeer::TYPE_COLNAME => array (AddressPeer::ID => 0, AddressPeer::TYPE => 1, AddressPeer::STREET_NAME => 2, AddressPeer::HOUSE_NUMBER => 3, AddressPeer::EXTRA_INFO => 4, AddressPeer::POSTAL_CODE => 5, AddressPeer::CITY => 6, AddressPeer::COUNTRY => 7, AddressPeer::MAP_URL => 8, AddressPeer::CREATED_AT => 9, AddressPeer::UPDATED_AT => 10, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'TYPE' => 1, 'STREET_NAME' => 2, 'HOUSE_NUMBER' => 3, 'EXTRA_INFO' => 4, 'POSTAL_CODE' => 5, 'CITY' => 6, 'COUNTRY' => 7, 'MAP_URL' => 8, 'CREATED_AT' => 9, 'UPDATED_AT' => 10, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'type' => 1, 'street_name' => 2, 'house_number' => 3, 'extra_info' => 4, 'postal_code' => 5, 'city' => 6, 'country' => 7, 'map_url' => 8, 'created_at' => 9, 'updated_at' => 10, ),
+        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Type' => 1, 'StreetName' => 2, 'HouseNumber' => 3, 'ExtraInfo' => 4, 'PostalCode' => 5, 'City' => 6, 'Country' => 7, 'MapCoordinates' => 8, 'CreatedAt' => 9, 'UpdatedAt' => 10, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'type' => 1, 'streetName' => 2, 'houseNumber' => 3, 'extraInfo' => 4, 'postalCode' => 5, 'city' => 6, 'country' => 7, 'mapCoordinates' => 8, 'createdAt' => 9, 'updatedAt' => 10, ),
+        BasePeer::TYPE_COLNAME => array (AddressPeer::ID => 0, AddressPeer::TYPE => 1, AddressPeer::STREET_NAME => 2, AddressPeer::HOUSE_NUMBER => 3, AddressPeer::EXTRA_INFO => 4, AddressPeer::POSTAL_CODE => 5, AddressPeer::CITY => 6, AddressPeer::COUNTRY => 7, AddressPeer::MAP_COORDINATES => 8, AddressPeer::CREATED_AT => 9, AddressPeer::UPDATED_AT => 10, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'TYPE' => 1, 'STREET_NAME' => 2, 'HOUSE_NUMBER' => 3, 'EXTRA_INFO' => 4, 'POSTAL_CODE' => 5, 'CITY' => 6, 'COUNTRY' => 7, 'MAP_COORDINATES' => 8, 'CREATED_AT' => 9, 'UPDATED_AT' => 10, ),
+        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'type' => 1, 'street_name' => 2, 'house_number' => 3, 'extra_info' => 4, 'postal_code' => 5, 'city' => 6, 'country' => 7, 'map_coordinates' => 8, 'created_at' => 9, 'updated_at' => 10, ),
         BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
     );
 
@@ -195,7 +195,7 @@ abstract class BaseAddressPeer
             $criteria->addSelectColumn(AddressPeer::POSTAL_CODE);
             $criteria->addSelectColumn(AddressPeer::CITY);
             $criteria->addSelectColumn(AddressPeer::COUNTRY);
-            $criteria->addSelectColumn(AddressPeer::MAP_URL);
+            $criteria->addSelectColumn(AddressPeer::MAP_COORDINATES);
             $criteria->addSelectColumn(AddressPeer::CREATED_AT);
             $criteria->addSelectColumn(AddressPeer::UPDATED_AT);
         } else {
@@ -207,7 +207,7 @@ abstract class BaseAddressPeer
             $criteria->addSelectColumn($alias . '.postal_code');
             $criteria->addSelectColumn($alias . '.city');
             $criteria->addSelectColumn($alias . '.country');
-            $criteria->addSelectColumn($alias . '.map_url');
+            $criteria->addSelectColumn($alias . '.map_coordinates');
             $criteria->addSelectColumn($alias . '.created_at');
             $criteria->addSelectColumn($alias . '.updated_at');
         }

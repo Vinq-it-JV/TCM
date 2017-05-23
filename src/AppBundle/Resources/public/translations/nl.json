@@ -5,6 +5,7 @@
     "CLOSE": "Sluiten",
     "HOME": "Home",
     "INFO": "Info",
+    "DETAILS": "Details",
     "MENU": "Menu",
     "PLEASE_WAIT": "Wachten a.u.b...",
     "SHOW_DETAILS": "Toon details",
@@ -75,6 +76,10 @@
         "BAR": {
             "NAME": "Bar",
             "DESCRIPTION": "Dit is een bar."
+        },
+        "SERVICE": {
+            "NAME": "Dienstverlening",
+            "DESCRIPTION": "Dit is een dienstverlenend bedrijf."
         }
     },
     "STORE_TYPE": {
@@ -82,6 +87,22 @@
             "NAME": "Bar",
             "DESCRIPTION": "Dit is een bar."
         }
+    },
+    "NOTIFY_AFTER": {
+        "DIRECTLY": "Direct",
+        "30_SEC": "30 sec.",
+        "1_MIN": "1 min.",
+        "2_MIN": "2 min.",
+        "5_MIN": "5 min.",
+        "10_MIN": "10 min.",
+        "15_MIN": "15 min.",
+        "30_MIN": "30 min.",
+        "1_HOUR": "1 uur.",
+        "2_HOUR": "2 uur.",
+        "5_HOUR": "5 uur.",
+        "10_HOUR": "10 uur.",
+        "1_DAY": "1 dag.",
+        "NEVER": "Nooit"
     },
     "USER": {
         "LABEL": "Gebruiker",
@@ -104,7 +125,7 @@
         "POSTAL_CODE": "Postcode",
         "CITY": "Stad",
         "COUNTRY": "Land",
-        "MAP_URL": "Kaart URL",
+        "MAP_COORDINATES": "Kaart coördinaten",
         "ROLES": "Rollen",
         "LANGUAGE": "Taal",
         "NEW_PASSWORD": "Nieuw wachtwoord"
@@ -134,7 +155,9 @@
         "REGION": "Regio",
         "NAME": "Naam",
         "EMAIL": "Email",
+        "EMAILS": "Emails",
         "PHONE": "Telefoonnummer",
+        "PHONES": "Telefoonnummers",
         "ADDRESS": "Adres",
         "ADDRESS_TYPE": "Adres type",
         "ADDRESSES": "Adressen",
@@ -142,7 +165,8 @@
         "POSTAL_CODE": "Postcode",
         "CITY": "Stad",
         "COUNTRY": "Land",
-        "MAP_URL": "Kaart URL",
+        "MAP": "Kaart",
+        "MAP_COORDINATES": "Kaart coördinaten",
         "OWNERS": "Eigenaren",
         "CONTACTS": "Contactpersonen",
         "INFORMANTS": "Informanten",
@@ -165,7 +189,9 @@
         "REGION": "Regio",
         "NAME": "Naam",
         "EMAIL": "Email",
+        "EMAILS": "Emails",
         "PHONE": "Telefoonnummer",
+        "PHONES": "Telefoonnummers",
         "ADDRESS": "Adres",
         "ADDRESS_TYPE": "Adres type",
         "ADDRESSES": "Adressen",
@@ -173,7 +199,8 @@
         "POSTAL_CODE": "Postcode",
         "CITY": "Stad",
         "COUNTRY": "Land",
-        "MAP_URL": "Kaart URL",
+        "MAP": "Kaart",
+        "MAP_COORDINATES": "Kaart coördinaten",
         "OWNERS": "Eigenaren",
         "CONTACTS": "Contactpersonen",
         "INFORMANTS": "Informanten",
@@ -214,6 +241,7 @@
         "HIGH": "Hoog",
         "LOW": "Laag",
         "LAST_UPDATED": "Laatste update op: ",
+        "NOTIFY_AFTER": "Notificeer na",
         "STATE": {
             "LABEL": "Status",
             "ACTIVE": "Actief",

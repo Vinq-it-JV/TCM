@@ -103,10 +103,10 @@ abstract class BaseAddress extends BaseObject implements Persistent
     protected $country;
 
     /**
-     * The value for the map_url field.
+     * The value for the map_coordinates field.
      * @var        string
      */
-    protected $map_url;
+    protected $map_coordinates;
 
     /**
      * The value for the created_at field.
@@ -303,14 +303,14 @@ abstract class BaseAddress extends BaseObject implements Persistent
     }
 
     /**
-     * Get the [map_url] column value.
+     * Get the [map_coordinates] column value.
      *
      * @return string
      */
-    public function getMapUrl()
+    public function getMapCoordinates()
     {
 
-        return $this->map_url;
+        return $this->map_coordinates;
     }
 
     /**
@@ -566,25 +566,25 @@ abstract class BaseAddress extends BaseObject implements Persistent
     } // setCountry()
 
     /**
-     * Set the value of [map_url] column.
+     * Set the value of [map_coordinates] column.
      *
      * @param  string $v new value
      * @return Address The current object (for fluent API support)
      */
-    public function setMapUrl($v)
+    public function setMapCoordinates($v)
     {
         if ($v !== null) {
             $v = (string) $v;
         }
 
-        if ($this->map_url !== $v) {
-            $this->map_url = $v;
-            $this->modifiedColumns[] = AddressPeer::MAP_URL;
+        if ($this->map_coordinates !== $v) {
+            $this->map_coordinates = $v;
+            $this->modifiedColumns[] = AddressPeer::MAP_COORDINATES;
         }
 
 
         return $this;
-    } // setMapUrl()
+    } // setMapCoordinates()
 
     /**
      * Sets the value of [created_at] column to a normalized version of the date/time value specified.
@@ -672,7 +672,7 @@ abstract class BaseAddress extends BaseObject implements Persistent
             $this->postal_code = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
             $this->city = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
             $this->country = ($row[$startcol + 7] !== null) ? (int) $row[$startcol + 7] : null;
-            $this->map_url = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
+            $this->map_coordinates = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
             $this->created_at = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
             $this->updated_at = ($row[$startcol + 10] !== null) ? (string) $row[$startcol + 10] : null;
             $this->resetModified();
@@ -1085,8 +1085,8 @@ abstract class BaseAddress extends BaseObject implements Persistent
         if ($this->isColumnModified(AddressPeer::COUNTRY)) {
             $modifiedColumns[':p' . $index++]  = '`country`';
         }
-        if ($this->isColumnModified(AddressPeer::MAP_URL)) {
-            $modifiedColumns[':p' . $index++]  = '`map_url`';
+        if ($this->isColumnModified(AddressPeer::MAP_COORDINATES)) {
+            $modifiedColumns[':p' . $index++]  = '`map_coordinates`';
         }
         if ($this->isColumnModified(AddressPeer::CREATED_AT)) {
             $modifiedColumns[':p' . $index++]  = '`created_at`';
@@ -1129,8 +1129,8 @@ abstract class BaseAddress extends BaseObject implements Persistent
                     case '`country`':
                         $stmt->bindValue($identifier, $this->country, PDO::PARAM_INT);
                         break;
-                    case '`map_url`':
-                        $stmt->bindValue($identifier, $this->map_url, PDO::PARAM_STR);
+                    case '`map_coordinates`':
+                        $stmt->bindValue($identifier, $this->map_coordinates, PDO::PARAM_STR);
                         break;
                     case '`created_at`':
                         $stmt->bindValue($identifier, $this->created_at, PDO::PARAM_STR);
@@ -1333,7 +1333,7 @@ abstract class BaseAddress extends BaseObject implements Persistent
                 return $this->getCountry();
                 break;
             case 8:
-                return $this->getMapUrl();
+                return $this->getMapCoordinates();
                 break;
             case 9:
                 return $this->getCreatedAt();
@@ -1378,7 +1378,7 @@ abstract class BaseAddress extends BaseObject implements Persistent
             $keys[5] => $this->getPostalCode(),
             $keys[6] => $this->getCity(),
             $keys[7] => $this->getCountry(),
-            $keys[8] => $this->getMapUrl(),
+            $keys[8] => $this->getMapCoordinates(),
             $keys[9] => $this->getCreatedAt(),
             $keys[10] => $this->getUpdatedAt(),
         );
@@ -1459,7 +1459,7 @@ abstract class BaseAddress extends BaseObject implements Persistent
                 $this->setCountry($value);
                 break;
             case 8:
-                $this->setMapUrl($value);
+                $this->setMapCoordinates($value);
                 break;
             case 9:
                 $this->setCreatedAt($value);
@@ -1499,7 +1499,7 @@ abstract class BaseAddress extends BaseObject implements Persistent
         if (array_key_exists($keys[5], $arr)) $this->setPostalCode($arr[$keys[5]]);
         if (array_key_exists($keys[6], $arr)) $this->setCity($arr[$keys[6]]);
         if (array_key_exists($keys[7], $arr)) $this->setCountry($arr[$keys[7]]);
-        if (array_key_exists($keys[8], $arr)) $this->setMapUrl($arr[$keys[8]]);
+        if (array_key_exists($keys[8], $arr)) $this->setMapCoordinates($arr[$keys[8]]);
         if (array_key_exists($keys[9], $arr)) $this->setCreatedAt($arr[$keys[9]]);
         if (array_key_exists($keys[10], $arr)) $this->setUpdatedAt($arr[$keys[10]]);
     }
@@ -1521,7 +1521,7 @@ abstract class BaseAddress extends BaseObject implements Persistent
         if ($this->isColumnModified(AddressPeer::POSTAL_CODE)) $criteria->add(AddressPeer::POSTAL_CODE, $this->postal_code);
         if ($this->isColumnModified(AddressPeer::CITY)) $criteria->add(AddressPeer::CITY, $this->city);
         if ($this->isColumnModified(AddressPeer::COUNTRY)) $criteria->add(AddressPeer::COUNTRY, $this->country);
-        if ($this->isColumnModified(AddressPeer::MAP_URL)) $criteria->add(AddressPeer::MAP_URL, $this->map_url);
+        if ($this->isColumnModified(AddressPeer::MAP_COORDINATES)) $criteria->add(AddressPeer::MAP_COORDINATES, $this->map_coordinates);
         if ($this->isColumnModified(AddressPeer::CREATED_AT)) $criteria->add(AddressPeer::CREATED_AT, $this->created_at);
         if ($this->isColumnModified(AddressPeer::UPDATED_AT)) $criteria->add(AddressPeer::UPDATED_AT, $this->updated_at);
 
@@ -1594,7 +1594,7 @@ abstract class BaseAddress extends BaseObject implements Persistent
         $copyObj->setPostalCode($this->getPostalCode());
         $copyObj->setCity($this->getCity());
         $copyObj->setCountry($this->getCountry());
-        $copyObj->setMapUrl($this->getMapUrl());
+        $copyObj->setMapCoordinates($this->getMapCoordinates());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
 
@@ -3080,7 +3080,7 @@ abstract class BaseAddress extends BaseObject implements Persistent
         $this->postal_code = null;
         $this->city = null;
         $this->country = null;
-        $this->map_url = null;
+        $this->map_coordinates = null;
         $this->created_at = null;
         $this->updated_at = null;
         $this->alreadyInSave = false;

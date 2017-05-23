@@ -19,7 +19,7 @@
     <table name="cb_input_notification">
         <column name="id" type="integer" primaryKey="true" autoIncrement="true"/>
         <column name="sensor" type="integer"/>
-        <column name="switch_state" type="varchar" size="10" default="0"/>
+        <column name="switch_state" type='boolean' default='false'/>
         <column name="reason" type="integer" default="0"/>
         <column name="is_handled" type='boolean' default='false'/>
         <column name="handled_by" type='integer'/>

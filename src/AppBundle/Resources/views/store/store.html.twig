@@ -10,17 +10,18 @@
             {% endblock %}
 
             {% block page %}
-                <div class="page">
-                    <div ng-switch="activePage">
-                        <div ng-switch-when="dashboard">
-                            {% include 'AppBundle:store:dashboard.html.twig' %}
-                        </div>
-                        <div ng-switch-when="sensors">
-                            {% include 'AppBundle:store:sensors.html.twig' %}
-                        </div>
-                        <div ng-switch-when="groupSensors">
-                            {% include 'AppBundle:store:group_sensors.html.twig' %}
-                        </div>
+                <div class="page" ng-switch="activePage">
+                    <div ng-switch-when="dashboard">
+                        {% include 'AppBundle:store:dashboard.html.twig' %}
+                    </div>
+                    <div ng-switch-when="information">
+                        {% include 'AppBundle:store:information.html.twig' %}
+                    </div>
+                    <div ng-switch-when="sensors">
+                        {% include 'AppBundle:store:sensors.html.twig' %}
+                    </div>
+                    <div ng-switch-when="groupSensors">
+                        {% include 'AppBundle:store:group_sensors.html.twig' %}
                     </div>
                 </div>
             {% endblock %}

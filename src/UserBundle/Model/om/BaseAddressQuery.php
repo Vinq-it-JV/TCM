@@ -32,7 +32,7 @@ use UserBundle\Model\UserAddress;
  * @method AddressQuery orderByPostalCode($order = Criteria::ASC) Order by the postal_code column
  * @method AddressQuery orderByCity($order = Criteria::ASC) Order by the city column
  * @method AddressQuery orderByCountry($order = Criteria::ASC) Order by the country column
- * @method AddressQuery orderByMapUrl($order = Criteria::ASC) Order by the map_url column
+ * @method AddressQuery orderByMapCoordinates($order = Criteria::ASC) Order by the map_coordinates column
  * @method AddressQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
  * @method AddressQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
  *
@@ -44,7 +44,7 @@ use UserBundle\Model\UserAddress;
  * @method AddressQuery groupByPostalCode() Group by the postal_code column
  * @method AddressQuery groupByCity() Group by the city column
  * @method AddressQuery groupByCountry() Group by the country column
- * @method AddressQuery groupByMapUrl() Group by the map_url column
+ * @method AddressQuery groupByMapCoordinates() Group by the map_coordinates column
  * @method AddressQuery groupByCreatedAt() Group by the created_at column
  * @method AddressQuery groupByUpdatedAt() Group by the updated_at column
  *
@@ -78,7 +78,7 @@ use UserBundle\Model\UserAddress;
  * @method Address findOneByPostalCode(string $postal_code) Return the first Address filtered by the postal_code column
  * @method Address findOneByCity(string $city) Return the first Address filtered by the city column
  * @method Address findOneByCountry(int $country) Return the first Address filtered by the country column
- * @method Address findOneByMapUrl(string $map_url) Return the first Address filtered by the map_url column
+ * @method Address findOneByMapCoordinates(string $map_coordinates) Return the first Address filtered by the map_coordinates column
  * @method Address findOneByCreatedAt(string $created_at) Return the first Address filtered by the created_at column
  * @method Address findOneByUpdatedAt(string $updated_at) Return the first Address filtered by the updated_at column
  *
@@ -90,7 +90,7 @@ use UserBundle\Model\UserAddress;
  * @method array findByPostalCode(string $postal_code) Return Address objects filtered by the postal_code column
  * @method array findByCity(string $city) Return Address objects filtered by the city column
  * @method array findByCountry(int $country) Return Address objects filtered by the country column
- * @method array findByMapUrl(string $map_url) Return Address objects filtered by the map_url column
+ * @method array findByMapCoordinates(string $map_coordinates) Return Address objects filtered by the map_coordinates column
  * @method array findByCreatedAt(string $created_at) Return Address objects filtered by the created_at column
  * @method array findByUpdatedAt(string $updated_at) Return Address objects filtered by the updated_at column
  */
@@ -198,7 +198,7 @@ abstract class BaseAddressQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `type`, `street_name`, `house_number`, `extra_info`, `postal_code`, `city`, `country`, `map_url`, `created_at`, `updated_at` FROM `address` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `type`, `street_name`, `house_number`, `extra_info`, `postal_code`, `city`, `country`, `map_coordinates`, `created_at`, `updated_at` FROM `address` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -561,32 +561,32 @@ abstract class BaseAddressQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the map_url column
+     * Filter the query on the map_coordinates column
      *
      * Example usage:
      * <code>
-     * $query->filterByMapUrl('fooValue');   // WHERE map_url = 'fooValue'
-     * $query->filterByMapUrl('%fooValue%'); // WHERE map_url LIKE '%fooValue%'
+     * $query->filterByMapCoordinates('fooValue');   // WHERE map_coordinates = 'fooValue'
+     * $query->filterByMapCoordinates('%fooValue%'); // WHERE map_coordinates LIKE '%fooValue%'
      * </code>
      *
-     * @param     string $mapUrl The value to use as filter.
+     * @param     string $mapCoordinates The value to use as filter.
      *              Accepts wildcards (* and % trigger a LIKE)
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return AddressQuery The current query, for fluid interface
      */
-    public function filterByMapUrl($mapUrl = null, $comparison = null)
+    public function filterByMapCoordinates($mapCoordinates = null, $comparison = null)
     {
         if (null === $comparison) {
-            if (is_array($mapUrl)) {
+            if (is_array($mapCoordinates)) {
                 $comparison = Criteria::IN;
-            } elseif (preg_match('/[\%\*]/', $mapUrl)) {
-                $mapUrl = str_replace('*', '%', $mapUrl);
+            } elseif (preg_match('/[\%\*]/', $mapCoordinates)) {
+                $mapCoordinates = str_replace('*', '%', $mapCoordinates);
                 $comparison = Criteria::LIKE;
             }
         }
 
-        return $this->addUsingAlias(AddressPeer::MAP_URL, $mapUrl, $comparison);
+        return $this->addUsingAlias(AddressPeer::MAP_COORDINATES, $mapCoordinates, $comparison);
     }
 
     /**

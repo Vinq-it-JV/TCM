@@ -53,7 +53,7 @@ use UserBundle\Model\User;
  * @method CbInputNotification findOneOrCreate(PropelPDO $con = null) Return the first CbInputNotification matching the query, or a new CbInputNotification object populated from the query conditions when no match is found
  *
  * @method CbInputNotification findOneBySensor(int $sensor) Return the first CbInputNotification filtered by the sensor column
- * @method CbInputNotification findOneBySwitchState(string $switch_state) Return the first CbInputNotification filtered by the switch_state column
+ * @method CbInputNotification findOneBySwitchState(boolean $switch_state) Return the first CbInputNotification filtered by the switch_state column
  * @method CbInputNotification findOneByReason(int $reason) Return the first CbInputNotification filtered by the reason column
  * @method CbInputNotification findOneByIsHandled(boolean $is_handled) Return the first CbInputNotification filtered by the is_handled column
  * @method CbInputNotification findOneByHandledBy(int $handled_by) Return the first CbInputNotification filtered by the handled_by column
@@ -62,7 +62,7 @@ use UserBundle\Model\User;
  *
  * @method array findById(int $id) Return CbInputNotification objects filtered by the id column
  * @method array findBySensor(int $sensor) Return CbInputNotification objects filtered by the sensor column
- * @method array findBySwitchState(string $switch_state) Return CbInputNotification objects filtered by the switch_state column
+ * @method array findBySwitchState(boolean $switch_state) Return CbInputNotification objects filtered by the switch_state column
  * @method array findByReason(int $reason) Return CbInputNotification objects filtered by the reason column
  * @method array findByIsHandled(boolean $is_handled) Return CbInputNotification objects filtered by the is_handled column
  * @method array findByHandledBy(int $handled_by) Return CbInputNotification objects filtered by the handled_by column
@@ -353,25 +353,23 @@ abstract class BaseCbInputNotificationQuery extends ModelCriteria
      *
      * Example usage:
      * <code>
-     * $query->filterBySwitchState('fooValue');   // WHERE switch_state = 'fooValue'
-     * $query->filterBySwitchState('%fooValue%'); // WHERE switch_state LIKE '%fooValue%'
+     * $query->filterBySwitchState(true); // WHERE switch_state = true
+     * $query->filterBySwitchState('yes'); // WHERE switch_state = true
      * </code>
      *
-     * @param     string $switchState The value to use as filter.
-     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     boolean|string $switchState The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return CbInputNotificationQuery The current query, for fluid interface
      */
     public function filterBySwitchState($switchState = null, $comparison = null)
     {
-        if (null === $comparison) {
-            if (is_array($switchState)) {
-                $comparison = Criteria::IN;
-            } elseif (preg_match('/[\%\*]/', $switchState)) {
-                $switchState = str_replace('*', '%', $switchState);
-                $comparison = Criteria::LIKE;
-            }
+        if (is_string($switchState)) {
+            $switchState = in_array(strtolower($switchState), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
 
         return $this->addUsingAlias(CbInputNotificationPeer::SWITCH_STATE, $switchState, $comparison);

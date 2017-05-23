@@ -38,61 +38,6 @@
                     {% endverbatim %}
                 </div>
             </div>
-            <div class="form-group">
-                <label class="control-label col-md-2"
-                       ng-cloak>{{ ng.translate('SENSOR.NAME') }}</label>
-                <div class="col-md-6">
-                    <input class="form-control input-sm" name="Name" type="text"
-                           ng-model="sensors.sensor().Name" validation="min_len:3|required" no-enter/>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="control-label col-md-2"
-                       ng-cloak>{{ ng.translate('SENSOR.DESCRIPTION') }}</label>
-                <div class="col-md-10">
-                        <textarea class="form-control input-sm no-resize" name="Description"
-                                  ng-model="sensors.sensor().Description" rows="5"></textarea>
-                </div>
-            </div>
-            <div ng-switch="sensors.sensor().TypeId">
-                <div ng-switch-when="3">
-                    <div class="form-group">
-                        <label class="control-label col-md-2"
-                               ng-cloak>{{ ng.translate('SENSOR.TRIP_LOW') }}</label>
-                        <div class="col-md-2">
-                            <input type="hidden" name="LowLimit" value="sensors.sensor().LowLimit">
-                            <input class="form-control input-sm" name="LowLimit" type="text"
-                                   ng-model="sensors.sensor().LowLimit" validation="integer_signed|required" no-enter/>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-2"
-                               ng-cloak>{{ ng.translate('SENSOR.TRIP_HIGH') }}</label>
-                        <div class="col-md-2">
-                            <input type="hidden" name="HighLimit" value="sensors.sensor().HighLimit">
-                            <input class="form-control input-sm" name="HighLimit" type="text"
-                                   ng-model="sensors.sensor().HighLimit" validation="integer_signed|required" no-enter/>
-                        </div>
-                    </div>
-                </div>
-                <div ng-switch-when="4">
-                    <div class="form-group">
-                        <label class="control-label col-md-2"
-                               ng-cloak>{{ ng.translate('SENSOR.SWITCH_WHEN') }}</label>
-                        <div class="col-md-2">
-                            {% verbatim %}
-                            <input type="hidden" name="SwitchWhen" value="{{ sensors.sensor().SwitchWhen }}">
-                            <toggle-switch
-                                    class="switch-small switch-danger"
-                                    ng-model="sensors.sensor().SwitchWhen"
-                                    on-label="{{ 'SENSOR.HIGH' | translate }}"
-                                    off-label="{{ 'SENSOR.LOW' | translate }}" ng-cloak>
-                            </toggle-switch>
-                            {% endverbatim %}
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 

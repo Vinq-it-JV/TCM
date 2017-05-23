@@ -112,7 +112,7 @@
         <column name='postal_code' type='varchar' size='25' />
         <column name='city' type='varchar' size='255' />
         <column name='country' type='integer' />
-        <column name='map_url' type='varchar' size='255' />
+        <column name='map_coordinates' type='varchar' size='255' />
         <behavior name="timestampable" />
         <foreign-key foreignTable='countries'>
             <reference local='country' foreign='id'/>

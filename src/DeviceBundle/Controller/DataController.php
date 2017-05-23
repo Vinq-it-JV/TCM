@@ -259,6 +259,8 @@ class DataController extends Controller
         $dataArr = array_merge($dataArr, $store->getStoreDataArray(), ['template' => $this->getFullStoreTemplateArray($store)]);
         $dataArr = array_merge($dataArr, $this->getStoreDeviceGroups($store));
 
+        $listsArr = array_merge($listsArr, CbInput::getNotificationAfterListArray());
+
         $dataArr = array_merge($dataArr, ['lists' => $listsArr]);
         return $dataArr;
     }
@@ -420,6 +422,7 @@ class DataController extends Controller
                     $_sensor->setLowLimit($sensor->LowLimit);
                     $_sensor->setHighLimit($sensor->HighLimit);
                     $_sensor->setIsEnabled($sensor->IsEnabled);
+                    $_sensor->setNotifyAfter($sensor->NotifyAfter);
                     $_sensor->setPosition($index);
                     if (!empty($_group))
                         $_sensor->setDeviceGroup($_group);
@@ -451,6 +454,7 @@ class DataController extends Controller
                     $_input->setMainStore($sensor->MainStore);
                     $_input->setIsEnabled($sensor->IsEnabled);
                     $_input->setSwitchWhen($sensor->SwitchWhen);
+                    $_input->setNotifyAfter($sensor->NotifyAfter);
                     $_input->setPosition($index);
                     if (!empty($_group))
                         $_input->setDeviceGroup($_group);

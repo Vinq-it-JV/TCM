@@ -19,7 +19,7 @@
     </div>
     <div class="row">
         <div class="col-xs-12 col-md-12 col-lg-12">
-            <div class="panel panel-green cursor-pointer" ng-click="">
+            <div class="panel panel-green cursor-pointer" ng-click="showInformation()">
                 <div class="panel-heading">
                     <div class="row">
                         <div class="col-xs-2 text-center big-button-icon">
@@ -58,7 +58,11 @@
                             <i class="fa fa-warning fa-5x fa-fw"></i>
                         </div>
                         <div class="col-xs-2 text-center big-button-badge">
-                            <span class="btn btn-default btn-circle">0</span>
+                            <span class="btn btn-default btn-circle" ng-cloak>
+                                {% verbatim %}
+                                {{ stores.store().Notifications.Count }}
+                                {% endverbatim %}
+                            </span>
                         </div>
                         <div class="col-xs-8 text-right big-button-text" style="font-size: 30px;" ng-cloak>
                             {{ ng.translate('NOTIFICATIONS.LABEL') }}
@@ -73,11 +77,9 @@
             <div class="panel panel-info cursor-pointer" ng-click="pageBack()">
                 <div class="panel-heading">
                     <div class="row">
-                        <div class="col-xs-10 text-left big-button-text" style="font-size: 30px;" ng-cloak>
+                        <div class="col-xs-12 text-left big-button-text" style="font-size: 30px;" ng-cloak>
                             {{ ng.translate('BACK') }}
-                        </div>
-                        <div class="col-xs-2 text-center big-button-icon">
-                            <i class="fa fa-chevron-left fa-5x fa-fw"></i>
+                            <i class="fa fa-chevron-left fa-2x fa-fw pull-right"></i>
                         </div>
                     </div>
                 </div>

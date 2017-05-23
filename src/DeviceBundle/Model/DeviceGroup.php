@@ -9,6 +9,9 @@ class DeviceGroup extends BaseDeviceGroup
 
     const TYPE_ID = 1;
 
+    const STATUS_OK = 0;
+    const STATUS_NOTIFY = 2;
+
     /**
      * getDeviceGroupDataArray()
      * @return array
@@ -19,6 +22,7 @@ class DeviceGroup extends BaseDeviceGroup
         $data['devicegroup'] = $this->toArray();
         $data['devicegroup']['TypeId'] = self::TYPE_ID;
         $data['devicegroup']['devices'] = [];
+        $data['devicegroup']['State'] = $this->getDeviceGroupStatus();
 
         $deviceArr = [];
         if (!$this->getDsTemperatureSensors()->isEmpty()) {
@@ -47,19 +51,6 @@ class DeviceGroup extends BaseDeviceGroup
 
         $data['devicegroup']['devices'] = $deviceArr;
 
-//        foreach ($deviceArr as $device)
-//        {   $_device = (object)$device;
-//            if (!empty($_device->Position))
-//                $data['devicegroup']['devices'][$_device->Position] = $device;
-//            else
-//                $data['devicegroup']['devices'][] = $device;
-//        }
-
-//        print "<pre>";
-//        var_dump($data['devicegroup']['devices']);
-//        print "</pre>";
-//        die();
-
         unset($data['devicegroup']['CreatedAt']);
         unset($data['devicegroup']['UpdatedAt']);
 
@@ -74,6 +65,25 @@ class DeviceGroup extends BaseDeviceGroup
     {
         $group = new DeviceGroup();
         return $group->getDeviceGroupDataArray();
+    }
+
+    /**
+     * getDeviceGroupStatus()
+     * @return int
+     */
+    public function getDeviceGroupStatus()
+    {
+        $inputs = $this->getCbInputs();
+        foreach ($inputs as $input) {
+            if ($input->getState() == CbInput::STATE_NOTIFY)
+                return self::STATUS_NOTIFY;
+        }
+
+        $sensors = $this->getDsTemperatureSensors();
+        foreach ($sensors as $sensor)
+            if ($sensor->getState() == DsTemperatureSensor::STATE_NOTIFY)
+                return self::STATUS_NOTIFY;
+        return self::STATUS_OK;
     }
 
 }

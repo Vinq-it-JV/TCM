@@ -200,9 +200,8 @@ angular
                     return false;
                 if (object.length === 0)
                     return false;
-                if (Object.keys(object).length === 0)
-                    return false;
-                return true;
+                return Object.keys(object).length !== 0;
+
             }
 
             return {
@@ -259,7 +258,7 @@ angular
                 },
                 makeDecimal: function (value, digits) {
                     var val = Number(value);
-                    val = val.toFixed(2);
+                    val = val.toFixed(digits);
                     val = Number(val);
                     return val;
                 },

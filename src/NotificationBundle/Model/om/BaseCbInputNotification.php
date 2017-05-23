@@ -56,8 +56,8 @@ abstract class BaseCbInputNotification extends BaseObject implements Persistent
 
     /**
      * The value for the switch_state field.
-     * Note: this column has a database default value of: '0'
-     * @var        string
+     * Note: this column has a database default value of: false
+     * @var        boolean
      */
     protected $switch_state;
 
@@ -131,7 +131,7 @@ abstract class BaseCbInputNotification extends BaseObject implements Persistent
      */
     public function applyDefaultValues()
     {
-        $this->switch_state = '0';
+        $this->switch_state = false;
         $this->reason = 0;
         $this->is_handled = false;
     }
@@ -171,7 +171,7 @@ abstract class BaseCbInputNotification extends BaseObject implements Persistent
     /**
      * Get the [switch_state] column value.
      *
-     * @return string
+     * @return boolean
      */
     public function getSwitchState()
     {
@@ -339,15 +339,23 @@ abstract class BaseCbInputNotification extends BaseObject implements Persistent
     } // setSensor()
 
     /**
-     * Set the value of [switch_state] column.
+     * Sets the value of the [switch_state] column.
+     * Non-boolean arguments are converted using the following rules:
+     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
      *
-     * @param  string $v new value
+     * @param boolean|integer|string $v The new value
      * @return CbInputNotification The current object (for fluent API support)
      */
     public function setSwitchState($v)
     {
         if ($v !== null) {
-            $v = (string) $v;
+            if (is_string($v)) {
+                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            } else {
+                $v = (boolean) $v;
+            }
         }
 
         if ($this->switch_state !== $v) {
@@ -490,7 +498,7 @@ abstract class BaseCbInputNotification extends BaseObject implements Persistent
      */
     public function hasOnlyDefaultValues()
     {
-            if ($this->switch_state !== '0') {
+            if ($this->switch_state !== false) {
                 return false;
             }
 
@@ -526,7 +534,7 @@ abstract class BaseCbInputNotification extends BaseObject implements Persistent
 
             $this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
             $this->sensor = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
-            $this->switch_state = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
+            $this->switch_state = ($row[$startcol + 2] !== null) ? (boolean) $row[$startcol + 2] : null;
             $this->reason = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
             $this->is_handled = ($row[$startcol + 4] !== null) ? (boolean) $row[$startcol + 4] : null;
             $this->handled_by = ($row[$startcol + 5] !== null) ? (int) $row[$startcol + 5] : null;
@@ -833,7 +841,7 @@ abstract class BaseCbInputNotification extends BaseObject implements Persistent
                         $stmt->bindValue($identifier, $this->sensor, PDO::PARAM_INT);
                         break;
                     case '`switch_state`':
-                        $stmt->bindValue($identifier, $this->switch_state, PDO::PARAM_STR);
+                        $stmt->bindValue($identifier, (int) $this->switch_state, PDO::PARAM_INT);
                         break;
                     case '`reason`':
                         $stmt->bindValue($identifier, $this->reason, PDO::PARAM_INT);

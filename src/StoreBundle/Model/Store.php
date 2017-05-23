@@ -5,6 +5,8 @@ namespace StoreBundle\Model;
 use CompanyBundle\Model\CompanyQuery;
 use CompanyBundle\Model\PaymentMethodQuery;
 use CompanyBundle\Model\RegionsQuery;
+use DeviceBundle\Model\CbInput;
+use DeviceBundle\Model\DsTemperatureSensor;
 use StoreBundle\Model\om\BaseStore;
 use \Criteria;
 use UserBundle\Model\Address;
@@ -51,6 +53,7 @@ class Store extends BaseStore
             foreach ($this->getInformants() as $informant)
                 $data['store']['Informants'][] = $informant->getUserDataArray()['user'];
 
+        $data['store']['Notifications'] = $this->getNotifications();
 
         unset($data['store']['CreatedAt']);
         unset($data['store']['UpdatedAt']);
@@ -265,5 +268,40 @@ class Store extends BaseStore
                 return $_owner;
         }
         return null;
+    }
+
+    /**
+     * @return array
+     */
+    public function getNotifications()
+    {
+        $notifications = [];
+        $count = 0;
+
+        $c = new Criteria();
+        $c->add('cb_input_notification.is_handled', false);
+
+        $inputs = $this->getCbInputs();
+        foreach ($inputs as $input) {
+            if ($input->getState() == CbInput::STATE_NOTIFY && $input->getIsEnabled()) {
+                $notifications['Inputs'] = $input->getCbInputNotifications($c)->toArray();
+                $count++;
+            }
+        }
+
+        $c = new Criteria();
+        $c->add('ds_temperature_notification.is_handled', false);
+
+        $sensors = $this->getDsTemperatureSensors();
+        foreach ($sensors as $sensor) {
+            if ($sensor->getState() == DsTemperatureSensor::STATE_NOTIFY && $sensor->getIsEnabled()) {
+                $notifications['Temperatures'] = $sensor->getDsTemperatureNotifications($c)->toArray();
+                $count++;
+            }
+        }
+
+        $notifications['Count'] = $count;
+
+        return $notifications;
     }
 }

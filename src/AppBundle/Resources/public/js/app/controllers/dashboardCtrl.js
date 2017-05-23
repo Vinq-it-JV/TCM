@@ -16,12 +16,15 @@ angular
             $scope.sensors = DS_Sensors;
             $scope.charts = DS_Charts;
 
+            $scope.test = 0;
+
             $scope.updateTimer = null;
             $scope.updateTimeout = 10000;
 
             $scope.storesCollection = [];
 
             $scope.activePage = 'dashboard';
+            $scope.sensorGroup = null;
 
             $scope.getStores = function () {
                 $scope.requestType = 'getStores';
@@ -53,8 +56,13 @@ angular
                 $scope.activePage = 'dashboard';
             };
 
+            $scope.showInformation = function () {
+                $scope.activePage = 'information';
+            };
+
             $scope.showSensors = function () {
                 $scope.activePage = 'sensors';
+                $scope.sensorGroup = null;
             };
 
             $scope.updateSensors = function () {
@@ -79,9 +87,9 @@ angular
             };
 
             $scope.showGroupSensors = function (groupid) {
-                $scope.sensors.getRecord(groupid);
-                if ($scope.isValidObject($scope.sensors.sensor()))
-                    $scope.activePage = 'groupSensors';
+                $scope.sensorGroup = groupid;
+                console.log(groupid);
+                $scope.activePage = 'groupSensors';
             };
 
             $scope.fetchDataOk = function (data) {
@@ -98,6 +106,7 @@ angular
                         if (!$scope.isValidObject(data))
                             break;
                         if (!data.errorcode) {
+                            console.log(data.contents.store);
                             $scope.stores.updRecord(data.contents.store);
                             $scope.stores.listsSet(data.contents.lists);
                             $scope.sensors.sensorsSet(data.contents.devicegroups);

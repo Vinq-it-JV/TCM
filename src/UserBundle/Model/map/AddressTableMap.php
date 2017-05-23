@@ -50,7 +50,7 @@ class AddressTableMap extends TableMap
         $this->addColumn('postal_code', 'PostalCode', 'VARCHAR', false, 25, null);
         $this->addColumn('city', 'City', 'VARCHAR', false, 255, null);
         $this->addForeignKey('country', 'Country', 'INTEGER', 'countries', 'id', false, null, null);
-        $this->addColumn('map_url', 'MapUrl', 'VARCHAR', false, 255, null);
+        $this->addColumn('map_coordinates', 'MapCoordinates', 'VARCHAR', false, 255, null);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
         // validators

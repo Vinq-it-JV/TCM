@@ -73,12 +73,12 @@ class DataController extends Controller
         $version = hexdec(substr($data, 0, 2));
         switch ($version) {
             case self::CONTROLLER_V3:
-                $this->parseControllerDataV3($data);
+                $this->parseControllerDataV3($version, $data);
                 break;
         }
     }
 
-    protected function parseControllerDataV3($data)
+    protected function parseControllerDataV3($version, $data)
     {
         if (strlen($data) != self::CONTROLLER_V3_PACKET_LENGTH)
             return;
@@ -86,7 +86,7 @@ class DataController extends Controller
         $controllerUid = substr($data, 4, 12);
         $internalTemp = $this->getMCPTemp(substr($data, 16, 8));
 
-        $controller = $this->updateControllerBox($controllerUid, $internalTemp);
+        $controller = $this->updateControllerBox($version, $controllerUid, $internalTemp);
         $this->updateInputs($inputs, $controller);
 
         for ($temp = 0; $temp < ControllerBox::CONTROLLER_DS_OUTPUTS; $temp++) {
@@ -96,7 +96,7 @@ class DataController extends Controller
 
     }
 
-    protected function updateControllerBox($uid, $temperature)
+    protected function updateControllerBox($version, $uid, $temperature)
     {
         $date = new \DateTime();
 
@@ -105,6 +105,7 @@ class DataController extends Controller
         if (empty($controller))
             $controller = new ControllerBox();
         $controller->setUid($uid);
+        $controller->setVersion($version);
         $controller->setState(ControllerBox::STATE_ACTIVE);
         $controller->setDataCollectedAt($date);
         $controller->setInternalTemperature($temperature);

@@ -72,10 +72,10 @@ body {
 
 .big-button-text {
     float: left;
-    height: 50px;
-    padding: 4px 15px;
+    height: 60px;
+    padding: 6px 15px;
     font-size: 2em;
-    line-height: 45px
+    line-height: 52px
 }
 
 .big-button-icon {
@@ -105,6 +105,16 @@ body {
     text-shadow: 0px 1px #fefefe;
 }
 
+.group-sensor {
+    padding-top: 4px;
+    font-size: 1.125em;
+    text-shadow: 0px 1px #fefefe;
+}
+
+.group-image {
+    width: 100%;
+}
+
 .sensor-updated {
     padding-top: 2px;
     font-size: 1.25em;
@@ -117,6 +127,54 @@ body {
     width: 100%;
     height: 100%;
     opacity: 0.2;
+}
+
+.angular-map-container {
+    background: #fefefe;
+    border: 1px solid #e3e3e3;
+    width: 100%;
+    height: 100%;
+}
+
+.custom-marker {
+}
+
+.custom-marker.tcm {
+    font-size: 1.5em;
+    padding: 10px;
+    background: #fff;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    border: #7F7F7F solid 1px;
+}
+
+.custom-marker.tcm:after {
+    content: '';
+    position: absolute;
+    border-style: solid;
+    border-width: 7px 6px 0;
+    border-color: #fff transparent;
+    display: block;
+    width: 0;
+    z-index: 1;
+    margin-left: -6px;
+    bottom: -6px;
+    left: 50%;
+}
+
+.custom-marker.tcm:before {
+    content: '';
+    position: absolute;
+    border-style: solid;
+    border-width: 7px 6px 0;
+    border-color: #7F7F7F transparent;
+    display: block;
+    width: 0;
+    z-index: 0;
+    margin-left: -6px;
+    bottom: -7px;
+    left: 50%;
 }
 
 .cg-busy {
