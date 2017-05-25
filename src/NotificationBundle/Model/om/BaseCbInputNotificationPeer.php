@@ -31,13 +31,13 @@ abstract class BaseCbInputNotificationPeer
     const TM_CLASS = 'NotificationBundle\\Model\\map\\CbInputNotificationTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 8;
+    const NUM_COLUMNS = 9;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 8;
+    const NUM_HYDRATE_COLUMNS = 9;
 
     /** the column name for the id field */
     const ID = 'cb_input_notification.id';
@@ -50,6 +50,9 @@ abstract class BaseCbInputNotificationPeer
 
     /** the column name for the reason field */
     const REASON = 'cb_input_notification.reason';
+
+    /** the column name for the is_notified field */
+    const IS_NOTIFIED = 'cb_input_notification.is_notified';
 
     /** the column name for the is_handled field */
     const IS_HANDLED = 'cb_input_notification.is_handled';
@@ -82,12 +85,12 @@ abstract class BaseCbInputNotificationPeer
      * e.g. CbInputNotificationPeer::$fieldNames[CbInputNotificationPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'Sensor', 'SwitchState', 'Reason', 'IsHandled', 'HandledBy', 'CreatedAt', 'UpdatedAt', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'sensor', 'switchState', 'reason', 'isHandled', 'handledBy', 'createdAt', 'updatedAt', ),
-        BasePeer::TYPE_COLNAME => array (CbInputNotificationPeer::ID, CbInputNotificationPeer::SENSOR, CbInputNotificationPeer::SWITCH_STATE, CbInputNotificationPeer::REASON, CbInputNotificationPeer::IS_HANDLED, CbInputNotificationPeer::HANDLED_BY, CbInputNotificationPeer::CREATED_AT, CbInputNotificationPeer::UPDATED_AT, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'SENSOR', 'SWITCH_STATE', 'REASON', 'IS_HANDLED', 'HANDLED_BY', 'CREATED_AT', 'UPDATED_AT', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'sensor', 'switch_state', 'reason', 'is_handled', 'handled_by', 'created_at', 'updated_at', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
+        BasePeer::TYPE_PHPNAME => array ('Id', 'Sensor', 'SwitchState', 'Reason', 'IsNotified', 'IsHandled', 'HandledBy', 'CreatedAt', 'UpdatedAt', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'sensor', 'switchState', 'reason', 'isNotified', 'isHandled', 'handledBy', 'createdAt', 'updatedAt', ),
+        BasePeer::TYPE_COLNAME => array (CbInputNotificationPeer::ID, CbInputNotificationPeer::SENSOR, CbInputNotificationPeer::SWITCH_STATE, CbInputNotificationPeer::REASON, CbInputNotificationPeer::IS_NOTIFIED, CbInputNotificationPeer::IS_HANDLED, CbInputNotificationPeer::HANDLED_BY, CbInputNotificationPeer::CREATED_AT, CbInputNotificationPeer::UPDATED_AT, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'SENSOR', 'SWITCH_STATE', 'REASON', 'IS_NOTIFIED', 'IS_HANDLED', 'HANDLED_BY', 'CREATED_AT', 'UPDATED_AT', ),
+        BasePeer::TYPE_FIELDNAME => array ('id', 'sensor', 'switch_state', 'reason', 'is_notified', 'is_handled', 'handled_by', 'created_at', 'updated_at', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, )
     );
 
     /**
@@ -97,12 +100,12 @@ abstract class BaseCbInputNotificationPeer
      * e.g. CbInputNotificationPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Sensor' => 1, 'SwitchState' => 2, 'Reason' => 3, 'IsHandled' => 4, 'HandledBy' => 5, 'CreatedAt' => 6, 'UpdatedAt' => 7, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'sensor' => 1, 'switchState' => 2, 'reason' => 3, 'isHandled' => 4, 'handledBy' => 5, 'createdAt' => 6, 'updatedAt' => 7, ),
-        BasePeer::TYPE_COLNAME => array (CbInputNotificationPeer::ID => 0, CbInputNotificationPeer::SENSOR => 1, CbInputNotificationPeer::SWITCH_STATE => 2, CbInputNotificationPeer::REASON => 3, CbInputNotificationPeer::IS_HANDLED => 4, CbInputNotificationPeer::HANDLED_BY => 5, CbInputNotificationPeer::CREATED_AT => 6, CbInputNotificationPeer::UPDATED_AT => 7, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'SENSOR' => 1, 'SWITCH_STATE' => 2, 'REASON' => 3, 'IS_HANDLED' => 4, 'HANDLED_BY' => 5, 'CREATED_AT' => 6, 'UPDATED_AT' => 7, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'sensor' => 1, 'switch_state' => 2, 'reason' => 3, 'is_handled' => 4, 'handled_by' => 5, 'created_at' => 6, 'updated_at' => 7, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
+        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Sensor' => 1, 'SwitchState' => 2, 'Reason' => 3, 'IsNotified' => 4, 'IsHandled' => 5, 'HandledBy' => 6, 'CreatedAt' => 7, 'UpdatedAt' => 8, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'sensor' => 1, 'switchState' => 2, 'reason' => 3, 'isNotified' => 4, 'isHandled' => 5, 'handledBy' => 6, 'createdAt' => 7, 'updatedAt' => 8, ),
+        BasePeer::TYPE_COLNAME => array (CbInputNotificationPeer::ID => 0, CbInputNotificationPeer::SENSOR => 1, CbInputNotificationPeer::SWITCH_STATE => 2, CbInputNotificationPeer::REASON => 3, CbInputNotificationPeer::IS_NOTIFIED => 4, CbInputNotificationPeer::IS_HANDLED => 5, CbInputNotificationPeer::HANDLED_BY => 6, CbInputNotificationPeer::CREATED_AT => 7, CbInputNotificationPeer::UPDATED_AT => 8, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'SENSOR' => 1, 'SWITCH_STATE' => 2, 'REASON' => 3, 'IS_NOTIFIED' => 4, 'IS_HANDLED' => 5, 'HANDLED_BY' => 6, 'CREATED_AT' => 7, 'UPDATED_AT' => 8, ),
+        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'sensor' => 1, 'switch_state' => 2, 'reason' => 3, 'is_notified' => 4, 'is_handled' => 5, 'handled_by' => 6, 'created_at' => 7, 'updated_at' => 8, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, )
     );
 
     /**
@@ -180,6 +183,7 @@ abstract class BaseCbInputNotificationPeer
             $criteria->addSelectColumn(CbInputNotificationPeer::SENSOR);
             $criteria->addSelectColumn(CbInputNotificationPeer::SWITCH_STATE);
             $criteria->addSelectColumn(CbInputNotificationPeer::REASON);
+            $criteria->addSelectColumn(CbInputNotificationPeer::IS_NOTIFIED);
             $criteria->addSelectColumn(CbInputNotificationPeer::IS_HANDLED);
             $criteria->addSelectColumn(CbInputNotificationPeer::HANDLED_BY);
             $criteria->addSelectColumn(CbInputNotificationPeer::CREATED_AT);
@@ -189,6 +193,7 @@ abstract class BaseCbInputNotificationPeer
             $criteria->addSelectColumn($alias . '.sensor');
             $criteria->addSelectColumn($alias . '.switch_state');
             $criteria->addSelectColumn($alias . '.reason');
+            $criteria->addSelectColumn($alias . '.is_notified');
             $criteria->addSelectColumn($alias . '.is_handled');
             $criteria->addSelectColumn($alias . '.handled_by');
             $criteria->addSelectColumn($alias . '.created_at');

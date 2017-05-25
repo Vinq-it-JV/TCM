@@ -53,7 +53,7 @@ class Store extends BaseStore
             foreach ($this->getInformants() as $informant)
                 $data['store']['Informants'][] = $informant->getUserDataArray()['user'];
 
-        $data['store']['Notifications'] = $this->getNotifications();
+        $data['store']['Notifications'] = $this->getNotificationsArray();
 
         unset($data['store']['CreatedAt']);
         unset($data['store']['UpdatedAt']);
@@ -271,11 +271,12 @@ class Store extends BaseStore
     }
 
     /**
+     * getNotificationsArray()
      * @return array
      */
-    public function getNotifications()
+    public function getNotificationsArray()
     {
-        $notifications = [];
+        $notificationsArr = [];
         $count = 0;
 
         $c = new Criteria();
@@ -284,8 +285,8 @@ class Store extends BaseStore
         $inputs = $this->getCbInputs();
         foreach ($inputs as $input) {
             if ($input->getState() == CbInput::STATE_NOTIFY && $input->getIsEnabled()) {
-                $notifications['Inputs'] = $input->getCbInputNotifications($c)->toArray();
-                $count++;
+                $notificationsArr['Inputs'] = $input->getCbInputNotifications($c)->toArray();
+                $count += count($notificationsArr['Inputs']);
             }
         }
 
@@ -295,13 +296,14 @@ class Store extends BaseStore
         $sensors = $this->getDsTemperatureSensors();
         foreach ($sensors as $sensor) {
             if ($sensor->getState() == DsTemperatureSensor::STATE_NOTIFY && $sensor->getIsEnabled()) {
-                $notifications['Temperatures'] = $sensor->getDsTemperatureNotifications($c)->toArray();
-                $count++;
+                $notificationsArr['Temperatures'] = $sensor->getDsTemperatureNotifications($c)->toArray();
+                $count += count($notificationsArr['Temperatures']);
             }
         }
 
-        $notifications['Count'] = $count;
+        $notificationsArr['Count'] = $count;
 
-        return $notifications;
+        return $notificationsArr;
     }
+
 }

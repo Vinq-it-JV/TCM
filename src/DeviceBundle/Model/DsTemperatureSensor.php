@@ -5,6 +5,7 @@ namespace DeviceBundle\Model;
 use DeviceBundle\Model\om\BaseDsTemperatureSensor;
 use \Criteria;
 use NotificationBundle\Model\DsTemperatureNotification;
+use StoreBundle\Model\StoreQuery;
 
 class DsTemperatureSensor extends BaseDsTemperatureSensor
 {
@@ -49,6 +50,10 @@ class DsTemperatureSensor extends BaseDsTemperatureSensor
     public function checkSensorStatus()
     {
         $state = self::STATE_ACTIVE;
+
+        $store = StoreQuery::create()->findOneById($this->getMainStore());
+        if ($store->getIsMaintenance())
+            return $state;
 
         if ($this->checkSensorInactive())
             $state = self::STATE_INACTIVE;

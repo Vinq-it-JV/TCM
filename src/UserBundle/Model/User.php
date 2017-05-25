@@ -106,7 +106,13 @@ class User extends BaseUser implements AdvancedUserInterface
      */
     public function getName()
     {
-        return $this->getFirstname() . ' ' . $this->getMiddlename() . ' ' . $this->getLastname();
+        $name = $this->getFirstname();
+        if (strlen($this->getMiddlename()))
+            $name .= ' ' . $this->getMiddlename();
+        if (strlen($this->getLastname()))
+            $name .= ' ' . $this->getLastname();
+
+        return $name;
     }
 
     /**
@@ -326,15 +332,15 @@ class User extends BaseUser implements AdvancedUserInterface
         $companies = CompanyQuery::create()
             ->filterByIsEnabled(true)
             ->filterByCompanyType($companyType)
-                ->useCompanyInformantQuery()
-                    ->useInformantQuery()
-                        ->useUserRoleQuery()
-                            ->useRoleQuery()
-                                ->filterByName(array('ROLE_TECH_BEER', 'ROLE_TECH_COOLING'), Criteria::IN)
-                            ->endUse()
+            ->useCompanyInformantQuery()
+                ->useInformantQuery()
+                    ->useUserRoleQuery()
+                        ->useRoleQuery()
+                            ->filterByName(array('ROLE_TECH_BEER', 'ROLE_TECH_COOLING'), Criteria::IN)
                         ->endUse()
                     ->endUse()
                 ->endUse()
+            ->endUse()
             ->distinct()
             ->find();
 
@@ -359,6 +365,18 @@ class User extends BaseUser implements AdvancedUserInterface
     {
         foreach ($this->getEmails() as $email)
             if (strcmp(strtolower($email->getEmail()), strtolower($emailaddress)) === 0)
+                return $email;
+        return null;
+    }
+
+    /**
+     * getPrimaryEmail()
+     * @return mixed|null|Email
+     */
+    public function getPrimaryEmail()
+    {
+        foreach ($this->getEmails() as $email)
+            if ($email->getPrimary())
                 return $email;
         return null;
     }

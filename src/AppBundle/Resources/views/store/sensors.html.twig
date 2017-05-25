@@ -28,7 +28,7 @@
                             <i class="fa fa-fw fa-2x" ng-class="{ 'fa-cubes': sensor.TypeId == 1, 'fa-thermometer-2': sensor.TypeId == 2 || sensor.TypeId == 3, 'fa-sign-in': sensor.TypeId == 4 }"></i>
                         </div>
                         <div class="col-xs-8">
-                            <label ng-class="{ 'group-name': sensor.TypeId == 1, 'sensor-name': sensor.TypeId == 2 || sensor.TypeId == 3 || sensor.TypeId == 4 }">{{ sensor.Name }}</label>
+                            <label ng-class="{ 'group-name': sensor.TypeId == 1, 'sensor-name': sensor.TypeId == 2 || sensor.TypeId == 3 || sensor.TypeId == 4 }" ng-cloak>{{ sensor.Name }}</label>
                         </div>
                         <div class="col-xs-2">
                             <button class="btn btn-xs btn-primary pull-right" ng-if="sensor.TypeId == 1" bs-collapse-toggle><i class="fa fa-fw fa-caret-down"></i></button>
@@ -44,25 +44,25 @@
                                     <div ng-switch-when="0">
                                         {%  set image = 'bundles/app/images/beertap.gif' ~ '?a=' ~ random(10000) %}
                                         <img class='group-image'
-                                            src="{{ asset(image) }}"/>
+                                            ng-src="{{ asset(image) }}"/>
                                     </div>
                                     {% verbatim %}
                                     <div ng-switch-when="2">
                                         <div ng-repeat="isensor in sensors.sensorGroup(sensor.Id).devices">
                                             <div class="well well-sm" ng-if="isensor.IsEnabled">
                                                 <div class="row">
-                                                    <div class="col-xs-5 col-md-5 group-sensor">
+                                                    <div class="col-xs-5 col-md-5 group-sensor" ng-cloak>
                                                         {{ isensor.Name }}
                                                     </div>
                                                     <div class="col-xs-4 col-md-4 text-right group-sensor">
                                                         <div ng-switch="isensor.TypeId">
-                                                            <div ng-switch-when="2">
+                                                            <div ng-switch-when="2" ng-cloak>
                                                                 {{ isensor.InternalTemperature | number: 2 }} °C
                                                             </div>
-                                                            <div ng-switch-when="3">
+                                                            <div ng-switch-when="3" ng-cloak>
                                                                 {{ isensor.Temperature | number: 2 }} °C
                                                             </div>
-                                                            <div ng-switch-when="4">
+                                                            <div ng-switch-when="4" ng-cloak>
                                                                 <div class="label label-success">
                                                                     {{ 'YES' | translate }}
                                                                 </div>

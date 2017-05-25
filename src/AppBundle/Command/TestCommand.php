@@ -63,9 +63,20 @@ class TestCommand extends ContainerAwareCommand
         //$this->makeDeviceGroup($output);
         //$this->showDeviceGroup($output);
         //$this->checkInputs($output);
-        $this->checkSensorStatus($output);
-        $this->showNotifications($output);
+        //$this->checkSensorStatus($output);
+        //$this->showNotifications($output);
+        $this->testNotificationMail($output);
         $output->writeln("Ready.");
+    }
+
+    protected function testNotificationMail(OutputInterface $output)
+    {
+        $output->writeln('Start notification mail check.');
+        $helper = $this->getContainer()->get('notification_helper');
+
+        $store = StoreQuery::create()->findOneById(1);
+
+        $helper->sendNotificationsEmail($store);
     }
 
     protected function checkSensorStatus(OutputInterface $output)

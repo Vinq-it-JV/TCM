@@ -1,0 +1,148 @@
+{% extends '::mail.html.twig' %}
+{% block title %}{% endblock %}
+{% block content %}
+<h1>{{ 'email.notification.header' | trans( { '%Store%': Store.Name } ) | raw}}</h1>
+<p>
+    {{ 'email.notification.text1' | trans( { '%Store%': Store.Name } ) | raw}}
+</p>
+<p>
+    {% if Store.getNotificationsArray is not empty %}
+        {% if Store.getNotificationsArray.Inputs is defined %}
+            {% for input in Store.getNotificationsArray.Inputs %}
+            <div class="padding well well-sm">
+                <table table="0" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td style="padding-left: 10px;">
+                            {{ input.Sensor.Name }}
+                        </td>
+                        <td>
+                            {{ 'email.input.switch-when' | trans}}
+                            {% if input.Sensor.SwitchWhen %}
+                                <div class="label label-success">
+                                    {{ 'email.input.high' | trans}}
+                                </div>
+                            {% else %}
+                                <div class="label label-danger">
+                                    {{ 'email.input.low' | trans}}
+                                </div>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {{ 'email.input.switch-state' | trans}}
+                            {% if input.SwitchState %}
+                                <div class="label label-success">
+                                    {{ 'email.input.high' | trans}}
+                                </div>
+                            {% else %}
+                                <div class="label label-danger">
+                                    {{ 'email.input.low' | trans}}
+                                </div>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {{ 'email.input.notify-date' | trans}}{{ input.CreatedAt | date('d-m-Y H:i:s') }}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            {% endfor %}
+        {% endif %}
+        {% if Store.getNotificationsArray.Temperatures is defined %}
+            {% for temperature in Store.getNotificationsArray.Temperatures %}
+                <div class="padding well well-sm">
+                    <table table="0" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td style="padding-left: 10px;">
+                                {{ temperature.Sensor.Name }}
+                            </td>
+                            <td>
+                                {{ 'email.temperature.low-limit' | trans}}
+                                {{ temperature.Sensor.LowLimit }}
+                            </td>
+                            <td>
+                                {{ 'email.temperature.high-limit' | trans}}
+                                {{ temperature.Sensor.HighLimit }}
+                            </td>
+                            <td>
+                                {{ 'email.temperature.temperature' | trans}}
+                                {{ temperature.Temperature }}
+                            </td>
+                            <td>
+                                {{ 'email.temperature.notify-date' | trans}}{{ temperature.CreatedAt | date('d-m-Y H:i:s') }}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endif %}
+</p>
+<p>
+    <table table="0" cellpadding="0" cellspacing="0">
+        <tr>
+            <td class="valign-top">
+                <h3>{{ 'email.notification.text2' | trans }}</h3>
+                <table table="0" cellpadding="0" cellspacing="0">
+                    {% for address in Store.Addresses %}
+                    {% if address.Type.Id == 2 %}
+                        {% set Country = address.Country.Name | trans %}
+                        <tr>
+                            <td>{{ Store.Name }}</td>
+                        </tr>
+                        <tr>
+                            <td>{{ address.StreetName }} {{ address.HouseNumber }}</td>
+                        </tr>
+                        <tr>
+                            <td>{{ address.PostalCode }}</td>
+                        </tr>
+                        <tr>
+                            <td>{{ address.City }}</td>
+                        </tr>
+                        <tr>
+                            <td>{{ Country }}</td>
+                        </tr>
+                    {% endif %}
+                    {% endfor %}
+                </table>
+            </td>
+            <td class="valign-top">
+                <h3>{{ 'email.notification.text3' | trans }}</h3>
+                <table table="0" cellpadding="0" cellspacing="0">
+                    {% for contact in Store.Contacts %}
+                    <tr>
+                        <td>{{ contact.Name }}</td>
+                        {% if contact.Emails is defined %}
+                            {% for email in contact.Emails %}
+                                {% if email.Primary %}
+                                    <td>
+                                        <div class="label label-default">
+                                            {{ email.Email }}
+                                        </div>
+                                    </td>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                        {% if contact.Phones is defined %}
+                            {% for phone in contact.Phones %}
+                                {% if phone.Primary %}
+                                    <td>
+                                        <div class="label label-default">
+                                            {{ phone.PhoneNumber }}
+                                        </div>
+                                    </td>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </table>
+            </td>
+        </tr>
+    </table>
+</p>
+<br>
+<p>
+    <a class="btn-primary" target="_blank" href="http://www.phnctrl.nl/login">{{ "login.label" | trans }}</a>
+</p>
+
+{% endblock %}

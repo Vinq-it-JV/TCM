@@ -5,6 +5,7 @@ namespace DeviceBundle\Model;
 use DeviceBundle\Model\om\BaseCbInput;
 use \Criteria;
 use NotificationBundle\Model\CbInputNotification;
+use StoreBundle\Model\StoreQuery;
 
 class CbInput extends BaseCbInput
 {
@@ -49,6 +50,10 @@ class CbInput extends BaseCbInput
     public function checkSensorStatus()
     {
         $state = self::STATE_ACTIVE;
+
+        $store = StoreQuery::create()->findOneById($this->getMainStore());
+        if ($store->getIsMaintenance())
+            return $state;
 
         if ($this->checkSensorInactive())
             $state = self::STATE_INACTIVE;

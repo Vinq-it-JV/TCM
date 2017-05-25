@@ -69,6 +69,13 @@ abstract class BaseCbInputNotification extends BaseObject implements Persistent
     protected $reason;
 
     /**
+     * The value for the is_notified field.
+     * Note: this column has a database default value of: false
+     * @var        boolean
+     */
+    protected $is_notified;
+
+    /**
      * The value for the is_handled field.
      * Note: this column has a database default value of: false
      * @var        boolean
@@ -133,6 +140,7 @@ abstract class BaseCbInputNotification extends BaseObject implements Persistent
     {
         $this->switch_state = false;
         $this->reason = 0;
+        $this->is_notified = false;
         $this->is_handled = false;
     }
 
@@ -188,6 +196,17 @@ abstract class BaseCbInputNotification extends BaseObject implements Persistent
     {
 
         return $this->reason;
+    }
+
+    /**
+     * Get the [is_notified] column value.
+     *
+     * @return boolean
+     */
+    public function getIsNotified()
+    {
+
+        return $this->is_notified;
     }
 
     /**
@@ -389,6 +408,35 @@ abstract class BaseCbInputNotification extends BaseObject implements Persistent
     } // setReason()
 
     /**
+     * Sets the value of the [is_notified] column.
+     * Non-boolean arguments are converted using the following rules:
+     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     *
+     * @param boolean|integer|string $v The new value
+     * @return CbInputNotification The current object (for fluent API support)
+     */
+    public function setIsNotified($v)
+    {
+        if ($v !== null) {
+            if (is_string($v)) {
+                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            } else {
+                $v = (boolean) $v;
+            }
+        }
+
+        if ($this->is_notified !== $v) {
+            $this->is_notified = $v;
+            $this->modifiedColumns[] = CbInputNotificationPeer::IS_NOTIFIED;
+        }
+
+
+        return $this;
+    } // setIsNotified()
+
+    /**
      * Sets the value of the [is_handled] column.
      * Non-boolean arguments are converted using the following rules:
      *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
@@ -506,6 +554,10 @@ abstract class BaseCbInputNotification extends BaseObject implements Persistent
                 return false;
             }
 
+            if ($this->is_notified !== false) {
+                return false;
+            }
+
             if ($this->is_handled !== false) {
                 return false;
             }
@@ -536,10 +588,11 @@ abstract class BaseCbInputNotification extends BaseObject implements Persistent
             $this->sensor = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
             $this->switch_state = ($row[$startcol + 2] !== null) ? (boolean) $row[$startcol + 2] : null;
             $this->reason = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
-            $this->is_handled = ($row[$startcol + 4] !== null) ? (boolean) $row[$startcol + 4] : null;
-            $this->handled_by = ($row[$startcol + 5] !== null) ? (int) $row[$startcol + 5] : null;
-            $this->created_at = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
-            $this->updated_at = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
+            $this->is_notified = ($row[$startcol + 4] !== null) ? (boolean) $row[$startcol + 4] : null;
+            $this->is_handled = ($row[$startcol + 5] !== null) ? (boolean) $row[$startcol + 5] : null;
+            $this->handled_by = ($row[$startcol + 6] !== null) ? (int) $row[$startcol + 6] : null;
+            $this->created_at = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
+            $this->updated_at = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -549,7 +602,7 @@ abstract class BaseCbInputNotification extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 8; // 8 = CbInputNotificationPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 9; // 9 = CbInputNotificationPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating CbInputNotification object", $e);
@@ -811,6 +864,9 @@ abstract class BaseCbInputNotification extends BaseObject implements Persistent
         if ($this->isColumnModified(CbInputNotificationPeer::REASON)) {
             $modifiedColumns[':p' . $index++]  = '`reason`';
         }
+        if ($this->isColumnModified(CbInputNotificationPeer::IS_NOTIFIED)) {
+            $modifiedColumns[':p' . $index++]  = '`is_notified`';
+        }
         if ($this->isColumnModified(CbInputNotificationPeer::IS_HANDLED)) {
             $modifiedColumns[':p' . $index++]  = '`is_handled`';
         }
@@ -845,6 +901,9 @@ abstract class BaseCbInputNotification extends BaseObject implements Persistent
                         break;
                     case '`reason`':
                         $stmt->bindValue($identifier, $this->reason, PDO::PARAM_INT);
+                        break;
+                    case '`is_notified`':
+                        $stmt->bindValue($identifier, (int) $this->is_notified, PDO::PARAM_INT);
                         break;
                     case '`is_handled`':
                         $stmt->bindValue($identifier, (int) $this->is_handled, PDO::PARAM_INT);
@@ -1023,15 +1082,18 @@ abstract class BaseCbInputNotification extends BaseObject implements Persistent
                 return $this->getReason();
                 break;
             case 4:
-                return $this->getIsHandled();
+                return $this->getIsNotified();
                 break;
             case 5:
-                return $this->getHandledBy();
+                return $this->getIsHandled();
                 break;
             case 6:
-                return $this->getCreatedAt();
+                return $this->getHandledBy();
                 break;
             case 7:
+                return $this->getCreatedAt();
+                break;
+            case 8:
                 return $this->getUpdatedAt();
                 break;
             default:
@@ -1067,10 +1129,11 @@ abstract class BaseCbInputNotification extends BaseObject implements Persistent
             $keys[1] => $this->getSensor(),
             $keys[2] => $this->getSwitchState(),
             $keys[3] => $this->getReason(),
-            $keys[4] => $this->getIsHandled(),
-            $keys[5] => $this->getHandledBy(),
-            $keys[6] => $this->getCreatedAt(),
-            $keys[7] => $this->getUpdatedAt(),
+            $keys[4] => $this->getIsNotified(),
+            $keys[5] => $this->getIsHandled(),
+            $keys[6] => $this->getHandledBy(),
+            $keys[7] => $this->getCreatedAt(),
+            $keys[8] => $this->getUpdatedAt(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1131,15 +1194,18 @@ abstract class BaseCbInputNotification extends BaseObject implements Persistent
                 $this->setReason($value);
                 break;
             case 4:
-                $this->setIsHandled($value);
+                $this->setIsNotified($value);
                 break;
             case 5:
-                $this->setHandledBy($value);
+                $this->setIsHandled($value);
                 break;
             case 6:
-                $this->setCreatedAt($value);
+                $this->setHandledBy($value);
                 break;
             case 7:
+                $this->setCreatedAt($value);
+                break;
+            case 8:
                 $this->setUpdatedAt($value);
                 break;
         } // switch()
@@ -1170,10 +1236,11 @@ abstract class BaseCbInputNotification extends BaseObject implements Persistent
         if (array_key_exists($keys[1], $arr)) $this->setSensor($arr[$keys[1]]);
         if (array_key_exists($keys[2], $arr)) $this->setSwitchState($arr[$keys[2]]);
         if (array_key_exists($keys[3], $arr)) $this->setReason($arr[$keys[3]]);
-        if (array_key_exists($keys[4], $arr)) $this->setIsHandled($arr[$keys[4]]);
-        if (array_key_exists($keys[5], $arr)) $this->setHandledBy($arr[$keys[5]]);
-        if (array_key_exists($keys[6], $arr)) $this->setCreatedAt($arr[$keys[6]]);
-        if (array_key_exists($keys[7], $arr)) $this->setUpdatedAt($arr[$keys[7]]);
+        if (array_key_exists($keys[4], $arr)) $this->setIsNotified($arr[$keys[4]]);
+        if (array_key_exists($keys[5], $arr)) $this->setIsHandled($arr[$keys[5]]);
+        if (array_key_exists($keys[6], $arr)) $this->setHandledBy($arr[$keys[6]]);
+        if (array_key_exists($keys[7], $arr)) $this->setCreatedAt($arr[$keys[7]]);
+        if (array_key_exists($keys[8], $arr)) $this->setUpdatedAt($arr[$keys[8]]);
     }
 
     /**
@@ -1189,6 +1256,7 @@ abstract class BaseCbInputNotification extends BaseObject implements Persistent
         if ($this->isColumnModified(CbInputNotificationPeer::SENSOR)) $criteria->add(CbInputNotificationPeer::SENSOR, $this->sensor);
         if ($this->isColumnModified(CbInputNotificationPeer::SWITCH_STATE)) $criteria->add(CbInputNotificationPeer::SWITCH_STATE, $this->switch_state);
         if ($this->isColumnModified(CbInputNotificationPeer::REASON)) $criteria->add(CbInputNotificationPeer::REASON, $this->reason);
+        if ($this->isColumnModified(CbInputNotificationPeer::IS_NOTIFIED)) $criteria->add(CbInputNotificationPeer::IS_NOTIFIED, $this->is_notified);
         if ($this->isColumnModified(CbInputNotificationPeer::IS_HANDLED)) $criteria->add(CbInputNotificationPeer::IS_HANDLED, $this->is_handled);
         if ($this->isColumnModified(CbInputNotificationPeer::HANDLED_BY)) $criteria->add(CbInputNotificationPeer::HANDLED_BY, $this->handled_by);
         if ($this->isColumnModified(CbInputNotificationPeer::CREATED_AT)) $criteria->add(CbInputNotificationPeer::CREATED_AT, $this->created_at);
@@ -1259,6 +1327,7 @@ abstract class BaseCbInputNotification extends BaseObject implements Persistent
         $copyObj->setSensor($this->getSensor());
         $copyObj->setSwitchState($this->getSwitchState());
         $copyObj->setReason($this->getReason());
+        $copyObj->setIsNotified($this->getIsNotified());
         $copyObj->setIsHandled($this->getIsHandled());
         $copyObj->setHandledBy($this->getHandledBy());
         $copyObj->setCreatedAt($this->getCreatedAt());
@@ -1434,6 +1503,7 @@ abstract class BaseCbInputNotification extends BaseObject implements Persistent
         $this->sensor = null;
         $this->switch_state = null;
         $this->reason = null;
+        $this->is_notified = null;
         $this->is_handled = null;
         $this->handled_by = null;
         $this->created_at = null;

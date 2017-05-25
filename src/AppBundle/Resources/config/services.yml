@@ -2,3 +2,7 @@ services:
    class_helper:
         class: AppBundle\Services\ClassHelper
         arguments: ['@service_container']
+
+   notification_helper:
+        class: NotificationBundle\Services\NotificationHelper
+        arguments: ['@service_container']

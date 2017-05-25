@@ -65,6 +65,10 @@ angular
                 $scope.sensorGroup = null;
             };
 
+            $scope.isPage = function (pageid) {
+                return $scope.activePage == pageid;
+            };
+
             $scope.updateSensors = function () {
                 $scope.updateTimer = $timeout(function () {
                     switch ($scope.activePage) {

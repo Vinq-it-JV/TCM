@@ -48,7 +48,7 @@ class ClassHelper
             return false;
 
         $mail = \Swift_Message::newInstance()
-            ->setTo($email->getEmail(), $user->getUsername())
+            ->setTo($email->getEmail(), $user->getName())
             ->setFrom('noreply@' . $domain, $translator->trans('email.password.from') . $domain)
             ->setSubject($translator->trans('email.password.subject'))
             ->setBody($templating->render('UserBundle:email:password.html.twig', array('User' => $user, 'Password' => $password, 'Domain' => $domain)), 'text/html');

@@ -23,6 +23,7 @@ use UserBundle\Model\User;
  * @method DsTemperatureNotificationQuery orderBySensor($order = Criteria::ASC) Order by the sensor column
  * @method DsTemperatureNotificationQuery orderByTemperature($order = Criteria::ASC) Order by the temperature column
  * @method DsTemperatureNotificationQuery orderByReason($order = Criteria::ASC) Order by the reason column
+ * @method DsTemperatureNotificationQuery orderByIsNotified($order = Criteria::ASC) Order by the is_notified column
  * @method DsTemperatureNotificationQuery orderByIsHandled($order = Criteria::ASC) Order by the is_handled column
  * @method DsTemperatureNotificationQuery orderByHandledBy($order = Criteria::ASC) Order by the handled_by column
  * @method DsTemperatureNotificationQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
@@ -32,6 +33,7 @@ use UserBundle\Model\User;
  * @method DsTemperatureNotificationQuery groupBySensor() Group by the sensor column
  * @method DsTemperatureNotificationQuery groupByTemperature() Group by the temperature column
  * @method DsTemperatureNotificationQuery groupByReason() Group by the reason column
+ * @method DsTemperatureNotificationQuery groupByIsNotified() Group by the is_notified column
  * @method DsTemperatureNotificationQuery groupByIsHandled() Group by the is_handled column
  * @method DsTemperatureNotificationQuery groupByHandledBy() Group by the handled_by column
  * @method DsTemperatureNotificationQuery groupByCreatedAt() Group by the created_at column
@@ -55,6 +57,7 @@ use UserBundle\Model\User;
  * @method DsTemperatureNotification findOneBySensor(int $sensor) Return the first DsTemperatureNotification filtered by the sensor column
  * @method DsTemperatureNotification findOneByTemperature(string $temperature) Return the first DsTemperatureNotification filtered by the temperature column
  * @method DsTemperatureNotification findOneByReason(int $reason) Return the first DsTemperatureNotification filtered by the reason column
+ * @method DsTemperatureNotification findOneByIsNotified(boolean $is_notified) Return the first DsTemperatureNotification filtered by the is_notified column
  * @method DsTemperatureNotification findOneByIsHandled(boolean $is_handled) Return the first DsTemperatureNotification filtered by the is_handled column
  * @method DsTemperatureNotification findOneByHandledBy(int $handled_by) Return the first DsTemperatureNotification filtered by the handled_by column
  * @method DsTemperatureNotification findOneByCreatedAt(string $created_at) Return the first DsTemperatureNotification filtered by the created_at column
@@ -64,6 +67,7 @@ use UserBundle\Model\User;
  * @method array findBySensor(int $sensor) Return DsTemperatureNotification objects filtered by the sensor column
  * @method array findByTemperature(string $temperature) Return DsTemperatureNotification objects filtered by the temperature column
  * @method array findByReason(int $reason) Return DsTemperatureNotification objects filtered by the reason column
+ * @method array findByIsNotified(boolean $is_notified) Return DsTemperatureNotification objects filtered by the is_notified column
  * @method array findByIsHandled(boolean $is_handled) Return DsTemperatureNotification objects filtered by the is_handled column
  * @method array findByHandledBy(int $handled_by) Return DsTemperatureNotification objects filtered by the handled_by column
  * @method array findByCreatedAt(string $created_at) Return DsTemperatureNotification objects filtered by the created_at column
@@ -173,7 +177,7 @@ abstract class BaseDsTemperatureNotificationQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `sensor`, `temperature`, `reason`, `is_handled`, `handled_by`, `created_at`, `updated_at` FROM `ds_temperature_notification` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `sensor`, `temperature`, `reason`, `is_notified`, `is_handled`, `handled_by`, `created_at`, `updated_at` FROM `ds_temperature_notification` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -417,6 +421,33 @@ abstract class BaseDsTemperatureNotificationQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(DsTemperatureNotificationPeer::REASON, $reason, $comparison);
+    }
+
+    /**
+     * Filter the query on the is_notified column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByIsNotified(true); // WHERE is_notified = true
+     * $query->filterByIsNotified('yes'); // WHERE is_notified = true
+     * </code>
+     *
+     * @param     boolean|string $isNotified The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return DsTemperatureNotificationQuery The current query, for fluid interface
+     */
+    public function filterByIsNotified($isNotified = null, $comparison = null)
+    {
+        if (is_string($isNotified)) {
+            $isNotified = in_array(strtolower($isNotified), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+
+        return $this->addUsingAlias(DsTemperatureNotificationPeer::IS_NOTIFIED, $isNotified, $comparison);
     }
 
     /**

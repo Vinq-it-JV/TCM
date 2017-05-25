@@ -23,6 +23,7 @@ use UserBundle\Model\User;
  * @method CbInputNotificationQuery orderBySensor($order = Criteria::ASC) Order by the sensor column
  * @method CbInputNotificationQuery orderBySwitchState($order = Criteria::ASC) Order by the switch_state column
  * @method CbInputNotificationQuery orderByReason($order = Criteria::ASC) Order by the reason column
+ * @method CbInputNotificationQuery orderByIsNotified($order = Criteria::ASC) Order by the is_notified column
  * @method CbInputNotificationQuery orderByIsHandled($order = Criteria::ASC) Order by the is_handled column
  * @method CbInputNotificationQuery orderByHandledBy($order = Criteria::ASC) Order by the handled_by column
  * @method CbInputNotificationQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
@@ -32,6 +33,7 @@ use UserBundle\Model\User;
  * @method CbInputNotificationQuery groupBySensor() Group by the sensor column
  * @method CbInputNotificationQuery groupBySwitchState() Group by the switch_state column
  * @method CbInputNotificationQuery groupByReason() Group by the reason column
+ * @method CbInputNotificationQuery groupByIsNotified() Group by the is_notified column
  * @method CbInputNotificationQuery groupByIsHandled() Group by the is_handled column
  * @method CbInputNotificationQuery groupByHandledBy() Group by the handled_by column
  * @method CbInputNotificationQuery groupByCreatedAt() Group by the created_at column
@@ -55,6 +57,7 @@ use UserBundle\Model\User;
  * @method CbInputNotification findOneBySensor(int $sensor) Return the first CbInputNotification filtered by the sensor column
  * @method CbInputNotification findOneBySwitchState(boolean $switch_state) Return the first CbInputNotification filtered by the switch_state column
  * @method CbInputNotification findOneByReason(int $reason) Return the first CbInputNotification filtered by the reason column
+ * @method CbInputNotification findOneByIsNotified(boolean $is_notified) Return the first CbInputNotification filtered by the is_notified column
  * @method CbInputNotification findOneByIsHandled(boolean $is_handled) Return the first CbInputNotification filtered by the is_handled column
  * @method CbInputNotification findOneByHandledBy(int $handled_by) Return the first CbInputNotification filtered by the handled_by column
  * @method CbInputNotification findOneByCreatedAt(string $created_at) Return the first CbInputNotification filtered by the created_at column
@@ -64,6 +67,7 @@ use UserBundle\Model\User;
  * @method array findBySensor(int $sensor) Return CbInputNotification objects filtered by the sensor column
  * @method array findBySwitchState(boolean $switch_state) Return CbInputNotification objects filtered by the switch_state column
  * @method array findByReason(int $reason) Return CbInputNotification objects filtered by the reason column
+ * @method array findByIsNotified(boolean $is_notified) Return CbInputNotification objects filtered by the is_notified column
  * @method array findByIsHandled(boolean $is_handled) Return CbInputNotification objects filtered by the is_handled column
  * @method array findByHandledBy(int $handled_by) Return CbInputNotification objects filtered by the handled_by column
  * @method array findByCreatedAt(string $created_at) Return CbInputNotification objects filtered by the created_at column
@@ -173,7 +177,7 @@ abstract class BaseCbInputNotificationQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `sensor`, `switch_state`, `reason`, `is_handled`, `handled_by`, `created_at`, `updated_at` FROM `cb_input_notification` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `sensor`, `switch_state`, `reason`, `is_notified`, `is_handled`, `handled_by`, `created_at`, `updated_at` FROM `cb_input_notification` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -415,6 +419,33 @@ abstract class BaseCbInputNotificationQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(CbInputNotificationPeer::REASON, $reason, $comparison);
+    }
+
+    /**
+     * Filter the query on the is_notified column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByIsNotified(true); // WHERE is_notified = true
+     * $query->filterByIsNotified('yes'); // WHERE is_notified = true
+     * </code>
+     *
+     * @param     boolean|string $isNotified The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return CbInputNotificationQuery The current query, for fluid interface
+     */
+    public function filterByIsNotified($isNotified = null, $comparison = null)
+    {
+        if (is_string($isNotified)) {
+            $isNotified = in_array(strtolower($isNotified), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+
+        return $this->addUsingAlias(CbInputNotificationPeer::IS_NOTIFIED, $isNotified, $comparison);
     }
 
     /**

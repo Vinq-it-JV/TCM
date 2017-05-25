@@ -18,6 +18,7 @@
         </div>
     </div>
 
+    {# General store information #}
     <h5 ng-cloak>
         <i class="fa fa-info-circle fa-fw"></i> {{ ng.translate('STORE.INFORMATION') }}
     </h5>
@@ -70,6 +71,7 @@
         {% endverbatim %}
     </div>
 
+    {# Store email information #}
     <h5 ng-cloak>
         <i class="fa fa-envelope fa-fw"></i> {{ ng.translate('STORE.EMAILS') }}
     </h5>
@@ -86,6 +88,7 @@
     {% endverbatim %}
     </div>
 
+    {# Store phone information #}
     <h5 ng-cloak>
         <i class="fa fa-phone fa-fw"></i> {{ ng.translate('STORE.PHONES') }}
     </h5>
@@ -102,6 +105,7 @@
     {% endverbatim %}
     </div>
 
+    {# Store address infromation #}
     <h5 ng-cloak>
         <i class="fa fa-map-marker fa-fw"></i> {{ ng.translate('STORE.ADDRESSES') }}
     </h5>
@@ -135,28 +139,28 @@
                         <div class="col-md-2 col-xs-4" ng-cloak><label ng-cloak>{{ 'STORE.MAP' | translate }}:</label></div>
                         <div class="col-md-10 col-xs-8" ng-cloak>
                             <div class="angular-map-container" ng-if="!address.MapCoordinates">
-                                <ng-map center="{{ address.StreetName }} {{ address.HouseNumber }}, {{ address.City }}, {{ address.Country.Name | translate }}" zoom="18">
+                                <ng-map center="{{ address.StreetName }} {{ address.HouseNumber }}, {{ address.City }}, {{ address.Country.Name | translate }}" zoom="18" scrollwheel="false">
                                     <custom-marker position="{{ address.StreetName }} {{ address.HouseNumber }}, {{ address.City }}, {{ address.Country.Name | translate }}"
                                                    draggable="false"
                                                    animation="DROP"
                                                    class="tcm-map-marker">
                                         {% endverbatim %}
                                         <div class="tcm">
-                                            <img width="48" src="{{ asset('bundles/app/images/beerglass.png') }}"/>
+                                            <img width="48" ng-src="{{ asset('bundles/app/images/beerglass.png') }}"/>
                                         </div>
                                         {% verbatim %}
                                     </custom-marker>
                                 </ng-map>
                             </div>
                             <div class="angular-map-container" ng-if="address.MapCoordinates">
-                                <ng-map center="[{{ address.MapCoordinates }}]" zoom="18">
+                                <ng-map center="[{{ address.MapCoordinates }}]" zoom="18" scrollwheel="false">
                                     <custom-marker position="[{{ address.MapCoordinates }}]"
                                                    draggable="false"
                                                    animation="DROP"
                                                    class="tcm-map-marker">
                                         {% endverbatim %}
                                         <div class="tcm">
-                                            <img width="48" src="{{ asset('bundles/app/images/beerglass.png') }}"/>
+                                            <img width="48" ng-src="{{ asset('bundles/app/images/beerglass.png') }}"/>
                                         </div>
                                         {% verbatim %}
                                     </custom-marker>
@@ -170,6 +174,7 @@
     </div>
     {% endverbatim %}
 
+    {# Store owners information #}
     <h5 ng-cloak>
         <i class="fa fa-users fa-fw"></i> {{ ng.translate('STORE.OWNERS') }}
     </h5>
@@ -188,14 +193,62 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+    {% endverbatim %}
+
+    {# Store contacts information #}
+    <h5 ng-cloak>
+        <i class="fa fa-comments fa-fw"></i> {{ ng.translate('STORE.CONTACTS') }}
+    </h5>
+    {% verbatim %}
+    <div class="well">
+        <div ng-repeat="contact in stores.store().Contacts track by $index">
+            <hr ng-hide="$first"/>
             <div class="row">
+                <div class="col-md-6 col-xs-6">{{ contact.Name }}</div>
                 <div class="col-md-6 col-xs-6">
+                    <div class="row" style="height:20px;" ng-if="contact.Phones">
+                        <div class="label label-default"><i class="fa fa-phone fa-fw"></i>: {{ contact.Phones[0].PhoneNumber }}</div>
+                    </div>
+                    <div class="row" style="height:20px;" ng-if="contact.Emails">
+                        <div class="label label-default"><i class="fa fa-envelope fa-fw"></i>: {{ contact.Emails[0].Email }}</div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
     {% endverbatim %}
 
+    {# Store informants information #}
+    <h5 ng-cloak>
+        <i class="fa fa-phone fa-fw"></i> {{ ng.translate('STORE.INFORMANTS') }}
+    </h5>
+    {% verbatim %}
+    <div class="well">
+        <div ng-repeat="informant in stores.store().Informants track by $index">
+            <hr ng-hide="$first"/>
+            <div class="row">
+                <div class="col-md-6 col-xs-6">{{ informant.Name }}</div>
+                <div class="col-md-3 col-xs-3">
+                    <div class="row" style="height:20px;" ng-if="informant.Phones">
+                        <div class="label label-default"><i class="fa fa-phone fa-fw"></i>: {{ informant.Phones[0].PhoneNumber }}</div>
+                    </div>
+                    <div class="row" style="height:20px;" ng-if="informant.Emails">
+                        <div class="label label-default"><i class="fa fa-envelope fa-fw"></i>: {{ informant.Emails[0].Email }}</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-xs-3">
+                    <div class="row" style="height: 20px;" ng-repeat="role in informant.Roles" ng-show="role.Id > 4">
+                        <div class="{{ role.Style }}">{{ role.Description | translate }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endverbatim %}
+
+    {# Back button #}
     <div class="row">
         <div class="col-xs-12 col-md-12 col-lg-12">
             <div class="panel panel-info cursor-pointer" ng-click="showDashboard()">

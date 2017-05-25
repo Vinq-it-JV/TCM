@@ -4,7 +4,7 @@ email:
     from: 'Administration of '
     subject: 'Your credentials'
     header: 'Your credentials for login @'
-    text1: 'You are reveiving this email because you are registered at %Domain%.<br><br>We have generated a new password, which you can use to login.'
+    text1: 'You are receiving this email because you are registered at %Domain%.<br><br>We have generated a new password, which you can use to login.'
     text2: 'When logged in you can change the password in your profile to your own password.<br><br>If you have any questions please contact our support team at <a href="mailto:support@%Domain%?SUBJECT:Credential request for:%Username%">Contact Support</a><br><br><b>Please use your username in the subject otherwise your request will not be handled!</b>'
     username: 'Username'
     password: 'Password'
@@ -14,7 +14,43 @@ email:
     from: 'Administration of '
     subject: 'Your new password'
     header: 'Your new password for login @'
-    text1: 'You are reveiving this email because you changed your password for %Domain%.<br><br>Please keep this password safe, we do not store this!'
+    text1: 'You are receiving this email because you changed your password for %Domain%.<br><br>Please keep this password safe, we do not store this!'
     text2: 'Please make sure you use a secure password that can not be guessed by anyone.<br><br>If you have any questions please contact our support team at <a href="mailto:support@%Domain%?SUBJECT:Password support for:%Username%">Contact Support</a><br><br><b>Please use your username in the subject otherwise your request will not be handled!</b>'
     username: 'Username'
     password: 'New password'
+
+  notification:
+    label: 'Notification'
+    from: 'Notification of '
+    subject: 'Notification of possible problems'
+    header: 'There are possible problems at %Store%'
+    text1: 'You are receiving this email because you are in the notification list for: %Store%.<br><br>Below is a list of sensors that are currently in the notification state:<br><br>'
+    text2: 'Store information:'
+    text3: 'Contacts:'
+
+  input:
+    switch-when: 'Switch when: '
+    switch-state: 'State: '
+    notify-after: 'Notify after: '
+    notify-date: 'On: '
+    high: 'high'
+    low: 'low'
+
+  temperature:
+    low-limit: 'Low limit: '
+    high-limit: 'High limit: '
+    temperature: 'Temperature: '
+    notify-date: 'On: '
+
+COUNTRY:
+  NL_NAME: 'Netherlands'
+  BE_NAME: 'Belgium'
+  FR_NAME: 'France'
+  DE_NAME: 'Germany'
+  ES_NAME: 'Spain'
+  IT_NAME: 'Italy'
+  PT_NAME: 'Portugal'
+  GB_NAME: 'United kingdom'
+
+login:
+  label: 'TCM Login'

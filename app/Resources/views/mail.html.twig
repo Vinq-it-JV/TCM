@@ -45,6 +45,59 @@
             border-radius: 25px;
         }
 
+        .well {
+            min-height: 20px;
+            padding: 19px;
+            margin-bottom: 20px;
+            background-color: #f5f5f5;
+            border: 1px solid #e3e3e3;
+            border-radius: 4px;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .05);
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, .05)
+        }
+
+        .well-sm {
+            padding: 9px;
+            border-radius: 3px
+        }
+
+        .label {
+            display: inline;
+            padding: .2em .6em .3em;
+            font-size: 75%;
+            font-weight: 700;
+            line-height: 1;
+            color: #fff;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: baseline;
+            border-radius: .25em
+        }
+
+        .label-default {
+            background-color: #777
+        }
+
+        .label-primary {
+            background-color: #337ab7
+        }
+
+        .label-success {
+            background-color: #5cb85c
+        }
+
+        .label-info {
+            background-color: #5bc0de
+        }
+
+        .label-warning {
+            background-color: #f0ad4e
+        }
+
+        .label-danger {
+            background-color: #d9534f
+        }
+
         .btn-secondary {
             text-decoration: none;
             color: #FFF;
@@ -70,6 +123,10 @@
 
         .padding {
             padding: 10px 0;
+        }
+
+        .valign-top {
+            vertical-align: top;
         }
 
         /* -------------------------------------
@@ -204,9 +261,9 @@
                 <table>
                     <tr>
                         <td align="center">
-                            {#<p>
-                             Don't like these annoying emails? <a href="#"><unsubscribe>Unsubscribe</unsubscribe></a>.
-                            </p>#}
+                            <p>
+                                &copy; {{ "now"|date("Y") }} - TCM
+                            </p>
                         </td>
                     </tr>
                 </table>

@@ -18,3 +18,39 @@ email:
     text2: 'Maak alstublieft gebruik van een veilig wachtwoord wat niet makkelijk is te raden door iemand.<br><br>Als u vragen heeft neem dan contact op met ons support team via <a href="mailto:support@%Domain%?SUBJECT:Wachtwoord ondersteuning voor:%Username%">Contacteer Support</a><br><br><b>Gebruik uw genruikersnaam in het onderwerp veld anders wordt uw aanvraag niet in behandeling genomen!</b>'
     username: 'Username'
     password: 'New password'
+
+  notification:
+    label: 'Notificatie'
+    from: 'Notificatie van '
+    subject: 'Notificatie van mogelijke problemen'
+    header: 'Er zijn mogelijk problemen bij %Store%'
+    text1: 'U ontvangt deze email omdat u op de notificatielijst staat van: %Store%.<br><br>Hieronder staat een lijst van sensoren die in de notificatie status staan:<br><br>'
+    text2: 'Filiaal informatie:'
+    text3: 'Contactpersonen:'
+
+  input:
+    switch-when: 'Schakel als: '
+    switch-state: 'Status: '
+    notify-after: 'Notificeer na: '
+    notify-date: 'Op: '
+    high: 'hoog'
+    low: 'laag'
+
+  temperature:
+    low-limit: 'Omslag laag: '
+    high-limit: 'Omslag hoog: '
+    temperature: 'Temperatuur: '
+    notify-date: 'Op: '
+
+COUNTRY:
+  NL_NAME: 'Nederland'
+  BE_NAME: 'Belgie'
+  FR_NAME: 'Frankrijk'
+  DE_NAME: 'Duitsland'
+  ES_NAME: 'Spanje'
+  IT_NAME: 'Italie'
+  PT_NAME: 'Portugal'
+  GB_NAME: 'Verenigd koninkrijk'
+
+login:
+  label: 'TCM Inloggen'
