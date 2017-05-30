@@ -277,7 +277,8 @@ class Store extends BaseStore
     public function getNotificationsArray()
     {
         $notificationsArr = [];
-        $count = 0;
+        $ic = 0;
+        $tc = 0;
 
         $c = new Criteria();
         $c->add('cb_input_notification.is_handled', false);
@@ -285,8 +286,9 @@ class Store extends BaseStore
         $inputs = $this->getCbInputs();
         foreach ($inputs as $input) {
             if ($input->getState() == CbInput::STATE_NOTIFY && $input->getIsEnabled()) {
-                $notificationsArr['Inputs'] = $input->getCbInputNotifications($c)->toArray();
-                $count += count($notificationsArr['Inputs']);
+                $notifications = $input->getCbInputNotifications($c)->toArray();
+                foreach ($notifications as $notification)
+                    $notificationsArr['Inputs'][$ic++] = $notification;
             }
         }
 
@@ -296,12 +298,13 @@ class Store extends BaseStore
         $sensors = $this->getDsTemperatureSensors();
         foreach ($sensors as $sensor) {
             if ($sensor->getState() == DsTemperatureSensor::STATE_NOTIFY && $sensor->getIsEnabled()) {
-                $notificationsArr['Temperatures'] = $sensor->getDsTemperatureNotifications($c)->toArray();
-                $count += count($notificationsArr['Temperatures']);
+                $notifications = $sensor->getDsTemperatureNotifications($c)->toArray();
+                foreach ($notifications as $notification)
+                    $notificationsArr['Temperatures'][$tc++] = $notification;
             }
         }
 
-        $notificationsArr['Count'] = $count;
+        $notificationsArr['Count'] = $ic + $tc;
 
         return $notificationsArr;
     }
