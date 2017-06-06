@@ -111,6 +111,25 @@ body {
     text-shadow: 0px 1px #fefefe;
 }
 
+.notify-sensor {
+    padding-top: 4px;
+    font-size: 1.125em;
+    text-shadow: 0px 1px #fefefe;
+}
+
+.notify-label {
+    padding-top: 4px;
+    font-size: 1.0em;
+    text-shadow: none;
+}
+
+.notify-name {
+    padding-top: 4px;
+    font-size: 1.25em;
+    text-shadow: none;
+    font-weight: bold;
+}
+
 .group-image {
     width: 100%;
 }

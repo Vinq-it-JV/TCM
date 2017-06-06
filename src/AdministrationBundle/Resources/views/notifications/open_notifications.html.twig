@@ -1,0 +1,168 @@
+{% extends 'base.html.twig' %}
+
+{% block contents %}
+    {% if app.user %}
+        <div ng-controller="notificationCtrl" ng-init="getOpenNotifications()">
+
+            {% block header %}
+                {% include 'AdministrationBundle:header:header.html.twig' %}
+            {% endblock %}
+
+            {% block page %}
+                <div class="page">
+                    <div class="container">
+                        <div class="row">
+                            <div class="panel-body">
+                                <h4 ng-cloak>
+                                    <i class="fa fa-exclamation-triangle"></i> {{ ng.translate('NOTIFICATIONS.LABEL') }}
+                                </h4>
+                                <hr/>
+                                <div class="well">
+                                    <section st-table="inputsCollection" st-safe-src="notifications.inputNotifications()">
+                                        <div class="row">
+                                            <div class="col-md-3 col-xs-6">
+                                                <input st-search class="form-control input-sm"
+                                                       placeholder="{{ ng.translate('SEARCH') }}" type="text" ng-cloak/>
+                                            </div>
+                                        </div>
+                                        <br/>
+                                        <div class="row">
+                                            <div class="col-md-12 col-xs-12">
+                                                <table class="table table-striped table-bordered">
+                                                    <thead>
+                                                    <tr>
+                                                        <th st-sort="Sensor.MainStore.Name" class="st-sortable col-md-2 col-xs-2"
+                                                            ng-cloak>{{ ng.translate('SENSOR.STORE') }}</th>
+                                                        <th st-sort="Sensor.Name" class="st-sortable col-md-3 col-xs-3"
+                                                            ng-cloak>{{ ng.translate('SENSOR.NAME') }}</th>
+                                                        <th class="st-sortable col-md-2 col-xs-2"
+                                                            ng-cloak>{{ ng.translate('SENSOR.STATE.LABEL') }}</th>
+                                                        <th class="st-sortable col-md-2 col-xs-2"
+                                                            ng-cloak>{{ ng.translate('SENSOR.SWITCH_WHEN') }}</th>
+                                                        <th st-sort="CreatedAt.date" class="st-sortable col-md-2 col-xs-2"
+                                                            ng-cloak><i class="fa fa-fw fa-clock-o"></i></th>
+                                                        <th class="st-nosort text-right col-md-1 col-xs-1"
+                                                            ng-cloak>{{ ng.translate('ACTION') }}</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr ng-repeat="notification in inputsCollection">
+                                                        {% verbatim %}
+                                                        <td ng-cloak>{{ notification.Sensor.MainStore.Name }}</td>
+                                                        <td ng-cloak>{{ notification.Sensor.Name }}</td>
+                                                        <td ng-cloak>
+                                                            <div ng-switch="notification.SwitchState" class="pull-left">
+                                                                <div ng-switch-when="false" class="label label-danger notify-label" ng-cloak>
+                                                                    {{ 'SENSOR.LOW' | translate }}
+                                                                </div>
+                                                                <div ng-switch-when="true" class="label label-success notify-label" ng-cloak>
+                                                                    {{ 'SENSOR.HIGH' | translate }}
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td ng-cloak>
+                                                            <div ng-switch="notification.Sensor.SwitchWhen" class="pull-left">
+                                                                <div ng-switch-when="false" class="label label-danger notify-label" ng-cloak>
+                                                                    {{ 'SENSOR.LOW' | translate }}
+                                                                </div>
+                                                                <div ng-switch-when="true" class="label label-success notify-label" ng-cloak>
+                                                                    {{ 'SENSOR.HIGH' | translate }}
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td ng-cloak>
+                                                            {{ notification.CreatedAt.date | GMT:'DD-MM-YYYY H:mm:ss' }}
+                                                        </td>
+                                                        <td>
+                                                            <div class="pull-right">
+                                                                <button type="button" ng-click="handleInputNotification(notification.Id)"
+                                                                        class="btn btn-xs btn-success">
+                                                                    <i class="fa fa-check"></i>
+                                                                </button>
+                                                            </div>
+                                                        </td>
+                                                        {% endverbatim %}
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </section>
+                                </div>
+
+                                <hr/>
+                                <div class="well">
+                                    <section st-table="temperaturesCollection" st-safe-src="notifications.temperatureNotifications()">
+                                        <div class="row">
+                                            <div class="col-md-3 col-xs-6">
+                                                <input st-search class="form-control input-sm"
+                                                       placeholder="{{ ng.translate('SEARCH') }}" type="text" ng-cloak/>
+                                            </div>
+                                        </div>
+                                        <br/>
+                                        <div class="row">
+                                            <div class="col-md-12 col-xs-12">
+                                                <table class="table table-striped table-bordered">
+                                                    <thead>
+                                                    <tr>
+                                                        <th st-sort="Sensor.MainStore.Name" class="st-sortable col-md-2 col-xs-2"
+                                                            ng-cloak>{{ ng.translate('SENSOR.STORE') }}</th>
+                                                        <th st-sort="Sensor.Name" class="st-sortable col-md-3 col-xs-3"
+                                                            ng-cloak>{{ ng.translate('SENSOR.NAME') }}</th>
+                                                        <th class="st-sortable col-md-2 col-xs-2"
+                                                            ng-cloak>{{ ng.translate('SENSOR.TEMPERATURE') }}</th>
+                                                        <th class="st-sortable col-md-2 col-xs-2"
+                                                            ng-cloak>{{ ng.translate('SENSOR.TRIP') }}</th>
+                                                        <th st-sort="CreatedAt.date" class="st-sortable col-md-2 col-xs-2"
+                                                            ng-cloak><i class="fa fa-fw fa-clock-o"></i></th>
+                                                        <th class="st-nosort text-right col-md-1 col-xs-1"
+                                                            ng-cloak>{{ ng.translate('ACTION') }}</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr ng-repeat="notification in temperaturesCollection">
+                                                        {% verbatim %}
+                                                        <td ng-cloak>{{ notification.Sensor.MainStore.Name }}</td>
+                                                        <td ng-cloak>{{ notification.Sensor.Name }}</td>
+                                                        <td ng-cloak>
+                                                            <div class="label label-default notify-label">
+                                                                {{ notification.Temperature | number: 2 }}
+                                                            </div>
+                                                        </td>
+                                                        <td ng-cloak>
+                                                            <i class="fa fa-fw fa-level-down"></i>: {{ notification.Sensor.LowLimit | number: 2 }}
+                                                            <i class="fa fa-fw fa-level-up"></i>: {{ notification.Sensor.HighLimit | number: 2 }}
+                                                        </td>
+                                                        <td ng-cloak>
+                                                            {{ notification.CreatedAt.date | GMT:'DD-MM-YYYY H:mm:ss' }}
+                                                        </td>
+                                                        <td>
+                                                            <div class="pull-right">
+                                                                <button type="button" ng-click="handleTemperatureNotification(notification.Id)"
+                                                                        class="btn btn-xs btn-success">
+                                                                    <i class="fa fa-check"></i>
+                                                                </button>
+                                                            </div>
+                                                        </td>
+                                                        {% endverbatim %}
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </section>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endblock %}
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('bundles/app/js/app/controllers/notificationCtrl.js') }}"></script>
+    <script src="{{ asset('bundles/app/js/app/datasets/notifications.js') }}"></script>
+{% endblock %}
+

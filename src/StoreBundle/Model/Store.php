@@ -287,8 +287,10 @@ class Store extends BaseStore
         foreach ($inputs as $input) {
             if ($input->getState() == CbInput::STATE_NOTIFY && $input->getIsEnabled()) {
                 $notifications = $input->getCbInputNotifications($c)->toArray();
-                foreach ($notifications as $notification)
+                foreach ($notifications as $notification) {
+                    $notification['Sensor'] = $notification['Sensor']->toArray();
                     $notificationsArr['Inputs'][$ic++] = $notification;
+                }
             }
         }
 
@@ -299,8 +301,10 @@ class Store extends BaseStore
         foreach ($sensors as $sensor) {
             if ($sensor->getState() == DsTemperatureSensor::STATE_NOTIFY && $sensor->getIsEnabled()) {
                 $notifications = $sensor->getDsTemperatureNotifications($c)->toArray();
-                foreach ($notifications as $notification)
+                foreach ($notifications as $notification) {
+                    $notification['Sensor'] = $notification['Sensor']->toArray();
                     $notificationsArr['Temperatures'][$tc++] = $notification;
+                }
             }
         }
 

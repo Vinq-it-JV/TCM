@@ -102,13 +102,13 @@ class ListNotificationCommand extends ContainerAwareCommand
                 case 'Inputs':
                     $output->writeln(' > Inputs:');
                     foreach ($notification as $inotification) {
-                        $output->writeln(sprintf('  > %d - ([%s] - %s) switch when: %d, switch state: %d (notified: %d | handled: %d) on: %s', $inotification['Id'], $inotification['Sensor']->getUid(), $inotification['Sensor']->getName(), $inotification['Sensor']->getSwitchWhen(), $inotification['SwitchState'], $inotification['IsNotified'], $inotification['IsHandled'], $inotification['CreatedAt']->format('d-m-Y H:i:s')));
+                        $output->writeln(sprintf('  > %d - ([%s] - %s) switch when: %d, switch state: %d (notified: %d | handled: %d) on: %s', $inotification['Id'], $inotification['Sensor']['Uid'], $inotification['Sensor']['Name'], $inotification['Sensor']['SwitchWhen'], $inotification['SwitchState'], $inotification['IsNotified'], $inotification['IsHandled'], $inotification['CreatedAt']->format('d-m-Y H:i:s')));
                     }
                     break;
                 case 'Temperatures':
                     $output->writeln(' > Temperatures:');
                     foreach ($notification as $tnotification) {
-                        $output->writeln(sprintf('  > %d - ([%s] - %s) low limit: %s, high limit: %s temperature: %s (notified: %d | handled: %d) on: %s', $tnotification['Id'], $tnotification['Sensor']->getUid(), $tnotification['Sensor']->getName(), $tnotification['Sensor']->getLowLimit(), $tnotification['Sensor']->getHighLimit(), $tnotification['Temperature'], $tnotification['IsNotified'], $tnotification['IsHandled'], $tnotification['CreatedAt']->format('d-m-Y H:i:s')));
+                        $output->writeln(sprintf('  > %d - ([%s] - %s) low limit: %s, high limit: %s temperature: %s (notified: %d | handled: %d) on: %s', $tnotification['Id'], $tnotification['Sensor']['Uid'], $tnotification['Sensor']['Name'], $tnotification['Sensor']['LowLimit'], $tnotification['Sensor']['HighLimit'], $tnotification['Temperature'], $tnotification['IsNotified'], $tnotification['IsHandled'], $tnotification['CreatedAt']->format('d-m-Y H:i:s')));
                     }
                     break;
                 case 'Count':

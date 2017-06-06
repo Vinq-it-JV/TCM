@@ -299,6 +299,33 @@ administration_store_delete_address:
         expose: true
 
 #
+# NOTIFICATIONS
+#
+administration_open_notifications:
+    path:     /notifications/open
+    defaults: { _controller: AdministrationBundle:Page:openNotifications }
+    options:
+        expose: true
+
+administration_open_notifications_get:
+    path:     /notifications/open/get
+    defaults: { _controller: NotificationBundle:Data:getOpenNotifications }
+    options:
+        expose: true
+
+administration_handle_input_notification:
+    path:     /notifications/input/{notificationid}/handle
+    defaults: { _controller: NotificationBundle:Data:handleInputNotification }
+    options:
+        expose: true
+
+administration_handle_temperature_notification:
+    path:     /notifications/temperature/{notificationid}/handle
+    defaults: { _controller: NotificationBundle:Data:handleTemperatureNotification }
+    options:
+        expose: true
+
+#
 # CONFIGURATION STORES
 #
 configuration_stores:

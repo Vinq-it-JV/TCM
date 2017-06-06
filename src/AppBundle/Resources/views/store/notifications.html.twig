@@ -1,0 +1,187 @@
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-md-12 col-lg-12">
+            <div class="panel panel-default" ng-click="">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-2 text-center big-button-icon">
+                            <i class="fa fa-map-marker fa-5x fa-fw"></i>
+                        </div>
+                        <div class="col-xs-10 text-center big-button-text" style="font-size: 30px;" ng-cloak>
+                            {% verbatim %}
+                                {{ stores.store().Name }}
+                            {% endverbatim %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-md-12 col-lg-12">
+            <div class="panel panel-yellow">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-2 text-center big-button-icon">
+                            <i class="fa fa-warning fa-2x fa-fw"></i>
+                        </div>
+                        <div class="col-xs-10 text-center group-name" ng-cloak>
+                            {% verbatim %}
+                                {{ 'NOTIFICATIONS.LABEL' | translate }}
+                            {% endverbatim %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-md-12 col-lg-12">
+            {% verbatim %}
+            <div ng-repeat="(key, notifications) in stores.store().Notifications">
+                <div ng-switch="key">
+                    <div ng-switch-when="Inputs">
+                        <div ng-repeat="notification in notifications">
+                            <div class="well well-sm">
+                                <div class="row">
+                                    <div class="col-xs-2">
+                                        <i class="fa fa-fw fa-sign-in fa-2x"></i>
+                                    </div>
+                                    <div class="col-xs-10 notify-name">
+                                        {{ notification.Sensor.Name }}
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-xs-3 col-xs-offset-2 notify-sensor">
+                                        <div class="row">
+                                            <div class="col-xs-6" ng-cloak>
+                                                {{ 'SENSOR.STATE.LABEL' | translate }}:
+                                            </div>
+                                            <div class="col-xs-6" ng-cloak>
+                                                <div ng-switch="notification.Sensor.SwitchWhen" class="pull-left">
+                                                    <div ng-switch-when="false" class="label label-danger notify-label" ng-cloak>
+                                                        {{ 'SENSOR.LOW' | translate }}
+                                                    </div>
+                                                    <div ng-switch-when="true" class="label label-success notify-label" ng-cloak>
+                                                        {{ 'SENSOR.HIGH' | translate }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-4 col-xs-offset-2 notify-sensor">
+                                        <div class="row">
+                                            <div class="col-xs-6" ng-cloak>
+                                                {{ 'SENSOR.SWITCH_WHEN' | translate }}:
+                                            </div>
+                                            <div class="col-xs-6">
+                                                <div ng-switch="notification.Sensor.SwitchWhen" class="pull-left">
+                                                    <div ng-switch-when="false" class="label label-danger notify-label" ng-cloak>
+                                                        {{ 'SENSOR.LOW' | translate }}
+                                                    </div>
+                                                    <div ng-switch-when="true" class="label label-success notify-label" ng-cloak>
+                                                        {{ 'SENSOR.HIGH' | translate }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-xs-2">
+                                        <button class="btn btn-default btn-sm" ng-click="gotoSensor(notification.Sensor.Group)">
+                                            {{ 'SENSOR.SHOW_SENSOR' | translate }}
+                                        </button>
+                                    </div>
+                                    <div class="col-xs-10 notify-sensor">
+                                        <p class="pull-right"><i class="fa fa-fw fa-clock-o"></i> {{ notification.CreatedAt.date | GMT:'DD-MM-YYYY H:mm:ss' }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-switch-when="Temperatures">
+                        <div ng-repeat="notification in notifications">
+                            <div class="well well-sm">
+                                <div class="row">
+                                    <div class="col-xs-2">
+                                        <i class="fa fa-fw fa-thermometer-2 fa-2x"></i>
+                                    </div>
+                                    <div class="col-xs-10 group-sensor notify-name">
+                                        {{ notification.Sensor.Name }}
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-xs-2 col-xs-offset-2 notify-sensor">
+                                        <div class="row">
+                                            <div class="col-xs-8" ng-cloak>
+                                                {{ 'SENSOR.TEMPERATURE' | translate }}:
+                                            </div>
+                                            <div class="col-xs-4">
+                                                <div class="label label-default notify-label pull-left">
+                                                    {{ notification.Temperature | number: 2 }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-2 col-xs-offset-3 notify-sensor">
+                                        <div class="row">
+                                            <div class="col-xs-8" ng-cloak>
+                                                <i class="fa fa-fw fa-level-down"></i>:
+                                            </div>
+                                            <div class="col-xs-4">
+                                                <b>{{ notification.Sensor.LowLimit | number: 2 }}</b>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-2 notify-sensor">
+                                        <div class="row">
+                                            <div class="col-xs-8" ng-cloak>
+                                                <i class="fa fa-fw fa-level-up"></i>:
+                                            </div>
+                                            <div class="col-xs-4">
+                                                <b>{{ notification.Sensor.HighLimit | number: 2 }}</b>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-xs-2">
+                                        <button class="btn btn-default btn-sm" ng-click="gotoSensor(notification.Sensor.Group)">
+                                            {{ 'SENSOR.SHOW_SENSOR' | translate }}
+                                        </button>
+                                    </div>
+                                    <div class="col-xs-10 notify-sensor">
+                                        <p class="pull-right"><i class="fa fa-fw fa-clock-o"></i> {{ notification.CreatedAt.date | GMT:'DD-MM-YYYY H:mm:ss' }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endverbatim %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-md-12 col-lg-12">
+            <div class="panel panel-info cursor-pointer" ng-click="showDashboard()">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-12 text-left big-button-text" style="font-size: 30px;" ng-cloak>
+                            {{ ng.translate('BACK') }}
+                            <i class="fa fa-chevron-left fa-2x fa-fw pull-right"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

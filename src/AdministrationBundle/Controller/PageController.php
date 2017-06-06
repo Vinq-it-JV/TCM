@@ -180,4 +180,10 @@ class PageController extends Controller
         return $this->render('AdministrationBundle:installation:edit_sensor.html.twig', $sensorArr);
     }
 
+    public function openNotificationsAction(Request $request)
+    {
+        return $this->render('AdministrationBundle:notifications:open_notifications.html.twig');
+    }
+
+
 }

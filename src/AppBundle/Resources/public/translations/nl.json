@@ -235,6 +235,7 @@
         "DESCRIPTION": "Omschrijving",
         "TEMPERATURE": "Temperatuur",
         "INPUT": "Ingang",
+        "TRIP": "Omslag",
         "TRIP_LOW": "Omslag laag",
         "TRIP_HIGH": "Omslag hoog",
         "SWITCH_WHEN": "Schakel als",
@@ -242,6 +243,7 @@
         "LOW": "Laag",
         "LAST_UPDATED": "Laatste update op: ",
         "NOTIFY_AFTER": "Notificeer na",
+        "SHOW_SENSOR": "Toon sensor",
         "STATE": {
             "LABEL": "Status",
             "ACTIVE": "Actief",
@@ -250,7 +252,10 @@
         }
     },
     "NOTIFICATIONS": {
-        "LABEL": "Notificaties"
+        "LABEL": "Notificaties",
+        "OPEN_NOTIFICATIONS": "Open notificaties",
+        "CLOSED_NOTIFICATIONS": "Gesloten notificaties",
+        "HANDLE": "Afhandelen"
     },
     "INSTALLATION": {
         "LABEL": "Installatie",
@@ -278,7 +283,8 @@
         "COPY_COMPANY_DATA": "Bedrijfsdata kopiëren?",
         "DELETE_GROUP": "Groep verwijderen?",
         "UNLINK_SENSOR": "Sensor loskoppelen van filiaal?",
-        "NEW_PASSWORD": "Nieuw wachtwoord genereren voor gebuiker?"
+        "NEW_PASSWORD": "Nieuw wachtwoord genereren voor gebuiker?",
+        "HANDLE_NOTIFICATION": "Notificatie afhandelen?"
     },
     "AUTH": {
         "USERNAME": "Gebruikersnaam",

@@ -60,9 +60,20 @@ angular
                 $scope.activePage = 'information';
             };
 
+            $scope.showNotifications = function () {
+                $scope.activePage = 'notifications';
+            };
+
             $scope.showSensors = function () {
                 $scope.activePage = 'sensors';
                 $scope.sensorGroup = null;
+            };
+
+            $scope.gotoSensor = function (groupid) {
+                if (groupid == 0)
+                    $scope.showSensors();
+                else
+                    $scope.showGroupSensors(groupid);
             };
 
             $scope.isPage = function (pageid) {

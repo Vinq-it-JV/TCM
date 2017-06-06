@@ -65,8 +65,22 @@ class TestCommand extends ContainerAwareCommand
         //$this->checkInputs($output);
         //$this->checkSensorStatus($output);
         //$this->showNotifications($output);
-        $this->testNotificationMail($output);
+        //$this->testNotificationMail($output);
+        $this->showInputNotifications($output);
         $output->writeln("Ready.");
+    }
+
+    protected function showInputNotifications(OutputInterface $output)
+    {
+        $c = new Criteria();
+        $c->add('cb_input_notification.is_handled', false);
+
+        $input = CbInputQuery::create()->findOneById(1);
+        if (!empty($input))
+        {
+            $notifications['Inputs'] = $input->getCbInputNotifications($c)->toArray();
+            var_dump($notifications);
+        }
     }
 
     protected function testNotificationMail(OutputInterface $output)

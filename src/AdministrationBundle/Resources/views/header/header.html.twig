@@ -40,6 +40,16 @@
                         </ul>
                     </li>
 
+                    {# Notifications #}
+                    <li class="dropdown">
+                        <a href="#" data-toggle="dropdown">
+                            <i class="icon-book icon-white"></i><div class="inline" ng-cloak>{{ ng.translate('NOTIFICATIONS.LABEL') }} <b class="caret"></b></div>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{{ path('administration_open_notifications') }}" ng-cloak> {{ ng.translate('NOTIFICATIONS.OPEN_NOTIFICATIONS') }} </a></li>
+                            <li><a href="{{ path('configuration_installation') }}" ng-cloak> {{ ng.translate('NOTIFICATIONS.CLOSED_NOTIFICATIONS') }} </a></li>
+                        </ul>
+                    </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown">
