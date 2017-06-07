@@ -313,6 +313,12 @@ administration_open_notifications_get:
     options:
         expose: true
 
+administration_closed_notifications:
+    path:     /notifications/closed
+    defaults: { _controller: AdministrationBundle:Page:closedNotifications }
+    options:
+        expose: true
+
 administration_handle_input_notification:
     path:     /notifications/input/{notificationid}/handle
     defaults: { _controller: NotificationBundle:Data:handleInputNotification }

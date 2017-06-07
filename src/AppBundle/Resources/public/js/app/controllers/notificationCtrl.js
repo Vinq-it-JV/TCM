@@ -19,9 +19,19 @@ angular
 
         $scope.getOpenNotifications = function ()
         {
-            console.log('open notifications');
-
             $scope.requestType = 'getOpenNotifications';
+
+            var getdata = {
+                'url': Routing.generate('administration_open_notifications_get'),
+                'payload': ''
+            };
+
+            $scope.BE.get(getdata, $scope.fetchDataOk, $scope.fetchDataFail);
+        };
+
+        $scope.getClosedNotifications = function ()
+        {
+            $scope.requestType = 'getClosedNotifications';
 
             var getdata = {
                 'url': Routing.generate('administration_open_notifications_get'),

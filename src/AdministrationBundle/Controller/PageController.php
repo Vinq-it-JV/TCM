@@ -185,5 +185,9 @@ class PageController extends Controller
         return $this->render('AdministrationBundle:notifications:open_notifications.html.twig');
     }
 
+    public function closedNotificationsAction(Request $request)
+    {
+        return $this->render('AdministrationBundle:notifications:closed_notifications.html.twig');
+    }
 
 }

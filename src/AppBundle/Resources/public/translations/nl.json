@@ -244,6 +244,7 @@
         "LAST_UPDATED": "Laatste update op: ",
         "NOTIFY_AFTER": "Notificeer na",
         "SHOW_SENSOR": "Toon sensor",
+        "HANDLED_BY": "Afgehandeld door",
         "STATE": {
             "LABEL": "Status",
             "ACTIVE": "Actief",

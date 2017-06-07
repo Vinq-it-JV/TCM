@@ -2,7 +2,7 @@
 
 {% block contents %}
     {% if app.user %}
-        <div ng-controller="notificationCtrl" ng-init="getOpenNotifications()">
+        <div ng-controller="notificationCtrl" ng-init="getClosedNotifications()">
 
             {% block header %}
                 {% include 'AdministrationBundle:header:header.html.twig' %}
@@ -14,7 +14,7 @@
                         <div class="row">
                             <div class="panel-body">
                                 <h4 ng-cloak>
-                                    <i class="fa fa-exclamation-triangle"></i> {{ ng.translate('NOTIFICATIONS.OPEN_NOTIFICATIONS') }}
+                                    <i class="fa fa-exclamation-triangle"></i> {{ ng.translate('NOTIFICATIONS.CLOSED_NOTIFICATIONS') }}
                                 </h4>
                                 <hr/>
                                 <div class="well">
@@ -33,7 +33,7 @@
                                                     <tr>
                                                         <th st-sort="Sensor.MainStore.Name" class="st-sortable col-md-2 col-xs-2"
                                                             ng-cloak>{{ ng.translate('SENSOR.STORE') }}</th>
-                                                        <th st-sort="Sensor.Name" class="st-sortable col-md-3 col-xs-3"
+                                                        <th st-sort="Sensor.Name" class="st-sortable col-md-2 col-xs-2"
                                                             ng-cloak>{{ ng.translate('SENSOR.NAME') }}</th>
                                                         <th class="st-sortable col-md-2 col-xs-2"
                                                             ng-cloak>{{ ng.translate('SENSOR.STATE.LABEL') }}</th>
@@ -41,8 +41,8 @@
                                                             ng-cloak>{{ ng.translate('SENSOR.SWITCH_WHEN') }}</th>
                                                         <th st-sort="CreatedAt.date" class="st-sortable col-md-2 col-xs-2"
                                                             ng-cloak><i class="fa fa-fw fa-clock-o"></i></th>
-                                                        <th class="st-nosort text-right col-md-1 col-xs-1"
-                                                            ng-cloak>{{ ng.translate('ACTION') }}</th>
+                                                        <th st-sort="HandledBy.Name" class="st-nosort text-right col-md-2 col-xs-2"
+                                                            ng-cloak><i class="fa fa-fw fa-user"></i></th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
@@ -74,12 +74,7 @@
                                                             {{ notification.CreatedAt.date | GMT:'DD-MM-YYYY H:mm:ss' }}
                                                         </td>
                                                         <td>
-                                                            <div class="pull-right">
-                                                                <button type="button" ng-click="handleInputNotification(notification.Id)"
-                                                                        class="btn btn-xs btn-success">
-                                                                    <i class="fa fa-check"></i>
-                                                                </button>
-                                                            </div>
+                                                            {{ notification.HandledBy.Name }}
                                                         </td>
                                                         {% endverbatim %}
                                                     </tr>
@@ -107,7 +102,7 @@
                                                     <tr>
                                                         <th st-sort="Sensor.MainStore.Name" class="st-sortable col-md-2 col-xs-2"
                                                             ng-cloak>{{ ng.translate('SENSOR.STORE') }}</th>
-                                                        <th st-sort="Sensor.Name" class="st-sortable col-md-3 col-xs-3"
+                                                        <th st-sort="Sensor.Name" class="st-sortable col-md-2 col-xs-2"
                                                             ng-cloak>{{ ng.translate('SENSOR.NAME') }}</th>
                                                         <th class="st-sortable col-md-2 col-xs-2"
                                                             ng-cloak>{{ ng.translate('SENSOR.TEMPERATURE') }}</th>
@@ -115,8 +110,8 @@
                                                             ng-cloak>{{ ng.translate('SENSOR.TRIP') }}</th>
                                                         <th st-sort="CreatedAt.date" class="st-sortable col-md-2 col-xs-2"
                                                             ng-cloak><i class="fa fa-fw fa-clock-o"></i></th>
-                                                        <th class="st-nosort text-right col-md-1 col-xs-1"
-                                                            ng-cloak>{{ ng.translate('ACTION') }}</th>
+                                                        <th st-sort="HandledBy.Name" class="st-nosort text-right col-md-2 col-xs-2"
+                                                            ng-cloak><i class="fa fa-fw fa-user"></i></th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
@@ -137,12 +132,7 @@
                                                             {{ notification.CreatedAt.date | GMT:'DD-MM-YYYY H:mm:ss' }}
                                                         </td>
                                                         <td>
-                                                            <div class="pull-right">
-                                                                <button type="button" ng-click="handleTemperatureNotification(notification.Id)"
-                                                                        class="btn btn-xs btn-success">
-                                                                    <i class="fa fa-check"></i>
-                                                                </button>
-                                                            </div>
+                                                            {{ notification.HandledBy.Name | GMT:'DD-MM-YYYY H:mm:ss' }}
                                                         </td>
                                                         {% endverbatim %}
                                                     </tr>

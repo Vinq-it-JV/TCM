@@ -244,6 +244,7 @@
         "LAST_UPDATED": "Last updated on: ",
         "NOTIFY_AFTER": "Notify after",
         "SHOW_SENSOR": "Show sensor",
+        "HANDLED_BY": "Handled by",
         "STATE": {
             "LABEL": "State",
             "ACTIVE": "Active",
