@@ -16,6 +16,8 @@ angular
         $scope.notifications = DS_Notifications;
         $scope.inputsCollection = [];
         $scope.temperaturesCollection = [];
+        $scope.inputTableState = [];
+        $scope.temperatureTableState = [];
 
         $scope.getOpenNotifications = function ()
         {
@@ -29,16 +31,28 @@ angular
             $scope.BE.get(getdata, $scope.fetchDataOk, $scope.fetchDataFail);
         };
 
-        $scope.getClosedNotifications = function ()
+        $scope.getClosedInputNotifications = function (tableState)
         {
-            $scope.requestType = 'getClosedNotifications';
+            $scope.inputTableState = tableState;
 
-            var getdata = {
-                'url': Routing.generate('administration_open_notifications_get'),
-                'payload': ''
+            var putdata = {
+                'url': Routing.generate('administration_closed_input_notifications_get'),
+                'payload': $scope.inputTableState
             };
 
-            $scope.BE.get(getdata, $scope.fetchDataOk, $scope.fetchDataFail);
+            $scope.BE.put(putdata, $scope.fetchInputDataOk, $scope.fetchDataFail);
+        };
+
+        $scope.getClosedTemperatureNotifications = function (tableState)
+        {
+            $scope.temperatureTableState = tableState;
+
+            var putdata = {
+                'url': Routing.generate('administration_closed_temperature_notifications_get'),
+                'payload': $scope.temperatureTableState
+            };
+
+            $scope.BE.put(putdata, $scope.fetchTemperatureDataOk, $scope.fetchDataFail);
         };
 
         $scope.handleInputNotification = function (notificationid)
@@ -83,6 +97,26 @@ angular
             };
 
             Modal.open({}, modalOptions);
+        };
+
+        $scope.fetchInputDataOk = function (data)
+        {
+            if (!$scope.isValidObject(data))
+                return;
+            if (!data.errorcode) {
+                $scope.inputTableState.pagination = data.contents.tableState.pagination;
+                $scope.inputsCollection = [].concat(data.contents.notifications);
+            }
+        };
+
+        $scope.fetchTemperatureDataOk = function (data)
+        {
+            if (!$scope.isValidObject(data))
+                return;
+            if (!data.errorcode) {
+                $scope.temperatureTableState.pagination = data.contents.tableState.pagination;
+                $scope.temperaturesCollection = [].concat(data.contents.notifications);
+            }
         };
 
         $scope.fetchDataOk = function (data)

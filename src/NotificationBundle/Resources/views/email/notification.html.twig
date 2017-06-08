@@ -9,46 +9,49 @@
     {% if Store.getNotificationsArray is not empty %}
         {% if Store.getNotificationsArray.Inputs is defined %}
             {% for input in Store.getNotificationsArray.Inputs %}
-            <div class="padding well well-sm">
-                <table table="0" cellpadding="0" cellspacing="0">
-                    <tr>
-                        <td style="padding-left: 10px; width: 25%;">
-                            {{ input.Sensor.Name }}
-                        </td>
-                        <td>
-                            {{ 'email.input.switch-when' | trans}}
-                            {% if input.Sensor.SwitchWhen %}
-                                <div class="label label-success">
-                                    {{ 'email.input.high' | trans}}
-                                </div>
-                            {% else %}
-                                <div class="label label-danger">
-                                    {{ 'email.input.low' | trans}}
-                                </div>
-                            {% endif %}
-                        </td>
-                        <td>
-                            {{ 'email.input.switch-state' | trans}}
-                            {% if input.SwitchState %}
-                                <div class="label label-success">
-                                    {{ 'email.input.high' | trans}}
-                                </div>
-                            {% else %}
-                                <div class="label label-danger">
-                                    {{ 'email.input.low' | trans}}
-                                </div>
-                            {% endif %}
-                        </td>
-                        <td style="text-align: right; padding-right: 10px;">
-                            {{ 'email.input.notify-date' | trans}}{{ input.CreatedAt | date('d-m-Y H:i:s') }}
-                        </td>
-                    </tr>
-                </table>
-            </div>
+                {%  if not input.IsNotified %}
+                <div class="padding well well-sm">
+                    <table table="0" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td style="padding-left: 10px; width: 25%;">
+                                {{ input.Sensor.Name }}
+                            </td>
+                            <td>
+                                {{ 'email.input.switch-when' | trans}}
+                                {% if input.Sensor.SwitchWhen %}
+                                    <div class="label label-success">
+                                        {{ 'email.input.high' | trans}}
+                                    </div>
+                                {% else %}
+                                    <div class="label label-danger">
+                                        {{ 'email.input.low' | trans}}
+                                    </div>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {{ 'email.input.switch-state' | trans}}
+                                {% if input.SwitchState %}
+                                    <div class="label label-success">
+                                        {{ 'email.input.high' | trans}}
+                                    </div>
+                                {% else %}
+                                    <div class="label label-danger">
+                                        {{ 'email.input.low' | trans}}
+                                    </div>
+                                {% endif %}
+                            </td>
+                            <td style="text-align: right; padding-right: 10px;">
+                                {{ 'email.input.notify-date' | trans}}{{ input.CreatedAt | date('d-m-Y H:i:s') }}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                {% endif %}
             {% endfor %}
         {% endif %}
         {% if Store.getNotificationsArray.Temperatures is defined %}
             {% for temperature in Store.getNotificationsArray.Temperatures %}
+                {% if not temperature.IsNotified %}
                 <div class="padding well well-sm">
                     <table table="0" cellpadding="0" cellspacing="0">
                         <tr>
@@ -73,6 +76,7 @@
                         </tr>
                     </table>
                 </div>
+                {% endif %}
             {% endfor %}
         {% endif %}
     {% endif %}

@@ -319,6 +319,18 @@ administration_closed_notifications:
     options:
         expose: true
 
+administration_closed_input_notifications_get:
+    path:     /notifications/closed/inputs/get
+    defaults: { _controller: NotificationBundle:Data:getClosedInputNotifications }
+    options:
+        expose: true
+
+administration_closed_temperature_notifications_get:
+    path:     /notifications/closed/temperatures/get
+    defaults: { _controller: NotificationBundle:Data:getClosedTemperatureNotifications }
+    options:
+        expose: true
+
 administration_handle_input_notification:
     path:     /notifications/input/{notificationid}/handle
     defaults: { _controller: NotificationBundle:Data:handleInputNotification }

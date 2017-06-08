@@ -2,7 +2,7 @@
 
 {% block contents %}
     {% if app.user %}
-        <div ng-controller="notificationCtrl" ng-init="getClosedNotifications()">
+        <div ng-controller="notificationCtrl" ng-init="">
 
             {% block header %}
                 {% include 'AdministrationBundle:header:header.html.twig' %}
@@ -18,14 +18,7 @@
                                 </h4>
                                 <hr/>
                                 <div class="well">
-                                    <section st-table="inputsCollection" st-safe-src="notifications.inputNotifications()">
-                                        <div class="row">
-                                            <div class="col-md-3 col-xs-6">
-                                                <input st-search class="form-control input-sm"
-                                                       placeholder="{{ ng.translate('SEARCH') }}" type="text" ng-cloak/>
-                                            </div>
-                                        </div>
-                                        <br/>
+                                    <section st-table="inputsCollection" st-pipe="getClosedInputNotifications" st-persist="inputTable">
                                         <div class="row">
                                             <div class="col-md-12 col-xs-12">
                                                 <table class="table table-striped table-bordered">
@@ -79,6 +72,12 @@
                                                         {% endverbatim %}
                                                     </tr>
                                                     </tbody>
+                                                    <tfoot>
+                                                        <tr>
+                                                            <td class="text-center" st-pagination="" st-items-by-page="10" colspan="6">
+                                                            </td>
+                                                        </tr>
+                                                    </tfoot>
                                                 </table>
                                             </div>
                                         </div>
@@ -87,14 +86,7 @@
 
                                 <hr/>
                                 <div class="well">
-                                    <section st-table="temperaturesCollection" st-safe-src="notifications.temperatureNotifications()">
-                                        <div class="row">
-                                            <div class="col-md-3 col-xs-6">
-                                                <input st-search class="form-control input-sm"
-                                                       placeholder="{{ ng.translate('SEARCH') }}" type="text" ng-cloak/>
-                                            </div>
-                                        </div>
-                                        <br/>
+                                    <section st-table="temperaturesCollection" st-pipe="getClosedTemperatureNotifications" st-persist="temperatureTable">
                                         <div class="row">
                                             <div class="col-md-12 col-xs-12">
                                                 <table class="table table-striped table-bordered">
@@ -132,11 +124,17 @@
                                                             {{ notification.CreatedAt.date | GMT:'DD-MM-YYYY H:mm:ss' }}
                                                         </td>
                                                         <td>
-                                                            {{ notification.HandledBy.Name | GMT:'DD-MM-YYYY H:mm:ss' }}
+                                                            {{ notification.HandledBy.Name }}
                                                         </td>
                                                         {% endverbatim %}
                                                     </tr>
                                                     </tbody>
+                                                    <tfoot>
+                                                    <tr>
+                                                        <td class="text-center" st-pagination="" st-items-by-page="10" colspan="6">
+                                                        </td>
+                                                    </tr>
+                                                    </tfoot>
                                                 </table>
                                             </div>
                                         </div>

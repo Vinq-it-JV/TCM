@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="282e9c36-730e-4d16-a19d-353a62e794e2" name="Default" comment="" />
+    <list default="true" id="282e9c36-730e-4d16-a19d-353a62e794e2" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/directives/st-persist.js" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/directives/persist.js" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Resources/views/base.html.twig" afterPath="$PROJECT_DIR$/app/Resources/views/base.html.twig" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AdministrationBundle/Resources/config/routing.yml" afterPath="$PROJECT_DIR$/src/AdministrationBundle/Resources/config/routing.yml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/notifications/closed_notifications.html.twig" afterPath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/notifications/closed_notifications.html.twig" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/notificationCtrl.js" afterPath="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/notificationCtrl.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/NotificationBundle/Controller/DataController.php" afterPath="$PROJECT_DIR$/src/NotificationBundle/Controller/DataController.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/NotificationBundle/Resources/views/email/notification.html.twig" afterPath="$PROJECT_DIR$/src/NotificationBundle/Resources/views/email/notification.html.twig" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/js/fos_js_routes.js" afterPath="$PROJECT_DIR$/web/js/fos_js_routes.js" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -24,32 +35,66 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="notificationCtrl.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="notification.html.twig" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/NotificationBundle/Resources/views/email/notification.html.twig">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="503">
+              <caret line="78" column="16" lean-forward="false" selection-start-line="78" selection-start-column="16" selection-end-line="78" selection-end-column="16" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="notificationCtrl.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/notificationCtrl.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="292">
-              <caret line="39" column="0" lean-forward="false" selection-start-line="39" selection-start-column="0" selection-end-line="39" selection-end-column="0" />
+            <state relative-caret-position="285">
+              <caret line="19" column="41" lean-forward="false" selection-start-line="19" selection-start-column="41" selection-end-line="19" selection-end-column="41" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="header.html.twig" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/AdministrationBundle/Resources/views/header/header.html.twig">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="223">
-              <caret line="49" column="71" lean-forward="false" selection-start-line="49" selection-start-column="71" selection-end-line="49" selection-end-column="71" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="routing.yml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/AdministrationBundle/Resources/config/routing.yml">
+      <file leaf-file-name="backend.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/services/backend.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="255">
-              <caret line="317" column="61" lean-forward="false" selection-start-line="317" selection-start-column="61" selection-end-line="317" selection-end-column="61" />
+              <caret line="28" column="36" lean-forward="false" selection-start-line="28" selection-start-column="36" selection-end-line="28" selection-end-column="36" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="http.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/services/http.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-2458">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="DataController.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/NotificationBundle/Controller/DataController.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="368">
+              <caret line="141" column="0" lean-forward="false" selection-start-line="141" selection-start-column="0" selection-end-line="141" selection-end-column="0" />
+              <folding>
+                <element signature="e#49#83#0#PHP" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ModelCriteria.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/vendor/propel/propel1/runtime/lib/query/ModelCriteria.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-375">
+              <caret line="1219" column="20" lean-forward="false" selection-start-line="1219" selection-start-column="20" selection-end-line="1219" selection-end-column="20" />
+              <folding>
+                <marker date="1393319638000" expanded="true" signature="53665:53722" ph="SELECT COUNT... ${$selectSql}" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -57,48 +102,8 @@
       <file leaf-file-name="PageController.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/AdministrationBundle/Controller/PageController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="313">
+            <state relative-caret-position="323">
               <caret line="189" column="71" lean-forward="false" selection-start-line="189" selection-start-column="71" selection-end-line="189" selection-end-column="71" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="open_notifications.html.twig" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/AdministrationBundle/Resources/views/notifications/open_notifications.html.twig">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="240">
-              <caret line="16" column="128" lean-forward="false" selection-start-line="16" selection-start-column="128" selection-end-line="16" selection-end-column="128" />
-              <folding>
-                <marker date="1496843016000" expanded="true" signature="3747:4622" ph="..." />
-                <marker date="1496843016000" expanded="true" signature="3868:4560" ph="..." />
-                <marker date="1496843016000" expanded="true" signature="4010:4180" ph="..." />
-                <marker date="1496843016000" expanded="true" signature="4322:4493" ph="..." />
-                <marker date="1496843016000" expanded="true" signature="4692:5573" ph="..." />
-                <marker date="1496843016000" expanded="true" signature="4819:5511" ph="..." />
-                <marker date="1496843016000" expanded="true" signature="4961:5131" ph="..." />
-                <marker date="1496843016000" expanded="true" signature="5273:5444" ph="..." />
-                <marker date="1496843016000" expanded="true" signature="5643:5826" ph="..." />
-                <marker date="1496843016000" expanded="true" signature="5887:6513" ph="..." />
-                <marker date="1496843016000" expanded="true" signature="5972:6451" ph="..." />
-                <marker date="1496843016000" expanded="true" signature="6111:6384" ph="..." />
-                <marker date="1496843016000" expanded="true" signature="9995:10338" ph="..." />
-                <marker date="1496843016000" expanded="true" signature="10102:10276" ph="..." />
-                <marker date="1496843016000" expanded="true" signature="10408:10763" ph="..." />
-                <marker date="1496843016000" expanded="true" signature="10833:11016" ph="..." />
-                <marker date="1496843016000" expanded="true" signature="11077:11709" ph="..." />
-                <marker date="1496843016000" expanded="true" signature="11162:11647" ph="..." />
-                <marker date="1496843016000" expanded="true" signature="11307:11580" ph="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="app.php" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/web/app.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="8" column="0" lean-forward="false" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -107,108 +112,35 @@
       <file leaf-file-name="closed_notifications.html.twig" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/AdministrationBundle/Resources/views/notifications/closed_notifications.html.twig">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="240">
-              <caret line="16" column="130" lean-forward="false" selection-start-line="16" selection-start-column="130" selection-end-line="16" selection-end-column="130" />
+            <state relative-caret-position="308">
+              <caret line="126" column="90" lean-forward="false" selection-start-line="126" selection-start-column="90" selection-end-line="126" selection-end-column="90" />
               <folding>
-                <marker date="1496843029000" expanded="true" signature="3780:4655" ph="..." />
-                <marker date="1496843029000" expanded="true" signature="3901:4593" ph="..." />
-                <marker date="1496843029000" expanded="true" signature="4043:4213" ph="..." />
-                <marker date="1496843029000" expanded="true" signature="4355:4526" ph="..." />
-                <marker date="1496843029000" expanded="true" signature="4725:5606" ph="..." />
-                <marker date="1496843029000" expanded="true" signature="4852:5544" ph="..." />
-                <marker date="1496843029000" expanded="true" signature="4994:5164" ph="..." />
-                <marker date="1496843029000" expanded="true" signature="5306:5477" ph="..." />
-                <marker date="1496843029000" expanded="true" signature="5676:5859" ph="..." />
-                <marker date="1496843029000" expanded="true" signature="5920:6076" ph="..." />
-                <marker date="1496843029000" expanded="true" signature="9587:9930" ph="..." />
-                <marker date="1496843029000" expanded="true" signature="9694:9868" ph="..." />
-                <marker date="1496843029000" expanded="true" signature="10000:10355" ph="..." />
-                <marker date="1496843029000" expanded="true" signature="10425:10608" ph="..." />
-                <marker date="1496843029000" expanded="true" signature="10669:10852" ph="..." />
+                <marker date="1496918385000" expanded="true" signature="3275:4150" ph="..." />
+                <marker date="1496918385000" expanded="true" signature="3396:4088" ph="..." />
+                <marker date="1496918385000" expanded="true" signature="3538:3708" ph="..." />
+                <marker date="1496918385000" expanded="true" signature="3850:4021" ph="..." />
+                <marker date="1496918385000" expanded="true" signature="4220:5101" ph="..." />
+                <marker date="1496918385000" expanded="true" signature="4347:5039" ph="..." />
+                <marker date="1496918385000" expanded="true" signature="4489:4659" ph="..." />
+                <marker date="1496918385000" expanded="true" signature="4801:4972" ph="..." />
+                <marker date="1496918385000" expanded="true" signature="5171:5354" ph="..." />
+                <marker date="1496918385000" expanded="true" signature="5415:5571" ph="..." />
+                <marker date="1496918385000" expanded="true" signature="9053:9396" ph="..." />
+                <marker date="1496918385000" expanded="true" signature="9160:9334" ph="..." />
+                <marker date="1496918385000" expanded="true" signature="9466:9821" ph="..." />
+                <marker date="1496918385000" expanded="true" signature="9891:10074" ph="..." />
+                <marker date="1496918385000" expanded="true" signature="10135:10291" ph="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="nl.json" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/public/translations/nl.json">
+      <file leaf-file-name="routing.yml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/AdministrationBundle/Resources/config/routing.yml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="151">
-              <caret line="239" column="35" lean-forward="false" selection-start-line="239" selection-start-column="35" selection-end-line="239" selection-end-column="35" />
+            <state relative-caret-position="300">
+              <caret line="328" column="48" lean-forward="false" selection-start-line="328" selection-start-column="48" selection-end-line="328" selection-end-column="48" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="en.json" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/public/translations/en.json">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="268">
-              <caret line="246" column="33" lean-forward="false" selection-start-line="246" selection-start-column="33" selection-end-line="246" selection-end-column="33" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="notifications.html.twig" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/views/store/notifications.html.twig">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="817">
-              <caret line="125" column="92" lean-forward="false" selection-start-line="125" selection-start-column="80" selection-end-line="125" selection-end-column="92" />
-              <folding>
-                <marker date="1496244965000" expanded="true" signature="1728:9830" ph="..." />
-                <marker date="1496244965000" expanded="true" signature="1766:9811" ph="..." />
-                <marker date="1496244965000" expanded="true" signature="1816:5986" ph="..." />
-                <marker date="1496244965000" expanded="true" signature="1888:5959" ph="..." />
-                <marker date="1496244965000" expanded="true" signature="1943:5928" ph="..." />
-                <marker date="1496244965000" expanded="true" signature="1993:2402" ph="..." />
-                <marker date="1496244965000" expanded="true" signature="2052:2177" ph="..." />
-                <marker date="1496244965000" expanded="true" signature="2249:2363" ph="..." />
-                <marker date="1496244965000" expanded="true" signature="2489:5123" ph="..." />
-                <marker date="1496244965000" expanded="true" signature="2578:3791" ph="..." />
-                <marker date="1496244965000" expanded="true" signature="2636:3748" ph="..." />
-                <marker date="1496244965000" expanded="true" signature="2712:2851" ph="..." />
-                <marker date="1496244965000" expanded="true" signature="2927:3701" ph="..." />
-                <marker date="1496244965000" expanded="true" signature="3042:3650" ph="..." />
-                <marker date="1496244965000" expanded="true" signature="3172:3318" ph="..." />
-                <marker date="1496244965000" expanded="true" signature="3448:3595" ph="..." />
-                <marker date="1496244965000" expanded="true" signature="3880:5084" ph="..." />
-                <marker date="1496244965000" expanded="true" signature="3938:5041" ph="..." />
-                <marker date="1496244965000" expanded="true" signature="4014:4153" ph="..." />
-                <marker date="1496244965000" expanded="true" signature="4220:4994" ph="..." />
-                <marker date="1496244965000" expanded="true" signature="4335:4943" ph="..." />
-                <marker date="1496244965000" expanded="true" signature="4465:4611" ph="..." />
-                <marker date="1496244965000" expanded="true" signature="4741:4888" ph="..." />
-                <marker date="1496244965000" expanded="true" signature="5210:5893" ph="..." />
-                <marker date="1496244965000" expanded="true" signature="5269:5574" ph="..." />
-                <marker date="1496244965000" expanded="true" signature="5398:5531" ph="..." />
-                <marker date="1496244965000" expanded="true" signature="5648:5854" ph="..." />
-                <marker date="1496244965000" expanded="true" signature="6042:9788" ph="..." />
-                <marker date="1496244965000" expanded="true" signature="6114:9761" ph="..." />
-                <marker date="1496244965000" expanded="true" signature="6169:9730" ph="..." />
-                <marker date="1496244965000" expanded="true" signature="6219:6647" ph="..." />
-                <marker date="1496244965000" expanded="true" signature="6219:8927" ph="..." />
-                <marker date="1496244965000" expanded="true" signature="6278:6409" ph="..." />
-                <marker date="1496244965000" expanded="true" signature="6494:6608" ph="..." />
-                <marker date="1496244965000" expanded="true" signature="6734:8925" ph="..." />
-                <marker date="1496244965000" expanded="true" signature="6823:7559" ph="..." />
-                <marker date="1496244965000" expanded="true" signature="6881:7516" ph="..." />
-                <marker date="1496244965000" expanded="true" signature="6957:7096" ph="..." />
-                <marker date="1496244965000" expanded="true" signature="7163:7469" ph="..." />
-                <marker date="1496244965000" expanded="true" signature="7268:7418" ph="..." />
-                <marker date="1496244965000" expanded="true" signature="7648:8231" ph="..." />
-                <marker date="1496244965000" expanded="true" signature="7706:8188" ph="..." />
-                <marker date="1496244965000" expanded="true" signature="7782:7921" ph="..." />
-                <marker date="1496244965000" expanded="true" signature="7988:8141" ph="..." />
-                <marker date="1496244965000" expanded="true" signature="8304:8886" ph="..." />
-                <marker date="1496244965000" expanded="true" signature="8362:8843" ph="..." />
-                <marker date="1496244965000" expanded="true" signature="8438:8575" ph="..." />
-                <marker date="1496244965000" expanded="true" signature="8642:8796" ph="..." />
-                <marker date="1496244965000" expanded="true" signature="9012:9695" ph="..." />
-                <marker date="1496244965000" expanded="true" signature="9071:9376" ph="..." />
-                <marker date="1496244965000" expanded="true" signature="9200:9333" ph="..." />
-                <marker date="1496244965000" expanded="true" signature="9450:9656" ph="..." />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -295,7 +227,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/tcmApp.js" />
         <option value="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/appCtrl.js" />
         <option value="$PROJECT_DIR$/app/Resources/views/base.html.twig" />
         <option value="$PROJECT_DIR$/src/CompanyBundle/Model/CompanyType.php" />
@@ -330,22 +261,23 @@
         <option value="$PROJECT_DIR$/src/AppBundle/Resources/views/store/dashboard.html.twig" />
         <option value="$PROJECT_DIR$/src/StoreBundle/Model/Store.php" />
         <option value="$PROJECT_DIR$/src/NotificationBundle/Command/ListNotificationCommand.php" />
-        <option value="$PROJECT_DIR$/src/NotificationBundle/Resources/views/email/notification.html.twig" />
         <option value="$PROJECT_DIR$/src/AppBundle/Resources/public/css/style.css" />
         <option value="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/dashboardCtrl.js" />
         <option value="$PROJECT_DIR$/src/AppBundle/Resources/views/store/notifications.html.twig" />
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/datasets/notifications.js" />
-        <option value="$PROJECT_DIR$/src/NotificationBundle/Controller/DataController.php" />
         <option value="$PROJECT_DIR$/src/AppBundle/Resources/public/translations/nl.json" />
         <option value="$PROJECT_DIR$/src/AppBundle/Resources/public/translations/en.json" />
-        <option value="$PROJECT_DIR$/src/AdministrationBundle/Resources/config/routing.yml" />
         <option value="$PROJECT_DIR$/src/AdministrationBundle/Controller/PageController.php" />
-        <option value="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/notificationCtrl.js" />
         <option value="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/header/header.html.twig" />
         <option value="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/notifications/open_notifications.html.twig" />
-        <option value="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/notifications/closed_notifications.html.twig" />
         <option value="$PROJECT_DIR$/web/app.php" />
+        <option value="$PROJECT_DIR$/src/NotificationBundle/Resources/views/email/notification.html.twig" />
+        <option value="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/directives/persist.js" />
+        <option value="$PROJECT_DIR$/src/AdministrationBundle/Resources/config/routing.yml" />
+        <option value="$PROJECT_DIR$/src/NotificationBundle/Controller/DataController.php" />
+        <option value="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/notifications/closed_notifications.html.twig" />
+        <option value="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/notificationCtrl.js" />
       </list>
     </option>
   </component>
@@ -441,6 +373,86 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="TCM" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="TCM" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="UserBundle" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="TCM" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="TCM" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="UserBundle" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Model" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="TCM" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="TCM" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="StoreBundle" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="TCM" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="TCM" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="StoreBundle" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Model" />
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
           </PATH>
@@ -1032,7 +1044,83 @@
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="services" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="TCM" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="TCM" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="AppBundle" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Resources" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="public" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="js" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="filters" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="TCM" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="TCM" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="AppBundle" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Resources" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="public" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="js" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="directives" />
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
           </PATH>
@@ -1109,6 +1197,40 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="controllers" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="TCM" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="TCM" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="AppBundle" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Resources" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="public" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="js" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="angular-storage" />
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
           </PATH>
@@ -2307,25 +2429,25 @@
       <workItem from="1494064444766" duration="109000" />
       <workItem from="1494322228178" duration="39051000" />
       <workItem from="1495460625052" duration="44120000" />
-      <workItem from="1496138707969" duration="32204000" />
+      <workItem from="1496138707969" duration="44799000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="634023000" />
+    <option name="totallyTimeSpent" value="646618000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="821" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26466382" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3299566" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3264177" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3251029" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24892704" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.4170096" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2798354" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -2369,98 +2491,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/web/apple-touch-icon.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/favicon.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/DataCollectorBundle/Command/ListDeviceCommand.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1230">
-          <caret line="91" column="87" lean-forward="false" selection-start-line="91" selection-start-column="87" selection-end-line="91" selection-end-column="87" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/DataCollectorBundle/Command/CheckDeviceCommand.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1292">
-          <caret line="19" column="48" lean-forward="false" selection-start-line="19" selection-start-column="48" selection-end-line="19" selection-end-column="48" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/DeviceBundle/Command/ListDeviceCommand.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="208">
-          <caret line="97" column="55" lean-forward="true" selection-start-line="97" selection-start-column="29" selection-end-line="97" selection-end-column="55" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/AppBundle/Command/TestCommand.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="322">
-          <caret line="81" column="34" lean-forward="false" selection-start-line="81" selection-start-column="34" selection-end-line="81" selection-end-column="34" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/NotificationBundle/Command/CheckNotificationCommand.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="232">
-          <caret line="89" column="54" lean-forward="false" selection-start-line="89" selection-start-column="54" selection-end-line="89" selection-end-column="54" />
-          <folding>
-            <element signature="e#46#82#0#PHP" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/views/stores/stores.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-30">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <marker date="1495455104000" expanded="true" signature="2492:3305" ph="..." />
-            <marker date="1495455104000" expanded="true" signature="2644:3247" ph="..." />
-            <marker date="1495455104000" expanded="true" signature="2729:3185" ph="..." />
-            <marker date="1495455104000" expanded="true" signature="2847:3118" ph="..." />
-            <marker date="1495455104000" expanded="true" signature="3918:5110" ph="..." />
-            <marker date="1495455104000" expanded="true" signature="3968:5075" ph="..." />
-            <marker date="1495455104000" expanded="true" signature="4048:5036" ph="..." />
-            <marker date="1495455104000" expanded="true" signature="4168:4993" ph="..." />
-            <marker date="1495455104000" expanded="true" signature="4240:4946" ph="..." />
-            <marker date="1495455104000" expanded="true" signature="4306:4895" ph="..." />
-            <marker date="1495455104000" expanded="false" signature="4416:4432" ph="..." />
-            <marker date="1495455104000" expanded="true" signature="4442:4574" ph="..." />
-            <marker date="1495455104000" expanded="true" signature="4677:4840" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/DeviceBundle/Model/om/BaseCbInput.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4707">
-          <caret line="2340" column="20" lean-forward="false" selection-start-line="2340" selection-start-column="20" selection-end-line="2340" selection-end-column="20" />
-          <folding>
-            <marker date="1493981885000" expanded="true" signature="44352:44391" ph="INSERT INTO `cb_input`... " />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/vendor/propel/propel1/runtime/lib/collection/PropelCollection.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="9388">
-          <caret line="636" column="20" lean-forward="false" selection-start-line="636" selection-start-column="20" selection-end-line="636" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/UserBundle/Model/Email.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-17">
@@ -2473,14 +2503,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="208">
           <caret line="110" column="24" lean-forward="false" selection-start-line="110" selection-start-column="24" selection-end-line="110" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/StoreBundle/Model/Store.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="291" column="0" lean-forward="false" selection-start-line="291" selection-start-column="0" selection-end-line="291" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -2562,19 +2584,6 @@
         <state relative-caret-position="390">
           <caret line="26" column="65" lean-forward="false" selection-start-line="26" selection-start-column="65" selection-end-line="26" selection-end-column="65" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/NotificationBundle/Resources/views/email/notification.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="20" column="63" lean-forward="false" selection-start-line="20" selection-start-column="63" selection-end-line="20" selection-end-column="63" />
-          <folding>
-            <element signature="e#611#650#0#HTML" expanded="false" />
-            <element signature="e#1977#2024#0#HTML" expanded="false" />
-            <element signature="e#2610#2649#0#HTML" expanded="false" />
-            <element signature="e#3403#3450#0#HTML" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2775,14 +2784,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/NotificationBundle/Model/CbInputNotification.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="223">
-          <caret line="48" column="42" lean-forward="false" selection-start-line="48" selection-start-column="42" selection-end-line="48" selection-end-column="42" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/regionCtrl.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="300">
@@ -2796,16 +2797,6 @@
         <state relative-caret-position="367">
           <caret line="92" column="0" lean-forward="false" selection-start-line="87" selection-start-column="0" selection-end-line="92" selection-end-column="0" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/NotificationBundle/Controller/DataController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="208">
-          <caret line="66" column="8" lean-forward="false" selection-start-line="66" selection-start-column="8" selection-end-line="66" selection-end-column="8" />
-          <folding>
-            <element signature="e#49#83#0#PHP" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2910,34 +2901,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/AdministrationBundle/Resources/config/routing.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="317" column="61" lean-forward="false" selection-start-line="317" selection-start-column="61" selection-end-line="317" selection-end-column="61" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/AdministrationBundle/Controller/PageController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="313">
-          <caret line="189" column="71" lean-forward="false" selection-start-line="189" selection-start-column="71" selection-end-line="189" selection-end-column="71" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/notificationCtrl.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="292">
-          <caret line="39" column="0" lean-forward="false" selection-start-line="39" selection-start-column="0" selection-end-line="39" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/AdministrationBundle/Resources/views/header/header.html.twig">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="223">
           <caret line="49" column="71" lean-forward="false" selection-start-line="49" selection-start-column="71" selection-end-line="49" selection-end-column="71" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/app.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="9" column="2" lean-forward="false" selection-start-line="9" selection-start-column="2" selection-end-line="9" selection-end-column="2" />
           <folding />
         </state>
       </provider>
@@ -2970,34 +2945,168 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/AdministrationBundle/Resources/views/notifications/closed_notifications.html.twig">
+    <entry file="file://$PROJECT_DIR$/src/NotificationBundle/Model/CbInputNotification.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="16" column="130" lean-forward="false" selection-start-line="16" selection-start-column="130" selection-end-line="16" selection-end-column="130" />
+        <state relative-caret-position="660">
+          <caret line="48" column="42" lean-forward="false" selection-start-line="48" selection-start-column="42" selection-end-line="48" selection-end-column="42" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/UserBundle/Model/User.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2970">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/NotificationBundle/Command/CheckNotificationCommand.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="938">
+          <caret line="118" column="58" lean-forward="true" selection-start-line="118" selection-start-column="58" selection-end-line="118" selection-end-column="58" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/StoreBundle/Model/Store.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="188">
+          <caret line="291" column="0" lean-forward="false" selection-start-line="291" selection-start-column="0" selection-end-line="291" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/NotificationBundle/Services/NotificationHelper.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="31" column="0" lean-forward="true" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/AdministrationBundle/Controller/PageController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="189" column="71" lean-forward="false" selection-start-line="189" selection-start-column="71" selection-end-line="189" selection-end-column="71" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/NotificationBundle/Resources/views/email/notification.html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="503">
+          <caret line="78" column="16" lean-forward="false" selection-start-line="78" selection-start-column="16" selection-end-line="78" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/public/js/angular-storage/angular-local-storage.min.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/directives/st-persist.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="467">
+          <caret line="36" column="7" lean-forward="false" selection-start-line="36" selection-start-column="7" selection-end-line="36" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/NotificationBundle/Model/om/BaseCbInputNotificationQuery.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1260">
+          <caret line="98" column="25" lean-forward="false" selection-start-line="98" selection-start-column="25" selection-end-line="98" selection-end-column="25" />
           <folding>
-            <marker date="1496843029000" expanded="true" signature="3780:4655" ph="..." />
-            <marker date="1496843029000" expanded="true" signature="3901:4593" ph="..." />
-            <marker date="1496843029000" expanded="true" signature="4043:4213" ph="..." />
-            <marker date="1496843029000" expanded="true" signature="4355:4526" ph="..." />
-            <marker date="1496843029000" expanded="true" signature="4725:5606" ph="..." />
-            <marker date="1496843029000" expanded="true" signature="4852:5544" ph="..." />
-            <marker date="1496843029000" expanded="true" signature="4994:5164" ph="..." />
-            <marker date="1496843029000" expanded="true" signature="5306:5477" ph="..." />
-            <marker date="1496843029000" expanded="true" signature="5676:5859" ph="..." />
-            <marker date="1496843029000" expanded="true" signature="5920:6076" ph="..." />
-            <marker date="1496843029000" expanded="true" signature="9587:9930" ph="..." />
-            <marker date="1496843029000" expanded="true" signature="9694:9868" ph="..." />
-            <marker date="1496843029000" expanded="true" signature="10000:10355" ph="..." />
-            <marker date="1496843029000" expanded="true" signature="10425:10608" ph="..." />
-            <marker date="1496843029000" expanded="true" signature="10669:10852" ph="..." />
+            <marker date="1495622640000" expanded="true" signature="9460:9624" ph="SELECT `id`,... cb_input_notification" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web/app.php">
+    <entry file="file://$PROJECT_DIR$/vendor/propel/propel1/runtime/lib/query/ModelCriteria.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="0" lean-forward="false" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+        <state relative-caret-position="-375">
+          <caret line="1219" column="20" lean-forward="false" selection-start-line="1219" selection-start-column="20" selection-end-line="1219" selection-end-column="20" />
+          <folding>
+            <marker date="1393319638000" expanded="true" signature="53665:53722" ph="SELECT COUNT... ${$selectSql}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Resources/views/base.html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-555">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/AdministrationBundle/Resources/config/routing.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="328" column="48" lean-forward="false" selection-start-line="328" selection-start-column="48" selection-end-line="328" selection-end-column="48" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/services/backend.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="28" column="36" lean-forward="false" selection-start-line="28" selection-start-column="36" selection-end-line="28" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/services/http.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2458">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/NotificationBundle/Controller/DataController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="368">
+          <caret line="141" column="0" lean-forward="false" selection-start-line="141" selection-start-column="0" selection-end-line="141" selection-end-column="0" />
+          <folding>
+            <element signature="e#49#83#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/AdministrationBundle/Resources/views/notifications/closed_notifications.html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="308">
+          <caret line="126" column="90" lean-forward="false" selection-start-line="126" selection-start-column="90" selection-end-line="126" selection-end-column="90" />
+          <folding>
+            <marker date="1496918385000" expanded="true" signature="3275:4150" ph="..." />
+            <marker date="1496918385000" expanded="true" signature="3396:4088" ph="..." />
+            <marker date="1496918385000" expanded="true" signature="3538:3708" ph="..." />
+            <marker date="1496918385000" expanded="true" signature="3850:4021" ph="..." />
+            <marker date="1496918385000" expanded="true" signature="4220:5101" ph="..." />
+            <marker date="1496918385000" expanded="true" signature="4347:5039" ph="..." />
+            <marker date="1496918385000" expanded="true" signature="4489:4659" ph="..." />
+            <marker date="1496918385000" expanded="true" signature="4801:4972" ph="..." />
+            <marker date="1496918385000" expanded="true" signature="5171:5354" ph="..." />
+            <marker date="1496918385000" expanded="true" signature="5415:5571" ph="..." />
+            <marker date="1496918385000" expanded="true" signature="9053:9396" ph="..." />
+            <marker date="1496918385000" expanded="true" signature="9160:9334" ph="..." />
+            <marker date="1496918385000" expanded="true" signature="9466:9821" ph="..." />
+            <marker date="1496918385000" expanded="true" signature="9891:10074" ph="..." />
+            <marker date="1496918385000" expanded="true" signature="10135:10291" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/notificationCtrl.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="19" column="41" lean-forward="false" selection-start-line="19" selection-start-column="41" selection-end-line="19" selection-end-column="41" />
           <folding />
         </state>
       </provider>

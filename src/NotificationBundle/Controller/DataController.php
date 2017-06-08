@@ -38,6 +38,118 @@ class DataController extends Controller
             ->make();
     }
 
+    public function getClosedInputNotificationsAction(Request $request)
+    {
+        $tableState = json_decode($request->getContent());
+        $order = 'id';
+        $reverse = false;
+
+        // reverse: false = ASC, true = DESC
+        $total = $inputNotifications = CbInputNotificationQuery::create()
+            ->filterByIsHandled(true)
+            ->count();
+
+        if (!empty((array)$tableState->sort)) {
+            if (!empty($tableState->sort->predicate))
+            {   switch ($tableState->sort->predicate)
+                {   case 'CreatedAt.date':
+                        $order = 'created_at';
+                        break;
+                    case 'HandledBy.Name':
+                        $order = 'user.Firstname';
+                        break;
+                    case 'Sensor.MainStore.Name':
+                        $order = 'store.Name';
+                        break;
+                    case 'Sensor.Name':
+                        $order = 'sensor.Name';
+                        break;
+                }
+            }
+            if (!empty($tableState->sort->reverse))
+                $reverse = $tableState->sort->reverse;
+        }
+
+        $inputNotifications = CbInputNotificationQuery::create()
+            ->filterByIsHandled(true)
+            ->useCbInputQuery('sensor')
+                ->useStoreQuery('store')
+                ->endUse()
+            ->endUse()
+            ->useUserQuery('user')
+            ->endUse()
+            ->orderBy($order, $reverse ? 'DESC' : 'ASC')
+            ->offset($tableState->pagination->start)
+            ->limit($tableState->pagination->number)
+            ->find();
+
+        $tableState->pagination->numberOfPages = ceil($total / $tableState->pagination->number);
+        $tableState->pagination->totalItemCount = $total;
+
+        $notificationsArr = $this->getNotificationsDataArray($inputNotifications);
+
+        return JsonResult::create()
+            ->setContents(array('notifications' => $notificationsArr, 'tableState' => $tableState))
+            ->setErrorcode(JsonResult::SUCCESS)
+            ->make();
+    }
+
+    public function getClosedTemperatureNotificationsAction(Request $request)
+    {
+        $tableState = json_decode($request->getContent());
+        $order = 'id';
+        $reverse = false;
+
+        // reverse: false = ASC, true = DESC
+        $total = $temperatureNotifications = DsTemperatureNotificationQuery::create()
+            ->filterByIsHandled(true)
+            ->count();
+
+        if (!empty((array)$tableState->sort)) {
+            if (!empty($tableState->sort->predicate))
+            {   switch ($tableState->sort->predicate)
+                {   case 'CreatedAt.date':
+                        $order = 'created_at';
+                        break;
+                    case 'HandledBy.Name':
+                        $order = 'user.Firstname';
+                        break;
+                    case 'Sensor.MainStore.Name':
+                        $order = 'store.Name';
+                        break;
+                    case 'Sensor.Name':
+                        $order = 'sensor.Name';
+                        break;
+                }
+            }
+            if (!empty($tableState->sort->reverse))
+                $reverse = $tableState->sort->reverse;
+        }
+
+        $temperatureNotifications = DsTemperatureNotificationQuery::create()
+            ->filterByIsHandled(true)
+            ->useDsTemperatureSensorQuery('sensor')
+                ->useStoreQuery('store')
+                ->endUse()
+            ->endUse()
+            ->useUserQuery('user')
+            ->endUse()
+            ->orderBy($order, $reverse ? 'DESC' : 'ASC')
+            ->offset($tableState->pagination->start)
+            ->limit($tableState->pagination->number)
+            ->find();
+
+        $tableState->pagination->numberOfPages = ceil($total / $tableState->pagination->number);
+        $tableState->pagination->totalItemCount = $total;
+
+        $notificationsArr = $this->getNotificationsDataArray($temperatureNotifications);
+
+        return JsonResult::create()
+            ->setContents(array('notifications' => $notificationsArr, 'tableState' => $tableState))
+            ->setErrorcode(JsonResult::SUCCESS)
+            ->make();
+    }
+
     public function handleInputNotificationAction(Request $request, $notificationid)
     {
         $notification = CbInputNotificationQuery::create()
@@ -86,6 +198,8 @@ class DataController extends Controller
                 if (!empty($store))
                     $notificationArr['Sensor']['MainStore'] = $store->toArray();
             }
+            if (!empty($notification->getHandledBy()))
+                $notificationArr['HandledBy'] = $notification->getHandledBy()->getUserDataArray()['user'];
 
             $dataArr[] = $notificationArr;
         }
