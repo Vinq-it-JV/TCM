@@ -136,6 +136,7 @@ class DataController extends Controller
             else
                 $input->setSwitchState(false);
             $input->setControllerBox($controller);
+            $input->setState(CbInput::STATE_ACTIVE);
             $input->setDataCollectedAt($date);
             $input->save();
             $input->checkSensorStatus();
@@ -165,6 +166,7 @@ class DataController extends Controller
         $temperature->setControllerBox($controller);
         if (!empty($controller->getMainStore()))
             $temperature->setMainStore($controller->getMainStore());
+        $temperature->setState(DsTemperatureSensor::STATE_ACTIVE);
         $temperature->setDataCollectedAt($date);
         $temperature->save();
         $temperature->checkSensorStatus();

@@ -77,15 +77,67 @@
             "NAME": "Bar",
             "DESCRIPTION": "This is a bar."
         },
+        "RESTAURANT": {
+            "NAME": "Restaurant",
+            "DESCRIPTION": "This is a restaurant."
+        },
+        "BRASSERIE": {
+            "NAME": "Brasserie",
+            "DESCRIPTION": "This is a brasserie."
+        },
+        "EATERY": {
+            "NAME": "Eatery",
+            "DESCRIPTION": "This is a eatery."
+        },
+        "CINEMA": {
+            "NAME": "Cinema",
+            "DESCRIPTION": "This is a cinema."
+        },
+        "HOTEL": {
+            "NAME": "Hotel",
+            "DESCRIPTION": "This is a hotel."
+        },
+        "NIGHTSPOT": {
+            "NAME": "Nightspot",
+            "DESCRIPTION": "This is a nightspot."
+        },
         "SERVICE": {
             "NAME": "Service",
             "DESCRIPTION": "This is a service company."
+        },
+        "PARENT": {
+            "NAME": "Parent company",
+            "DESCRIPTION": "This is a parent company."
         }
     },
     "STORE_TYPE": {
         "BAR": {
             "NAME": "Bar",
             "DESCRIPTION": "This is a bar."
+        },
+        "RESTAURANT": {
+            "NAME": "Restaurant",
+            "DESCRIPTION": "This is a restaurant."
+        },
+        "BRASSERIE": {
+            "NAME": "Brasserie",
+            "DESCRIPTION": "This is a brasserie."
+        },
+        "EATERY": {
+            "NAME": "Eatery",
+            "DESCRIPTION": "This is a eatery."
+        },
+        "CINEMA": {
+            "NAME": "Cinema",
+            "DESCRIPTION": "This is a cinema."
+        },
+        "HOTEL": {
+            "NAME": "Hotel",
+            "DESCRIPTION": "This is a hotel."
+        },
+        "NIGHTSPOT": {
+            "NAME": "Nightspot",
+            "DESCRIPTION": "This is a nightspot."
         }
     },
     "NOTIFY_AFTER": {

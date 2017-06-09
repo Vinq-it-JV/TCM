@@ -66,8 +66,15 @@ class TestCommand extends ContainerAwareCommand
         //$this->checkSensorStatus($output);
         //$this->showNotifications($output);
         //$this->testNotificationMail($output);
-        $this->showInputNotifications($output);
+        //$this->showInputNotifications($output);
+        $this->getSuperAdminEmail($output);
         $output->writeln("Ready.");
+    }
+
+    protected function getSuperAdminEmail(OutputInterface $output)
+    {
+        $helper = $this->getContainer()->get('notification_helper');
+        var_dump(implode(',', $helper->getSuperAdminEmailList()));
     }
 
     protected function showInputNotifications(OutputInterface $output)

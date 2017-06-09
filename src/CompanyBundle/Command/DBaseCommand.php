@@ -32,6 +32,20 @@ class DBaseCommand extends ContainerAwareCommand
         $this->companyTypeArr[CompanyType::BAR_ID]['Description'] = CompanyType::BAR_DESCRIPTION;
         $this->companyTypeArr[CompanyType::SERVICE_ID]['Name'] = CompanyType::SERVICE_NAME;
         $this->companyTypeArr[CompanyType::SERVICE_ID]['Description'] = CompanyType::SERVICE_DESCRIPTION;
+        $this->companyTypeArr[CompanyType::RESTAURANT_ID]['Name'] = CompanyType::RESTAURANT_NAME;
+        $this->companyTypeArr[CompanyType::RESTAURANT_ID]['Description'] = CompanyType::RESTAURANT_DESCRIPTION;
+        $this->companyTypeArr[CompanyType::BRASSERIE_ID]['Name'] = CompanyType::BRASSERIE_NAME;
+        $this->companyTypeArr[CompanyType::BRASSERIE_ID]['Description'] = CompanyType::BRASSERIE_DESCRIPTION;
+        $this->companyTypeArr[CompanyType::EATERY_ID]['Name'] = CompanyType::EATERY_NAME;
+        $this->companyTypeArr[CompanyType::EATERY_ID]['Description'] = CompanyType::EATERY_DESCRIPTION;
+        $this->companyTypeArr[CompanyType::CINEMA_ID]['Name'] = CompanyType::CINEMA_NAME;
+        $this->companyTypeArr[CompanyType::CINEMA_ID]['Description'] = CompanyType::CINEMA_DESCRIPTION;
+        $this->companyTypeArr[CompanyType::HOTEL_ID]['Name'] = CompanyType::HOTEL_NAME;
+        $this->companyTypeArr[CompanyType::HOTEL_ID]['Description'] = CompanyType::HOTEL_DESCRIPTION;
+        $this->companyTypeArr[CompanyType::NIGHTSPOT_ID]['Name'] = CompanyType::NIGHTSPOT_NAME;
+        $this->companyTypeArr[CompanyType::NIGHTSPOT_ID]['Description'] = CompanyType::NIGHTSPOT_DESCRIPTION;
+        $this->companyTypeArr[CompanyType::PARENT_ID]['Name'] = CompanyType::PARENT_NAME;
+        $this->companyTypeArr[CompanyType::PARENT_ID]['Description'] = CompanyType::PARENT_DESCRIPTION;
     }
 
     protected function configPaymentMethodsList()

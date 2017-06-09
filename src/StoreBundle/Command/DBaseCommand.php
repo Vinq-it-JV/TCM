@@ -31,6 +31,18 @@ class DBaseCommand extends ContainerAwareCommand
     {
         $this->storeTypeArr['BAR']['Name'] = StoreType::BAR_NAME;
         $this->storeTypeArr['BAR']['Description'] = StoreType::BAR_DESCRIPTION;
+        $this->storeTypeArr['RESTAURANT']['Name'] = StoreType::RESTAURANT_NAME;
+        $this->storeTypeArr['RESTAURANT']['Description'] = StoreType::RESTAURANT_DESCRIPTION;
+        $this->storeTypeArr['BRASSERIE']['Name'] = StoreType::BRASSERIE_NAME;
+        $this->storeTypeArr['BRASSERIE']['Description'] = StoreType::BRASSERIE_DESCRIPTION;
+        $this->storeTypeArr['EATERY']['Name'] = StoreType::EATERY_NAME;
+        $this->storeTypeArr['EATERY']['Description'] = StoreType::EATERY_DESCRIPTION;
+        $this->storeTypeArr['CINEMA']['Name'] = StoreType::CINEMA_NAME;
+        $this->storeTypeArr['CINEMA']['Description'] = StoreType::CINEMA_DESCRIPTION;
+        $this->storeTypeArr['HOTEL']['Name'] = StoreType::HOTEL_NAME;
+        $this->storeTypeArr['HOTEL']['Description'] = StoreType::HOTEL_DESCRIPTION;
+        $this->storeTypeArr['NIGHTSPOT']['Name'] = StoreType::NIGHTSPOT_NAME;
+        $this->storeTypeArr['NIGHTSPOT']['Description'] = StoreType::NIGHTSPOT_DESCRIPTION;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

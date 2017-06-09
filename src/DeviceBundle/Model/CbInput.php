@@ -99,6 +99,9 @@ class CbInput extends BaseCbInput
         $date = new \DateTime();
         $now = $date->format('Y-m-d H:i:s');
 
+        if ($this->getNotifyAfter() == -1)
+            return false;
+
         if ($this->getSwitchState() == $this->getSwitchWhen()) {
             if (empty($this->getNotifyStartedAt())) {
                 $this->setNotifyStartedAt($date);

@@ -99,6 +99,9 @@ class DsTemperatureSensor extends BaseDsTemperatureSensor
         $date = new \DateTime();
         $now = $date->format('Y-m-d H:i:s');
 
+        if ($this->getNotifyAfter() == -1)
+            return false;
+
         $temperature = round(floatval($this->getTemperature()), 2);
         $low = $this->getLowLimit();
         $high = $this->getHighLimit();
