@@ -79,27 +79,27 @@
         },
         "RESTAURANT": {
             "NAME": "Restaurant",
-            "DESCRIPTION": "This is a restaurant."
+            "DESCRIPTION": "Dit is een restaurant."
         },
         "BRASSERIE": {
             "NAME": "Brasserie",
-            "DESCRIPTION": "This is a brasserie."
+            "DESCRIPTION": "Dit is een brasserie."
         },
         "EATERY": {
-            "NAME": "Eatery",
-            "DESCRIPTION": "This is a eatery."
+            "NAME": "Eetcafe",
+            "DESCRIPTION": "Dit is een eetcafe."
         },
         "CINEMA": {
-            "NAME": "Cinema",
-            "DESCRIPTION": "This is a cinema."
+            "NAME": "Bioscoop",
+            "DESCRIPTION": "Dit is een bioscoop."
         },
         "HOTEL": {
             "NAME": "Hotel",
-            "DESCRIPTION": "This is a hotel."
+            "DESCRIPTION": "Dit is een hotel."
         },
         "NIGHTSPOT": {
-            "NAME": "Nightspot",
-            "DESCRIPTION": "This is a nightspot."
+            "NAME": "Uitgaansgelegenheid",
+            "DESCRIPTION": "Dit is een uitgaansgelegenheid."
         },
         "SERVICE": {
             "NAME": "Dienstverlening",

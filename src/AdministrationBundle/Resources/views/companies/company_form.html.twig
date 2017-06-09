@@ -27,7 +27,7 @@
                     {% verbatim %}
                     <input type="hidden" name="Type" value="{{ companies.company().Type.Id }}">
                     <ui-select ng-model="companies.company().Type" search-enabled="true" theme="select2" style="width:100%;">
-                        <ui-select-match placeholder="{{ 'SELECT' | translate }}" ng-cloak>{{ $select.selected.Name|translate }}</ui-select-match>
+                        <ui-select-match placeholder="{{ 'SELECT' | translate }}" ng-cloak>{{ $select.selected.Name | translate }}</ui-select-match>
                         <ui-select-choices repeat="item in companies.lists().company_type | filterTranslate : {'Name':$select.search}" ng-cloak>{{ item.Name | translate }}</ui-select-choices>
                     </ui-select>
                     {% endverbatim %}
