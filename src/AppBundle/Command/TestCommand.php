@@ -74,7 +74,7 @@ class TestCommand extends ContainerAwareCommand
     protected function getSuperAdminEmail(OutputInterface $output)
     {
         $helper = $this->getContainer()->get('notification_helper');
-        var_dump(implode(',', $helper->getSuperAdminEmailList()));
+        var_dump($helper->getSuperAdminEmailList());
     }
 
     protected function showInputNotifications(OutputInterface $output)

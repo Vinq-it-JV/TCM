@@ -47,7 +47,7 @@ class NotificationHelper
         }
 
         // And send to all Super Admins!
-        $emailList = implode(',', $this->getSuperAdminEmailList());
+        $emailList = $this->getSuperAdminEmailList();
 
         $mail = \Swift_Message::newInstance()
             ->setTo($emailList)
