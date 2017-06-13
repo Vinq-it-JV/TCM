@@ -37,51 +37,53 @@
     </div>
     {% verbatim %}
     <div class="row">
-        <div class="col-md-6 col-lg-6" ng-repeat="sensor in sensors.sensorGroup(sensorGroup).devices" ng-show="sensor.IsEnabled">
-            <div class="panel panel-default" ng-click="">
-                <div class="panel-heading text-left">
-                    <div class="row">
-                        <div class="col-xs-2">
-                            <i class="fa fa-fw fa-2x" ng-class="{ 'fa-thermometer-2': sensor.TypeId == 2 || sensor.TypeId == 3, 'fa-sign-in': sensor.TypeId == 4 }"></i>
-                        </div>
-                        <div class="col-xs-10">
-                            <label class="sensor-name">{{ sensor.Name }}</label>
-                        </div>
-                    </div>
-                </div>
-                <div class="panel-body">
-                    <div ng-switch="sensor.TypeId">
-                        <div ng-switch-when="2">
-                            <highchart id="sensor.Name" config="sensor.chartConfig" ng-class="{ 'gauge-filter': sensor.State == 1 }"></highchart>
-                        </div>
-                        <div ng-switch-when="3">
-                            <highchart id="sensor.Name" config="sensor.chartConfig" ng-class="{ 'gauge-filter': sensor.State == 1 }"></highchart>
-                        </div>
-                        <div ng-switch-when="4">
-                            <highchart id="sensor.Name" config="sensor.chartConfig" ng-class="{ 'gauge-filter': sensor.State == 1 }"></highchart>
-                        </div>
-                    </div>
-                </div>
-                <div class="panel-footer">
-                    <div class="row">
-                        <div class="col-xs-2">
-                            <i class="fa fa-fw fa-2x" ng-class="{ 'fa-check-circle text-success': sensor.State == 0, 'fa-question-circle text-info': sensor.State == 1, 'fa-exclamation-circle text-danger': sensor.State == 2 }"></i>
-                        </div>
-                        <div class="col-xs-3">
-                            <div ng-switch="sensor.State" class="sensor-status">
-                                <div ng-switch-when="0" class="text-success" ng-cloak>
-                                    {{ 'SENSOR.STATE.ACTIVE' | translate }}
-                                </div>
-                                <div ng-switch-when="1" class="text-info" ng-cloak>
-                                    {{ 'SENSOR.STATE.INACTIVE' | translate }}
-                                </div>
-                                <div ng-switch-when="2" class="text-danger" ng-cloak>
-                                    {{ 'SENSOR.STATE.NOTIFIED' | translate }}
-                                </div>
+        <div ng-repeat="sensor in sensors.sensorGroup(sensorGroup).devices" ng-show="sensor.IsEnabled">
+            <div class="col-md-6 col-lg-6">
+                <div class="panel panel-default" ng-click="">
+                    <div class="panel-heading text-left">
+                        <div class="row">
+                            <div class="col-xs-2">
+                                <i class="fa fa-fw fa-2x" ng-class="{ 'fa-thermometer-2': sensor.TypeId == 2 || sensor.TypeId == 3, 'fa-sign-in': sensor.TypeId == 4 }"></i>
+                            </div>
+                            <div class="col-xs-10">
+                                <label class="sensor-name">{{ sensor.Name }}</label>
                             </div>
                         </div>
-                        <div class="col-xs-7">
-                            <div class="pull-right sensor-updated"><small><i class="fa fa-fw fa-clock-o"></i> {{ sensor.DataCollectedAt.date | GMT: 'HH:mm:ss DD-MM-YYYY' }}</small></div>
+                    </div>
+                    <div class="panel-body">
+                        <div ng-switch="sensor.TypeId">
+                            <div ng-switch-when="2">
+                                <highchart id="sensor.Name" config="sensor.chartConfig" ng-class="{ 'gauge-filter': sensor.State == 1 }"></highchart>
+                            </div>
+                            <div ng-switch-when="3">
+                                <highchart id="sensor.Name" config="sensor.chartConfig" ng-class="{ 'gauge-filter': sensor.State == 1 }"></highchart>
+                            </div>
+                            <div ng-switch-when="4">
+                                <highchart id="sensor.Name" config="sensor.chartConfig" ng-class="{ 'gauge-filter': sensor.State == 1 }"></highchart>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-footer">
+                        <div class="row">
+                            <div class="col-xs-2">
+                                <i class="fa fa-fw fa-2x" ng-class="{ 'fa-check-circle text-success': sensor.State == 0, 'fa-question-circle text-info': sensor.State == 1, 'fa-exclamation-circle text-danger': sensor.State == 2 }"></i>
+                            </div>
+                            <div class="col-xs-3">
+                                <div ng-switch="sensor.State" class="sensor-status">
+                                    <div ng-switch-when="0" class="text-success" ng-cloak>
+                                        {{ 'SENSOR.STATE.ACTIVE' | translate }}
+                                    </div>
+                                    <div ng-switch-when="1" class="text-info" ng-cloak>
+                                        {{ 'SENSOR.STATE.INACTIVE' | translate }}
+                                    </div>
+                                    <div ng-switch-when="2" class="text-danger" ng-cloak>
+                                        {{ 'SENSOR.STATE.NOTIFIED' | translate }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-7">
+                                <div class="pull-right sensor-updated"><small><i class="fa fa-fw fa-clock-o"></i> {{ sensor.DataCollectedAt.date | GMT: 'HH:mm:ss DD-MM-YYYY' }}</small></div>
+                            </div>
                         </div>
                     </div>
                 </div>

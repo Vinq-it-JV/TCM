@@ -94,11 +94,11 @@
     </h5>
     <div class="well">
         {% verbatim %}
-        <div ng-repeat="email in stores.store().Emails track by $index">
+        <div ng-repeat="phone in stores.store().Phones track by $index">
             <div class="form-group">
                 <div class="row">
-                    <div class="col-md-2 col-xs-4" ng-cloak><i ng-if='email.Primary' class="fa fa-fw fa-check"></i></div>
-                    <div class="col-md-10 col-xs-8" ng-cloak>{{ email.Email }}</div>
+                    <div class="col-md-2 col-xs-4" ng-cloak><i ng-if='phone.Primary' class="fa fa-fw fa-check"></i></div>
+                    <div class="col-md-10 col-xs-8" ng-cloak>{{ phone.PhoneNumber }}</div>
                 </div>
             </div>
         </div>
