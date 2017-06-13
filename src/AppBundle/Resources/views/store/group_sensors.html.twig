@@ -37,7 +37,7 @@
     </div>
     {% verbatim %}
     <div class="row">
-        <div class="col-md-4 col-lg-4" ng-repeat="sensor in sensors.sensorGroup(sensorGroup).devices" ng-if="sensor.IsEnabled">
+        <div class="col-md-6 col-lg-6" ng-repeat="sensor in sensors.sensorGroup(sensorGroup).devices" ng-show="sensor.IsEnabled">
             <div class="panel panel-default" ng-click="">
                 <div class="panel-heading text-left">
                     <div class="row">
