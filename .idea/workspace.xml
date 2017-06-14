@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="282e9c36-730e-4d16-a19d-353a62e794e2" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Command/TestCommand.php" afterPath="$PROJECT_DIR$/src/AppBundle/Command/TestCommand.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/NotificationBundle/Services/NotificationHelper.php" afterPath="$PROJECT_DIR$/src/NotificationBundle/Services/NotificationHelper.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DeviceBundle/Model/CbInput.php" afterPath="$PROJECT_DIR$/src/DeviceBundle/Model/CbInput.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DeviceBundle/Model/DsTemperatureSensor.php" afterPath="$PROJECT_DIR$/src/DeviceBundle/Model/DsTemperatureSensor.php" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -28,7 +27,7 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="app.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="app.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/web/app.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="120">
@@ -81,8 +80,28 @@
       <file leaf-file-name="CbInput.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/DeviceBundle/Model/CbInput.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="58" column="42" lean-forward="false" selection-start-line="58" selection-start-column="42" selection-end-line="58" selection-end-column="42" />
+            <state relative-caret-position="210">
+              <caret line="17" column="40" lean-forward="false" selection-start-line="17" selection-start-column="40" selection-end-line="17" selection-end-column="40" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ControllerBox.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/DeviceBundle/Model/ControllerBox.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="DsTemperatureSensor.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/DeviceBundle/Model/DsTemperatureSensor.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="225">
+              <caret line="18" column="0" lean-forward="true" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -237,8 +256,6 @@
         <option value="$PROJECT_DIR$/src/NotificationBundle/Controller/DataController.php" />
         <option value="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/notificationCtrl.js" />
         <option value="$PROJECT_DIR$/.gitignore" />
-        <option value="$PROJECT_DIR$/src/DeviceBundle/Model/CbInput.php" />
-        <option value="$PROJECT_DIR$/src/DeviceBundle/Model/DsTemperatureSensor.php" />
         <option value="$PROJECT_DIR$/src/DataCollectorBundle/Controller/DataController.php" />
         <option value="$PROJECT_DIR$/src/StoreBundle/Command/DBaseCommand.php" />
         <option value="$PROJECT_DIR$/src/StoreBundle/Model/StoreType.php" />
@@ -254,6 +271,8 @@
         <option value="$PROJECT_DIR$/src/DataCollectorBundle/Command/CheckDeviceCommand.php" />
         <option value="$PROJECT_DIR$/src/NotificationBundle/Services/NotificationHelper.php" />
         <option value="$PROJECT_DIR$/web/app.php" />
+        <option value="$PROJECT_DIR$/src/DeviceBundle/Model/CbInput.php" />
+        <option value="$PROJECT_DIR$/src/DeviceBundle/Model/DsTemperatureSensor.php" />
       </list>
     </option>
   </component>
@@ -2542,12 +2561,12 @@
       <workItem from="1494322228178" duration="39051000" />
       <workItem from="1495460625052" duration="44120000" />
       <workItem from="1496138707969" duration="45558000" />
-      <workItem from="1496998184924" duration="19950000" />
+      <workItem from="1496998184924" duration="20781000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="667327000" />
+    <option name="totallyTimeSpent" value="668158000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="821" extended-state="6" />
@@ -2604,14 +2623,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/DeviceBundle/Controller/DataController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1532">
-          <caret line="47" column="0" lean-forward="false" selection-start-line="43" selection-start-column="0" selection-end-line="47" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/NotificationBundle/Model/DsTemperatureNotification.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-407">
@@ -2789,14 +2800,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="203">
           <caret line="288" column="64" lean-forward="false" selection-start-line="288" selection-start-column="41" selection-end-line="288" selection-end-column="64" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/DeviceBundle/Model/DsTemperatureSensor.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="103" column="0" lean-forward="false" selection-start-line="103" selection-start-column="0" selection-end-line="103" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -3210,14 +3213,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/DeviceBundle/Model/CbInput.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="58" column="42" lean-forward="false" selection-start-line="58" selection-start-column="42" selection-end-line="58" selection-end-column="42" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/data/mail-spool/default/doLjyLHOOJ.message">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -3266,6 +3261,14 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/web/app.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="8" column="2" lean-forward="false" selection-start-line="8" selection-start-column="2" selection-end-line="8" selection-end-column="2" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/DataCollectorBundle/Command/CheckDeviceCommand.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="68">
@@ -3274,10 +3277,26 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web/app.php">
+    <entry file="file://$PROJECT_DIR$/src/DeviceBundle/Model/CbInput.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="2" lean-forward="false" selection-start-line="8" selection-start-column="2" selection-end-line="8" selection-end-column="2" />
+        <state relative-caret-position="210">
+          <caret line="17" column="40" lean-forward="false" selection-start-line="17" selection-start-column="40" selection-end-line="17" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/DeviceBundle/Model/ControllerBox.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/DeviceBundle/Model/DsTemperatureSensor.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="18" column="0" lean-forward="true" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
           <folding />
         </state>
       </provider>

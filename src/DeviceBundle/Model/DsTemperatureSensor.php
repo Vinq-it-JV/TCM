@@ -15,7 +15,7 @@ class DsTemperatureSensor extends BaseDsTemperatureSensor
     const STATE_INACTIVE = 1;
     const STATE_NOTIFY = 2;
 
-    const INACTIVITY_TIME = 300;    // 5 minutes
+    const INACTIVITY_TIME = 900;    // 15 minutes
 
     /**
      * getDsTemperatureSensorDataArray()
