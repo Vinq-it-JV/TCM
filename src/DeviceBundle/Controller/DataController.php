@@ -346,8 +346,10 @@ class DataController extends Controller
         if (!empty($store)) {
             $groups = $store->getDeviceGroupsIdArray();
             $_groups = [];
+
             foreach ($storeData as $index => $device) {
                 $device = (object)$device;
+
                 if ($device->TypeId == DeviceGroup::TYPE_ID) {
                     if ($device->Id)
                         $_groups[] = $device->Id;
@@ -357,8 +359,9 @@ class DataController extends Controller
                             $sensor = (object)$sensor;
                             if (empty($sensor->MainStore))
                                 $this->updateSensor($sensor, $position);
-                            else
+                            else {
                                 $this->updateSensor($sensor, $position, $device);
+                            }
                         }
                     }
                 } else {
@@ -374,7 +377,6 @@ class DataController extends Controller
                 if (!empty($_group))
                     $store->removeDeviceGroup($_group);
             }
-
             $store->save();
         }
 
@@ -386,7 +388,7 @@ class DataController extends Controller
      * @param $group
      * @param $index
      */
-    private function updateDeviceGroup($group, $index)
+    private function updateDeviceGroup(&$group, $index)
     {
         $_group = DeviceGroupQuery::create()->findOneById($group->Id);
         if (empty($_group))
@@ -397,6 +399,7 @@ class DataController extends Controller
         $_group->setPosition($index);
         $_group->setIsEnabled($group->IsEnabled);
         $_group->save();
+        $group->Id = $_group->getId();
     }
 
     /**
