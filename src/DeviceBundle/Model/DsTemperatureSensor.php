@@ -62,11 +62,9 @@ class DsTemperatureSensor extends BaseDsTemperatureSensor
         if ($this->getState() == self::STATE_NOTIFY)
             return self::STATE_NOTIFY;
 
-        if ($this->hasOpenNotification())
-            return self::STATE_NOTIFY;
-
         if ($this->checkSensorNotify())
-            return self::STATE_NOTIFY;
+            if ($this->hasOpenNotification())
+                return self::STATE_NOTIFY;
 
         return $state;
     }
