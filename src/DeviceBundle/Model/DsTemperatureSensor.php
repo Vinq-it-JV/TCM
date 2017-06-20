@@ -15,7 +15,7 @@ class DsTemperatureSensor extends BaseDsTemperatureSensor
     const STATE_INACTIVE = 1;
     const STATE_NOTIFY = 2;
 
-    const INACTIVITY_TIME = 900;    // 15 minutes
+    const INACTIVITY_TIME = 300;    // 5 minutes
 
     /**
      * getDsTemperatureSensorDataArray()
@@ -62,9 +62,11 @@ class DsTemperatureSensor extends BaseDsTemperatureSensor
         if ($this->getState() == self::STATE_NOTIFY)
             return self::STATE_NOTIFY;
 
+        if ($this->hasOpenNotification())
+            return self::STATE_NOTIFY;
+
         if ($this->checkSensorNotify())
-            if ($this->hasOpenNotification())
-                return self::STATE_NOTIFY;
+            return self::STATE_NOTIFY;
 
         return $state;
     }
