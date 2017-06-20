@@ -138,7 +138,8 @@ class DataController extends Controller
             $input->setControllerBox($controller);
             $input->setDataCollectedAt($date);
             $input->save();
-            $input->checkSensorStatus();
+            if ($input->getIsEnabled())
+                $input->checkSensorStatus();
             $bit <<= 1;
         }
         return true;
@@ -167,7 +168,8 @@ class DataController extends Controller
             $temperature->setMainStore($controller->getMainStore());
         $temperature->setDataCollectedAt($date);
         $temperature->save();
-        $temperature->checkSensorStatus();
+        if ($temperature->getIsEnabled())
+            $temperature->checkSensorStatus();
         return true;
     }
 
