@@ -87,6 +87,12 @@ class DsTemperatureSensor extends BaseDsTemperatureSensor
             $this->save();
             return true;
         }
+        else
+        {   if ($this->getState() != self::STATE_NOTIFY) {
+                $this->setState(self::STATE_ACTIVE);
+                $this->save();
+            }
+        }
         return false;
     }
 

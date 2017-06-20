@@ -87,6 +87,12 @@ class CbInput extends BaseCbInput
             $this->save();
             return true;
         }
+        else
+        {   if ($this->getState() != self::STATE_NOTIFY) {
+                $this->setState(self::STATE_ACTIVE);
+                $this->save();
+            }
+        }
         return false;
     }
 
@@ -114,6 +120,8 @@ class CbInput extends BaseCbInput
                 $notification->setSwitchState($this->getSwitchState());
                 $notification->setReason(CbInputNotification::REASON_SWITCH_STATE);
                 $notification->save();
+
+
                 $this->setState(self::STATE_NOTIFY);
                 $this->addCbInputNotification($notification);
                 $this->save();
