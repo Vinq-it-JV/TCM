@@ -120,7 +120,7 @@ class DataController extends Controller
 
         $date = new \DateTime();
 
-        $bit = 0x04;
+        $bit = 0x01;
 
         for ($inp = 1; $inp <= ControllerBox::CONTROLLER_INPUTS; $inp++) {
             $input = CbInputQuery::create()
@@ -135,6 +135,7 @@ class DataController extends Controller
                 $input->setSwitchState(false);
             else
                 $input->setSwitchState(true);
+            $input->setNotifyAfter($inputs);
             $input->setControllerBox($controller);
             $input->setDataCollectedAt($date);
             $input->save();
