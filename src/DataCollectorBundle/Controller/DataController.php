@@ -120,7 +120,7 @@ class DataController extends Controller
 
         $date = new \DateTime();
 
-        $bit = 0x01;
+        $bit = 0x04;
 
         for ($inp = 1; $inp <= ControllerBox::CONTROLLER_INPUTS; $inp++) {
             $input = CbInputQuery::create()
@@ -141,7 +141,7 @@ class DataController extends Controller
             $input->save();
             if ($input->getIsEnabled())
                 $input->checkSensorStatus();
-            $bit <<= 1;
+            $bit >>= 1;
         }
         return true;
     }
