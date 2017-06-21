@@ -132,15 +132,11 @@ class DataController extends Controller
             $input->setUid($controller->getUid());
             $input->setInputNumber($inp);
             if ($inputs & $bit)
-                $input->setSwitchState(true);
-            else
                 $input->setSwitchState(false);
+            else
+                $input->setSwitchState(true);
             $input->setControllerBox($controller);
             $input->setDataCollectedAt($date);
-            if ($controller->getUid() == 'E03889AA340E')
-                $input->setNotifyAfter($inputs);
-            else
-                $input->setNotifyAfter(0);
             $input->save();
             if ($input->getIsEnabled())
                 $input->checkSensorStatus();
