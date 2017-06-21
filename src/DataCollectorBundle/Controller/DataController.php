@@ -137,7 +137,7 @@ class DataController extends Controller
                 $input->setSwitchState(false);
             $input->setControllerBox($controller);
             $input->setDataCollectedAt($date);
-            $input->setNotifyAfter($bit);
+            $input->setNotifyAfter($inputs & $bit);
             $input->save();
             if ($input->getIsEnabled())
                 $input->checkSensorStatus();
