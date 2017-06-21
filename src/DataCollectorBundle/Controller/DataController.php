@@ -141,7 +141,7 @@ class DataController extends Controller
             $input->save();
             if ($input->getIsEnabled())
                 $input->checkSensorStatus();
-            $bit >>= 1;
+            $bit <<= 1;
         }
         return true;
     }
