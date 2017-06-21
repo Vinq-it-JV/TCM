@@ -135,7 +135,6 @@ class DataController extends Controller
                 $input->setSwitchState(false);
             else
                 $input->setSwitchState(true);
-            $input->setNotifyAfter($inputs);
             $input->setControllerBox($controller);
             $input->setDataCollectedAt($date);
             $input->save();
