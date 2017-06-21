@@ -137,7 +137,7 @@ class DataController extends Controller
                 $input->setSwitchState(false);
             $input->setControllerBox($controller);
             $input->setDataCollectedAt($date);
-            if ($controller->getUid() == 'E03889AA340B')
+            if ($controller->getUid() == 'E03889AA340E')
                 $input->setNotifyAfter($inputs);
             else
                 $input->setNotifyAfter(0);
