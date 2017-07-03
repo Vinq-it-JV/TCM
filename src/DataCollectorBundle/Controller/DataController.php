@@ -93,7 +93,6 @@ class DataController extends Controller
             $DsTemperatureData = $this->getDsTemperatureData(substr($data, 24 + $temp * 20, 20));
             $this->updateDsOutput($DsTemperatureData, (ControllerBox::CONTROLLER_DS_OUTPUTS - $temp), $controller);
         }
-
     }
 
     protected function updateControllerBox($version, $uid, $temperature)
@@ -138,8 +137,6 @@ class DataController extends Controller
             $input->setControllerBox($controller);
             $input->setDataCollectedAt($date);
             $input->save();
-            if ($input->getIsEnabled())
-                $input->checkSensorStatus();
             $bit <<= 1;
         }
         return true;
@@ -168,8 +165,6 @@ class DataController extends Controller
             $temperature->setMainStore($controller->getMainStore());
         $temperature->setDataCollectedAt($date);
         $temperature->save();
-        if ($temperature->getIsEnabled())
-            $temperature->checkSensorStatus();
         return true;
     }
 
@@ -262,5 +257,4 @@ class DataController extends Controller
         }
         return ($calccrc == 0xdd);
     }
-
 }

@@ -103,6 +103,7 @@ angular
         {
             $scope.collections.clrRecord();
             $scope.activePage = pagetype;
+            console.log($scope.collections.collection());
         };
 
         $scope.showCollection = function (collectionid, pagetype)

@@ -44,51 +44,26 @@ class DsTemperatureSensor extends BaseDsTemperatureSensor
     }
 
     /**
-     * checkSensorStatus()
-     * @return bool
-     */
-    public function checkSensorStatus()
-    {
-        $state = self::STATE_ACTIVE;
-
-        $store = StoreQuery::create()->findOneById($this->getMainStore());
-        if ($store->getIsMaintenance())
-            return $state;
-
-        if ($this->checkSensorInactive())
-            $state = self::STATE_INACTIVE;
-
-        // This check prevents excessive database checks on hasOpenNotification
-        if ($this->getState() == self::STATE_NOTIFY)
-            return self::STATE_NOTIFY;
-
-        if ($this->hasOpenNotification())
-            return self::STATE_NOTIFY;
-
-        if ($this->checkSensorNotify())
-            return self::STATE_NOTIFY;
-
-        return $state;
-    }
-
-    /**
      * checkSensorInactive()
      * @return bool
      */
     public function checkSensorInactive()
     {
+        if ($this->getStore()->getIsMaintenance())
+            return false;
+
         $date = new \DateTime();
         $now = $date->format('Y-m-d H:i:s');
         $updated = $this->getDataCollectedAt('Y-m-d H:i:s');
         $diffSeconds = strtotime($now) - strtotime($updated);
 
-        if ($diffSeconds >= self::INACTIVITY_TIME) {
-            $this->setState(self::STATE_INACTIVE);
-            $this->save();
-            return true;
-        }
-        else
-        {   if ($this->getState() != self::STATE_NOTIFY) {
+        if ($this->getState() != self::STATE_NOTIFY) {
+            if ($diffSeconds >= self::INACTIVITY_TIME) {
+                $this->setState(self::STATE_INACTIVE);
+                $this->save();
+                return true;
+            }
+            else {
                 $this->setState(self::STATE_ACTIVE);
                 $this->save();
             }
@@ -107,6 +82,12 @@ class DsTemperatureSensor extends BaseDsTemperatureSensor
 
         if ($this->getNotifyAfter() == -1)
             return false;
+
+        if ($this->getStore()->getIsMaintenance())
+            return false;
+
+        if ($this->getState() == self::STATE_NOTIFY)
+            return true;
 
         $temperature = round(floatval($this->getTemperature()), 2);
         $low = $this->getLowLimit();
@@ -130,6 +111,10 @@ class DsTemperatureSensor extends BaseDsTemperatureSensor
                 $this->save();
                 return true;
             }
+        }
+        else {
+            $this->setNotifyStartedAt(NULL);
+            $this->save();
         }
         return false;
     }

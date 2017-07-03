@@ -66,7 +66,6 @@ class TestCommand extends ContainerAwareCommand
         //$this->makeDeviceGroup($output);
         //$this->showDeviceGroup($output);
         //$this->checkInputs($output);
-        //$this->checkSensorStatus($output);
         //$this->showNotifications($output);
         //$this->testNotificationMail($output);
         //$this->showInputNotifications($output);
@@ -136,14 +135,6 @@ class TestCommand extends ContainerAwareCommand
         $store = StoreQuery::create()->findOneById(1);
 
         $helper->sendNotificationsEmail($store);
-    }
-
-    protected function checkSensorStatus(OutputInterface $output)
-    {
-        $output->writeln('Start sensor status check.');
-        $input = CbInputQuery::create()->findOneById(1);
-        $input->checkSensorStatus();
-        $output->writeln('End sensor status check.');
     }
 
     protected function showNotifications(OutputInterface $output)

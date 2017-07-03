@@ -2,7 +2,7 @@
 
     {# Maintenance information #}
     <h5 ng-cloak>
-        <i class="fa fa-fw fa-wrench"></i> {{ ng.translate('MAINTENANCE.LABEL') }}
+        <i class="fa fa-fw fa-wrench"></i> {{ ng.translate('MAINTENANCE.LABEL') }} {{ ng.translate('MAINTENANCE.FOR') }} {{ store.Name }}
     </h5>
     <div class="well">
         {% verbatim %}
@@ -63,7 +63,7 @@
         <div class="form-group">
             <div class="row" ng-show="collections.collection().EditedBy">
                 <div class="col-md-2 col-xs-4" ng-cloak><label>{{ 'COLLECTIONS.EDITED_BY' | translate }}:</label></div>
-                <div class="col-md-10 col-xs-8" ng-cloak>{{ collections.collection().EditedBy.Name }} ({{ collections.collection().UpdatedAt.date | GMT:'DD-MM-YYYY HH:mm:ss' }})</div>
+                <div class="col-md-10 col-xs-8" ng-cloak>{{ collections.collection().EditedBy.Name }} ({{ collections.collection().UpdatedAt.date | GMT:'DD-MM-YYYY HH:mm' }})</div>
             </div>
         </div>
         <div ng-show="collections.collection().Attachements">

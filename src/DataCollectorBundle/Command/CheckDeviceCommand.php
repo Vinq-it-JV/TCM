@@ -100,7 +100,7 @@ class CheckDeviceCommand extends ContainerAwareCommand
             ->find();
 
         foreach ($inputs as $input)
-            $input->checkSensorStatus();
+            $input->checkSensorNotify();
 
         $temperatures = DsTemperatureSensorQuery::create()
             ->filterByIsEnabled(true)
@@ -108,7 +108,7 @@ class CheckDeviceCommand extends ContainerAwareCommand
             ->find();
 
         foreach ($temperatures as $temperature)
-            $temperature->checkSensorStatus();
+            $temperature->checkSensorNotify();
     }
 
     /**

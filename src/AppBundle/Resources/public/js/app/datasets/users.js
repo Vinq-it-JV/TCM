@@ -121,6 +121,7 @@ angular
             if (index === -1)
                 return null;
             d_user = angular.copy(d_users[index]);
+            d_user.BirthDate.date = moment(d_user.BirthDate.date, "dd-mm-yyyy");
             return d_user;
         },
         setRecord: function (record_data)
@@ -139,6 +140,7 @@ angular
         clrRecord: function ()
         {
             d_user = angular.copy(d_template.user);
+            d_user.BirthDate.date = moment(d_user.BirthDate.date, "dd-mm-yyyy");
             return d_user;
         },
         delRecord: function (record_id)
@@ -152,6 +154,7 @@ angular
         updRecord: function (record_data)
         {
             d_user = angular.copy(record_data);
+            d_user.BirthDate.date = moment(d_user.BirthDate.date, "YYYY-MM-DD");
             return d_user;
         },
         addEmail: function ()
