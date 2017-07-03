@@ -2,17 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="282e9c36-730e-4d16-a19d-353a62e794e2" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/maintenance/maintenance_form.html.twig" afterPath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/maintenance/maintenance_form.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/maintenance/maintenance_info.html.twig" afterPath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/maintenance/maintenance_info.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Command/TestCommand.php" afterPath="$PROJECT_DIR$/src/AppBundle/Command/TestCommand.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/collectionCtrl.js" afterPath="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/collectionCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/datasets/collections.js" afterPath="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/datasets/collections.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/datasets/users.js" afterPath="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/datasets/users.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DataCollectorBundle/Command/CheckDeviceCommand.php" afterPath="$PROJECT_DIR$/src/DataCollectorBundle/Command/CheckDeviceCommand.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DataCollectorBundle/Controller/DataController.php" afterPath="$PROJECT_DIR$/src/DataCollectorBundle/Controller/DataController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DeviceBundle/Model/CbInput.php" afterPath="$PROJECT_DIR$/src/DeviceBundle/Model/CbInput.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DeviceBundle/Model/DsTemperatureSensor.php" afterPath="$PROJECT_DIR$/src/DeviceBundle/Model/DsTemperatureSensor.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/CollectionBundle/Controller/DataController.php" afterPath="$PROJECT_DIR$/src/CollectionBundle/Controller/DataController.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/app.php" afterPath="$PROJECT_DIR$/web/app.php" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -36,105 +28,42 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="maintenance_form.html.twig" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/AdministrationBundle/Resources/views/maintenance/maintenance_form.html.twig">
+      <file leaf-file-name="collectionCtrl.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/collectionCtrl.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="60">
-              <caret line="4" column="137" lean-forward="true" selection-start-line="4" selection-start-column="83" selection-end-line="4" selection-end-column="137" />
-              <folding>
-                <marker date="1499084967000" expanded="true" signature="272:5471" ph="..." />
-                <marker date="1499084967000" expanded="true" signature="328:1011" ph="..." />
-                <marker date="1499084967000" expanded="true" signature="328:1013" ph="..." />
-                <marker date="1499084967000" expanded="true" signature="358:996" ph="..." />
-                <marker date="1499084967000" expanded="true" signature="358:1011" ph="..." />
-                <marker date="1499084967000" expanded="true" signature="534:977" ph="..." />
-                <marker date="1499084967000" expanded="true" signature="607:954" ph="..." />
-                <marker date="1499084967000" expanded="true" signature="1044:1902" ph="..." />
-                <marker date="1499084967000" expanded="true" signature="1074:1887" ph="..." />
-                <marker date="1499084967000" expanded="true" signature="1246:1515" ph="..." />
-                <marker date="1499084967000" expanded="true" signature="1316:1492" ph="..." />
-                <marker date="1499084967000" expanded="true" signature="1572:1867" ph="..." />
-                <marker date="1499084967000" expanded="true" signature="1642:1844" ph="..." />
-                <marker date="1499084967000" expanded="true" signature="1935:2387" ph="..." />
-                <marker date="1499084967000" expanded="true" signature="1965:2372" ph="..." />
-                <marker date="1499084967000" expanded="true" signature="2138:2353" ph="..." />
-                <marker date="1499084967000" expanded="true" signature="2220:2330" ph="..." />
-                <marker date="1499084967000" expanded="true" signature="2420:2902" ph="..." />
-                <marker date="1499084967000" expanded="true" signature="2450:2887" ph="..." />
-                <marker date="1499084967000" expanded="true" signature="2630:2868" ph="..." />
-                <marker date="1499084967000" expanded="true" signature="2799:2812" ph="..." />
-                <marker date="1499084967000" expanded="true" signature="2813:2845" ph="..." />
-                <marker date="1499084967000" expanded="true" signature="2935:3274" ph="..." />
-                <marker date="1499084967000" expanded="true" signature="3010:3259" ph="..." />
-                <marker date="1499084967000" expanded="true" signature="3307:3716" ph="..." />
-                <marker date="1499084967000" expanded="true" signature="3381:3701" ph="..." />
-                <marker date="1499084967000" expanded="true" signature="3778:3953" ph="..." />
-                <marker date="1499084967000" expanded="true" signature="3822:3938" ph="..." />
-                <marker date="1499084967000" expanded="true" signature="4014:5461" ph="..." />
-                <marker date="1499084967000" expanded="true" signature="4058:4174" ph="..." />
-                <marker date="1499084967000" expanded="true" signature="4222:5446" ph="..." />
-                <marker date="1499084967000" expanded="true" signature="4334:5427" ph="..." />
-                <marker date="1499084967000" expanded="true" signature="4388:5404" ph="..." />
-                <marker date="1499084967000" expanded="true" signature="4470:4505" ph="..." />
-                <marker date="1499084967000" expanded="true" signature="4649:4666" ph="..." />
-                <marker date="1499084967000" expanded="true" signature="4667:5195" ph="..." />
-                <marker date="1499084967000" expanded="true" signature="4745:4913" ph="..." />
-                <marker date="1499084967000" expanded="true" signature="4991:5164" ph="..." />
-                <marker date="1499084967000" expanded="true" signature="5246:5377" ph="..." />
-              </folding>
+            <state relative-caret-position="315">
+              <caret line="213" column="0" lean-forward="false" selection-start-line="213" selection-start-column="0" selection-end-line="213" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="maintenance.html.twig" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/AdministrationBundle/Resources/views/maintenance/maintenance.html.twig">
+      <file leaf-file-name="routing.yml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/AdministrationBundle/Resources/config/routing.yml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="60">
-              <caret line="4" column="145" lean-forward="false" selection-start-line="4" selection-start-column="129" selection-end-line="4" selection-end-column="145" />
-              <folding>
-                <marker date="1499008699000" expanded="true" signature="2284:4256" ph="..." />
-                <marker date="1499008699000" expanded="true" signature="2600:3042" ph="..." />
-                <marker date="1499008699000" expanded="true" signature="3083:4218" ph="..." />
-                <marker date="1499008699000" expanded="true" signature="3148:4176" ph="..." />
-                <marker date="1499008699000" expanded="true" signature="3268:3479" ph="..." />
-                <marker date="1499008699000" expanded="true" signature="3599:3813" ph="..." />
-                <marker date="1499008699000" expanded="true" signature="3916:4129" ph="..." />
-              </folding>
+            <state relative-caret-position="179">
+              <caret line="325" column="70" lean-forward="false" selection-start-line="325" selection-start-column="51" selection-end-line="325" selection-end-column="70" />
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="maintenance_info.html.twig" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/AdministrationBundle/Resources/views/maintenance/maintenance_info.html.twig">
+      <file leaf-file-name="DataController.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/CollectionBundle/Controller/DataController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="12" column="18" lean-forward="true" selection-start-line="12" selection-start-column="18" selection-end-line="12" selection-end-column="18" />
-              <folding>
-                <marker date="1499084986000" expanded="true" signature="302:610" ph="..." />
-                <marker date="1499084986000" expanded="true" signature="332:595" ph="..." />
-                <marker date="1499084986000" expanded="true" signature="643:921" ph="..." />
-                <marker date="1499084986000" expanded="true" signature="673:906" ph="..." />
-                <marker date="1499084986000" expanded="true" signature="954:1388" ph="..." />
-                <marker date="1499084986000" expanded="true" signature="984:1373" ph="..." />
-                <marker date="1499084986000" expanded="true" signature="1164:1354" ph="..." />
-                <marker date="1499084986000" expanded="false" signature="1243:1256" ph="..." />
-                <marker date="1499084986000" expanded="true" signature="1257:1331" ph="..." />
-                <marker date="1499084986000" expanded="true" signature="1421:1715" ph="..." />
-                <marker date="1499084986000" expanded="true" signature="1451:1700" ph="..." />
-                <marker date="1499084986000" expanded="true" signature="1748:2159" ph="..." />
-                <marker date="1499084986000" expanded="true" signature="1822:2144" ph="..." />
-                <marker date="1499084986000" expanded="true" signature="2220:3463" ph="..." />
-                <marker date="1499084986000" expanded="true" signature="2220:3465" ph="..." />
-                <marker date="1499084986000" expanded="true" signature="2264:2380" ph="..." />
-                <marker date="1499084986000" expanded="true" signature="2428:3448" ph="..." />
-                <marker date="1499084986000" expanded="true" signature="2540:3429" ph="..." />
-                <marker date="1499084986000" expanded="true" signature="2594:3406" ph="..." />
-                <marker date="1499084986000" expanded="true" signature="2651:2668" ph="..." />
-                <marker date="1499084986000" expanded="true" signature="2669:3197" ph="..." />
-                <marker date="1499084986000" expanded="true" signature="2747:2915" ph="..." />
-                <marker date="1499084986000" expanded="true" signature="3161:3197" ph="..." />
-                <marker date="1499084986000" expanded="true" signature="3248:3379" ph="..." />
-              </folding>
+            <state relative-caret-position="315">
+              <caret line="72" column="55" lean-forward="false" selection-start-line="72" selection-start-column="55" selection-end-line="72" selection-end-column="55" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PageController.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/AdministrationBundle/Controller/PageController.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="370">
+              <caret line="193" column="48" lean-forward="false" selection-start-line="193" selection-start-column="48" selection-end-line="193" selection-end-column="48" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -143,7 +72,7 @@
         <entry file="file://$PROJECT_DIR$/src/DataCollectorBundle/Command/CheckDeviceCommand.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="240">
-              <caret line="77" column="0" lean-forward="true" selection-start-line="77" selection-start-column="0" selection-end-line="77" selection-end-column="0" />
+              <caret line="77" column="0" lean-forward="false" selection-start-line="77" selection-start-column="0" selection-end-line="77" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -193,7 +122,7 @@
         <entry file="file://$PROJECT_DIR$/src/DeviceBundle/Model/CbInput.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="175">
-              <caret line="93" column="30" lean-forward="true" selection-start-line="93" selection-start-column="30" selection-end-line="93" selection-end-column="30" />
+              <caret line="93" column="30" lean-forward="false" selection-start-line="93" selection-start-column="30" selection-end-line="93" selection-end-column="30" />
               <folding />
             </state>
           </provider>
@@ -212,8 +141,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>saveS</find>
-      <find>map</find>
       <find>_URL</find>
       <find>Url</find>
       <find>&lt;img</find>
@@ -242,6 +169,8 @@
       <find>vert</find>
       <find>conso</find>
       <find>CheckSensorStatus</find>
+      <find>administration_maintenance_store_get</find>
+      <find>getStoreMaintenance</find>
     </findStrings>
     <replaceStrings>
       <replace>&quot;</replace>
@@ -318,12 +247,10 @@
         <option value="$PROJECT_DIR$/src/AppBundle/Resources/views/store/maintenance_info.html.twig" />
         <option value="$PROJECT_DIR$/src/AppBundle/Resources/views/store/maintenance.html.twig" />
         <option value="$PROJECT_DIR$/src/AdministrationBundle/Resources/config/routing.yml" />
-        <option value="$PROJECT_DIR$/src/CollectionBundle/Controller/DataController.php" />
         <option value="$PROJECT_DIR$/src/AppBundle/Resources/public/translations/en.json" />
         <option value="$PROJECT_DIR$/src/AppBundle/Resources/public/translations/nl.json" />
         <option value="$PROJECT_DIR$/app/config/parameters.yml" />
         <option value="$PROJECT_DIR$/src/CollectionBundle/Services/CollectionHelper.php" />
-        <option value="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/collectionCtrl.js" />
         <option value="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/datasets/users.js" />
         <option value="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/datasets/collections.js" />
         <option value="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/maintenance/maintenance_form.html.twig" />
@@ -333,6 +260,8 @@
         <option value="$PROJECT_DIR$/src/DataCollectorBundle/Controller/DataController.php" />
         <option value="$PROJECT_DIR$/src/DataCollectorBundle/Command/CheckDeviceCommand.php" />
         <option value="$PROJECT_DIR$/src/AppBundle/Command/TestCommand.php" />
+        <option value="$PROJECT_DIR$/src/CollectionBundle/Controller/DataController.php" />
+        <option value="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/collectionCtrl.js" />
         <option value="$PROJECT_DIR$/web/app.php" />
       </list>
     </option>
@@ -1701,78 +1630,6 @@
               <option name="myItemId" value="public" />
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="js" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="angular-dropzone" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="TCM" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="TCM" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="AppBundle" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Resources" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="public" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="js" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="angular-cookies" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="angular-cookies.min.js" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.NestingTreeNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="TCM" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="TCM" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="AppBundle" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Resources" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="public" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -1953,6 +1810,32 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="Resources" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="config" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="TCM" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="TCM" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="AdministrationBundle" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Controller" />
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
           </PATH>
@@ -2200,12 +2083,12 @@
       <workItem from="1495460625052" duration="44120000" />
       <workItem from="1496138707969" duration="45558000" />
       <workItem from="1496998184924" duration="95866000" />
-      <workItem from="1499062945739" duration="16519000" />
+      <workItem from="1499062945739" duration="17184000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="759762000" />
+    <option name="totallyTimeSpent" value="760427000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="823" extended-state="6" />
@@ -2262,18 +2145,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/collectiondata/1828d196-21db-4d7c-9ebc-27d4156e8b1b/e10d482d176249079e00f1d46d44a91d.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/config/config.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-210">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/CollectionBundle/Resources/config/schema.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="323">
@@ -2437,29 +2308,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/AdministrationBundle/Resources/config/routing.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="293">
-          <caret line="357" column="0" lean-forward="false" selection-start-line="357" selection-start-column="0" selection-end-line="357" selection-end-column="43" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/config/parameters.yml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="225">
           <caret line="15" column="26" lean-forward="false" selection-start-line="15" selection-start-column="26" selection-end-line="15" selection-end-column="26" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/CollectionBundle/Controller/DataController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="745">
-          <caret line="172" column="5" lean-forward="false" selection-start-line="172" selection-start-column="5" selection-end-line="172" selection-end-column="5" />
-          <folding>
-            <element signature="e#47#85#0#PHP" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2493,14 +2346,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/collectionCtrl.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="229">
-          <caret line="105" column="57" lean-forward="false" selection-start-line="105" selection-start-column="57" selection-end-line="105" selection-end-column="57" />
           <folding />
         </state>
       </provider>
@@ -2728,7 +2573,7 @@
     <entry file="file://$PROJECT_DIR$/src/DeviceBundle/Model/CbInput.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="175">
-          <caret line="93" column="30" lean-forward="true" selection-start-line="93" selection-start-column="30" selection-end-line="93" selection-end-column="30" />
+          <caret line="93" column="30" lean-forward="false" selection-start-line="93" selection-start-column="30" selection-end-line="93" selection-end-column="30" />
           <folding />
         </state>
       </provider>
@@ -2752,7 +2597,7 @@
     <entry file="file://$PROJECT_DIR$/src/DataCollectorBundle/Command/CheckDeviceCommand.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="240">
-          <caret line="77" column="0" lean-forward="true" selection-start-line="77" selection-start-column="0" selection-end-line="77" selection-end-column="0" />
+          <caret line="77" column="0" lean-forward="false" selection-start-line="77" selection-start-column="0" selection-end-line="77" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -2761,6 +2606,46 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="155">
           <caret line="68" column="0" lean-forward="false" selection-start-line="68" selection-start-column="0" selection-end-line="68" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/AdministrationBundle/Controller/DataController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-50">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/AdministrationBundle/Controller/PageController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="370">
+          <caret line="193" column="48" lean-forward="false" selection-start-line="193" selection-start-column="48" selection-end-line="193" selection-end-column="48" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/AdministrationBundle/Resources/config/routing.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="179">
+          <caret line="325" column="70" lean-forward="false" selection-start-line="325" selection-start-column="51" selection-end-line="325" selection-end-column="70" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/CollectionBundle/Controller/DataController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="72" column="55" lean-forward="false" selection-start-line="72" selection-start-column="55" selection-end-line="72" selection-end-column="55" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/collectionCtrl.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="213" column="0" lean-forward="false" selection-start-line="213" selection-start-column="0" selection-end-line="213" selection-end-column="0" />
           <folding />
         </state>
       </provider>

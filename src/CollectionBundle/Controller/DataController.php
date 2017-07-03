@@ -67,8 +67,9 @@ class DataController extends Controller
         if ($request->isMethod('PUT')) {
             $postData = json_decode($request->getContent(), true);
             if (!empty($postData))
-            {   $this->saveCollectionData((object)$postData);
+            {   $collection = $this->saveCollectionData((object)$postData);
                 return JsonResult::create()
+                    ->setContents($collection->getCollectionDataArray())
                     ->setErrorcode(JsonResult::SUCCESS)
                     ->make();
             }
@@ -182,9 +183,6 @@ class DataController extends Controller
         $helper = $this->getClassHelper();
         $user = $this->getUser();
 
-//        var_dump($collectionData);
-//        die();
-
         if (isset($collectionData->Id)) {
             $collection = CollectionQuery::create()->findOneById($collectionData->Id);
             if (empty($collection)) {
@@ -218,7 +216,7 @@ class DataController extends Controller
         $collection->setDescription($collectionData->Description);
         $collection->save();
 
-        return true;
+        return $collection;
     }
 
     /**

@@ -211,9 +211,8 @@ angular
                     if (!$scope.isValidObject(data))
                         break;
                     if (!data.errorcode) {
-                            $scope.uploadCollectionAttachments();
-                        // else
-                        //     $scope.showCollectionUrl();
+                        $scope.collections.updRecord(data.contents.collection);
+                        $scope.uploadCollectionAttachments();
                     }
                     break;
                 case 'deleteCollection':
