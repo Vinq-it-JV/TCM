@@ -12,6 +12,7 @@ use \PropelCollection;
 use \PropelException;
 use \PropelObjectCollection;
 use \PropelPDO;
+use CollectionBundle\Model\Collection;
 use CompanyBundle\Model\Company;
 use CompanyBundle\Model\CompanyContact;
 use CompanyBundle\Model\CompanyInformant;
@@ -97,6 +98,14 @@ use UserBundle\Model\UserTitle;
  * @method UserQuery leftJoinCountriesRelatedByLanguage($relationAlias = null) Adds a LEFT JOIN clause to the query using the CountriesRelatedByLanguage relation
  * @method UserQuery rightJoinCountriesRelatedByLanguage($relationAlias = null) Adds a RIGHT JOIN clause to the query using the CountriesRelatedByLanguage relation
  * @method UserQuery innerJoinCountriesRelatedByLanguage($relationAlias = null) Adds a INNER JOIN clause to the query using the CountriesRelatedByLanguage relation
+ *
+ * @method UserQuery leftJoinCollectionRelatedByCreatedBy($relationAlias = null) Adds a LEFT JOIN clause to the query using the CollectionRelatedByCreatedBy relation
+ * @method UserQuery rightJoinCollectionRelatedByCreatedBy($relationAlias = null) Adds a RIGHT JOIN clause to the query using the CollectionRelatedByCreatedBy relation
+ * @method UserQuery innerJoinCollectionRelatedByCreatedBy($relationAlias = null) Adds a INNER JOIN clause to the query using the CollectionRelatedByCreatedBy relation
+ *
+ * @method UserQuery leftJoinCollectionRelatedByEditedBy($relationAlias = null) Adds a LEFT JOIN clause to the query using the CollectionRelatedByEditedBy relation
+ * @method UserQuery rightJoinCollectionRelatedByEditedBy($relationAlias = null) Adds a RIGHT JOIN clause to the query using the CollectionRelatedByEditedBy relation
+ * @method UserQuery innerJoinCollectionRelatedByEditedBy($relationAlias = null) Adds a INNER JOIN clause to the query using the CollectionRelatedByEditedBy relation
  *
  * @method UserQuery leftJoinCompanyContact($relationAlias = null) Adds a LEFT JOIN clause to the query using the CompanyContact relation
  * @method UserQuery rightJoinCompanyContact($relationAlias = null) Adds a RIGHT JOIN clause to the query using the CompanyContact relation
@@ -1354,6 +1363,154 @@ abstract class BaseUserQuery extends ModelCriteria
         return $this
             ->joinCountriesRelatedByLanguage($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'CountriesRelatedByLanguage', '\UserBundle\Model\CountriesQuery');
+    }
+
+    /**
+     * Filter the query by a related Collection object
+     *
+     * @param   Collection|PropelObjectCollection $collection  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 UserQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByCollectionRelatedByCreatedBy($collection, $comparison = null)
+    {
+        if ($collection instanceof Collection) {
+            return $this
+                ->addUsingAlias(UserPeer::ID, $collection->getCreatedBy(), $comparison);
+        } elseif ($collection instanceof PropelObjectCollection) {
+            return $this
+                ->useCollectionRelatedByCreatedByQuery()
+                ->filterByPrimaryKeys($collection->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByCollectionRelatedByCreatedBy() only accepts arguments of type Collection or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the CollectionRelatedByCreatedBy relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return UserQuery The current query, for fluid interface
+     */
+    public function joinCollectionRelatedByCreatedBy($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('CollectionRelatedByCreatedBy');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'CollectionRelatedByCreatedBy');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the CollectionRelatedByCreatedBy relation Collection object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   \CollectionBundle\Model\CollectionQuery A secondary query class using the current class as primary query
+     */
+    public function useCollectionRelatedByCreatedByQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinCollectionRelatedByCreatedBy($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'CollectionRelatedByCreatedBy', '\CollectionBundle\Model\CollectionQuery');
+    }
+
+    /**
+     * Filter the query by a related Collection object
+     *
+     * @param   Collection|PropelObjectCollection $collection  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 UserQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByCollectionRelatedByEditedBy($collection, $comparison = null)
+    {
+        if ($collection instanceof Collection) {
+            return $this
+                ->addUsingAlias(UserPeer::ID, $collection->getEditedBy(), $comparison);
+        } elseif ($collection instanceof PropelObjectCollection) {
+            return $this
+                ->useCollectionRelatedByEditedByQuery()
+                ->filterByPrimaryKeys($collection->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByCollectionRelatedByEditedBy() only accepts arguments of type Collection or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the CollectionRelatedByEditedBy relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return UserQuery The current query, for fluid interface
+     */
+    public function joinCollectionRelatedByEditedBy($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('CollectionRelatedByEditedBy');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'CollectionRelatedByEditedBy');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the CollectionRelatedByEditedBy relation Collection object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   \CollectionBundle\Model\CollectionQuery A secondary query class using the current class as primary query
+     */
+    public function useCollectionRelatedByEditedByQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinCollectionRelatedByEditedBy($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'CollectionRelatedByEditedBy', '\CollectionBundle\Model\CollectionQuery');
     }
 
     /**

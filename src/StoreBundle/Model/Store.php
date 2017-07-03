@@ -142,8 +142,7 @@ class Store extends BaseStore
      */
     public function getStoreTemplateArray()
     {
-        $company = new Store();
-        return $company->getStoreDataArray();
+        return $this->getStoreDataArray();
     }
 
     /**

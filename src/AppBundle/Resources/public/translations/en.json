@@ -24,6 +24,9 @@
     "UNLINK": "Unlink",
     "REFRESH": "Refresh",
     "BACK": "Back",
+    "DROPZONE": {
+        "DROP_FILES": "Drop files here."
+    },
     "ROLE": {
         "USER": "User",
         "ADMIN": "Admin",
@@ -304,6 +307,37 @@
             "NOTIFIED": "Notified"
         }
     },
+    "COLLECTION_TYPE": {
+        "MAINTENANCE": {
+            "NAME": "Maintenance"
+        },
+        "INVENTORY": {
+            "NAME": "Inventory"
+        }
+    },
+    "COLLECTIONS": {
+        "LABEL": "Collections",
+        "COLLECTION": "Collection",
+        "USER": "User",
+        "NAME": "Name",
+        "DESCRIPTION": "Description",
+        "DETAILS": "Details",
+        "DATE": "Date",
+        "ATTACHMENTS": "Attachments",
+        "CREATED_BY": "Created by",
+        "EDITED_BY": "Edited by",
+        "PUBLISHED": "Published",
+        "UPLOAD": "Upload"
+    },
+    "MAINTENANCE": {
+        "LABEL": "Maintenance",
+        "STORE": "Store",
+        "STORES": "Stores",
+        "NEW": "New maintenance",
+        "FOR": "for",
+        "PERIODICALY": "Periodicaly",
+        "FILE": "File"
+    },
     "NOTIFICATIONS": {
         "LABEL": "Notifications",
         "OPEN_NOTIFICATIONS": "Open notifications",
@@ -337,7 +371,9 @@
         "DELETE_GROUP": "Delete group?",
         "UNLINK_SENSOR": "Unlink sensor / device from store?",
         "NEW_PASSWORD": "Generate new password for user?",
-        "HANDLE_NOTIFICATION": "Handle notification?"
+        "HANDLE_NOTIFICATION": "Handle notification?",
+        "DELETE_ENTRY": "Delete entry?",
+        "DELETE_ATTACHMENT": "Delete attachment?"
     },
     "AUTH": {
         "USERNAME": "Username",

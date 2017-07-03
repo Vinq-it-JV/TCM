@@ -24,6 +24,9 @@
     "UNLINK": "Loskoppelen",
     "REFRESH": "Verversen",
     "BACK": "Terug",
+    "DROPZONE": {
+        "DROP_FILES": "Sleep bestanden hier."
+    },
     "ROLE": {
         "USER": "Gebruiker",
         "ADMIN": "Admin",
@@ -304,6 +307,37 @@
             "NOTIFIED": "Notificatie"
         }
     },
+    "COLLECTION_TYPE": {
+        "MAINTENANCE": {
+            "NAME": "Onderhoud"
+        },
+        "INVENTORY": {
+            "NAME": "Inventaris"
+        }
+    },
+    "COLLECTIONS": {
+        "LABEL": "Collecties",
+        "COLLECTION": "Collectie",
+        "USER": "Gebruiker",
+        "NAME": "Naam",
+        "DESCRIPTION": "Omschrijving",
+        "DETAILS": "Details",
+        "DATE": "Datum",
+        "ATTACHMENTS": "Bijlagen",
+        "CREATED_BY": "Aangemaakt door",
+        "EDITED_BY": "Bewerkt door",
+        "PUBLISHED": "Gepubliceerd",
+        "UPLOAD": "Upload"
+    },
+    "MAINTENANCE": {
+        "LABEL": "Onderhoud",
+        "STORE": "Filiaal",
+        "STORES": "Filialen",
+        "NEW": "Nieuw onderhoud",
+        "FOR": "voor",
+        "PERIODICALY": "Periodiek",
+        "FILE": "Bestand"
+    },
     "NOTIFICATIONS": {
         "LABEL": "Notificaties",
         "OPEN_NOTIFICATIONS": "Open notificaties",
@@ -337,7 +371,9 @@
         "DELETE_GROUP": "Groep verwijderen?",
         "UNLINK_SENSOR": "Sensor loskoppelen van filiaal?",
         "NEW_PASSWORD": "Nieuw wachtwoord genereren voor gebuiker?",
-        "HANDLE_NOTIFICATION": "Notificatie afhandelen?"
+        "HANDLE_NOTIFICATION": "Notificatie afhandelen?",
+        "DELETE_ENTRY": "Gegevens wissen?",
+        "DELETE_ATTACHMENT": "Bijlage verwijderen?"
     },
     "AUTH": {
         "USERNAME": "Gebruikersnaam",

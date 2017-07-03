@@ -7,7 +7,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface as Container;
 class ClassHelper
 {
     public function __construct(Container $container)
-    {   $this->container = $container;
+    {
+        $this->container = $container;
     }
 
     public function info()
@@ -19,6 +20,11 @@ class ClassHelper
     {
         $d = \DateTime::createFromFormat('d-m-Y', $date);
         return $d && $d->format('d-m-Y') === $date;
+    }
+
+    public function removeTimezone($date)
+    {
+        return date('d-m-Y H:i:s', strtotime($date));
     }
 
     public function getBooleanValue($value)
@@ -57,5 +63,16 @@ class ClassHelper
         return true;
     }
 
+    public function createUUID()
+    {
+        if (function_exists('openssl_random_pseudo_bytes') === true) {
+            $data = openssl_random_pseudo_bytes(16);
+            $data[6] = chr(ord($data[6]) & 0x0f | 0x40);    // set version to 0100
+            $data[8] = chr(ord($data[8]) & 0x3f | 0x80);    // set bits 6-7 to 10
+            $uuid = vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
+            return $uuid;
+        }
+        return null;
+    }
 
 }

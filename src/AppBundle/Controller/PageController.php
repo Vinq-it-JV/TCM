@@ -39,4 +39,20 @@ class PageController extends Controller
         return $this->render('AppBundle:store:store.html.twig', $storeArr);
     }
 
+    public function storeMaintenanceAction(Request $request, $storeid)
+    {
+        $store = StoreQuery::create()->findOneById($storeid);
+        $storeArr = $store->getStoreDataArray();
+        $storeArr['collectionType'] = 'maintenance';
+        return $this->render('AppBundle:store:collections.html.twig', $storeArr);
+    }
+
+    public function storeInventoryAction(Request $request, $storeid)
+    {
+        $store = StoreQuery::create()->findOneById($storeid);
+        $storeArr = $store->getStoreDataArray();
+        $storeArr['collectionType'] = 'inventory';
+        return $this->render('AppBundle:store:collections.html.twig', $storeArr);
+    }
+
 }

@@ -48,6 +48,18 @@ angular
                 $scope.BE.get(getdata, $scope.fetchDataOk, $scope.fetchDataFail);
             };
 
+            $scope.showInventory = function () {
+
+                console.log("show inventory");
+                $scope.showUrl(Routing.generate('tcm_store_inventory', {'storeid': $scope.stores.store().Id}));
+            };
+
+            $scope.showMaintenance = function () {
+
+                console.log("show maintenance");
+                $scope.showUrl(Routing.generate('tcm_store_maintenance', {'storeid': $scope.stores.store().Id}));
+            };
+
             $scope.showStore = function (storeid) {
                 $scope.showUrl(Routing.generate('tcm_store_show', {'storeid': storeid}));
             };

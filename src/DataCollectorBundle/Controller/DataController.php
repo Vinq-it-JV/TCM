@@ -68,7 +68,7 @@ class DataController extends Controller
         return new Response();
     }
 
-    private function collectControllerData($data)
+    protected function collectControllerData($data)
     {
         $version = hexdec(substr($data, 0, 2));
         switch ($version) {

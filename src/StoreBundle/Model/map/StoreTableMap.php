@@ -71,6 +71,7 @@ class StoreTableMap extends TableMap
         $this->addRelation('Company', 'CompanyBundle\\Model\\Company', RelationMap::MANY_TO_ONE, array('main_company' => 'id', ), null, null);
         $this->addRelation('StoreType', 'StoreBundle\\Model\\StoreType', RelationMap::MANY_TO_ONE, array('type' => 'id', ), null, null);
         $this->addRelation('Regions', 'CompanyBundle\\Model\\Regions', RelationMap::MANY_TO_ONE, array('region' => 'id', ), null, null);
+        $this->addRelation('Collection', 'CollectionBundle\\Model\\Collection', RelationMap::ONE_TO_MANY, array('id' => 'collection_store', ), null, null, 'Collections');
         $this->addRelation('ControllerBox', 'DeviceBundle\\Model\\ControllerBox', RelationMap::ONE_TO_MANY, array('id' => 'main_store', ), null, null, 'ControllerBoxen');
         $this->addRelation('DeviceGroup', 'DeviceBundle\\Model\\DeviceGroup', RelationMap::ONE_TO_MANY, array('id' => 'main_store', ), null, null, 'DeviceGroups');
         $this->addRelation('DsTemperatureSensor', 'DeviceBundle\\Model\\DsTemperatureSensor', RelationMap::ONE_TO_MANY, array('id' => 'main_store', ), null, null, 'DsTemperatureSensors');

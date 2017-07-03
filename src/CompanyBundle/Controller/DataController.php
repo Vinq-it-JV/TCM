@@ -215,7 +215,7 @@ class DataController extends Controller
      * @param $company
      * @return array
      */
-    private function getCompanyData($company)
+    protected function getCompanyData($company)
     {
         $dataArr = [];
         $listsArr = [];
@@ -239,7 +239,7 @@ class DataController extends Controller
      * @param $companyData
      * @return bool
      */
-    private function saveCompanyData($companyData)
+    protected function saveCompanyData($companyData)
     {
         $helper = $this->getHelper();
 
@@ -467,7 +467,7 @@ class DataController extends Controller
      * @param $region
      * @return array
      */
-    private function getRegionData($region)
+    protected function getRegionData($region)
     {
         $dataArr = [];
         $listsArr = [];
@@ -521,7 +521,7 @@ class DataController extends Controller
      * @param $regionData
      * @return bool
      */
-    private function saveRegionData($regionData)
+    protected function saveRegionData($regionData)
     {
         $helper = $this->getHelper();
 
@@ -544,7 +544,7 @@ class DataController extends Controller
      * Get page controller
      * @return object
      */
-    private function getPageController()
+    protected function getPageController()
     {
         $pc = $this->container->get('page_controller');
         $pc->container = $this->container;
@@ -555,7 +555,7 @@ class DataController extends Controller
      * Get class helper
      * @return object
      */
-    private function getHelper()
+    protected function getHelper()
     {
         $helper = $this->container->get('class_helper');
         return $helper;

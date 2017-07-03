@@ -15,6 +15,8 @@ use \PropelDateTime;
 use \PropelException;
 use \PropelObjectCollection;
 use \PropelPDO;
+use CollectionBundle\Model\Collection;
+use CollectionBundle\Model\CollectionQuery;
 use CompanyBundle\Model\Company;
 use CompanyBundle\Model\CompanyContact;
 use CompanyBundle\Model\CompanyContactQuery;
@@ -222,6 +224,18 @@ abstract class BaseUser extends BaseObject implements Persistent
     protected $aCountriesRelatedByLanguage;
 
     /**
+     * @var        PropelObjectCollection|Collection[] Collection to store aggregation of Collection objects.
+     */
+    protected $collCollectionsRelatedByCreatedBy;
+    protected $collCollectionsRelatedByCreatedByPartial;
+
+    /**
+     * @var        PropelObjectCollection|Collection[] Collection to store aggregation of Collection objects.
+     */
+    protected $collCollectionsRelatedByEditedBy;
+    protected $collCollectionsRelatedByEditedByPartial;
+
+    /**
      * @var        PropelObjectCollection|CompanyContact[] Collection to store aggregation of CompanyContact objects.
      */
     protected $collCompanyContacts;
@@ -422,6 +436,18 @@ abstract class BaseUser extends BaseObject implements Persistent
      * @var		PropelObjectCollection
      */
     protected $phonesScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $collectionsRelatedByCreatedByScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $collectionsRelatedByEditedByScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -1427,6 +1453,10 @@ abstract class BaseUser extends BaseObject implements Persistent
             $this->aUserTitle = null;
             $this->aCountriesRelatedByCountry = null;
             $this->aCountriesRelatedByLanguage = null;
+            $this->collCollectionsRelatedByCreatedBy = null;
+
+            $this->collCollectionsRelatedByEditedBy = null;
+
             $this->collCompanyContacts = null;
 
             $this->collCompanyInformants = null;
@@ -1885,6 +1915,42 @@ abstract class BaseUser extends BaseObject implements Persistent
                 foreach ($this->collPhones as $phone) {
                     if ($phone->isModified()) {
                         $phone->save($con);
+                    }
+                }
+            }
+
+            if ($this->collectionsRelatedByCreatedByScheduledForDeletion !== null) {
+                if (!$this->collectionsRelatedByCreatedByScheduledForDeletion->isEmpty()) {
+                    foreach ($this->collectionsRelatedByCreatedByScheduledForDeletion as $collectionRelatedByCreatedBy) {
+                        // need to save related object because we set the relation to null
+                        $collectionRelatedByCreatedBy->save($con);
+                    }
+                    $this->collectionsRelatedByCreatedByScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collCollectionsRelatedByCreatedBy !== null) {
+                foreach ($this->collCollectionsRelatedByCreatedBy as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->collectionsRelatedByEditedByScheduledForDeletion !== null) {
+                if (!$this->collectionsRelatedByEditedByScheduledForDeletion->isEmpty()) {
+                    foreach ($this->collectionsRelatedByEditedByScheduledForDeletion as $collectionRelatedByEditedBy) {
+                        // need to save related object because we set the relation to null
+                        $collectionRelatedByEditedBy->save($con);
+                    }
+                    $this->collectionsRelatedByEditedByScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collCollectionsRelatedByEditedBy !== null) {
+                foreach ($this->collCollectionsRelatedByEditedBy as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
                     }
                 }
             }
@@ -2375,6 +2441,22 @@ abstract class BaseUser extends BaseObject implements Persistent
             }
 
 
+                if ($this->collCollectionsRelatedByCreatedBy !== null) {
+                    foreach ($this->collCollectionsRelatedByCreatedBy as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
+                if ($this->collCollectionsRelatedByEditedBy !== null) {
+                    foreach ($this->collCollectionsRelatedByEditedBy as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
                 if ($this->collCompanyContacts !== null) {
                     foreach ($this->collCompanyContacts as $referrerFK) {
                         if (!$referrerFK->validate($columns)) {
@@ -2629,6 +2711,12 @@ abstract class BaseUser extends BaseObject implements Persistent
             }
             if (null !== $this->aCountriesRelatedByLanguage) {
                 $result['CountriesRelatedByLanguage'] = $this->aCountriesRelatedByLanguage->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->collCollectionsRelatedByCreatedBy) {
+                $result['CollectionsRelatedByCreatedBy'] = $this->collCollectionsRelatedByCreatedBy->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collCollectionsRelatedByEditedBy) {
+                $result['CollectionsRelatedByEditedBy'] = $this->collCollectionsRelatedByEditedBy->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collCompanyContacts) {
                 $result['CompanyContacts'] = $this->collCompanyContacts->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
@@ -2918,6 +3006,18 @@ abstract class BaseUser extends BaseObject implements Persistent
             $copyObj->setNew(false);
             // store object hash to prevent cycle
             $this->startCopy = true;
+
+            foreach ($this->getCollectionsRelatedByCreatedBy() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addCollectionRelatedByCreatedBy($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getCollectionsRelatedByEditedBy() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addCollectionRelatedByEditedBy($relObj->copy($deepCopy));
+                }
+            }
 
             foreach ($this->getCompanyContacts() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
@@ -3260,6 +3360,12 @@ abstract class BaseUser extends BaseObject implements Persistent
      */
     public function initRelation($relationName)
     {
+        if ('CollectionRelatedByCreatedBy' == $relationName) {
+            $this->initCollectionsRelatedByCreatedBy();
+        }
+        if ('CollectionRelatedByEditedBy' == $relationName) {
+            $this->initCollectionsRelatedByEditedBy();
+        }
         if ('CompanyContact' == $relationName) {
             $this->initCompanyContacts();
         }
@@ -3296,6 +3402,606 @@ abstract class BaseUser extends BaseObject implements Persistent
         if ('UserPhone' == $relationName) {
             $this->initUserPhones();
         }
+    }
+
+    /**
+     * Clears out the collCollectionsRelatedByCreatedBy collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return User The current object (for fluent API support)
+     * @see        addCollectionsRelatedByCreatedBy()
+     */
+    public function clearCollectionsRelatedByCreatedBy()
+    {
+        $this->collCollectionsRelatedByCreatedBy = null; // important to set this to null since that means it is uninitialized
+        $this->collCollectionsRelatedByCreatedByPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collCollectionsRelatedByCreatedBy collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialCollectionsRelatedByCreatedBy($v = true)
+    {
+        $this->collCollectionsRelatedByCreatedByPartial = $v;
+    }
+
+    /**
+     * Initializes the collCollectionsRelatedByCreatedBy collection.
+     *
+     * By default this just sets the collCollectionsRelatedByCreatedBy collection to an empty array (like clearcollCollectionsRelatedByCreatedBy());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initCollectionsRelatedByCreatedBy($overrideExisting = true)
+    {
+        if (null !== $this->collCollectionsRelatedByCreatedBy && !$overrideExisting) {
+            return;
+        }
+        $this->collCollectionsRelatedByCreatedBy = new PropelObjectCollection();
+        $this->collCollectionsRelatedByCreatedBy->setModel('Collection');
+    }
+
+    /**
+     * Gets an array of Collection objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this User is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Collection[] List of Collection objects
+     * @throws PropelException
+     */
+    public function getCollectionsRelatedByCreatedBy($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collCollectionsRelatedByCreatedByPartial && !$this->isNew();
+        if (null === $this->collCollectionsRelatedByCreatedBy || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collCollectionsRelatedByCreatedBy) {
+                // return empty collection
+                $this->initCollectionsRelatedByCreatedBy();
+            } else {
+                $collCollectionsRelatedByCreatedBy = CollectionQuery::create(null, $criteria)
+                    ->filterByUserRelatedByCreatedBy($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collCollectionsRelatedByCreatedByPartial && count($collCollectionsRelatedByCreatedBy)) {
+                      $this->initCollectionsRelatedByCreatedBy(false);
+
+                      foreach ($collCollectionsRelatedByCreatedBy as $obj) {
+                        if (false == $this->collCollectionsRelatedByCreatedBy->contains($obj)) {
+                          $this->collCollectionsRelatedByCreatedBy->append($obj);
+                        }
+                      }
+
+                      $this->collCollectionsRelatedByCreatedByPartial = true;
+                    }
+
+                    $collCollectionsRelatedByCreatedBy->getInternalIterator()->rewind();
+
+                    return $collCollectionsRelatedByCreatedBy;
+                }
+
+                if ($partial && $this->collCollectionsRelatedByCreatedBy) {
+                    foreach ($this->collCollectionsRelatedByCreatedBy as $obj) {
+                        if ($obj->isNew()) {
+                            $collCollectionsRelatedByCreatedBy[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collCollectionsRelatedByCreatedBy = $collCollectionsRelatedByCreatedBy;
+                $this->collCollectionsRelatedByCreatedByPartial = false;
+            }
+        }
+
+        return $this->collCollectionsRelatedByCreatedBy;
+    }
+
+    /**
+     * Sets a collection of CollectionRelatedByCreatedBy objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $collectionsRelatedByCreatedBy A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return User The current object (for fluent API support)
+     */
+    public function setCollectionsRelatedByCreatedBy(PropelCollection $collectionsRelatedByCreatedBy, PropelPDO $con = null)
+    {
+        $collectionsRelatedByCreatedByToDelete = $this->getCollectionsRelatedByCreatedBy(new Criteria(), $con)->diff($collectionsRelatedByCreatedBy);
+
+
+        $this->collectionsRelatedByCreatedByScheduledForDeletion = $collectionsRelatedByCreatedByToDelete;
+
+        foreach ($collectionsRelatedByCreatedByToDelete as $collectionRelatedByCreatedByRemoved) {
+            $collectionRelatedByCreatedByRemoved->setUserRelatedByCreatedBy(null);
+        }
+
+        $this->collCollectionsRelatedByCreatedBy = null;
+        foreach ($collectionsRelatedByCreatedBy as $collectionRelatedByCreatedBy) {
+            $this->addCollectionRelatedByCreatedBy($collectionRelatedByCreatedBy);
+        }
+
+        $this->collCollectionsRelatedByCreatedBy = $collectionsRelatedByCreatedBy;
+        $this->collCollectionsRelatedByCreatedByPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Collection objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Collection objects.
+     * @throws PropelException
+     */
+    public function countCollectionsRelatedByCreatedBy(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collCollectionsRelatedByCreatedByPartial && !$this->isNew();
+        if (null === $this->collCollectionsRelatedByCreatedBy || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collCollectionsRelatedByCreatedBy) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getCollectionsRelatedByCreatedBy());
+            }
+            $query = CollectionQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByUserRelatedByCreatedBy($this)
+                ->count($con);
+        }
+
+        return count($this->collCollectionsRelatedByCreatedBy);
+    }
+
+    /**
+     * Method called to associate a Collection object to this object
+     * through the Collection foreign key attribute.
+     *
+     * @param    Collection $l Collection
+     * @return User The current object (for fluent API support)
+     */
+    public function addCollectionRelatedByCreatedBy(Collection $l)
+    {
+        if ($this->collCollectionsRelatedByCreatedBy === null) {
+            $this->initCollectionsRelatedByCreatedBy();
+            $this->collCollectionsRelatedByCreatedByPartial = true;
+        }
+
+        if (!in_array($l, $this->collCollectionsRelatedByCreatedBy->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddCollectionRelatedByCreatedBy($l);
+
+            if ($this->collectionsRelatedByCreatedByScheduledForDeletion and $this->collectionsRelatedByCreatedByScheduledForDeletion->contains($l)) {
+                $this->collectionsRelatedByCreatedByScheduledForDeletion->remove($this->collectionsRelatedByCreatedByScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	CollectionRelatedByCreatedBy $collectionRelatedByCreatedBy The collectionRelatedByCreatedBy object to add.
+     */
+    protected function doAddCollectionRelatedByCreatedBy($collectionRelatedByCreatedBy)
+    {
+        $this->collCollectionsRelatedByCreatedBy[]= $collectionRelatedByCreatedBy;
+        $collectionRelatedByCreatedBy->setUserRelatedByCreatedBy($this);
+    }
+
+    /**
+     * @param	CollectionRelatedByCreatedBy $collectionRelatedByCreatedBy The collectionRelatedByCreatedBy object to remove.
+     * @return User The current object (for fluent API support)
+     */
+    public function removeCollectionRelatedByCreatedBy($collectionRelatedByCreatedBy)
+    {
+        if ($this->getCollectionsRelatedByCreatedBy()->contains($collectionRelatedByCreatedBy)) {
+            $this->collCollectionsRelatedByCreatedBy->remove($this->collCollectionsRelatedByCreatedBy->search($collectionRelatedByCreatedBy));
+            if (null === $this->collectionsRelatedByCreatedByScheduledForDeletion) {
+                $this->collectionsRelatedByCreatedByScheduledForDeletion = clone $this->collCollectionsRelatedByCreatedBy;
+                $this->collectionsRelatedByCreatedByScheduledForDeletion->clear();
+            }
+            $this->collectionsRelatedByCreatedByScheduledForDeletion[]= $collectionRelatedByCreatedBy;
+            $collectionRelatedByCreatedBy->setUserRelatedByCreatedBy(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this User is new, it will return
+     * an empty collection; or if this User has previously
+     * been saved, it will retrieve related CollectionsRelatedByCreatedBy from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in User.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Collection[] List of Collection objects
+     */
+    public function getCollectionsRelatedByCreatedByJoinCollectionType($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = CollectionQuery::create(null, $criteria);
+        $query->joinWith('CollectionType', $join_behavior);
+
+        return $this->getCollectionsRelatedByCreatedBy($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this User is new, it will return
+     * an empty collection; or if this User has previously
+     * been saved, it will retrieve related CollectionsRelatedByCreatedBy from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in User.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Collection[] List of Collection objects
+     */
+    public function getCollectionsRelatedByCreatedByJoinCompany($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = CollectionQuery::create(null, $criteria);
+        $query->joinWith('Company', $join_behavior);
+
+        return $this->getCollectionsRelatedByCreatedBy($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this User is new, it will return
+     * an empty collection; or if this User has previously
+     * been saved, it will retrieve related CollectionsRelatedByCreatedBy from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in User.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Collection[] List of Collection objects
+     */
+    public function getCollectionsRelatedByCreatedByJoinStore($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = CollectionQuery::create(null, $criteria);
+        $query->joinWith('Store', $join_behavior);
+
+        return $this->getCollectionsRelatedByCreatedBy($query, $con);
+    }
+
+    /**
+     * Clears out the collCollectionsRelatedByEditedBy collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return User The current object (for fluent API support)
+     * @see        addCollectionsRelatedByEditedBy()
+     */
+    public function clearCollectionsRelatedByEditedBy()
+    {
+        $this->collCollectionsRelatedByEditedBy = null; // important to set this to null since that means it is uninitialized
+        $this->collCollectionsRelatedByEditedByPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collCollectionsRelatedByEditedBy collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialCollectionsRelatedByEditedBy($v = true)
+    {
+        $this->collCollectionsRelatedByEditedByPartial = $v;
+    }
+
+    /**
+     * Initializes the collCollectionsRelatedByEditedBy collection.
+     *
+     * By default this just sets the collCollectionsRelatedByEditedBy collection to an empty array (like clearcollCollectionsRelatedByEditedBy());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initCollectionsRelatedByEditedBy($overrideExisting = true)
+    {
+        if (null !== $this->collCollectionsRelatedByEditedBy && !$overrideExisting) {
+            return;
+        }
+        $this->collCollectionsRelatedByEditedBy = new PropelObjectCollection();
+        $this->collCollectionsRelatedByEditedBy->setModel('Collection');
+    }
+
+    /**
+     * Gets an array of Collection objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this User is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Collection[] List of Collection objects
+     * @throws PropelException
+     */
+    public function getCollectionsRelatedByEditedBy($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collCollectionsRelatedByEditedByPartial && !$this->isNew();
+        if (null === $this->collCollectionsRelatedByEditedBy || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collCollectionsRelatedByEditedBy) {
+                // return empty collection
+                $this->initCollectionsRelatedByEditedBy();
+            } else {
+                $collCollectionsRelatedByEditedBy = CollectionQuery::create(null, $criteria)
+                    ->filterByUserRelatedByEditedBy($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collCollectionsRelatedByEditedByPartial && count($collCollectionsRelatedByEditedBy)) {
+                      $this->initCollectionsRelatedByEditedBy(false);
+
+                      foreach ($collCollectionsRelatedByEditedBy as $obj) {
+                        if (false == $this->collCollectionsRelatedByEditedBy->contains($obj)) {
+                          $this->collCollectionsRelatedByEditedBy->append($obj);
+                        }
+                      }
+
+                      $this->collCollectionsRelatedByEditedByPartial = true;
+                    }
+
+                    $collCollectionsRelatedByEditedBy->getInternalIterator()->rewind();
+
+                    return $collCollectionsRelatedByEditedBy;
+                }
+
+                if ($partial && $this->collCollectionsRelatedByEditedBy) {
+                    foreach ($this->collCollectionsRelatedByEditedBy as $obj) {
+                        if ($obj->isNew()) {
+                            $collCollectionsRelatedByEditedBy[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collCollectionsRelatedByEditedBy = $collCollectionsRelatedByEditedBy;
+                $this->collCollectionsRelatedByEditedByPartial = false;
+            }
+        }
+
+        return $this->collCollectionsRelatedByEditedBy;
+    }
+
+    /**
+     * Sets a collection of CollectionRelatedByEditedBy objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $collectionsRelatedByEditedBy A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return User The current object (for fluent API support)
+     */
+    public function setCollectionsRelatedByEditedBy(PropelCollection $collectionsRelatedByEditedBy, PropelPDO $con = null)
+    {
+        $collectionsRelatedByEditedByToDelete = $this->getCollectionsRelatedByEditedBy(new Criteria(), $con)->diff($collectionsRelatedByEditedBy);
+
+
+        $this->collectionsRelatedByEditedByScheduledForDeletion = $collectionsRelatedByEditedByToDelete;
+
+        foreach ($collectionsRelatedByEditedByToDelete as $collectionRelatedByEditedByRemoved) {
+            $collectionRelatedByEditedByRemoved->setUserRelatedByEditedBy(null);
+        }
+
+        $this->collCollectionsRelatedByEditedBy = null;
+        foreach ($collectionsRelatedByEditedBy as $collectionRelatedByEditedBy) {
+            $this->addCollectionRelatedByEditedBy($collectionRelatedByEditedBy);
+        }
+
+        $this->collCollectionsRelatedByEditedBy = $collectionsRelatedByEditedBy;
+        $this->collCollectionsRelatedByEditedByPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Collection objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Collection objects.
+     * @throws PropelException
+     */
+    public function countCollectionsRelatedByEditedBy(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collCollectionsRelatedByEditedByPartial && !$this->isNew();
+        if (null === $this->collCollectionsRelatedByEditedBy || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collCollectionsRelatedByEditedBy) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getCollectionsRelatedByEditedBy());
+            }
+            $query = CollectionQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByUserRelatedByEditedBy($this)
+                ->count($con);
+        }
+
+        return count($this->collCollectionsRelatedByEditedBy);
+    }
+
+    /**
+     * Method called to associate a Collection object to this object
+     * through the Collection foreign key attribute.
+     *
+     * @param    Collection $l Collection
+     * @return User The current object (for fluent API support)
+     */
+    public function addCollectionRelatedByEditedBy(Collection $l)
+    {
+        if ($this->collCollectionsRelatedByEditedBy === null) {
+            $this->initCollectionsRelatedByEditedBy();
+            $this->collCollectionsRelatedByEditedByPartial = true;
+        }
+
+        if (!in_array($l, $this->collCollectionsRelatedByEditedBy->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddCollectionRelatedByEditedBy($l);
+
+            if ($this->collectionsRelatedByEditedByScheduledForDeletion and $this->collectionsRelatedByEditedByScheduledForDeletion->contains($l)) {
+                $this->collectionsRelatedByEditedByScheduledForDeletion->remove($this->collectionsRelatedByEditedByScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	CollectionRelatedByEditedBy $collectionRelatedByEditedBy The collectionRelatedByEditedBy object to add.
+     */
+    protected function doAddCollectionRelatedByEditedBy($collectionRelatedByEditedBy)
+    {
+        $this->collCollectionsRelatedByEditedBy[]= $collectionRelatedByEditedBy;
+        $collectionRelatedByEditedBy->setUserRelatedByEditedBy($this);
+    }
+
+    /**
+     * @param	CollectionRelatedByEditedBy $collectionRelatedByEditedBy The collectionRelatedByEditedBy object to remove.
+     * @return User The current object (for fluent API support)
+     */
+    public function removeCollectionRelatedByEditedBy($collectionRelatedByEditedBy)
+    {
+        if ($this->getCollectionsRelatedByEditedBy()->contains($collectionRelatedByEditedBy)) {
+            $this->collCollectionsRelatedByEditedBy->remove($this->collCollectionsRelatedByEditedBy->search($collectionRelatedByEditedBy));
+            if (null === $this->collectionsRelatedByEditedByScheduledForDeletion) {
+                $this->collectionsRelatedByEditedByScheduledForDeletion = clone $this->collCollectionsRelatedByEditedBy;
+                $this->collectionsRelatedByEditedByScheduledForDeletion->clear();
+            }
+            $this->collectionsRelatedByEditedByScheduledForDeletion[]= $collectionRelatedByEditedBy;
+            $collectionRelatedByEditedBy->setUserRelatedByEditedBy(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this User is new, it will return
+     * an empty collection; or if this User has previously
+     * been saved, it will retrieve related CollectionsRelatedByEditedBy from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in User.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Collection[] List of Collection objects
+     */
+    public function getCollectionsRelatedByEditedByJoinCollectionType($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = CollectionQuery::create(null, $criteria);
+        $query->joinWith('CollectionType', $join_behavior);
+
+        return $this->getCollectionsRelatedByEditedBy($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this User is new, it will return
+     * an empty collection; or if this User has previously
+     * been saved, it will retrieve related CollectionsRelatedByEditedBy from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in User.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Collection[] List of Collection objects
+     */
+    public function getCollectionsRelatedByEditedByJoinCompany($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = CollectionQuery::create(null, $criteria);
+        $query->joinWith('Company', $join_behavior);
+
+        return $this->getCollectionsRelatedByEditedBy($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this User is new, it will return
+     * an empty collection; or if this User has previously
+     * been saved, it will retrieve related CollectionsRelatedByEditedBy from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in User.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Collection[] List of Collection objects
+     */
+    public function getCollectionsRelatedByEditedByJoinStore($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = CollectionQuery::create(null, $criteria);
+        $query->joinWith('Store', $join_behavior);
+
+        return $this->getCollectionsRelatedByEditedBy($query, $con);
     }
 
     /**
@@ -8245,6 +8951,16 @@ abstract class BaseUser extends BaseObject implements Persistent
     {
         if ($deep && !$this->alreadyInClearAllReferencesDeep) {
             $this->alreadyInClearAllReferencesDeep = true;
+            if ($this->collCollectionsRelatedByCreatedBy) {
+                foreach ($this->collCollectionsRelatedByCreatedBy as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collCollectionsRelatedByEditedBy) {
+                foreach ($this->collCollectionsRelatedByEditedBy as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collCompanyContacts) {
                 foreach ($this->collCompanyContacts as $o) {
                     $o->clearAllReferences($deep);
@@ -8371,6 +9087,14 @@ abstract class BaseUser extends BaseObject implements Persistent
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
 
+        if ($this->collCollectionsRelatedByCreatedBy instanceof PropelCollection) {
+            $this->collCollectionsRelatedByCreatedBy->clearIterator();
+        }
+        $this->collCollectionsRelatedByCreatedBy = null;
+        if ($this->collCollectionsRelatedByEditedBy instanceof PropelCollection) {
+            $this->collCollectionsRelatedByEditedBy->clearIterator();
+        }
+        $this->collCollectionsRelatedByEditedBy = null;
         if ($this->collCompanyContacts instanceof PropelCollection) {
             $this->collCompanyContacts->clearIterator();
         }

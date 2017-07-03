@@ -157,7 +157,7 @@ class DataController extends Controller
      * @param $typeid
      * @return bool
      */
-    private function saveSensorData($sensorData, $sensorid, $typeid)
+    protected function saveSensorData($sensorData, $sensorid, $typeid)
     {
         $helper = $this->getHelper();
 
@@ -200,7 +200,7 @@ class DataController extends Controller
      * @param $typeid
      * @return array
      */
-    private function getSensorData($sensorid, $typeid)
+    protected function getSensorData($sensorid, $typeid)
     {
         $dataArr = [];
         $listsArr = [];
@@ -225,7 +225,7 @@ class DataController extends Controller
      * @param $typeid
      * @return array
      */
-    private function getSensor($sensorid, $typeid)
+    protected function getSensor($sensorid, $typeid)
     {
         $sensor = null;
         $data = [];
@@ -251,7 +251,7 @@ class DataController extends Controller
      * @param $store
      * @return array
      */
-    private function getStoreData($store)
+    protected function getStoreData($store)
     {
         $dataArr = [];
         $listsArr = [];
@@ -270,7 +270,7 @@ class DataController extends Controller
      * @param $store
      * @return array
      */
-    private function getFullStoreTemplateArray($store)
+    protected function getFullStoreTemplateArray($store)
     {
         $data = [];
         $group = new DeviceGroup();
@@ -290,7 +290,7 @@ class DataController extends Controller
      * @param $store
      * @return array
      */
-    private function getStoreDeviceGroups($store)
+    protected function getStoreDeviceGroups($store)
     {
         $dataArr = [];
         $deviceArr = [];
@@ -337,7 +337,7 @@ class DataController extends Controller
      * @param $storeData
      * @return bool
      */
-    private function saveStoreData($storeData, $storeid)
+    protected function saveStoreData($storeData, $storeid)
     {
         $helper = $this->getHelper();
 
@@ -388,7 +388,7 @@ class DataController extends Controller
      * @param $group
      * @param $index
      */
-    private function updateDeviceGroup(&$group, $index)
+    protected function updateDeviceGroup(&$group, $index)
     {
         $_group = DeviceGroupQuery::create()->findOneById($group->Id);
         if (empty($_group))
@@ -408,7 +408,7 @@ class DataController extends Controller
      * @param int $index
      * @param null $group
      */
-    private function updateSensor($sensor, $index = 0, $group = null)
+    protected function updateSensor($sensor, $index = 0, $group = null)
     {
         $groupDetach = false;
         if (!empty($group))
@@ -473,7 +473,7 @@ class DataController extends Controller
      * Get class helper
      * @return object
      */
-    private function getHelper()
+    protected function getHelper()
     {
         $helper = $this->container->get('class_helper');
         return $helper;

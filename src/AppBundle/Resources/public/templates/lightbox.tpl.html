@@ -1,0 +1,15 @@
+<div class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" ng-class="{'wide-modal':modalOptions.wide === true}">
+        <div class="modal-content noselect">
+            <div class="modal-header">
+                <button type="button" class="close" ng-click="$hide();modalOptions.onCancel();">&times;</button>
+                <h5 class="modal-title" ng-cloak>{{ modalOptions.headerText }}</h5>
+            </div>
+            <div class="modal-body" ng-cloak>
+                <div class="row text-center">
+                    <img ng-src="{{ modalOptions.parentScope.lightboxImage }}" width="80%"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

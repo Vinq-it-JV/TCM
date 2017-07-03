@@ -73,6 +73,8 @@ class UserTableMap extends TableMap
         $this->addRelation('UserTitle', 'UserBundle\\Model\\UserTitle', RelationMap::MANY_TO_ONE, array('title' => 'id', ), null, null);
         $this->addRelation('CountriesRelatedByCountry', 'UserBundle\\Model\\Countries', RelationMap::MANY_TO_ONE, array('country' => 'id', ), null, null);
         $this->addRelation('CountriesRelatedByLanguage', 'UserBundle\\Model\\Countries', RelationMap::MANY_TO_ONE, array('language' => 'id', ), null, null);
+        $this->addRelation('CollectionRelatedByCreatedBy', 'CollectionBundle\\Model\\Collection', RelationMap::ONE_TO_MANY, array('id' => 'created_by', ), null, null, 'CollectionsRelatedByCreatedBy');
+        $this->addRelation('CollectionRelatedByEditedBy', 'CollectionBundle\\Model\\Collection', RelationMap::ONE_TO_MANY, array('id' => 'edited_by', ), null, null, 'CollectionsRelatedByEditedBy');
         $this->addRelation('CompanyContact', 'CompanyBundle\\Model\\CompanyContact', RelationMap::ONE_TO_MANY, array('id' => 'contact_id', ), null, null, 'CompanyContacts');
         $this->addRelation('CompanyInformant', 'CompanyBundle\\Model\\CompanyInformant', RelationMap::ONE_TO_MANY, array('id' => 'informant_id', ), null, null, 'CompanyInformants');
         $this->addRelation('CompanyOwner', 'CompanyBundle\\Model\\CompanyOwner', RelationMap::ONE_TO_MANY, array('id' => 'owner_id', ), null, null, 'CompanyOwners');

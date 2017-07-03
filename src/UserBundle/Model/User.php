@@ -277,8 +277,7 @@ class User extends BaseUser implements AdvancedUserInterface
      */
     public function getUserTemplateArray()
     {
-        $user = new User();
-        return $user->getUserDataArray();
+        return $this->getUserDataArray();
     }
 
     /**

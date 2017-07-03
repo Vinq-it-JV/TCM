@@ -186,7 +186,7 @@ class DataController extends Controller
             ->make();
     }
 
-    private function getNotificationsDataArray($notifications)
+    protected function getNotificationsDataArray($notifications)
     {
         $dataArr = [];
         foreach ($notifications as $notification)

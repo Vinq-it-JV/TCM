@@ -491,7 +491,7 @@
         <div class="row">
             <div class="col-md-12">
                 <a href="{{ path('administration_stores') }}" class="btn btn-sm btn-default pull-left"
-                   ng-click="BE.showLoader(true)"><i class="fa fa-close" ng-cloak></i> {{ ng.translate('CANCEL') }}</a>
+                   ng-click="BE.showLoader(true)" ng-cloak><i class="fa fa-close"></i> {{ ng.translate('CANCEL') }}</a>
                 <button type="submit" class="btn btn-sm btn-success pull-right" ng-click="BE.showLoader(true)"
                         ng-disabled="storeForm.$invalid||!stores.emails().length">
                     <i class="fa fa-floppy-o" ng-cloak></i> {{ ng.translate('SAVE') }}

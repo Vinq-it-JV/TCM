@@ -46,6 +46,8 @@
             <script src="{{ asset('bundles/app/js/angular-toggle/angular-toggle.min.js') }}"></script>
             <script src="{{ asset('bundles/app/js/angular-tree/angular-ui-tree.js') }}"></script>
             <script src="{{ asset('bundles/app/js/angular-map/ng-map.min.js') }}"></script>
+            <script src="{{ asset('bundles/app/js/angular-dropzone/dropzone.js') }}"></script>
+            <script src="{{ asset('bundles/app/js/angular-dropzone/ng-dropzone.min.js') }}"></script>
 
             <script src="{{ asset('bundles/app/js/angular-charts/highcharts.js') }}"></script>
             <script src="{{ asset('bundles/app/js/angular-charts/highcharts-more.js') }}"></script>
@@ -77,6 +79,11 @@
             <script src="{{ asset('bundles/app/js/app/directives/st-persist.js') }}"></script>
             <script src="{{ asset('bundles/app/js/app/directives/st-ratio.js') }}"></script>
             <script src="{{ asset('bundles/app/js/app/directives/no-enter.js') }}"></script>
+            <script src="{{ asset('bundles/app/js/app/directives/ng-thumb.js') }}"></script>
+
+            <script type='text/javascript'>
+                Dropzone.autoDiscover = false;
+            </script>
         {% endblock %}
     </head>
 

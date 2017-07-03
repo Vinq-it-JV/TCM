@@ -28,8 +28,33 @@ tcm_store_show:
     options:
         expose: true
 
+tcm_store_inventory:
+    path:     /store/{storeid}/inventory
+    defaults: { _controller: AppBundle:Page:storeInventory }
+    options:
+        expose: true
+
+tcm_store_maintenance:
+    path:     /store/{storeid}/maintenance
+    defaults: { _controller: AppBundle:Page:storeMaintenance }
+    options:
+        expose: true
+
 tcm_update_sensors:
     path:     /store/{storeid}/sensors/update
     defaults: { _controller: AppBundle:Data:updateSensors }
+    options:
+        expose: true
+
+tcm_store_maintenance_get:
+    path:     /store/{storeid}/maintenance/get
+    defaults: { _controller: AppBundle:Data:getStoreMaintenance }
+    options:
+        expose: true
+
+tcm_collection_attachment_get:
+    path:     /collection/attachment/{attachmentid}/get
+    defaults: { _controller: CollectionBundle:Data:getCollectionAttachment }
+    methods: [GET]
     options:
         expose: true

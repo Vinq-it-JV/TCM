@@ -230,7 +230,7 @@ class DataController extends Controller
      * @param $user
      * @return array
      */
-    private function getUserData($user)
+    protected function getUserData($user)
     {
         $dataArr = [];
         $listsArr = [];
@@ -252,7 +252,7 @@ class DataController extends Controller
      * @param $userData
      * @return bool
      */
-    private function saveUserData($userData)
+    protected function saveUserData($userData)
     {
         $helper = $this->getHelper();
         $encoder = $this->container->get('security.password_encoder');
@@ -376,7 +376,7 @@ class DataController extends Controller
      * Get page controller
      * @return object
      */
-    private function getPageController()
+    protected function getPageController()
     {
         $pc = $this->container->get('page_controller');
         $pc->container = $this->container;
@@ -387,7 +387,7 @@ class DataController extends Controller
      * Get class helper
      * @return object
      */
-    private function getHelper()
+    protected function getHelper()
     {
         $helper = $this->container->get('class_helper');
         return $helper;

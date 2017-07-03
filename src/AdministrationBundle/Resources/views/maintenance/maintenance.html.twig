@@ -1,0 +1,90 @@
+<div class="container">
+    <div class="row" ng-show="AUTH.isSuperAdmin()">
+        <div class="panel-body">
+            <h4 ng-cloak>
+                <i class="fa fa-fw fa-wrench"></i> {{ ng.translate('MAINTENANCE.LABEL') }} {{ ng.translate('MAINTENANCE.FOR') }} {{ store.Name }}
+            </h4>
+            <hr/>
+            <div class="well">
+                <section st-table="collectionsCollection" st-safe-src="collections.collections()" st-persist="maintenanceTable">
+                    <div class="row">
+                        <div class="col-md-3 col-xs-6">
+                            <input st-search class="form-control input-sm"
+                                   placeholder="{{ ng.translate('SEARCH') }}" type="text" ng-cloak/>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12">
+                            <table class="table table-striped table-bordered">
+                                <thead>
+                                <tr>
+                                    <th st-sort="CreatedBy.Name" class="st-sortable col-md-2 col-xs-2"
+                                        ng-cloak>{{ ng.translate('COLLECTIONS.NAME') }}</th>
+                                    <th st-sort="Name" class="st-sortable col-md-4 col-xs-4"
+                                        ng-cloak>{{ ng.translate('COLLECTIONS.DESCRIPTION') }}</th>
+                                    <th st-sort="Date.date" class="st-sortable col-md-2 col-xs-2"
+                                        ng-cloak>{{ ng.translate('COLLECTIONS.DATE') }}</th>
+                                    <th st-sort="IsPublished" class="st-sortable text-right col-md-2 col-xs-2"
+                                        ng-cloak>{{ ng.translate('COLLECTIONS.PUBLISHED') }}</th>
+                                    <th class="st-nosort text-right col-md-2 col-xs-2"
+                                        ng-cloak>{{ ng.translate('ACTION') }}</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% verbatim %}
+                                <tr ng-repeat="row in collectionsCollection">
+                                    <td ng-cloak>{{ row.CreatedBy.Name }}</td>
+                                    <td ng-cloak>{{ row.Name }}</td>
+                                    <td ng-cloak>{{ row.Date.date | GMT:'DD-MM-YYYY HH:mm' }}</td>
+                                    <td ng-cloak class="text-right">
+                                        <i ng-show="row.Attachments" class="fa fa-fw fa-paperclip"></i>
+                                        <label class="label label-success tag-label" ng-show="{{ row.IsPublished }}">{{ 'YES' | translate }}</label>
+                                        <label class="label label-danger tag-label" ng-hide="{{ row.IsPublished }}">{{ 'NO' | translate }}</label>
+                                    </td>
+                                    <td>
+                                        <div class="pull-right">
+                                            <button type="button" ng-click="showCollection(row.Id, 'maintenanceInfo')"
+                                                    class="btn btn-xs btn-info">
+                                                <i class="fa fa-search"></i>
+                                            </button>
+                                            <button type="button" ng-click="editCollection(row.Id, 'maintenanceEdit')"
+                                                    class="btn btn-xs btn-primary">
+                                                <i class="fa fa-pencil"></i>
+                                            </button>
+                                            <button type="button" ng-click="removeCollection(row.Id)"
+                                                    class="btn btn-xs btn-danger">
+                                                <i class="fa fa-remove"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endverbatim %}
+                                </tbody>
+                                <tfoot ng-show="collectionsCollection.length > 10">
+                                <tr>
+                                    <td class="text-center" st-pagination="" st-items-by-page="10" colspan="4">
+                                    </td>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="panel-footer">
+                <div class="row">
+                    <div class="col-md-12">
+                        <button class="btn btn-sm btn-default pull-left" ng-click="pageBack()" ng-cloak>
+                            <i class="fa fa-close"></i> {{ ng.translate('CANCEL') }}
+                        </button>
+                        <button class="btn btn-sm btn-success pull-right"
+                                ng-click="addCollection('maintenanceAdd')" ng-cloak>
+                            <i class="fa fa-plus"></i> {{ ng.translate('ADD') }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

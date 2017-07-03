@@ -3,6 +3,10 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Response\JsonResult;
+use CollectionBundle\Model\Collection;
+use CollectionBundle\Model\CollectionQuery;
+use CollectionBundle\Model\CollectionType;
+use CollectionBundle\Model\CollectionTypeQuery;
 use CompanyBundle\Model\Company;
 use CompanyBundle\Model\CompanyQuery;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -99,7 +103,7 @@ class DataController extends Controller
      * @param $store
      * @return array
      */
-    private function getStoreData($store)
+    protected function getStoreData($store)
     {
         $dataArr = [];
         $listsArr = [];
@@ -116,7 +120,7 @@ class DataController extends Controller
      * @param $store
      * @return array
      */
-    private function getStoreDeviceGroups($store)
+    protected function getStoreDeviceGroups($store)
     {
         $dataArr = [];
         $deviceArr = [];
@@ -158,10 +162,49 @@ class DataController extends Controller
     }
 
     /**
+     * Get store maintenance log
+     * @param Request $request
+     * @param $storeid
+     */
+    public function getStoreMaintenanceAction(Request $request, $storeid)
+    {
+        $dataArr = [];
+        $maintenanceLogs = [];
+        $date = new \DateTime();
+
+        $type = CollectionTypeQuery::create()->findOneById(CollectionType::TYPE_MAINTENANCE_ID);
+
+        $collections = CollectionQuery::create()
+            ->filterByCollectionType($type)
+            ->filterByCollectionStore($storeid)
+            ->filterByIsPublished(true)
+            ->filterByIsDeleted(false)
+            ->orderByDate('DESC')
+            ->find();
+
+        foreach ($collections as $collection)
+            $maintenanceLogs[] = $collection->getCollectionDataArray()['collection'];
+
+        $collection = new Collection();
+        $collection->setId(0);
+        $collection->setType(CollectionType::TYPE_MAINTENANCE_ID);
+        $collection->setDate($date);
+        $collection->setCollectionStore($storeid);
+
+        $dataArr['collections'] = $maintenanceLogs;
+        $dataArr['template'] = $collection->getFullCollectionTemplateArray()['collection'];
+
+        return JsonResult::create()
+            ->setContents($dataArr)
+            ->setErrorcode(JsonResult::SUCCESS)
+            ->make();
+    }
+
+    /**
      * Get page controller
      * @return object
      */
-    private function getPageController()
+    protected function getPageController()
     {
         $pc = $this->container->get('page_controller');
         $pc->container = $this->container;
@@ -172,7 +215,7 @@ class DataController extends Controller
      * Get class helper
      * @return object
      */
-    private function getHelper()
+    protected function getHelper()
     {
         $helper = $this->container->get('class_helper');
         return $helper;

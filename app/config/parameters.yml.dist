@@ -19,3 +19,4 @@ parameters:
 
     domain_name:        phnctrl.nl
     logins:             3
+    collection_path:    collectiondata

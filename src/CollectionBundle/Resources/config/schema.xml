@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<database name="default" defaultIdMethod="native" namespace="CollectionBundle\Model">
+    <table name="collection_type">
+        <column name="id" type="integer" primaryKey="true" autoIncrement="true"/>
+        <column name="name" type="varchar" size="255"/>
+        <column name="description" type="longvarchar" />
+        <column name="icon" type="varchar" size="255"/>
+        <column name="style" type="varchar" size="255"/>
+        <behavior name="timestampable"/>
+    </table>
+
+    <table name="collection">
+        <column name="id" type="integer" primaryKey="true" autoIncrement="true"/>
+        <column name="uid" type="varchar" size="64"/>
+        <column name="type" type="integer"/>
+        <column name="name" type="varchar" size="255"/>
+        <column name="description" type="longvarchar" />
+        <column name="date" type="timestamp" />
+        <column name='is_published' type='boolean' default='true'/>
+        <column name='is_deleted' type='boolean' default='false'/>
+        <column name="collection_company" type="integer"/>
+        <column name="collection_store" type="integer"/>
+        <column name="created_by" type="integer"/>
+        <column name="edited_by" type="integer"/>
+        <behavior name="timestampable"/>
+        <foreign-key foreignTable="collection_type">
+            <reference local="type" foreign="id"/>
+        </foreign-key>
+        <foreign-key foreignTable="company">
+            <reference local="collection_company" foreign="id"/>
+        </foreign-key>
+        <foreign-key foreignTable="store">
+            <reference local="collection_store" foreign="id"/>
+        </foreign-key>
+        <foreign-key foreignTable="user">
+            <reference local="created_by" foreign="id"/>
+        </foreign-key>
+        <foreign-key foreignTable="user">
+            <reference local="edited_by" foreign="id"/>
+        </foreign-key>
+    </table>
+
+    <table name='collection_attachment' isCrossRef="true">
+        <column name='collection_id' type='integer' primaryKey='true'/>
+        <column name='attachment_id' type='integer' primaryKey='true'/>
+        <foreign-key foreignTable='collection'>
+            <reference local='collection_id' foreign='id'/>
+        </foreign-key>
+        <foreign-key foreignTable='attachment'>
+            <reference local='attachment_id' foreign='id'/>
+        </foreign-key>
+    </table>
+
+    <table name="attachment">
+        <column name="id" type="integer" primaryKey="true" autoIncrement="true"/>
+        <column name="uid" type="varchar" size="64"/>
+        <column name="type" type="integer"/>
+        <column name="original_name" type="varchar" size="255"/>
+        <column name="name" type="varchar" size="255"/>
+        <column name="link_url" type="varchar" size="255"/>
+        <column name="filename" type="varchar" size="255"/>
+        <behavior name="timestampable"/>
+    </table>
+</database>

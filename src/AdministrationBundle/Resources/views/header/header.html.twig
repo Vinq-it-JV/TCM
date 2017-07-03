@@ -43,6 +43,16 @@
                     {# Notifications #}
                     <li class="dropdown">
                         <a href="#" data-toggle="dropdown">
+                            <i class="icon-book icon-white"></i><div class="inline" ng-cloak>{{ ng.translate('MAINTENANCE.LABEL') }} <b class="caret"></b></div>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{{ path('administration_maintenance_stores') }}" ng-cloak> {{ ng.translate('MAINTENANCE.PERIODICALY') }} </a></li>
+                        </ul>
+                    </li>
+
+                    {# Notifications #}
+                    <li class="dropdown">
+                        <a href="#" data-toggle="dropdown">
                             <i class="icon-book icon-white"></i><div class="inline" ng-cloak>{{ ng.translate('NOTIFICATIONS.LABEL') }} <b class="caret"></b></div>
                         </a>
                         <ul class="dropdown-menu">

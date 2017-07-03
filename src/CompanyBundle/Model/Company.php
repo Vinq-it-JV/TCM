@@ -131,8 +131,7 @@ class Company extends BaseCompany
      */
     public function getCompanyTemplateArray()
     {
-        $company = new Company();
-        return $company->getCompanyDataArray();
+        return $this->getCompanyDataArray();
     }
 
     /**

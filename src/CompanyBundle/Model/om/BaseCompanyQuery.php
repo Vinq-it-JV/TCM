@@ -12,6 +12,7 @@ use \PropelCollection;
 use \PropelException;
 use \PropelObjectCollection;
 use \PropelPDO;
+use CollectionBundle\Model\Collection;
 use CompanyBundle\Model\Company;
 use CompanyBundle\Model\CompanyAddress;
 use CompanyBundle\Model\CompanyContact;
@@ -75,6 +76,10 @@ use UserBundle\Model\User;
  * @method CompanyQuery leftJoinRegions($relationAlias = null) Adds a LEFT JOIN clause to the query using the Regions relation
  * @method CompanyQuery rightJoinRegions($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Regions relation
  * @method CompanyQuery innerJoinRegions($relationAlias = null) Adds a INNER JOIN clause to the query using the Regions relation
+ *
+ * @method CompanyQuery leftJoinCollection($relationAlias = null) Adds a LEFT JOIN clause to the query using the Collection relation
+ * @method CompanyQuery rightJoinCollection($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Collection relation
+ * @method CompanyQuery innerJoinCollection($relationAlias = null) Adds a INNER JOIN clause to the query using the Collection relation
  *
  * @method CompanyQuery leftJoinCompanyAddress($relationAlias = null) Adds a LEFT JOIN clause to the query using the CompanyAddress relation
  * @method CompanyQuery rightJoinCompanyAddress($relationAlias = null) Adds a RIGHT JOIN clause to the query using the CompanyAddress relation
@@ -1027,6 +1032,80 @@ abstract class BaseCompanyQuery extends ModelCriteria
         return $this
             ->joinRegions($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Regions', '\CompanyBundle\Model\RegionsQuery');
+    }
+
+    /**
+     * Filter the query by a related Collection object
+     *
+     * @param   Collection|PropelObjectCollection $collection  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 CompanyQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByCollection($collection, $comparison = null)
+    {
+        if ($collection instanceof Collection) {
+            return $this
+                ->addUsingAlias(CompanyPeer::ID, $collection->getCollectionCompany(), $comparison);
+        } elseif ($collection instanceof PropelObjectCollection) {
+            return $this
+                ->useCollectionQuery()
+                ->filterByPrimaryKeys($collection->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByCollection() only accepts arguments of type Collection or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Collection relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return CompanyQuery The current query, for fluid interface
+     */
+    public function joinCollection($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Collection');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Collection');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Collection relation Collection object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   \CollectionBundle\Model\CollectionQuery A secondary query class using the current class as primary query
+     */
+    public function useCollectionQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinCollection($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Collection', '\CollectionBundle\Model\CollectionQuery');
     }
 
     /**

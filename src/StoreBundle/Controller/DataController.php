@@ -213,7 +213,7 @@ class DataController extends Controller
      * @param $store
      * @return array
      */
-    private function getStoreData($store)
+    protected function getStoreData($store)
     {
         $dataArr = [];
         $listsArr = [];
@@ -238,7 +238,7 @@ class DataController extends Controller
      * @param $storeData
      * @return bool
      */
-    private function saveStoreData($storeData)
+    protected function saveStoreData($storeData)
     {
         $helper = $this->getHelper();
 
@@ -415,7 +415,7 @@ class DataController extends Controller
      * Get page controller
      * @return object
      */
-    private function getPageController()
+    protected function getPageController()
     {
         $pc = $this->container->get('page_controller');
         $pc->container = $this->container;
@@ -426,7 +426,7 @@ class DataController extends Controller
      * Get class helper
      * @return object
      */
-    private function getHelper()
+    protected function getHelper()
     {
         $helper = $this->container->get('class_helper');
         return $helper;

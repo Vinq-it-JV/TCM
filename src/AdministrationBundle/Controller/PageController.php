@@ -2,6 +2,9 @@
 
 namespace AdministrationBundle\Controller;
 
+use CollectionBundle\Model\CollectionQuery;
+use CollectionBundle\Model\CollectionType;
+use CollectionBundle\Model\CollectionTypeQuery;
 use CompanyBundle\Model\Company;
 use CompanyBundle\Model\CompanyQuery;
 use CompanyBundle\Model\Regions;
@@ -180,6 +183,20 @@ class PageController extends Controller
         return $this->render('AdministrationBundle:installation:edit_sensor.html.twig', $sensorArr);
     }
 
+    public function maintenanceStoresAction(Request $request)
+    {
+        return $this->render('AdministrationBundle:maintenance:stores.html.twig');
+    }
+
+    public function maintenanceStoreAction(Request $request, $storeid)
+    {
+        $store = StoreQuery::create()->findOneById($storeid);
+        $storeArr = $store->getStoreDataArray();
+        $storeArr['collectionType'] = 'administration_maintenance';
+
+        return $this->render('AdministrationBundle:maintenance:store.html.twig', $storeArr);
+    }
+
     public function openNotificationsAction(Request $request)
     {
         return $this->render('AdministrationBundle:notifications:open_notifications.html.twig');
@@ -189,5 +206,4 @@ class PageController extends Controller
     {
         return $this->render('AdministrationBundle:notifications:closed_notifications.html.twig');
     }
-
 }

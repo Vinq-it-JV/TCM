@@ -2,6 +2,9 @@
 
 namespace AppBundle\Command;
 
+use CollectionBundle\Model\Collection;
+use CollectionBundle\Model\CollectionType;
+use CollectionBundle\Model\CollectionTypeQuery;
 use CompanyBundle\Model\Company;
 use CompanyBundle\Model\Informant;
 use CompanyBundle\Model\InformantQuery;
@@ -67,8 +70,43 @@ class TestCommand extends ContainerAwareCommand
         //$this->showNotifications($output);
         //$this->testNotificationMail($output);
         //$this->showInputNotifications($output);
-        $this->getSuperAdminEmail($output);
+        //$this->getSuperAdminEmail($output);
+        //$this->addCollection($output);
+        $this->createUUID($output);
         $output->writeln("Ready.");
+    }
+
+    protected function createUUID(OutputInterface $output)
+    {
+        $helper = $this->getContainer()->get('class_helper');
+
+        $output->writeln($helper->createUUID());
+
+        $inputs = "6";
+        $bit = 0x04;
+        for($i = 1; $i <= 3; $i++) {
+
+            $output->writeln($inputs & $bit);
+            $bit >>= 1;
+        }
+    }
+
+    protected function addCollection(OutputInterface $output)
+    {
+        $store = StoreQuery::create()->findOneById(1);
+        $collectionType = CollectionTypeQuery::create()->findOneById(CollectionType::TYPE_INVENTORY_ID);
+        $date = new \DateTime();
+
+        $collection = new Collection();
+        $collection->setStore($store);
+        $collection->setCollectionType($collectionType);
+        $collection->setName("Just some maintenance");
+        $collection->setDescription("Here we can add a very long text!");
+        $collection->setDate($date);
+        $collection->setIsPublished(true);
+        $collection->save();
+
+        $output->writeln(printf("Collection is created for store %s", $store->getName()));
     }
 
     protected function getSuperAdminEmail(OutputInterface $output)

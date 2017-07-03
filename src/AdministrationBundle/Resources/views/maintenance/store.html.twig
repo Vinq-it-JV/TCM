@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block contents %}
+    {% if app.user %}
+        {% set execute = 'getCollectionData(' ~ store.Id ~ ',"' ~ collectionType ~ '")' %}
+        <div ng-controller="collectionCtrl" ng-init="{{ execute }}">
+
+            {% block header %}
+                {% include 'AdministrationBundle:header:header.html.twig' %}
+            {% endblock %}
+
+            {% block page %}
+                <div class="page" ng-switch="activePage">
+                    <div ng-switch-when="administration_maintenance">
+                        {% include 'AdministrationBundle:maintenance:maintenance.html.twig' %}
+                    </div>
+                    <div ng-switch-when="maintenanceInfo">
+                        {% include 'AdministrationBundle:maintenance:maintenance_info.html.twig' %}
+                    </div>
+                    <div ng-switch-when="maintenanceEdit">
+                        {% include 'AdministrationBundle:maintenance:maintenance_form.html.twig' %}
+                    </div>
+                    <div ng-switch-when="maintenanceAdd">
+                        {% include 'AdministrationBundle:maintenance:maintenance_form.html.twig' %}
+                    </div>
+                </div>
+            {% endblock %}
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('bundles/app/js/app/controllers/collectionCtrl.js') }}"></script>
+    <script src="{{ asset('bundles/app/js/app/datasets/collections.js') }}"></script>
+{% endblock %}
+

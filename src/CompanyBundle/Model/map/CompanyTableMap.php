@@ -68,6 +68,7 @@ class CompanyTableMap extends TableMap
     {
         $this->addRelation('CompanyType', 'CompanyBundle\\Model\\CompanyType', RelationMap::MANY_TO_ONE, array('type' => 'id', ), null, null);
         $this->addRelation('Regions', 'CompanyBundle\\Model\\Regions', RelationMap::MANY_TO_ONE, array('region' => 'id', ), null, null);
+        $this->addRelation('Collection', 'CollectionBundle\\Model\\Collection', RelationMap::ONE_TO_MANY, array('id' => 'collection_company', ), null, null, 'Collections');
         $this->addRelation('CompanyAddress', 'CompanyBundle\\Model\\CompanyAddress', RelationMap::ONE_TO_MANY, array('id' => 'company_id', ), 'CASCADE', null, 'CompanyAddresses');
         $this->addRelation('CompanyEmail', 'CompanyBundle\\Model\\CompanyEmail', RelationMap::ONE_TO_MANY, array('id' => 'company_id', ), 'CASCADE', null, 'CompanyEmails');
         $this->addRelation('CompanyPhone', 'CompanyBundle\\Model\\CompanyPhone', RelationMap::ONE_TO_MANY, array('id' => 'company_id', ), 'CASCADE', null, 'CompanyPhones');

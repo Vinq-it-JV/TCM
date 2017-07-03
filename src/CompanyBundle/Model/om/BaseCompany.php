@@ -15,6 +15,8 @@ use \PropelDateTime;
 use \PropelException;
 use \PropelObjectCollection;
 use \PropelPDO;
+use CollectionBundle\Model\Collection;
+use CollectionBundle\Model\CollectionQuery;
 use CompanyBundle\Model\Company;
 use CompanyBundle\Model\CompanyAddress;
 use CompanyBundle\Model\CompanyAddressQuery;
@@ -175,6 +177,12 @@ abstract class BaseCompany extends BaseObject implements Persistent
     protected $aRegions;
 
     /**
+     * @var        PropelObjectCollection|Collection[] Collection to store aggregation of Collection objects.
+     */
+    protected $collCollections;
+    protected $collCollectionsPartial;
+
+    /**
      * @var        PropelObjectCollection|CompanyAddress[] Collection to store aggregation of CompanyAddress objects.
      */
     protected $collCompanyAddresses;
@@ -301,6 +309,12 @@ abstract class BaseCompany extends BaseObject implements Persistent
      * @var		PropelObjectCollection
      */
     protected $ownersScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $collectionsScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -1099,6 +1113,8 @@ abstract class BaseCompany extends BaseObject implements Persistent
 
             $this->aCompanyType = null;
             $this->aRegions = null;
+            $this->collCollections = null;
+
             $this->collCompanyAddresses = null;
 
             $this->collCompanyEmails = null;
@@ -1425,6 +1441,24 @@ abstract class BaseCompany extends BaseObject implements Persistent
                 foreach ($this->collOwners as $owner) {
                     if ($owner->isModified()) {
                         $owner->save($con);
+                    }
+                }
+            }
+
+            if ($this->collectionsScheduledForDeletion !== null) {
+                if (!$this->collectionsScheduledForDeletion->isEmpty()) {
+                    foreach ($this->collectionsScheduledForDeletion as $collection) {
+                        // need to save related object because we set the relation to null
+                        $collection->save($con);
+                    }
+                    $this->collectionsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collCollections !== null) {
+                foreach ($this->collCollections as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
                     }
                 }
             }
@@ -1799,6 +1833,14 @@ abstract class BaseCompany extends BaseObject implements Persistent
             }
 
 
+                if ($this->collCollections !== null) {
+                    foreach ($this->collCollections as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
                 if ($this->collCompanyAddresses !== null) {
                     foreach ($this->collCompanyAddresses as $referrerFK) {
                         if (!$referrerFK->validate($columns)) {
@@ -1995,6 +2037,9 @@ abstract class BaseCompany extends BaseObject implements Persistent
             }
             if (null !== $this->aRegions) {
                 $result['Regions'] = $this->aRegions->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->collCollections) {
+                $result['Collections'] = $this->collCollections->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collCompanyAddresses) {
                 $result['CompanyAddresses'] = $this->collCompanyAddresses->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
@@ -2252,6 +2297,12 @@ abstract class BaseCompany extends BaseObject implements Persistent
             // store object hash to prevent cycle
             $this->startCopy = true;
 
+            foreach ($this->getCollections() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addCollection($relObj->copy($deepCopy));
+                }
+            }
+
             foreach ($this->getCompanyAddresses() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addCompanyAddress($relObj->copy($deepCopy));
@@ -2459,6 +2510,9 @@ abstract class BaseCompany extends BaseObject implements Persistent
      */
     public function initRelation($relationName)
     {
+        if ('Collection' == $relationName) {
+            $this->initCollections();
+        }
         if ('CompanyAddress' == $relationName) {
             $this->initCompanyAddresses();
         }
@@ -2480,6 +2534,331 @@ abstract class BaseCompany extends BaseObject implements Persistent
         if ('Store' == $relationName) {
             $this->initStores();
         }
+    }
+
+    /**
+     * Clears out the collCollections collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Company The current object (for fluent API support)
+     * @see        addCollections()
+     */
+    public function clearCollections()
+    {
+        $this->collCollections = null; // important to set this to null since that means it is uninitialized
+        $this->collCollectionsPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collCollections collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialCollections($v = true)
+    {
+        $this->collCollectionsPartial = $v;
+    }
+
+    /**
+     * Initializes the collCollections collection.
+     *
+     * By default this just sets the collCollections collection to an empty array (like clearcollCollections());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initCollections($overrideExisting = true)
+    {
+        if (null !== $this->collCollections && !$overrideExisting) {
+            return;
+        }
+        $this->collCollections = new PropelObjectCollection();
+        $this->collCollections->setModel('Collection');
+    }
+
+    /**
+     * Gets an array of Collection objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Company is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Collection[] List of Collection objects
+     * @throws PropelException
+     */
+    public function getCollections($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collCollectionsPartial && !$this->isNew();
+        if (null === $this->collCollections || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collCollections) {
+                // return empty collection
+                $this->initCollections();
+            } else {
+                $collCollections = CollectionQuery::create(null, $criteria)
+                    ->filterByCompany($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collCollectionsPartial && count($collCollections)) {
+                      $this->initCollections(false);
+
+                      foreach ($collCollections as $obj) {
+                        if (false == $this->collCollections->contains($obj)) {
+                          $this->collCollections->append($obj);
+                        }
+                      }
+
+                      $this->collCollectionsPartial = true;
+                    }
+
+                    $collCollections->getInternalIterator()->rewind();
+
+                    return $collCollections;
+                }
+
+                if ($partial && $this->collCollections) {
+                    foreach ($this->collCollections as $obj) {
+                        if ($obj->isNew()) {
+                            $collCollections[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collCollections = $collCollections;
+                $this->collCollectionsPartial = false;
+            }
+        }
+
+        return $this->collCollections;
+    }
+
+    /**
+     * Sets a collection of Collection objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $collections A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Company The current object (for fluent API support)
+     */
+    public function setCollections(PropelCollection $collections, PropelPDO $con = null)
+    {
+        $collectionsToDelete = $this->getCollections(new Criteria(), $con)->diff($collections);
+
+
+        $this->collectionsScheduledForDeletion = $collectionsToDelete;
+
+        foreach ($collectionsToDelete as $collectionRemoved) {
+            $collectionRemoved->setCompany(null);
+        }
+
+        $this->collCollections = null;
+        foreach ($collections as $collection) {
+            $this->addCollection($collection);
+        }
+
+        $this->collCollections = $collections;
+        $this->collCollectionsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Collection objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Collection objects.
+     * @throws PropelException
+     */
+    public function countCollections(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collCollectionsPartial && !$this->isNew();
+        if (null === $this->collCollections || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collCollections) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getCollections());
+            }
+            $query = CollectionQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByCompany($this)
+                ->count($con);
+        }
+
+        return count($this->collCollections);
+    }
+
+    /**
+     * Method called to associate a Collection object to this object
+     * through the Collection foreign key attribute.
+     *
+     * @param    Collection $l Collection
+     * @return Company The current object (for fluent API support)
+     */
+    public function addCollection(Collection $l)
+    {
+        if ($this->collCollections === null) {
+            $this->initCollections();
+            $this->collCollectionsPartial = true;
+        }
+
+        if (!in_array($l, $this->collCollections->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddCollection($l);
+
+            if ($this->collectionsScheduledForDeletion and $this->collectionsScheduledForDeletion->contains($l)) {
+                $this->collectionsScheduledForDeletion->remove($this->collectionsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Collection $collection The collection object to add.
+     */
+    protected function doAddCollection($collection)
+    {
+        $this->collCollections[]= $collection;
+        $collection->setCompany($this);
+    }
+
+    /**
+     * @param	Collection $collection The collection object to remove.
+     * @return Company The current object (for fluent API support)
+     */
+    public function removeCollection($collection)
+    {
+        if ($this->getCollections()->contains($collection)) {
+            $this->collCollections->remove($this->collCollections->search($collection));
+            if (null === $this->collectionsScheduledForDeletion) {
+                $this->collectionsScheduledForDeletion = clone $this->collCollections;
+                $this->collectionsScheduledForDeletion->clear();
+            }
+            $this->collectionsScheduledForDeletion[]= $collection;
+            $collection->setCompany(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Company is new, it will return
+     * an empty collection; or if this Company has previously
+     * been saved, it will retrieve related Collections from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Company.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Collection[] List of Collection objects
+     */
+    public function getCollectionsJoinCollectionType($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = CollectionQuery::create(null, $criteria);
+        $query->joinWith('CollectionType', $join_behavior);
+
+        return $this->getCollections($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Company is new, it will return
+     * an empty collection; or if this Company has previously
+     * been saved, it will retrieve related Collections from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Company.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Collection[] List of Collection objects
+     */
+    public function getCollectionsJoinStore($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = CollectionQuery::create(null, $criteria);
+        $query->joinWith('Store', $join_behavior);
+
+        return $this->getCollections($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Company is new, it will return
+     * an empty collection; or if this Company has previously
+     * been saved, it will retrieve related Collections from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Company.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Collection[] List of Collection objects
+     */
+    public function getCollectionsJoinUserRelatedByCreatedBy($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = CollectionQuery::create(null, $criteria);
+        $query->joinWith('UserRelatedByCreatedBy', $join_behavior);
+
+        return $this->getCollections($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Company is new, it will return
+     * an empty collection; or if this Company has previously
+     * been saved, it will retrieve related Collections from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Company.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Collection[] List of Collection objects
+     */
+    public function getCollectionsJoinUserRelatedByEditedBy($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = CollectionQuery::create(null, $criteria);
+        $query->joinWith('UserRelatedByEditedBy', $join_behavior);
+
+        return $this->getCollections($query, $con);
     }
 
     /**
@@ -5441,6 +5820,11 @@ abstract class BaseCompany extends BaseObject implements Persistent
     {
         if ($deep && !$this->alreadyInClearAllReferencesDeep) {
             $this->alreadyInClearAllReferencesDeep = true;
+            if ($this->collCollections) {
+                foreach ($this->collCollections as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collCompanyAddresses) {
                 foreach ($this->collCompanyAddresses as $o) {
                     $o->clearAllReferences($deep);
@@ -5516,6 +5900,10 @@ abstract class BaseCompany extends BaseObject implements Persistent
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
 
+        if ($this->collCollections instanceof PropelCollection) {
+            $this->collCollections->clearIterator();
+        }
+        $this->collCollections = null;
         if ($this->collCompanyAddresses instanceof PropelCollection) {
             $this->collCompanyAddresses->clearIterator();
         }

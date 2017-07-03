@@ -299,6 +299,70 @@ administration_store_delete_address:
         expose: true
 
 #
+# MAINTENANCE
+#
+administration_maintenance_stores:
+    path:     /maintenance/stores
+    defaults: { _controller: AdministrationBundle:Page:maintenanceStores }
+    options:
+        expose: true
+
+administration_maintenance_stores_get:
+    path:     /maintenance/stores/get
+    defaults: { _controller: StoreBundle:Data:getStores }
+    methods: [GET]
+    options:
+        expose: true
+
+administration_maintenance_store:
+    path:     /maintenance/store/{storeid}/get
+    defaults: { _controller: AdministrationBundle:Page:maintenanceStore }
+    methods: [GET]
+    options:
+        expose: true
+
+administration_maintenance_store_get:
+    path:     /maintenance/store/{storeid}/maintenance/get
+    defaults: { _controller: CollectionBundle:Data:getStoreMaintenance }
+    options:
+        expose: true
+
+administration_collection_save:
+    path:     /collection/{collectionid}/save
+    defaults: { _controller: CollectionBundle:Data:saveCollection }
+    methods: [POST, PUT]
+    options:
+        expose: true
+
+administration_collection_delete:
+    path:     /collection/{collectionid}/delete
+    defaults: { _controller: CollectionBundle:Data:deleteCollection }
+    methods: [DELETE]
+    options:
+        expose: true
+
+administration_collection_upload:
+    path:     /collection/{collectionid}/upload
+    defaults: { _controller: CollectionBundle:Data:uploadCollection }
+    methods: [POST]
+    options:
+        expose: true
+
+administration_collection_attachment_get:
+    path:     /collection/attachment/{attachmentid}/get
+    defaults: { _controller: CollectionBundle:Data:getCollectionAttachment }
+    methods: [GET]
+    options:
+        expose: true
+
+administration_collection_attachment_delete:
+    path:     /collection/{collectionid}/attachment/{attachmentid}/delete
+    defaults: { _controller: CollectionBundle:Data:deleteCollectionAttachment }
+    methods: [DELETE]
+    options:
+        expose: true
+
+#
 # NOTIFICATIONS
 #
 administration_open_notifications:

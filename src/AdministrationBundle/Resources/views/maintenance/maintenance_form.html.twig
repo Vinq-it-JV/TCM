@@ -1,0 +1,128 @@
+<div class="container" ng-form="maintenanceForm">
+
+    {# Maintenance information #}
+    <h5 ng-cloak>
+        <i class="fa fa-fw fa-wrench"></i> {{ ng.translate('MAINTENANCE.LABEL') }}
+    </h5>
+    <div class="well">
+        {% verbatim %}
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-2 col-xs-4" ng-cloak><label>{{ 'COLLECTIONS.PUBLISHED' | translate }}</label></div>
+                <div class="col-md-2 col-xs-4" ng-cloak>
+                    <toggle-switch  class="switch-small switch-success"
+                                    off-class="switch-small switch-danger"
+                                    ng-model="collections.collection().IsPublished"
+                                    on-label="{{ 'YES' | translate }}"
+                                    off-label="{{ 'NO' | translate }}" ng-cloak>
+                    </toggle-switch>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-2 col-xs-4" ng-cloak><label>{{ 'COLLECTIONS.DATE' | translate }}:</label></div>
+                <div class="col-md-2 col-xs-4" ng-cloak>
+                    <input class="form-control input-sm" name="Date"
+                           ng-model="collections.collection().Date.date" bs-datepicker
+                           data-date-format="dd-MM-yyyy" data-max-date="today" required/>
+                </div>
+                <div class="col-md-2 col-xs-4" ng-cloak>
+                    <input class="form-control input-sm" name="Time"
+                           ng-model="collections.collection().Date.date" bs-timepicker
+                           data-default-time="false"
+                           data-time-format="HH:mm" required/>
+                </div>
+
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-2 col-xs-4" ng-cloak><label>{{ 'COLLECTIONS.NAME' | translate }}:</label></div>
+                <div class="col-md-10 col-xs-8" ng-cloak>
+                    <input class="form-control input-sm" name="Name" type="text"
+                           ng-model="collections.collection().Name" validation="min_len:3|required" no-enter/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-2 col-xs-4" ng-cloak><label>{{ 'COLLECTIONS.DESCRIPTION' | translate }}:</label></div>
+                <div class="col-md-10 col-xs-8" ng-cloak>
+                    <textarea class="form-control" ng-model="collections.collection().Description" name="Description" rows="10" validation="min_len:1|required" style="resize: none;">
+                    </textarea>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row" ng-show="collections.collection().CreatedBy">
+                <div class="col-md-2 col-xs-4" ng-cloak><label>{{ 'COLLECTIONS.CREATED_BY' | translate }}:</label></div>
+                <div class="col-md-10 col-xs-8" ng-cloak>{{ collections.collection().CreatedBy.Name }}</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row" ng-show="collections.collection().EditedBy">
+                <div class="col-md-2 col-xs-4" ng-cloak><label>{{ 'COLLECTIONS.EDITED_BY' | translate }}:</label></div>
+                <div class="col-md-10 col-xs-8" ng-cloak>{{ collections.collection().EditedBy.Name }} ({{ collections.collection().UpdatedAt.date | GMT:'DD-MM-YYYY HH:mm:ss' }})</div>
+            </div>
+        </div>
+        <div ng-show="collections.collection().Attachements">
+            <hr/>
+            <h5 ng-cloak>
+                <i class="fa fa-fw fa-paperclip"></i> {{ 'COLLECTIONS.ATTACHMENTS' | translate }}
+            </h5>
+        </div>
+        <div ng-show="collections.collection().Attachments">
+            <hr/>
+            <h5 ng-cloak>
+                <i class="fa fa-fw fa-paperclip"></i> {{ 'COLLECTIONS.ATTACHMENTS' | translate }}
+            </h5>
+            <hr/>
+            <div class="row">
+                <div ng-repeat="attachment in collections.collection().Attachments" class="col-md-3 col-xs-12">
+                    <div class="panel panel-default">
+                        <button class="btn btn-xs btn-danger pull-right" style="margin-top: 5px; margin-right: 5px;" ng-click="deleteAttachment(attachment.Id)"><i class="fa fa-fw fa-remove"></i></button>
+                        <div class="panel-body" style="min-height:150px;">
+                            <div ng-if="attachment.Type == 1" class="valign">
+                                <img ng-click="showAttachment(attachment)" ng-src="{{ attachmentUrl(attachment.Id) }}" width="100"/>
+                            </div>
+                            <div ng-if="attachment.Type == 2" class="valign">
+                                <a ng-href="{{ attachmentUrl(attachment.Id) }}" download><i class="fa fa-fw fa-file-pdf-o fa-5x"></i></a>
+                            </div>
+                        </div>
+                        <div class="panel-footer">
+                            <div class="text-center text-muted">{{ attachment.OriginalName }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endverbatim %}
+    </div>
+
+    {# Upload files #}
+    <h5 ng-cloak>
+        <i class="fa fa-fw fa-upload"></i> {{ ng.translate('COLLECTIONS.UPLOAD') }}
+    </h5>
+    <div class="well" nv-file-drop="" uploader="uploader" filters="queueLimit, maintenanceFilter">
+        {% verbatim %}
+        <ng-dropzone class="dropzone" options="dzOptions" callbacks="dzCallbacks" methods="dzMethods"></ng-dropzone>
+        {% endverbatim %}
+    </div>
+
+    {# Buttons #}
+    <div class="panel-footer">
+        <div class="row">
+            <div class="col-md-12">
+                <button class="btn btn-sm btn-default pull-left" ng-click="showCollections('administration_maintenance')" ng-cloak>
+                    <i class="fa fa-close"></i> {{ ng.translate('CANCEL') }}
+                </button>
+                <button class="btn btn-sm btn-success pull-right" ng-click="saveCollectionData()"
+                        ng-disabled="maintenanceForm.$invalid">
+                    <i class="fa fa-floppy-o" ng-cloak></i> {{ ng.translate('SAVE') }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
