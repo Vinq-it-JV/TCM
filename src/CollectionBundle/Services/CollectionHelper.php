@@ -95,7 +95,7 @@ class CollectionHelper
 
     public function getAttachementType($filename)
     {
-        $ext = pathinfo($filename, PATHINFO_EXTENSION);
+        $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
         switch ($ext) {
             case 'png':
             case 'jpeg':
