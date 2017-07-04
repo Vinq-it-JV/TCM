@@ -49,7 +49,7 @@ class CbInput extends BaseCbInput
      */
     public function checkSensorInactive()
     {
-        if ($this->getStore()->getIsMaintenance())
+        if ($this->getMainStore()->getIsMaintenance())
             return false;
 
         $date = new \DateTime();
@@ -82,7 +82,7 @@ class CbInput extends BaseCbInput
         if ($this->getNotifyAfter() == -1)
             return false;
 
-        if ($this->getStore()->getIsMaintenance())
+        if ($this->getMainStore()->getIsMaintenance())
             return false;
 
         if ($this->getState() == self::STATE_NOTIFY)
