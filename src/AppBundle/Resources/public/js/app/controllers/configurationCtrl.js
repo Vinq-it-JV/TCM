@@ -153,7 +153,6 @@ angular
                         if (!$scope.isValidObject(data))
                             break;
                         if (!data.errorcode) {
-                            console.log(data.contents.lists);
                             $scope.stores.updRecord(data.contents.store);
                             $scope.stores.templateSet(data.contents.template);
                             $scope.stores.listsSet(data.contents.lists);

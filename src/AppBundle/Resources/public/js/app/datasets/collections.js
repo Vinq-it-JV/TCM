@@ -60,8 +60,8 @@ angular
                     if (index === -1)
                         return null;
                     d_collection = angular.copy(d_collections[index]);
-                    console.log(d_collection);
                     d_collection.Date.date = moment(d_collection.Date.date, "YYYY-MM-DD HH:mm");
+                    d_collection.UpdatedAt.date = moment(d_collection.UpdatedAt.date, "YYYY-MM-DD HH:mm");
                     return d_collection;
                 },
                 setRecord: function (record_data) {

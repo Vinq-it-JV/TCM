@@ -338,6 +338,14 @@
         "PERIODICALY": "Periodicaly",
         "FILE": "File"
     },
+    "INVENTORY": {
+        "LABEL": "Inventory",
+        "STORE": "Store",
+        "STORES": "Stores",
+        "NEW": "New inventory",
+        "OF": "of",
+        "FILE": "File"
+    },
     "NOTIFICATIONS": {
         "LABEL": "Notifications",
         "OPEN_NOTIFICATIONS": "Open notifications",

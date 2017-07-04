@@ -50,13 +50,11 @@ angular
 
             $scope.showInventory = function () {
 
-                console.log("show inventory");
                 $scope.showUrl(Routing.generate('tcm_store_inventory', {'storeid': $scope.stores.store().Id}));
             };
 
             $scope.showMaintenance = function () {
 
-                console.log("show maintenance");
                 $scope.showUrl(Routing.generate('tcm_store_maintenance', {'storeid': $scope.stores.store().Id}));
             };
 
@@ -115,7 +113,6 @@ angular
 
             $scope.showGroupSensors = function (groupid) {
                 $scope.sensorGroup = groupid;
-                console.log(groupid);
                 $scope.activePage = 'groupSensors';
             };
 

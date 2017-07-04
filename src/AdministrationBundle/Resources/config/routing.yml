@@ -301,7 +301,7 @@ administration_store_delete_address:
 #
 # MAINTENANCE
 #
-administration_maintenance_stores:
+administration_maintenance:
     path:     /maintenance/stores
     defaults: { _controller: AdministrationBundle:Page:maintenanceStores }
     options:
@@ -327,6 +327,38 @@ administration_maintenance_store_get:
     options:
         expose: true
 
+#
+# INVENTORY
+#
+administration_inventory:
+    path:     /inventory/stores
+    defaults: { _controller: AdministrationBundle:Page:inventoryStores }
+    options:
+        expose: true
+
+administration_inventory_stores_get:
+    path:     /inventory/stores/get
+    defaults: { _controller: StoreBundle:Data:getStores }
+    methods: [GET]
+    options:
+        expose: true
+
+administration_inventory_store:
+    path:     /inventory/store/{storeid}/get
+    defaults: { _controller: AdministrationBundle:Page:inventoryStore }
+    methods: [GET]
+    options:
+        expose: true
+
+administration_inventory_store_get:
+    path:     /inventory/store/{storeid}/inventory/get
+    defaults: { _controller: CollectionBundle:Data:getStoreInventory }
+    options:
+        expose: true
+
+#
+# COLLECTIONS (GENERAL)
+#
 administration_collection_save:
     path:     /collection/{collectionid}/save
     defaults: { _controller: CollectionBundle:Data:saveCollection }

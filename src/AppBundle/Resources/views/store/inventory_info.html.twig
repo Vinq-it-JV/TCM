@@ -1,17 +1,11 @@
 <div class="container">
 
-    {# Maintenance information #}
+    {# Inventory information #}
     <h5 ng-cloak>
-        <i class="fa fa-fw fa-list"></i> {{ ng.translate('MAINTENANCE.LABEL') }} {{ ng.translate('MAINTENANCE.FOR') }} {{ store.Name }}
+        <i class="fa fa-fw fa-list"></i> {{ ng.translate('INVENTORY.LABEL') }} {{ ng.translate('INVENTORY.OF') }} {{ store.Name }}
     </h5>
     <div class="well">
         {% verbatim %}
-        <div class="form-group">
-            <div class="row">
-                <div class="col-md-2 col-xs-4" ng-cloak><label>{{ 'COLLECTIONS.DATE' | translate }}:</label></div>
-                <div class="col-md-10 col-xs-8" ng-cloak>{{ collections.collection().Date.date | GMT:'DD-MM-YYYY HH:mm' }}</div>
-            </div>
-        </div>
         <div class="form-group">
             <div class="row">
                 <div class="col-md-2 col-xs-4" ng-cloak><label>{{ 'COLLECTIONS.NAME' | translate }}:</label></div>
@@ -36,7 +30,7 @@
         <div class="form-group">
             <div class="row" ng-show="collections.collection().EditedBy">
                 <div class="col-md-2 col-xs-4" ng-cloak><label>{{ 'COLLECTIONS.EDITED_BY' | translate }}:</label></div>
-                <div class="col-md-10 col-xs-8" ng-cloak>{{ collections.collection().EditedBy.Name }} ({{ collections.collection().UpdatedAt.date | GMT:'DD-MM-YYYY HH:mm' }})</div>
+                <div class="col-md-10 col-xs-8" ng-cloak>{{ collections.collection().EditedBy.Name }} ({{ collections.collection().UpdatedAt.date | GMT:'DD-MM-YYYY H:mm:ss' }})</div>
             </div>
         </div>
         <div ng-show="collections.collection().Attachments">
@@ -66,13 +60,20 @@
         {% endverbatim %}
     </div>
 
-    <div class="panel-footer">
-        <div class="row">
-            <div class="col-md-12">
-                <button class="btn btn-sm btn-default pull-left" ng-click="showCollections('administration_maintenance')" ng-cloak>
-                    <i class="fa fa-close"></i> {{ ng.translate('CANCEL') }}
-                </button>
+    {# Back button #}
+    <div class="row">
+        <div class="col-xs-12 col-md-12 col-lg-12">
+            <div class="panel panel-info cursor-pointer" ng-click="showCollections('inventory')">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-12 text-left big-button-text" style="font-size: 30px;" ng-cloak>
+                            {{ ng.translate('BACK') }}
+                            <i class="fa fa-chevron-left fa-2x fa-fw pull-right"></i>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
+

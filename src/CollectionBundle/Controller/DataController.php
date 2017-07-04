@@ -57,6 +57,44 @@ class DataController extends Controller
     }
 
     /**
+     * Get store inventory log
+     * @param Request $request
+     * @param $storeid
+     */
+    public function getStoreInventoryAction(Request $request, $storeid)
+    {
+        $dataArr = [];
+        $inventoryLogs = [];
+        $date = new \DateTime();
+
+        $type = CollectionTypeQuery::create()->findOneById(CollectionType::TYPE_INVENTORY_ID);
+
+        $collections = CollectionQuery::create()
+            ->filterByCollectionType($type)
+            ->filterByCollectionStore($storeid)
+            ->filterByIsDeleted(false)
+            ->orderByDate('DESC')
+            ->find();
+
+        foreach ($collections as $collection)
+            $inventoryLogs[] = $collection->getCollectionDataArray()['collection'];
+
+        $collection = new Collection();
+        $collection->setId(0);
+        $collection->setType(CollectionType::TYPE_INVENTORY_ID);
+        $collection->setDate($date);
+        $collection->setCollectionStore($storeid);
+
+        $dataArr['collections'] = $inventoryLogs;
+        $dataArr['template'] = $collection->getFullCollectionTemplateArray()['collection'];
+
+        return JsonResult::create()
+            ->setContents($dataArr)
+            ->setErrorcode(JsonResult::SUCCESS)
+            ->make();
+    }
+
+    /**
      * Save collection
      * @param Request $request
      * @param $collectionid

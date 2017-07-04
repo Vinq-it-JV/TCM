@@ -52,6 +52,12 @@ tcm_store_maintenance_get:
     options:
         expose: true
 
+tcm_store_inventory_get:
+    path:     /store/{storeid}/inventory/get
+    defaults: { _controller: AppBundle:Data:getStoreInventory }
+    options:
+        expose: true
+
 tcm_collection_attachment_get:
     path:     /collection/attachment/{attachmentid}/get
     defaults: { _controller: CollectionBundle:Data:getCollectionAttachment }

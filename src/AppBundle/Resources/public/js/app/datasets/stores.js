@@ -158,7 +158,6 @@ angular
                     d_store.Addresses.push(d_address);
 
                     this.clrAddress();
-                    console.log(d_store.Addresses);
                 },
                 deleteEmail: function (id) {
                     var emailId = d_store.Emails[id].Id;

@@ -6,22 +6,22 @@
         <div ng-controller="collectionCtrl" ng-init="{{ execute }}">
 
             {% block header %}
-                {%  include 'AppBundle::header.html.twig' %}
+                {% include 'AdministrationBundle:header:header.html.twig' %}
             {% endblock %}
 
             {% block page %}
                 <div class="page" ng-switch="activePage">
-                    <div ng-switch-when="maintenance">
-                        {% include 'AppBundle:store:maintenance.html.twig' %}
-                    </div>
-                    <div ng-switch-when="maintenanceInfo">
-                        {% include 'AppBundle:store:maintenance_info.html.twig' %}
-                    </div>
-                    <div ng-switch-when="inventory">
-                        {% include 'AppBundle:store:inventory.html.twig' %}
+                    <div ng-switch-when="administration_inventory">
+                        {% include 'AdministrationBundle:inventory:inventory.html.twig' %}
                     </div>
                     <div ng-switch-when="inventoryInfo">
-                        {% include 'AppBundle:store:inventory_info.html.twig' %}
+                        {% include 'AdministrationBundle:inventory:inventory_info.html.twig' %}
+                    </div>
+                    <div ng-switch-when="inventoryEdit">
+                        {% include 'AdministrationBundle:inventory:inventory_form.html.twig' %}
+                    </div>
+                    <div ng-switch-when="inventoryAdd">
+                        {% include 'AdministrationBundle:inventory:inventory_form.html.twig' %}
                     </div>
                 </div>
             {% endblock %}

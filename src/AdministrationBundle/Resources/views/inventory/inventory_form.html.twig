@@ -1,8 +1,8 @@
-<div class="container" ng-form="maintenanceForm">
+<div class="container" ng-form="inventoryForm">
 
-    {# Maintenance form #}
+    {# Inventory information #}
     <h5 ng-cloak>
-        <i class="fa fa-fw fa-wrench"></i> {{ ng.translate('MAINTENANCE.LABEL') }} {{ ng.translate('MAINTENANCE.FOR') }} {{ store.Name }}
+        <i class="fa fa-fw fa-list"></i> {{ ng.translate('INVENTORY.LABEL') }} {{ ng.translate('INVENTORY.OF') }} {{ store.Name }}
     </h5>
     <div class="well">
         {% verbatim %}
@@ -17,23 +17,6 @@
                                     off-label="{{ 'NO' | translate }}" ng-cloak>
                     </toggle-switch>
                 </div>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="row">
-                <div class="col-md-2 col-xs-4" ng-cloak><label>{{ 'COLLECTIONS.DATE' | translate }}:</label></div>
-                <div class="col-md-2 col-xs-4" ng-cloak>
-                    <input class="form-control input-sm" name="Date"
-                           ng-model="collections.collection().Date.date" bs-datepicker
-                           data-date-format="dd-MM-yyyy" data-max-date="today" required/>
-                </div>
-                <div class="col-md-2 col-xs-4" ng-cloak>
-                    <input class="form-control input-sm" name="Time"
-                           ng-model="collections.collection().Date.date" bs-timepicker
-                           data-default-time="false"
-                           data-time-format="HH:mm" required/>
-                </div>
-
             </div>
         </div>
         <div class="form-group">
@@ -114,11 +97,11 @@
     <div class="panel-footer">
         <div class="row">
             <div class="col-md-12">
-                <button class="btn btn-sm btn-default pull-left" ng-click="showCollections('administration_maintenance')" ng-cloak>
+                <button class="btn btn-sm btn-default pull-left" ng-click="showCollections('administration_inventory')" ng-cloak>
                     <i class="fa fa-close"></i> {{ ng.translate('CANCEL') }}
                 </button>
                 <button class="btn btn-sm btn-success pull-right" ng-click="saveCollectionData()"
-                        ng-disabled="maintenanceForm.$invalid">
+                        ng-disabled="inventoryForm.$invalid">
                     <i class="fa fa-floppy-o" ng-cloak></i> {{ ng.translate('SAVE') }}
                 </button>
             </div>

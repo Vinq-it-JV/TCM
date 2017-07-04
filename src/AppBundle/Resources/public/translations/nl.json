@@ -338,6 +338,14 @@
         "PERIODICALY": "Periodiek",
         "FILE": "Bestand"
     },
+    "INVENTORY": {
+        "LABEL": "Inventaris",
+        "STORE": "Filiaal",
+        "STORES": "Filialen",
+        "NEW": "Nieuw inventaris",
+        "OF": "van",
+        "FILE": "Bestand"
+    },
     "NOTIFICATIONS": {
         "LABEL": "Notificaties",
         "OPEN_NOTIFICATIONS": "Open notificaties",

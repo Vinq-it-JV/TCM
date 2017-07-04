@@ -197,6 +197,20 @@ class PageController extends Controller
         return $this->render('AdministrationBundle:maintenance:store.html.twig', $storeArr);
     }
 
+    public function inventoryStoresAction(Request $request)
+    {
+        return $this->render('AdministrationBundle:inventory:stores.html.twig');
+    }
+
+    public function inventoryStoreAction(Request $request, $storeid)
+    {
+        $store = StoreQuery::create()->findOneById($storeid);
+        $storeArr = $store->getStoreDataArray();
+        $storeArr['collectionType'] = 'administration_inventory';
+
+        return $this->render('AdministrationBundle:inventory:store.html.twig', $storeArr);
+    }
+
     public function openNotificationsAction(Request $request)
     {
         return $this->render('AdministrationBundle:notifications:open_notifications.html.twig');

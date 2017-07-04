@@ -2,11 +2,11 @@
     <div class="row" ng-show="AUTH.isSuperAdmin()">
         <div class="panel-body">
             <h4 ng-cloak>
-                <i class="fa fa-fw fa-wrench"></i> {{ ng.translate('MAINTENANCE.LABEL') }} {{ ng.translate('MAINTENANCE.FOR') }} {{ store.Name }}
+                <i class="fa fa-fw fa-list"></i> {{ ng.translate('INVENTORY.LABEL') }} {{ ng.translate('INVENTORY.OF') }} {{ store.Name }}
             </h4>
             <hr/>
             <div class="well">
-                <section st-table="collectionsCollection" st-safe-src="collections.collections()" st-persist="maintenanceTable">
+                <section st-table="collectionsCollection" st-safe-src="collections.collections()" st-persist="inventoryTable">
                     <div class="row">
                         <div class="col-md-3 col-xs-6">
                             <input st-search class="form-control input-sm"
@@ -36,7 +36,7 @@
                                 <tr ng-repeat="row in collectionsCollection">
                                     <td ng-cloak>{{ row.CreatedBy.Name }}</td>
                                     <td ng-cloak>{{ row.Name }}</td>
-                                    <td ng-cloak>{{ row.Date.date | GMT:'DD-MM-YYYY HH:mm' }}</td>
+                                    <td ng-cloak>{{ row.CreatedAt.date | GMT:'DD-MM-YYYY HH:mm' }}</td>
                                     <td ng-cloak class="text-right">
                                         <i ng-show="row.Attachments" class="fa fa-fw fa-paperclip"></i>
                                         <label class="label label-success tag-label" ng-show="{{ row.IsPublished }}">{{ 'YES' | translate }}</label>
@@ -44,11 +44,11 @@
                                     </td>
                                     <td>
                                         <div class="pull-right">
-                                            <button type="button" ng-click="showCollection(row.Id, 'maintenanceInfo')"
+                                            <button type="button" ng-click="showCollection(row.Id, 'inventoryInfo')"
                                                     class="btn btn-xs btn-info">
                                                 <i class="fa fa-search"></i>
                                             </button>
-                                            <button type="button" ng-click="editCollection(row.Id, 'maintenanceEdit')"
+                                            <button type="button" ng-click="editCollection(row.Id, 'inventoryEdit')"
                                                     class="btn btn-xs btn-primary">
                                                 <i class="fa fa-pencil"></i>
                                             </button>
@@ -79,7 +79,7 @@
                             <i class="fa fa-close"></i> {{ ng.translate('CANCEL') }}
                         </button>
                         <button class="btn btn-sm btn-success pull-right"
-                                ng-click="addCollection('maintenanceAdd')" ng-cloak>
+                                ng-click="addCollection('inventoryAdd')" ng-cloak>
                             <i class="fa fa-plus"></i> {{ ng.translate('ADD') }}
                         </button>
                     </div>

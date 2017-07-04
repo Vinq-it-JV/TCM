@@ -44,30 +44,35 @@ angular
 
         $scope.getCollectionData = function (storeid, collectiontype)
         {
+            var requestUrl = '';
+
             $scope.storeId = storeid;
             $scope.collectionType = collectiontype;
             $scope.activePage = collectiontype;
+            $scope.requestType = 'getCollectionData';
 
             switch ($scope.activePage)
             {
                 case 'maintenance':
-                    $scope.requestType = 'getMaintenanceLog';
-                    var getdata = {
-                        'url': Routing.generate('tcm_store_maintenance_get', {'storeid': $scope.storeId}),
-                        'payload': ''
-                    };
+                    requestUrl = Routing.generate('tcm_store_maintenance_get', {'storeid': $scope.storeId});
                     break;
                 case 'administration_maintenance':
-                    $scope.requestType = 'getMaintenanceLog';
-                    var getdata = {
-                        'url': Routing.generate('administration_maintenance_store_get', {'storeid': $scope.storeId}),
-                        'payload': ''
-                    };
+                    requestUrl = Routing.generate('administration_maintenance_store_get', {'storeid': $scope.storeId});
+                    break;
+                case 'inventory':
+                    requestUrl = Routing.generate('tcm_store_inventory_get', {'storeid': $scope.storeId});
+                    break;
+                case 'administration_inventory':
+                    requestUrl = Routing.generate('administration_inventory_store_get', {'storeid': $scope.storeId});
                     break;
                 default:
                     break;
             }
 
+            var getdata = {
+                'url': requestUrl,
+                'payload': ''
+            };
             $scope.BE.get(getdata, $scope.fetchDataOk, $scope.fetchDataFail);
         };
 
@@ -103,7 +108,6 @@ angular
         {
             $scope.collections.clrRecord();
             $scope.activePage = pagetype;
-            console.log($scope.collections.collection());
         };
 
         $scope.showCollection = function (collectionid, pagetype)
@@ -198,7 +202,7 @@ angular
         {
         	switch ($scope.requestType)
         	{
-                case 'getMaintenanceLog':
+                case 'getCollectionData':
                     if (!$scope.isValidObject(data))
                         break;
                     if (!data.errorcode) {
@@ -237,9 +241,11 @@ angular
         $scope.showCollectionUrl = function ()
         {
             switch ($scope.collectionType)
-            {   case 'deleteCollection':
-                case 'administration_maintenance':
+            {   case 'administration_maintenance':
                     $scope.showUrl(Routing.generate('administration_maintenance_store', {'storeid': $scope.storeId}));
+                    break;
+                case 'administration_inventory':
+                    $scope.showUrl(Routing.generate('administration_inventory_store', {'storeid': $scope.storeId}));
                     break;
                 default:
                     console.log('No collection url for type: ' + $scope.collectionType);

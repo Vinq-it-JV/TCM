@@ -82,6 +82,11 @@ angular
             $scope.showUrl(Routing.generate('administration_maintenance_store', {'storeid': storeid}));
         };
 
+        $scope.showStoreInventory = function (storeid)
+        {
+            $scope.showUrl(Routing.generate('administration_inventory_store', {'storeid': storeid}));
+        };
+
         $scope.deleteStore = function (storeid)
         {
             var modalOptions = {

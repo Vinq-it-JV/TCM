@@ -158,7 +158,6 @@ angular
                     d_company.Addresses.push(d_address);
 
                     this.clrAddress();
-                    console.log(d_company.Addresses);
                 },
                 deleteEmail: function (id) {
                     var emailId = d_company.Emails[id].Id;
