@@ -69,7 +69,6 @@ class CheckDeviceCommand extends ContainerAwareCommand
 
         $inputs = CbInputQuery::create()
             ->filterByIsEnabled(true)
-            ->filterByState(CbInput::STATE_ACTIVE)
             ->find();
 
         foreach ($inputs as $input) {
@@ -78,7 +77,6 @@ class CheckDeviceCommand extends ContainerAwareCommand
 
         $temperatures = DsTemperatureSensorQuery::create()
             ->filterByIsEnabled(true)
-            ->filterByState(DsTemperatureSensor::STATE_ACTIVE)
             ->find();
 
         foreach ($temperatures as $temperature) {
