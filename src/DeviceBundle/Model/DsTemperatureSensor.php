@@ -49,8 +49,10 @@ class DsTemperatureSensor extends BaseDsTemperatureSensor
      */
     public function checkSensorInactive()
     {
-        if ($this->getMainStore()->getIsMaintenance())
-            return false;
+        $store = StoreQuery::create()->findOneById($this->getMainStore());
+        if (!empty($store))
+            if ($store->getIsMaintenance())
+                return false;
 
         $date = new \DateTime();
         $now = $date->format('Y-m-d H:i:s');
@@ -83,8 +85,10 @@ class DsTemperatureSensor extends BaseDsTemperatureSensor
         if ($this->getNotifyAfter() == -1)
             return false;
 
-        if ($this->getMainStore()->getIsMaintenance())
-            return false;
+        $store = StoreQuery::create()->findOneById($this->getMainStore());
+        if (!empty($store))
+            if ($store->getIsMaintenance())
+                return false;
 
         if ($this->getState() == self::STATE_NOTIFY)
             return true;
