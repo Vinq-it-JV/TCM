@@ -71,8 +71,19 @@ class TestCommand extends ContainerAwareCommand
         //$this->showInputNotifications($output);
         //$this->getSuperAdminEmail($output);
         //$this->addCollection($output);
-        $this->createUUID($output);
+        //$this->createUUID($output);
+        $this->checkTimeDiff($output);
         $output->writeln("Ready.");
+    }
+
+    protected function checkTimeDiff(OutputInterface $output)
+    {
+        $date = new \DateTime();
+        $updated = '2017-07-04 09:23:10';
+        $now = $date->format('Y-m-d H:i:s');
+
+        $diffSeconds = strtotime($now) - strtotime($updated);
+        $output->writeln(sprintf("now: %d, updated at: %d = diff: %d", strtotime($now), strtotime($updated), $diffSeconds));
     }
 
     protected function createUUID(OutputInterface $output)
