@@ -79,11 +79,16 @@ class TestCommand extends ContainerAwareCommand
     protected function checkTimeDiff(OutputInterface $output)
     {
         $date = new \DateTime();
-        $updated = '2017-07-04 09:23:10';
-        $now = $date->format('Y-m-d H:i:s');
 
-        $diffSeconds = strtotime($now) - strtotime($updated);
-        $output->writeln(sprintf("now: %d, updated at: %d = diff: %d", strtotime($now), strtotime($updated), $diffSeconds));
+        $sensor = DsTemperatureSensorQuery::create()->findOneByUid('28FFA05A91150176');
+        if (!empty($sensor)) {
+            $updated = $sensor->getUpdatedAt('Y-m-d H:i:s'); //'2017-07-04 09:23:10';
+            $now = $date->format('Y-m-d H:i:s');
+            $diffSeconds = strtotime($now) - strtotime($updated);
+            $output->writeln(sprintf("now: %d, updated at: %d = diff: %d", strtotime($now), strtotime($updated), $diffSeconds));
+        }
+        else
+            $output->writeln('Sensor not found');
     }
 
     protected function createUUID(OutputInterface $output)
