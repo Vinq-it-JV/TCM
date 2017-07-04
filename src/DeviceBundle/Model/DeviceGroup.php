@@ -75,14 +75,22 @@ class DeviceGroup extends BaseDeviceGroup
     {
         $inputs = $this->getCbInputs();
         foreach ($inputs as $input) {
-            if ($input->getState() == CbInput::STATE_NOTIFY)
+            if ($input->getState() == CbInput::STATE_NOTIFY) {
+                $this->setState(self::STATUS_NOTIFY);
+                $this->save();
                 return self::STATUS_NOTIFY;
+            }
         }
 
         $sensors = $this->getDsTemperatureSensors();
         foreach ($sensors as $sensor)
-            if ($sensor->getState() == DsTemperatureSensor::STATE_NOTIFY)
+            if ($sensor->getState() == DsTemperatureSensor::STATE_NOTIFY) {
+                $this->setState(self::STATUS_NOTIFY);
+                $this->save();
                 return self::STATUS_NOTIFY;
+            }
+        $this->setState(self::STATUS_NOTIFY);
+        $this->save();
         return self::STATUS_OK;
     }
 
