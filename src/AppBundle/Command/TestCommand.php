@@ -82,7 +82,7 @@ class TestCommand extends ContainerAwareCommand
 
         $sensor = DsTemperatureSensorQuery::create()->findOneByUid('28FFA05A91150176');
         if (!empty($sensor)) {
-            $updated = $sensor->getUpdatedAt('Y-m-d H:i:s'); //'2017-07-04 09:23:10';
+            $updated = $sensor->getDataCollectedAt('Y-m-d H:i:s'); //'2017-07-04 09:23:10';
             $now = $date->format('Y-m-d H:i:s');
             $diffSeconds = strtotime($now) - strtotime($updated);
             $output->writeln(sprintf("now: %d, updated at: %d = diff: %d", strtotime($now), strtotime($updated), $diffSeconds));
