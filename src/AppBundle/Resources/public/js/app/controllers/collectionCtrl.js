@@ -148,6 +148,11 @@ angular
             $scope.activePage = pagetype;
         };
 
+        $scope.showPreviousPage = function ()
+        {
+            $scope.activePage = $scope.previousPage;
+        };
+
         $scope.attachmentUrl = function (attachmentid)
         {
             var route = Routing.generate('administration_collection_attachment_get', {'attachmentid':attachmentid});
@@ -261,7 +266,7 @@ angular
                         break;
                     if (!data.errorcode) {
                         $scope.collections.updAttachment($scope.attachemntId, data.contents.attachment);
-                        $scope.activePage = $scope.previousPage;
+                        $scope.showPreviousPage();
                     }
                     break;
                 default:

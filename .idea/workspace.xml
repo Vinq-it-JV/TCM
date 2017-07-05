@@ -2,20 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="282e9c36-730e-4d16-a19d-353a62e794e2" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/attachment/attachment_form.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AdministrationBundle/Resources/config/routing.yml" afterPath="$PROJECT_DIR$/src/AdministrationBundle/Resources/config/routing.yml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/inventory/inventory_form.html.twig" afterPath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/inventory/inventory_form.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/inventory/store.html.twig" afterPath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/inventory/store.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/maintenance/maintenance_form.html.twig" afterPath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/maintenance/maintenance_form.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/maintenance/store.html.twig" afterPath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/maintenance/store.html.twig" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/attachment/attachment_form.html.twig" afterPath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/attachment/attachment_form.html.twig" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/collectionCtrl.js" afterPath="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/collectionCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/datasets/collections.js" afterPath="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/datasets/collections.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Resources/views/store/maintenance_info.html.twig" afterPath="$PROJECT_DIR$/src/AppBundle/Resources/views/store/maintenance_info.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/CollectionBundle/Controller/DataController.php" afterPath="$PROJECT_DIR$/src/CollectionBundle/Controller/DataController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/CollectionBundle/Services/CollectionHelper.php" afterPath="$PROJECT_DIR$/src/CollectionBundle/Services/CollectionHelper.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/app.php" afterPath="$PROJECT_DIR$/web/app.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/js/fos_js_routes.js" afterPath="$PROJECT_DIR$/web/js/fos_js_routes.js" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -42,8 +30,8 @@
       <file leaf-file-name="collectionCtrl.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/collectionCtrl.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="332">
-              <caret line="265" column="24" lean-forward="false" selection-start-line="265" selection-start-column="24" selection-end-line="265" selection-end-column="24" />
+            <state relative-caret-position="292">
+              <caret line="269" column="0" lean-forward="false" selection-start-line="269" selection-start-column="0" selection-end-line="269" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -176,27 +164,27 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="attachment_form.html.twig" pinned="false" current-in-tab="false">
+      <file leaf-file-name="attachment_form.html.twig" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/AdministrationBundle/Resources/views/attachment/attachment_form.html.twig">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="278">
-              <caret line="25" column="38" lean-forward="true" selection-start-line="25" selection-start-column="38" selection-end-line="25" selection-end-column="38" />
+            <state relative-caret-position="238">
+              <caret line="16" column="20" lean-forward="false" selection-start-line="16" selection-start-column="20" selection-end-line="16" selection-end-column="20" />
               <folding>
-                <marker date="1499262086000" expanded="true" signature="319:830" ph="..." />
-                <marker date="1499262086000" expanded="true" signature="349:815" ph="..." />
-                <marker date="1499262086000" expanded="true" signature="399:796" ph="..." />
-                <marker date="1499262086000" expanded="true" signature="468:596" ph="..." />
-                <marker date="1499262086000" expanded="true" signature="665:773" ph="..." />
-                <marker date="1499262086000" expanded="true" signature="863:1315" ph="..." />
-                <marker date="1499262086000" expanded="true" signature="893:1300" ph="..." />
-                <marker date="1499262086000" expanded="true" signature="1066:1281" ph="..." />
-                <marker date="1499262086000" expanded="true" signature="1148:1258" ph="..." />
+                <marker date="1499262603000" expanded="true" signature="319:870" ph="..." />
+                <marker date="1499262603000" expanded="true" signature="349:855" ph="..." />
+                <marker date="1499262603000" expanded="true" signature="399:836" ph="..." />
+                <marker date="1499262603000" expanded="true" signature="488:616" ph="..." />
+                <marker date="1499262603000" expanded="true" signature="705:813" ph="..." />
+                <marker date="1499262603000" expanded="true" signature="903:1355" ph="..." />
+                <marker date="1499262603000" expanded="true" signature="933:1340" ph="..." />
+                <marker date="1499262603000" expanded="true" signature="1106:1321" ph="..." />
+                <marker date="1499262603000" expanded="true" signature="1188:1298" ph="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="app.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="app.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/web/app.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="135">
@@ -398,11 +386,11 @@
         <option value="$PROJECT_DIR$/src/AdministrationBundle/Resources/config/routing.yml" />
         <option value="$PROJECT_DIR$/src/CollectionBundle/Controller/DataController.php" />
         <option value="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/inventory/inventory_form.html.twig" />
-        <option value="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/collectionCtrl.js" />
         <option value="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/inventory/store.html.twig" />
         <option value="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/maintenance/store.html.twig" />
         <option value="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/maintenance/maintenance_form.html.twig" />
         <option value="$PROJECT_DIR$/src/AppBundle/Resources/views/store/maintenance_info.html.twig" />
+        <option value="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/collectionCtrl.js" />
         <option value="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/attachment/attachment_form.html.twig" />
         <option value="$PROJECT_DIR$/web/app.php" />
       </list>
@@ -2300,12 +2288,12 @@
       <workItem from="1496138707969" duration="45558000" />
       <workItem from="1496998184924" duration="95866000" />
       <workItem from="1499062945739" duration="25632000" />
-      <workItem from="1499258768289" duration="3318000" />
+      <workItem from="1499258768289" duration="3626000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="772193000" />
+    <option name="totallyTimeSpent" value="772501000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="827" extended-state="6" />
@@ -2733,14 +2721,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/collectionCtrl.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="332">
-          <caret line="265" column="24" lean-forward="false" selection-start-line="265" selection-start-column="24" selection-end-line="265" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/AdministrationBundle/Resources/views/inventory/store.html.twig">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="360">
@@ -2908,21 +2888,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/AdministrationBundle/Resources/views/attachment/attachment_form.html.twig">
+    <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/collectionCtrl.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="278">
-          <caret line="25" column="38" lean-forward="true" selection-start-line="25" selection-start-column="38" selection-end-line="25" selection-end-column="38" />
-          <folding>
-            <marker date="1499262086000" expanded="true" signature="319:830" ph="..." />
-            <marker date="1499262086000" expanded="true" signature="349:815" ph="..." />
-            <marker date="1499262086000" expanded="true" signature="399:796" ph="..." />
-            <marker date="1499262086000" expanded="true" signature="468:596" ph="..." />
-            <marker date="1499262086000" expanded="true" signature="665:773" ph="..." />
-            <marker date="1499262086000" expanded="true" signature="863:1315" ph="..." />
-            <marker date="1499262086000" expanded="true" signature="893:1300" ph="..." />
-            <marker date="1499262086000" expanded="true" signature="1066:1281" ph="..." />
-            <marker date="1499262086000" expanded="true" signature="1148:1258" ph="..." />
-          </folding>
+        <state relative-caret-position="292">
+          <caret line="269" column="0" lean-forward="false" selection-start-line="269" selection-start-column="0" selection-end-line="269" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -2931,6 +2901,24 @@
         <state relative-caret-position="135">
           <caret line="9" column="0" lean-forward="false" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/AdministrationBundle/Resources/views/attachment/attachment_form.html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="16" column="20" lean-forward="false" selection-start-line="16" selection-start-column="20" selection-end-line="16" selection-end-column="20" />
+          <folding>
+            <marker date="1499262603000" expanded="true" signature="319:870" ph="..." />
+            <marker date="1499262603000" expanded="true" signature="349:855" ph="..." />
+            <marker date="1499262603000" expanded="true" signature="399:836" ph="..." />
+            <marker date="1499262603000" expanded="true" signature="488:616" ph="..." />
+            <marker date="1499262603000" expanded="true" signature="705:813" ph="..." />
+            <marker date="1499262603000" expanded="true" signature="903:1355" ph="..." />
+            <marker date="1499262603000" expanded="true" signature="933:1340" ph="..." />
+            <marker date="1499262603000" expanded="true" signature="1106:1321" ph="..." />
+            <marker date="1499262603000" expanded="true" signature="1188:1298" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>
