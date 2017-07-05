@@ -394,6 +394,13 @@ administration_collection_attachment_delete:
     options:
         expose: true
 
+administration_attachment_save:
+    path:     /attachment/{attachmentid}/save
+    defaults: { _controller: CollectionBundle:Data:saveAttachment }
+    methods: [PUT]
+    options:
+        expose: true
+
 #
 # NOTIFICATIONS
 #

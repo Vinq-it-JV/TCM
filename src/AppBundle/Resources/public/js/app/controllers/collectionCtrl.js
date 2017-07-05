@@ -16,7 +16,9 @@ angular
         $scope.collections = DS_Collections;
         $scope.collectionsCollection = [];
         $scope.activePage = '';
+        $scope.previousPage = '';
         $scope.storeId = 0;
+        $scope.attachmentId = 0;
         $scope.collectioType = '';
         $scope.dzUrl = '/';
         $scope.lightboxImage = '';
@@ -152,6 +154,27 @@ angular
             return route;
         };
 
+        $scope.editAttachment = function (attachmentid)
+        {
+            var result = $scope.collections.getAttachment(attachmentid);
+            if (result == null)
+                return;
+            $scope.previousPage = $scope.activePage;
+            $scope.activePage = 'attachmentEdit';
+        };
+
+        $scope.saveAttachmentData = function ()
+        {
+            $scope.attachemntId = $scope.collections.attachment().Id;
+            $scope.requestType = 'saveAttachmentData';
+            var putdata = {
+                'url': Routing.generate('administration_attachment_save', {'attachmentid': $scope.attachemntId}),
+                'payload': $scope.collections.attachment()
+            };
+
+            $scope.BE.put(putdata, $scope.fetchDataOk, $scope.fetchDataFail);
+        };
+
         $scope.deleteAttachment = function (attachmentid)
         {
             var collectionid = $scope.collections.collection().Id;
@@ -183,7 +206,7 @@ angular
                     var modalOptions = {
                         closeButtonText: '',
                         actionButtonText: '',
-                        headerText: attachment.OriginalName,
+                        headerText: attachment.Name,
                         wide: true,
                         onCancel: function () {
                         },
@@ -231,6 +254,14 @@ angular
                         break;
                     if (!data.errorcode) {
                         $scope.showCollectionUrl();
+                    }
+                    break;
+                case 'saveAttachmentData':
+                    if (!$scope.isValidObject(data))
+                        break;
+                    if (!data.errorcode) {
+                        $scope.collections.updAttachment($scope.attachemntId, data.contents.attachment);
+                        $scope.activePage = $scope.previousPage;
                     }
                     break;
                 default:

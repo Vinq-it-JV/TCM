@@ -15,10 +15,18 @@ angular
             var d_collections = [];
             var d_collection = [];
             var d_template = [];
+            var d_attachment = [];
 
             function recordOnIndex(record_id) {
                 for (index in d_collections)
                     if (d_collections[index].Id == record_id)
+                        return index;
+                return -1;
+            }
+
+            function attachmentOnIndex(attachment_id) {
+                for (index in d_collection.Attachments)
+                    if (d_collection.Attachments[index].Id == attachment_id)
                         return index;
                 return -1;
             }
@@ -55,6 +63,9 @@ angular
                 template: function () {
                     return d_template;
                 },
+                attachment: function () {
+                    return d_attachment;
+                },
                 getRecord: function (record_id) {
                     var index = recordOnIndex(record_id);
                     if (index === -1)
@@ -90,6 +101,20 @@ angular
                 updRecord: function (record_data) {
                     d_collection = angular.copy(record_data);
                     return d_collection;
+                },
+                getAttachment: function (attachment_id) {
+                    var index = attachmentOnIndex(attachment_id);
+                    if (index === -1)
+                        return null;
+                    d_attachment = angular.copy(d_collection.Attachments[index]);
+                    return d_attachment;
+                },
+                updAttachment: function (attachment_id, data) {
+                    var index = attachmentOnIndex(attachment_id);
+                    if (index === -1)
+                        return null;
+                    d_collection.Attachments[index] = angular.copy(data);
+                    return d_collection.Attachments[index];
                 },
                 isValidObject: function (object) {
                     return isValidObject(object);

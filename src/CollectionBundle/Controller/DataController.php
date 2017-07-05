@@ -106,10 +106,11 @@ class DataController extends Controller
             $postData = json_decode($request->getContent(), true);
             if (!empty($postData))
             {   $collection = $this->saveCollectionData((object)$postData);
-                return JsonResult::create()
-                    ->setContents($collection->getCollectionDataArray())
-                    ->setErrorcode(JsonResult::SUCCESS)
-                    ->make();
+                if (!is_bool($collection))
+                    return JsonResult::create()
+                        ->setContents($collection->getCollectionDataArray())
+                        ->setErrorcode(JsonResult::SUCCESS)
+                        ->make();
             }
         }
         return JsonResult::create()
@@ -212,6 +213,34 @@ class DataController extends Controller
     }
 
     /**
+     * Save attachment
+     * @param Request $request
+     * @param $collectionid
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function saveAttachmentAction(Request $request, $attachmentid)
+    {
+        if ($request->isMethod('PUT')) {
+            $postData = json_decode($request->getContent(), true);
+            if (!empty($postData))
+            {
+                $attachment = $this->saveAttachmentData((object)$postData);
+                if (!is_bool($attachment))
+                    return JsonResult::create()
+                        ->setContents($attachment->getAttachmentDataArray())
+                        ->setErrorcode(JsonResult::SUCCESS)
+                        ->make();
+            }
+            else
+                var_dump('huh');
+        }
+        return JsonResult::create()
+            ->setMessage('Attachment not saved!')
+            ->setErrorcode(JsonResult::DANGER)
+            ->make();
+    }
+
+    /**
      * Save collection data
      * @param $collectionData
      * @return bool
@@ -255,6 +284,25 @@ class DataController extends Controller
         $collection->save();
 
         return $collection;
+    }
+
+    /**
+     * Save attachment data
+     * @param $collectionData
+     * @return bool
+     */
+    protected function saveAttachmentData($attachmentData)
+    {
+        if (isset($attachmentData->Id)) {
+            $attachment = AttachmentQuery::create()->findOneById($attachmentData->Id);
+            if (empty($attachment))
+                return false;
+        }
+        if (isset($attachmentData->Name))
+        {   $attachment->setName($attachmentData->Name);
+            $attachment->save();
+        }
+        return $attachment;
     }
 
     /**

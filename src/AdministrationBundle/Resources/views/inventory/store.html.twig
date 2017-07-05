@@ -23,6 +23,9 @@
                     <div ng-switch-when="inventoryAdd">
                         {% include 'AdministrationBundle:inventory:inventory_form.html.twig' %}
                     </div>
+                    <div ng-switch-when="attachmentEdit">
+                        {% include 'AdministrationBundle:attachment:attachment_form.html.twig' %}
+                    </div>
                 </div>
             {% endblock %}
         </div>

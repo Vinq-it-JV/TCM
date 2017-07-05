@@ -64,6 +64,7 @@
             <div class="row">
                 <div ng-repeat="attachment in collections.collection().Attachments" class="col-md-3 col-xs-12">
                     <div class="panel panel-default">
+                        <button class="btn btn-xs btn-primary pull-left" style="margin-top: 5px; margin-left: 5px;" ng-click="editAttachment(attachment.Id)"><i class="fa fa-fw fa-pencil"></i></button>
                         <button class="btn btn-xs btn-danger pull-right" style="margin-top: 5px; margin-right: 5px;" ng-click="deleteAttachment(attachment.Id)"><i class="fa fa-fw fa-remove"></i></button>
                         <div class="panel-body" style="min-height:150px;">
                             <div ng-if="attachment.Type == 1" class="valign">
@@ -74,7 +75,7 @@
                             </div>
                         </div>
                         <div class="panel-footer">
-                            <div class="text-center text-muted">{{ attachment.OriginalName }}</div>
+                            <div class="text-center text-muted">{{ attachment.Name }}</div>
                         </div>
                     </div>
                 </div>

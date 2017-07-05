@@ -54,6 +54,7 @@ class CollectionHelper
         $attachment->setUid($this->createUUID());
         $attachment->setOriginalName($originalName);
         $attachment->setFilename($filename);
+        $attachment->setName($filename);
         $attachment->setType($this->getAttachementType($originalName));
         $attachment->setLinkUrl($filePath . $filename);
         $attachment->save();
