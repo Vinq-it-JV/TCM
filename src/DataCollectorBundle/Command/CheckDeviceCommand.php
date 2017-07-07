@@ -2,13 +2,13 @@
 
 namespace DataCollectorBundle\Command;
 
-use DeviceBundle\Model\CbInput;
-use DeviceBundle\Model\DsTemperatureSensor;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+use DeviceBundle\Model\CbInput;
+use DeviceBundle\Model\DsTemperatureSensor;
 use DeviceBundle\Model\CbInputQuery;
 use DeviceBundle\Model\DsTemperatureSensorQuery;
 

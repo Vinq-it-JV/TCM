@@ -2,6 +2,7 @@
 
 namespace DataCollectorBundle\Controller;
 
+use DataCollectorBundle\Model\CollectorLog;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -45,6 +46,8 @@ class DataController extends Controller
 
     public function collectDataAction(Request $request)
     {
+        $log = new CollectorLog();
+
         $fs = new Filesystem();
         $logger = $this->get('logger');
 
@@ -65,6 +68,10 @@ class DataController extends Controller
 
         file_put_contents($rootDir . $fileDir . $file, $data);
         $this->collectControllerData($data);
+
+        $log->setPacketData($data);
+        $log->save();
+
         return new Response();
     }
 

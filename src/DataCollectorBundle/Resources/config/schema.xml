@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<database name="default" defaultIdMethod="native" namespace="DataCollectorBundle\Model">
+    <table name="collector_log">
+        <column name="id" type="integer" primaryKey="true" autoIncrement="true" />
+        <column name="packet_data" type="longvarchar" />
+        <behavior name="timestampable" />
+    </table>
+</database>

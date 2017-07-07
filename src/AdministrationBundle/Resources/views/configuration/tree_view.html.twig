@@ -40,7 +40,7 @@
                                             <div class="col-md-1 col-xs-2">
                                                 <i class="fa fa-fw fa-2x" ng-class="{ 'fa-cog':group.TypeId == 2, 'fa-thermometer':group.TypeId == 3, 'fa-sign-in':group.TypeId == 4 }"></i>
                                             </div>
-                                            <div class="col-md-9 col-xs-7">
+                                            <div class="col-md-9 col-xs-6">
                                                  {{ group.Name }}
                                             </div>
                                             <div class="col-md-1 col-xs-1">
@@ -48,7 +48,10 @@
                                                 <div ng-show="group.TypeId==4">{{ group.InputNumber }}</div>
                                             </div>
                                             <div class="col-md-1 col-xs-1">
-                                                <i class="fa fa-fw" ng-class="{ 'fa-bell': group.IsEnabled, 'fa-bell-slash':!group.IsEnabled }"></i>
+                                                <i class="fa fa-fw" ng-class="{ 'fa-eye':group.IsEnabled, 'fa-eye-slash':!group.IsEnabled }"></i>
+                                            </div>
+                                            <div class="col-md-1 col-xs-1">
+                                                <i class="fa fa-fw" ng-class="{ 'fa-bell':group.NotifyAfter > -1, 'fa-bell-slash':group.NotifyAfter == -1 }"></i>
                                             </div>
                                         </div>
                                     </div>
@@ -78,7 +81,7 @@
                                                     <div class="col-md-1 col-xs-2">
                                                         <i class="fa fa-fw fa-2x" ng-class="{ 'fa-cog': device.TypeId == 2, 'fa-thermometer':device.TypeId == 3, 'fa-sign-in': device.TypeId == 4 }"></i>
                                                     </div>
-                                                    <div class="col-md-9 col-xs-7">
+                                                    <div class="col-md-9 col-xs-6">
                                                          {{ device.Name }}
                                                     </div>
                                                     <div class="col-md-1 col-xs-1">
@@ -86,7 +89,10 @@
                                                         <div ng-show="device.TypeId==4">{{ device.InputNumber }}</div>
                                                     </div>
                                                     <div class="col-md-1 col-xs-1">
-                                                        <i class="fa fa-fw" ng-class="{ 'fa-bell': device.IsEnabled, 'fa-bell-slash':!device.IsEnabled }"></i>
+                                                        <i class="fa fa-fw" ng-class="{ 'fa-eye':device.IsEnabled, 'fa-eye-slash':!device.IsEnabled }"></i>
+                                                    </div>
+                                                    <div class="col-md-1 col-xs-1">
+                                                        <i class="fa fa-fw" ng-class="{ 'fa-bell':device.NotifyAfter > -1, 'fa-bell-slash':device.NotifyAfter == -1 }"></i>
                                                     </div>
                                                 </div>
                                             </div>
