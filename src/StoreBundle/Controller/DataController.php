@@ -209,6 +209,60 @@ class DataController extends Controller
     }
 
     /**
+     * Start store maintenance
+     * @param Request $request
+     * @param $storeid
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function maintenanceGeneralStartAction(Request $request, $storeid)
+    {
+        $store = StoreQuery::create()->findOneById($storeid);
+        $date = new \DateTime();
+
+        if (!empty($store)) {
+            $store->setIsMaintenance(true);
+            $store->setMaintenanceStartedAt($date);
+            $store->save();
+
+            // TODO: Add new maintenance log row (startdate, storeid, user, type (STARTED / STOPPED)
+            return JsonResult::create()
+                ->setErrorcode(JsonResult::SUCCESS)
+                ->make();
+        }
+        return JsonResult::create()
+            ->setMessage('Store not in maintenance!')
+            ->setErrorcode(JsonResult::DANGER)
+            ->make();
+    }
+
+    /**
+     * Stop store maintenance
+     * @param Request $request
+     * @param $storeid
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function maintenanceGeneralStopAction(Request $request, $storeid)
+    {
+        $store = StoreQuery::create()->findOneById($storeid);
+        $date = new \DateTime();
+
+        if (!empty($store)) {
+            $store->setIsMaintenance(false);
+            $store->setMaintenanceStartedAt(null);
+            $store->save();
+
+            // TODO: Add new maintenance log row (startdate, storeid, user, type (STARTED / STOPPED)
+            return JsonResult::create()
+                ->setErrorcode(JsonResult::SUCCESS)
+                ->make();
+        }
+        return JsonResult::create()
+            ->setMessage('Store not in maintenance!')
+            ->setErrorcode(JsonResult::DANGER)
+            ->make();
+    }
+
+    /**
      * getStoreData($store)
      * @param $store
      * @return array

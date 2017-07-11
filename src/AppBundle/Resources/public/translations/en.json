@@ -261,7 +261,9 @@
         "INFORMANTS": "Informants",
         "NOTIFY": "Notify",
         "DEVICE_GROUPS": "Groups",
-        "INFORMATION": "Information"
+        "INFORMATION": "Information",
+        "IN_MAINTENANCE": "This store is currently under maintenace!",
+        "MAINTENANCE_STARTED": "Maintenance started at: "
     },
     "SENSOR_GROUP": {
         "LABEL": "Sensor group",
@@ -275,7 +277,20 @@
     "CONFIGURATION": {
         "LABEL": "Configuration",
         "STORES": "Stores",
-        "INSTALLATION": "Installation"
+        "INSTALLATION": "Installation",
+        "PACKET_LOG": "Packet log"
+    },
+    "LOG": {
+        "LABEL": "Log",
+        "INPUTS": "Inputs",
+        "DEVICE_ID": "Device Id",
+        "INTERNAL": "Internal",
+        "OUTPUT_1": "Output 1",
+        "OUTPUT_2": "Output 2",
+        "OUTPUT_3": "Output 3",
+        "OUTPUT_4": "Output 4",
+        "OUTPUT_5": "Output 5",
+        "OUTPUT_6": "Output 6"
     },
     "SENSOR": {
         "LABEL": "Sensor",
@@ -333,9 +348,12 @@
         "LABEL": "Maintenance",
         "STORE": "Store",
         "STORES": "Stores",
+        "START_MAINTENANCE": "Start",
+        "STOP_MAINTENANCE": "Stop",
         "NEW": "New maintenance",
         "FOR": "for",
-        "PERIODICALY": "Periodicaly",
+        "PERIODICALLY": "Periodically",
+        "GENERAL": "General",
         "FILE": "File"
     },
     "INVENTORY": {

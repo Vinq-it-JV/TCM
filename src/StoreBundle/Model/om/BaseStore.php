@@ -176,6 +176,12 @@ abstract class BaseStore extends BaseObject implements Persistent
     protected $is_deleted;
 
     /**
+     * The value for the maintenance_started_at field.
+     * @var        string
+     */
+    protected $maintenance_started_at;
+
+    /**
      * The value for the created_at field.
      * @var        string
      */
@@ -617,6 +623,46 @@ abstract class BaseStore extends BaseObject implements Persistent
     {
 
         return $this->is_deleted;
+    }
+
+    /**
+     * Get the [optionally formatted] temporal [maintenance_started_at] column value.
+     *
+     *
+     * @param string $format The date/time format string (either date()-style or strftime()-style).
+     *				 If format is null, then the raw DateTime object will be returned.
+     * @return mixed Formatted date/time value as string or DateTime object (if format is null), null if column is null, and 0 if column value is 0000-00-00 00:00:00
+     * @throws PropelException - if unable to parse/validate the date/time value.
+     */
+    public function getMaintenanceStartedAt($format = null)
+    {
+        if ($this->maintenance_started_at === null) {
+            return null;
+        }
+
+        if ($this->maintenance_started_at === '0000-00-00 00:00:00') {
+            // while technically this is not a default value of null,
+            // this seems to be closest in meaning.
+            return null;
+        }
+
+        try {
+            $dt = new DateTime($this->maintenance_started_at);
+        } catch (Exception $x) {
+            throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->maintenance_started_at, true), $x);
+        }
+
+        if ($format === null) {
+            // Because propel.useDateTimeClass is true, we return a DateTime object.
+            return $dt;
+        }
+
+        if (strpos($format, '%') !== false) {
+            return strftime($format, $dt->format('U'));
+        }
+
+        return $dt->format($format);
+
     }
 
     /**
@@ -1072,6 +1118,29 @@ abstract class BaseStore extends BaseObject implements Persistent
     } // setIsDeleted()
 
     /**
+     * Sets the value of [maintenance_started_at] column to a normalized version of the date/time value specified.
+     *
+     * @param mixed $v string, integer (timestamp), or DateTime value.
+     *               Empty strings are treated as null.
+     * @return Store The current object (for fluent API support)
+     */
+    public function setMaintenanceStartedAt($v)
+    {
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->maintenance_started_at !== null || $dt !== null) {
+            $currentDateAsString = ($this->maintenance_started_at !== null && $tmpDt = new DateTime($this->maintenance_started_at)) ? $tmpDt->format('Y-m-d H:i:s') : null;
+            $newDateAsString = $dt ? $dt->format('Y-m-d H:i:s') : null;
+            if ($currentDateAsString !== $newDateAsString) {
+                $this->maintenance_started_at = $newDateAsString;
+                $this->modifiedColumns[] = StorePeer::MAINTENANCE_STARTED_AT;
+            }
+        } // if either are not null
+
+
+        return $this;
+    } // setMaintenanceStartedAt()
+
+    /**
      * Sets the value of [created_at] column to a normalized version of the date/time value specified.
      *
      * @param mixed $v string, integer (timestamp), or DateTime value.
@@ -1177,8 +1246,9 @@ abstract class BaseStore extends BaseObject implements Persistent
             $this->is_maintenance = ($row[$startcol + 13] !== null) ? (boolean) $row[$startcol + 13] : null;
             $this->is_enabled = ($row[$startcol + 14] !== null) ? (boolean) $row[$startcol + 14] : null;
             $this->is_deleted = ($row[$startcol + 15] !== null) ? (boolean) $row[$startcol + 15] : null;
-            $this->created_at = ($row[$startcol + 16] !== null) ? (string) $row[$startcol + 16] : null;
-            $this->updated_at = ($row[$startcol + 17] !== null) ? (string) $row[$startcol + 17] : null;
+            $this->maintenance_started_at = ($row[$startcol + 16] !== null) ? (string) $row[$startcol + 16] : null;
+            $this->created_at = ($row[$startcol + 17] !== null) ? (string) $row[$startcol + 17] : null;
+            $this->updated_at = ($row[$startcol + 18] !== null) ? (string) $row[$startcol + 18] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -1188,7 +1258,7 @@ abstract class BaseStore extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 18; // 18 = StorePeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 19; // 19 = StorePeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Store object", $e);
@@ -1873,6 +1943,9 @@ abstract class BaseStore extends BaseObject implements Persistent
         if ($this->isColumnModified(StorePeer::IS_DELETED)) {
             $modifiedColumns[':p' . $index++]  = '`is_deleted`';
         }
+        if ($this->isColumnModified(StorePeer::MAINTENANCE_STARTED_AT)) {
+            $modifiedColumns[':p' . $index++]  = '`maintenance_started_at`';
+        }
         if ($this->isColumnModified(StorePeer::CREATED_AT)) {
             $modifiedColumns[':p' . $index++]  = '`created_at`';
         }
@@ -1937,6 +2010,9 @@ abstract class BaseStore extends BaseObject implements Persistent
                         break;
                     case '`is_deleted`':
                         $stmt->bindValue($identifier, (int) $this->is_deleted, PDO::PARAM_INT);
+                        break;
+                    case '`maintenance_started_at`':
+                        $stmt->bindValue($identifier, $this->maintenance_started_at, PDO::PARAM_STR);
                         break;
                     case '`created_at`':
                         $stmt->bindValue($identifier, $this->created_at, PDO::PARAM_STR);
@@ -2239,9 +2315,12 @@ abstract class BaseStore extends BaseObject implements Persistent
                 return $this->getIsDeleted();
                 break;
             case 16:
-                return $this->getCreatedAt();
+                return $this->getMaintenanceStartedAt();
                 break;
             case 17:
+                return $this->getCreatedAt();
+                break;
+            case 18:
                 return $this->getUpdatedAt();
                 break;
             default:
@@ -2289,8 +2368,9 @@ abstract class BaseStore extends BaseObject implements Persistent
             $keys[13] => $this->getIsMaintenance(),
             $keys[14] => $this->getIsEnabled(),
             $keys[15] => $this->getIsDeleted(),
-            $keys[16] => $this->getCreatedAt(),
-            $keys[17] => $this->getUpdatedAt(),
+            $keys[16] => $this->getMaintenanceStartedAt(),
+            $keys[17] => $this->getCreatedAt(),
+            $keys[18] => $this->getUpdatedAt(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -2423,9 +2503,12 @@ abstract class BaseStore extends BaseObject implements Persistent
                 $this->setIsDeleted($value);
                 break;
             case 16:
-                $this->setCreatedAt($value);
+                $this->setMaintenanceStartedAt($value);
                 break;
             case 17:
+                $this->setCreatedAt($value);
+                break;
+            case 18:
                 $this->setUpdatedAt($value);
                 break;
         } // switch()
@@ -2468,8 +2551,9 @@ abstract class BaseStore extends BaseObject implements Persistent
         if (array_key_exists($keys[13], $arr)) $this->setIsMaintenance($arr[$keys[13]]);
         if (array_key_exists($keys[14], $arr)) $this->setIsEnabled($arr[$keys[14]]);
         if (array_key_exists($keys[15], $arr)) $this->setIsDeleted($arr[$keys[15]]);
-        if (array_key_exists($keys[16], $arr)) $this->setCreatedAt($arr[$keys[16]]);
-        if (array_key_exists($keys[17], $arr)) $this->setUpdatedAt($arr[$keys[17]]);
+        if (array_key_exists($keys[16], $arr)) $this->setMaintenanceStartedAt($arr[$keys[16]]);
+        if (array_key_exists($keys[17], $arr)) $this->setCreatedAt($arr[$keys[17]]);
+        if (array_key_exists($keys[18], $arr)) $this->setUpdatedAt($arr[$keys[18]]);
     }
 
     /**
@@ -2497,6 +2581,7 @@ abstract class BaseStore extends BaseObject implements Persistent
         if ($this->isColumnModified(StorePeer::IS_MAINTENANCE)) $criteria->add(StorePeer::IS_MAINTENANCE, $this->is_maintenance);
         if ($this->isColumnModified(StorePeer::IS_ENABLED)) $criteria->add(StorePeer::IS_ENABLED, $this->is_enabled);
         if ($this->isColumnModified(StorePeer::IS_DELETED)) $criteria->add(StorePeer::IS_DELETED, $this->is_deleted);
+        if ($this->isColumnModified(StorePeer::MAINTENANCE_STARTED_AT)) $criteria->add(StorePeer::MAINTENANCE_STARTED_AT, $this->maintenance_started_at);
         if ($this->isColumnModified(StorePeer::CREATED_AT)) $criteria->add(StorePeer::CREATED_AT, $this->created_at);
         if ($this->isColumnModified(StorePeer::UPDATED_AT)) $criteria->add(StorePeer::UPDATED_AT, $this->updated_at);
 
@@ -2577,6 +2662,7 @@ abstract class BaseStore extends BaseObject implements Persistent
         $copyObj->setIsMaintenance($this->getIsMaintenance());
         $copyObj->setIsEnabled($this->getIsEnabled());
         $copyObj->setIsDeleted($this->getIsDeleted());
+        $copyObj->setMaintenanceStartedAt($this->getMaintenanceStartedAt());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
 
@@ -6916,6 +7002,7 @@ abstract class BaseStore extends BaseObject implements Persistent
         $this->is_maintenance = null;
         $this->is_enabled = null;
         $this->is_deleted = null;
+        $this->maintenance_started_at = null;
         $this->created_at = null;
         $this->updated_at = null;
         $this->alreadyInSave = false;

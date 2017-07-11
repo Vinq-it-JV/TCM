@@ -87,6 +87,28 @@ angular
             $scope.showUrl(Routing.generate('administration_inventory_store', {'storeid': storeid}));
         };
 
+        $scope.startGeneralMaintenance = function (storeid)
+        {
+            $scope.stores.getRecord(storeid);
+            $scope.requestType = 'startGeneralMaintenance';
+            var putdata = {
+                'url': Routing.generate('administration_maintenance_general_start', {'storeid': storeid}),
+                'payload': ''
+            };
+            $scope.BE.put(putdata, $scope.fetchDataOk, $scope.fetchDataFail);
+        };
+
+        $scope.stopGeneralMaintenance = function (storeid)
+        {
+            $scope.stores.getRecord(storeid);
+            $scope.requestType = 'stopGeneralMaintenance';
+            var putdata = {
+                'url': Routing.generate('administration_maintenance_general_stop', {'storeid': storeid}),
+                'payload': ''
+            };
+            $scope.BE.put(putdata, $scope.fetchDataOk, $scope.fetchDataFail);
+        };
+
         $scope.deleteStore = function (storeid)
         {
             var modalOptions = {
@@ -214,6 +236,22 @@ angular
                 case 'deleteEmail':
                 case 'deletePhone':
                 case 'deleteAddress':
+                    break;
+                case 'startGeneralMaintenance':
+                    if (!$scope.isValidObject(data))
+                        break;
+                    if (!data.errorcode) {
+                        $scope.stores.store().IsMaintenance = true;
+                        $scope.stores.setRecord($scope.stores.store());
+                    }
+                    break;
+                case 'stopGeneralMaintenance':
+                    if (!$scope.isValidObject(data))
+                        break;
+                    if (!data.errorcode) {
+                        $scope.stores.store().IsMaintenance = false;
+                        $scope.stores.setRecord($scope.stores.store());
+                    }
                     break;
                 default:
                     break;

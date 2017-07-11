@@ -1,4 +1,30 @@
 <div class="container">
+    <div ng-if="stores.store().IsMaintenance" class="row">
+        <div class="col-xs-12 col-md-12 col-lg-12">
+            <div class="panel panel-danger" ng-click="">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-2 text-center big-button-icon">
+                            <i class="fa fa-exclamation-triangle fa-5x fa-fw"></i>
+                        </div>
+                        <div class="col-xs-10 text-center big-button-text" style="font-size: 20px;" ng-cloak>
+                            {{ ng.translate('STORE.IN_MAINTENANCE') }}
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-xs-offset-2 text-center" style="font-size: 16px;" ng-cloak>
+                            {{ ng.translate('STORE.MAINTENANCE_STARTED') }}
+                            {% verbatim %}
+                                {{ stores.store().MaintenanceStartedAt.date | GMT: 'HH:mm:ss DD-MM-YYYY' }}
+                            {% endverbatim %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="row">
         <div class="col-xs-12 col-md-12 col-lg-12">
             <div class="panel panel-default cursor-pointer" ng-click="">
@@ -49,7 +75,7 @@
             </div>
         </div>
     </div>
-    <div class="row">
+    <div ng-if="!stores.store().IsMaintenance" class="row">
         <div class="col-xs-12 col-md-12 col-lg-12">
             <div class="panel panel-primary cursor-pointer" ng-click="showSensors()">
                 <div class="panel-heading">
@@ -81,7 +107,7 @@
             </div>
         </div>
     </div>
-    <div class="row">
+    <div ng-if="!stores.store().IsMaintenance" class="row">
         <div class="col-xs-12 col-md-12 col-lg-12">
             <div class="panel panel-yellow cursor-pointer" ng-click="showNotifications()">
                 <div class="panel-heading">

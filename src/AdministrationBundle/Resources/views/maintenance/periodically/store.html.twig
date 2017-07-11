@@ -12,16 +12,16 @@
             {% block page %}
                 <div class="page" ng-switch="activePage">
                     <div ng-switch-when="administration_maintenance">
-                        {% include 'AdministrationBundle:maintenance:maintenance.html.twig' %}
+                        {% include 'AdministrationBundle:maintenance:periodically/maintenance.html.twig' %}
                     </div>
                     <div ng-switch-when="maintenanceInfo">
-                        {% include 'AdministrationBundle:maintenance:maintenance_info.html.twig' %}
+                        {% include 'AdministrationBundle:maintenance:periodically/maintenance_info.html.twig' %}
                     </div>
                     <div ng-switch-when="maintenanceEdit">
-                        {% include 'AdministrationBundle:maintenance:maintenance_form.html.twig' %}
+                        {% include 'AdministrationBundle:maintenance:periodically/maintenance_form.html.twig' %}
                     </div>
                     <div ng-switch-when="maintenanceAdd">
-                        {% include 'AdministrationBundle:maintenance:maintenance_form.html.twig' %}
+                        {% include 'AdministrationBundle:maintenance:periodically/maintenance_form.html.twig' %}
                     </div>
                     <div ng-switch-when="attachmentEdit">
                         {% include 'AdministrationBundle:attachment:attachment_form.html.twig' %}

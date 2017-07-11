@@ -158,6 +158,11 @@ class PageController extends Controller
         return $this->render('AdministrationBundle:installation:sensors.html.twig');
     }
 
+    public function packetLogAction(Request $request)
+    {
+        return $this->render('AdministrationBundle:packetlog:log.html.twig');
+    }
+
     public function editSensorAction(Request $request, $sensorid, $typeid)
     {
         $sensorArr = [];
@@ -183,9 +188,14 @@ class PageController extends Controller
         return $this->render('AdministrationBundle:installation:edit_sensor.html.twig', $sensorArr);
     }
 
-    public function maintenanceStoresAction(Request $request)
+    public function maintenancePeriodicallyStoresAction(Request $request)
     {
-        return $this->render('AdministrationBundle:maintenance:stores.html.twig');
+        return $this->render('AdministrationBundle:maintenance:periodically/stores.html.twig');
+    }
+
+    public function maintenanceGeneralStoresAction(Request $request)
+    {
+        return $this->render('AdministrationBundle:maintenance:general/stores.html.twig');
     }
 
     public function maintenanceStoreAction(Request $request, $storeid)
@@ -194,7 +204,7 @@ class PageController extends Controller
         $storeArr = $store->getStoreDataArray();
         $storeArr['collectionType'] = 'administration_maintenance';
 
-        return $this->render('AdministrationBundle:maintenance:store.html.twig', $storeArr);
+        return $this->render('AdministrationBundle:maintenance:periodically/store.html.twig', $storeArr);
     }
 
     public function inventoryStoresAction(Request $request)

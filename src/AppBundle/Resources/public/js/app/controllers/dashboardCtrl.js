@@ -130,7 +130,6 @@ angular
                         if (!$scope.isValidObject(data))
                             break;
                         if (!data.errorcode) {
-                            console.log(data.contents.store);
                             $scope.stores.updRecord(data.contents.store);
                             $scope.stores.listsSet(data.contents.lists);
                             $scope.sensors.sensorsSet(data.contents.devicegroups);

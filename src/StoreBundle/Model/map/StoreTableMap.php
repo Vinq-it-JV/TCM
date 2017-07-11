@@ -58,6 +58,7 @@ class StoreTableMap extends TableMap
         $this->addColumn('is_maintenance', 'IsMaintenance', 'BOOLEAN', false, 1, false);
         $this->addColumn('is_enabled', 'IsEnabled', 'BOOLEAN', false, 1, true);
         $this->addColumn('is_deleted', 'IsDeleted', 'BOOLEAN', false, 1, false);
+        $this->addColumn('maintenance_started_at', 'MaintenanceStartedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
         // validators

@@ -3,6 +3,7 @@
 namespace DataCollectorBundle\Controller;
 
 use DataCollectorBundle\Model\CollectorLog;
+use DataCollectorBundle\Model\CollectorLogQuery;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,6 +16,8 @@ use DeviceBundle\Model\ControllerBox;
 use DeviceBundle\Model\ControllerBoxQuery;
 use DeviceBundle\Model\DsTemperatureSensor;
 use DeviceBundle\Model\DsTemperatureSensorQuery;
+
+use AppBundle\Response\JsonResult;
 
 class DataController extends Controller
 {
@@ -73,6 +76,24 @@ class DataController extends Controller
         $log->save();
 
         return new Response();
+    }
+
+    public function getPacketlogAction(Request $request)
+    {
+        $dataArr = [];
+
+        $logs = CollectorLogQuery::create()
+            ->orderById('DESC')
+            ->limit(10)
+            ->find();
+
+        foreach ($logs as $log)
+            $dataArr['logs'][] = $log->getCollectorLogDataArray()['log'];
+
+        return JsonResult::create()
+            ->setContents($dataArr)
+            ->setErrorcode(JsonResult::SUCCESS)
+            ->make();
     }
 
     protected function collectControllerData($data)

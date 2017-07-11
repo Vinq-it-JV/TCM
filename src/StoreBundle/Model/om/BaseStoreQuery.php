@@ -51,6 +51,7 @@ use UserBundle\Model\User;
  * @method StoreQuery orderByIsMaintenance($order = Criteria::ASC) Order by the is_maintenance column
  * @method StoreQuery orderByIsEnabled($order = Criteria::ASC) Order by the is_enabled column
  * @method StoreQuery orderByIsDeleted($order = Criteria::ASC) Order by the is_deleted column
+ * @method StoreQuery orderByMaintenanceStartedAt($order = Criteria::ASC) Order by the maintenance_started_at column
  * @method StoreQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
  * @method StoreQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
  *
@@ -70,6 +71,7 @@ use UserBundle\Model\User;
  * @method StoreQuery groupByIsMaintenance() Group by the is_maintenance column
  * @method StoreQuery groupByIsEnabled() Group by the is_enabled column
  * @method StoreQuery groupByIsDeleted() Group by the is_deleted column
+ * @method StoreQuery groupByMaintenanceStartedAt() Group by the maintenance_started_at column
  * @method StoreQuery groupByCreatedAt() Group by the created_at column
  * @method StoreQuery groupByUpdatedAt() Group by the updated_at column
  *
@@ -151,6 +153,7 @@ use UserBundle\Model\User;
  * @method Store findOneByIsMaintenance(boolean $is_maintenance) Return the first Store filtered by the is_maintenance column
  * @method Store findOneByIsEnabled(boolean $is_enabled) Return the first Store filtered by the is_enabled column
  * @method Store findOneByIsDeleted(boolean $is_deleted) Return the first Store filtered by the is_deleted column
+ * @method Store findOneByMaintenanceStartedAt(string $maintenance_started_at) Return the first Store filtered by the maintenance_started_at column
  * @method Store findOneByCreatedAt(string $created_at) Return the first Store filtered by the created_at column
  * @method Store findOneByUpdatedAt(string $updated_at) Return the first Store filtered by the updated_at column
  *
@@ -170,6 +173,7 @@ use UserBundle\Model\User;
  * @method array findByIsMaintenance(boolean $is_maintenance) Return Store objects filtered by the is_maintenance column
  * @method array findByIsEnabled(boolean $is_enabled) Return Store objects filtered by the is_enabled column
  * @method array findByIsDeleted(boolean $is_deleted) Return Store objects filtered by the is_deleted column
+ * @method array findByMaintenanceStartedAt(string $maintenance_started_at) Return Store objects filtered by the maintenance_started_at column
  * @method array findByCreatedAt(string $created_at) Return Store objects filtered by the created_at column
  * @method array findByUpdatedAt(string $updated_at) Return Store objects filtered by the updated_at column
  */
@@ -277,7 +281,7 @@ abstract class BaseStoreQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `main_company`, `name`, `description`, `type`, `code`, `website`, `region`, `remarks`, `payment_method`, `bank_account_number`, `vat_number`, `coc_number`, `is_maintenance`, `is_enabled`, `is_deleted`, `created_at`, `updated_at` FROM `store` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `main_company`, `name`, `description`, `type`, `code`, `website`, `region`, `remarks`, `payment_method`, `bank_account_number`, `vat_number`, `coc_number`, `is_maintenance`, `is_enabled`, `is_deleted`, `maintenance_started_at`, `created_at`, `updated_at` FROM `store` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -893,6 +897,49 @@ abstract class BaseStoreQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(StorePeer::IS_DELETED, $isDeleted, $comparison);
+    }
+
+    /**
+     * Filter the query on the maintenance_started_at column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByMaintenanceStartedAt('2011-03-14'); // WHERE maintenance_started_at = '2011-03-14'
+     * $query->filterByMaintenanceStartedAt('now'); // WHERE maintenance_started_at = '2011-03-14'
+     * $query->filterByMaintenanceStartedAt(array('max' => 'yesterday')); // WHERE maintenance_started_at < '2011-03-13'
+     * </code>
+     *
+     * @param     mixed $maintenanceStartedAt The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return StoreQuery The current query, for fluid interface
+     */
+    public function filterByMaintenanceStartedAt($maintenanceStartedAt = null, $comparison = null)
+    {
+        if (is_array($maintenanceStartedAt)) {
+            $useMinMax = false;
+            if (isset($maintenanceStartedAt['min'])) {
+                $this->addUsingAlias(StorePeer::MAINTENANCE_STARTED_AT, $maintenanceStartedAt['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($maintenanceStartedAt['max'])) {
+                $this->addUsingAlias(StorePeer::MAINTENANCE_STARTED_AT, $maintenanceStartedAt['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(StorePeer::MAINTENANCE_STARTED_AT, $maintenanceStartedAt, $comparison);
     }
 
     /**

@@ -301,9 +301,29 @@ administration_store_delete_address:
 #
 # MAINTENANCE
 #
-administration_maintenance:
-    path:     /maintenance/stores
-    defaults: { _controller: AdministrationBundle:Page:maintenanceStores }
+administration_maintenance_periodically:
+    path:     /maintenance/periodically/stores
+    defaults: { _controller: AdministrationBundle:Page:maintenancePeriodicallyStores }
+    options:
+        expose: true
+
+administration_maintenance_general:
+    path:     /maintenance/general/stores
+    defaults: { _controller: AdministrationBundle:Page:maintenanceGeneralStores }
+    options:
+        expose: true
+
+administration_maintenance_general_start:
+    path:     /maintenance/general/store/{storeid}/start
+    defaults: { _controller: StoreBundle:Data:maintenanceGeneralStart }
+    methods: [PUT]
+    options:
+        expose: true
+
+administration_maintenance_general_stop:
+    path:     /maintenance/general/store/{storeid}/stop
+    defaults: { _controller: StoreBundle:Data:maintenanceGeneralStop }
+    methods: [PUT]
     options:
         expose: true
 
@@ -517,5 +537,22 @@ installation_sensor_save:
     path:     /installation/sensor/{sensorid}/type/{typeid}/save
     defaults: { _controller: DeviceBundle:Data:saveSensor }
     methods: [POST, PUT]
+    options:
+        expose: true
+
+#
+# PACKET LOG
+#
+configuration_packetlog:
+    path:     /installation/packetlog
+    defaults: { _controller: AdministrationBundle:Page:packetLog }
+    methods: [GET]
+    options:
+        expose: true
+
+configuration_packetlog_get:
+    path:     /installation/packetlog/get
+    defaults: { _controller: DataCollectorBundle:Data:getPacketlog }
+    methods: [GET]
     options:
         expose: true

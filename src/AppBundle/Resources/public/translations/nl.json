@@ -261,7 +261,9 @@
         "INFORMANTS": "Informanten",
         "NOTIFY": "Notificeer",
         "DEVICE_GROUPS": "Groepen",
-        "INFORMATION": "Informatie"
+        "INFORMATION": "Informatie",
+        "IN_MAINTENANCE": "Dit filiaal is momenteel in onderhoud!",
+        "MAINTENANCE_STARTED": "Onderhoud gestart op: "
     },
     "SENSOR_GROUP": {
         "LABEL": "Sensor groep",
@@ -275,7 +277,20 @@
     "CONFIGURATION": {
         "LABEL": "Configuratie",
         "STORES": "Filialen",
-        "INSTALLATION": "Installatie"
+        "INSTALLATION": "Installatie",
+        "PACKET_LOG": "Pakketlog"
+    },
+    "LOG": {
+        "LABEL": "Log",
+        "INPUTS": "Ingangen",
+        "DEVICE_ID": "Device Id",
+        "INTERNAL": "Intern",
+        "OUTPUT_1": "Uitgang 1",
+        "OUTPUT_2": "Uitgang 2",
+        "OUTPUT_3": "Uitgang 3",
+        "OUTPUT_4": "Uitgang 4",
+        "OUTPUT_5": "Uitgang 5",
+        "OUTPUT_6": "Uitgang 6"
     },
     "SENSOR": {
         "LABEL": "Sensor",
@@ -333,9 +348,12 @@
         "LABEL": "Onderhoud",
         "STORE": "Filiaal",
         "STORES": "Filialen",
+        "START_MAINTENANCE": "Start onderhoud",
+        "STOP_MAINTENANCE": "Stop onderhoud",
         "NEW": "Nieuw onderhoud",
         "FOR": "voor",
-        "PERIODICALY": "Periodiek",
+        "PERIODICALLY": "Periodiek",
+        "GENERAL": "Algemeen",
         "FILE": "Bestand"
     },
     "INVENTORY": {

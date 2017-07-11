@@ -38,16 +38,18 @@
                         <ul class="dropdown-menu">
                             <li><a href="{{ path('configuration_stores') }}" ng-cloak> {{ ng.translate('CONFIGURATION.STORES') }} </a></li>
                             <li><a href="{{ path('configuration_installation') }}" ng-cloak> {{ ng.translate('CONFIGURATION.INSTALLATION') }} </a></li>
+                            <li><a href="{{ path('configuration_packetlog') }}" ng-cloak> {{ ng.translate('CONFIGURATION.PACKET_LOG') }} </a></li>
                         </ul>
                     </li>
 
-                    {# Notifications #}
+                    {# Maintenance #}
                     <li class="dropdown">
                         <a href="#" data-toggle="dropdown">
                             <i class="icon-book icon-white"></i><div class="inline" ng-cloak>{{ ng.translate('MAINTENANCE.LABEL') }} <b class="caret"></b></div>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="{{ path('administration_maintenance') }}" ng-cloak> {{ ng.translate('MAINTENANCE.PERIODICALY') }} </a></li>
+                            <li><a href="{{ path('administration_maintenance_general') }}" ng-cloak> {{ ng.translate('MAINTENANCE.GENERAL') }} </a></li>
+                            <li><a href="{{ path('administration_maintenance_periodically') }}" ng-cloak> {{ ng.translate('MAINTENANCE.PERIODICALLY') }} </a></li>
                         </ul>
                     </li>
 
