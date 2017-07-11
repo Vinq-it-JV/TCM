@@ -243,6 +243,7 @@ angular
                     if (!data.errorcode) {
                         $scope.stores.store().IsMaintenance = true;
                         $scope.stores.setRecord($scope.stores.store());
+                        $scope.storesCollection = [].concat($scope.stores.stores());
                     }
                     break;
                 case 'stopGeneralMaintenance':
@@ -251,6 +252,7 @@ angular
                     if (!data.errorcode) {
                         $scope.stores.store().IsMaintenance = false;
                         $scope.stores.setRecord($scope.stores.store());
+                        $scope.storesCollection = [].concat($scope.stores.stores());
                     }
                     break;
                 default:
