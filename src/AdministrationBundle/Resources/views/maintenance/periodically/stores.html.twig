@@ -14,7 +14,9 @@
                         <div class="row">
                             <div class="panel-body">
                                 <h4 ng-cloak>
-                                    <i class="fa fa-fw fa-wrench"></i> {{ ng.translate('MAINTENANCE.LABEL') }} - {{ ng.translate('MAINTENANCE.PERIODICALLY') }}
+                                    {% verbatim %}
+                                        <i class="fa fa-fw fa-wrench"></i> {{ 'MAINTENANCE.LABEL' | translate }} - {{ 'MAINTENANCE.PERIODICALLY' | translate }}
+                                    {% endverbatim %}
                                 </h4>
                                 <hr/>
                                 <div class="well">
