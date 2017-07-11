@@ -129,11 +129,12 @@ class DataController extends Controller
                 ->findOneByArray(['ControllerBox' => $controller, 'InputNumber' => $inputNr]);
             if (empty($_input))
                 $_input = new CbInput();
-            if (!empty($controller))
+            if (!empty($controller)) {
                 $_input->setUid($controller->getUid());
+                $input->setControllerBox($controller);
+            }
             $_input->setInputNumber($inputNr);
             $_input->setSwitchState($input);
-            $input->setControllerBox($controller);
             $input->setDataCollectedAt($date);
             $input->save();
             $bit <<= 1;
