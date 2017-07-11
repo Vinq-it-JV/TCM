@@ -131,12 +131,12 @@ class DataController extends Controller
                 $_input = new CbInput();
             if (!empty($controller)) {
                 $_input->setUid($controller->getUid());
-                $input->setControllerBox($controller);
+                $_input->setControllerBox($controller);
             }
             $_input->setInputNumber($inputNr);
             $_input->setSwitchState($input);
-            $input->setDataCollectedAt($date);
-            $input->save();
+            $_input->setDataCollectedAt($date);
+            $_input->save();
             $bit <<= 1;
             $inputNr++;
         }
