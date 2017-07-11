@@ -1,4 +1,4 @@
 services:
-#    data_collector.example:
-#        class: DataCollectorBundle\Example
-#        arguments: ["@service_id", "plain_value", "%parameter%"]
+   collector_helper:
+        class: DataCollectorBundle\Services\CollectorHelper
+        arguments: ['@service_container']

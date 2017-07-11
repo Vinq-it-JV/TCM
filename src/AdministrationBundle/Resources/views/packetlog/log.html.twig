@@ -54,15 +54,16 @@
                                                     <tbody>
                                                         {% verbatim %}
                                                         <tr ng-repeat="log in logCollection">
-                                                            <td ng-cloak>{{ log.Id }}</td>
-                                                            <td ng-cloak></td>
-                                                            <td ng-cloak></td>
-                                                            <td ng-cloak></td>
-                                                            <td ng-cloak></td>
-                                                            <td ng-cloak></td>
-                                                            <td ng-cloak></td>
-                                                            <td ng-cloak></td>
-                                                            <td ng-cloak></td>
+                                                            <td ng-cloak>{{ log.Uid }}</td>
+                                                            <td ng-cloak>
+                                                                <div class="label" ng-repeat="state in log.InputStates track by $index" ng-class="{'label-danger':!state, 'label-success':state}">
+                                                                    <i class="fa fa-fw" ng-class="{'fa-check':state, 'fa-remove':!state}"></i>
+                                                                </div>
+                                                            </td>
+                                                            <td ng-cloak>{{ log.Internal | number:2 }}</td>
+                                                            <td ng-repeat="output in log.Outputs" class="text-right"ng-cloak>
+                                                                <div>{{ output.uid }}</div>
+                                                            </td>
                                                             <td ng-cloak></td>
                                                         </tr>
                                                         {% endverbatim %}

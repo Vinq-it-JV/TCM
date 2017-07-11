@@ -36,8 +36,8 @@ angular
                     if (!$scope.isValidObject(data))
                         break;
                     if (!data.errorcode) {
-                        $scope.logs.logsSet(data.contents.logs);
-                        $scope.logCollection = [].concat(data.contents.logs);
+                        $scope.logs.logsSet(data.contents.packetLog);
+                        $scope.logCollection = [].concat(data.contents.packetLog);
                         console.log($scope.logCollection);
                     }
                     break;
