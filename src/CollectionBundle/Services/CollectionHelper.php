@@ -89,7 +89,7 @@ class CollectionHelper
                 $source = imagecreatefromjpeg($filename);
                 if (empty($source))
                     return false;
-                $rotated = imagerotate($source, 90, 0);
+                $rotated = imagerotate($source, -90, 0);
                 imagejpeg($rotated, $filename);
                 imagedestroy($source);
                 imagedestroy($rotated);
@@ -98,7 +98,7 @@ class CollectionHelper
                 $source = imagecreatefrompng($filename);
                 if (empty($source))
                     return false;
-                $rotated = imagerotate($source, 90, 0);
+                $rotated = imagerotate($source, -90, 0);
                 imagepng($rotated, $filename);
                 imagedestroy($source);
                 imagedestroy($rotated);

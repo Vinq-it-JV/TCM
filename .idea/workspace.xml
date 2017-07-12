@@ -2,43 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="282e9c36-730e-4d16-a19d-353a62e794e2" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/filters/decacheSrc.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Resources/views/base.html.twig" afterPath="$PROJECT_DIR$/app/Resources/views/base.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AdministrationBundle/Resources/config/routing.yml" afterPath="$PROJECT_DIR$/src/AdministrationBundle/Resources/config/routing.yml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/attachment/attachment_form.html.twig" afterPath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/attachment/attachment_form.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/companies/companies.html.twig" afterPath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/companies/companies.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/configuration/stores.html.twig" afterPath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/configuration/stores.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/installation/sensors.html.twig" afterPath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/installation/sensors.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/inventory/inventory.html.twig" afterPath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/inventory/inventory.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/inventory/inventory_form.html.twig" afterPath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/inventory/inventory_form.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/inventory/stores.html.twig" afterPath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/inventory/stores.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/maintenance/general/stores.html.twig" afterPath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/maintenance/general/stores.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/maintenance/periodically/maintenance.html.twig" afterPath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/maintenance/periodically/maintenance.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/maintenance/periodically/maintenance_form.html.twig" afterPath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/maintenance/periodically/maintenance_form.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/maintenance/periodically/stores.html.twig" afterPath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/maintenance/periodically/stores.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/notifications/closed_notifications.html.twig" afterPath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/notifications/closed_notifications.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/notifications/open_notifications.html.twig" afterPath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/notifications/open_notifications.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/packetlog/log.html.twig" afterPath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/packetlog/log.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/regions/regions.html.twig" afterPath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/regions/regions.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/stores/stores.html.twig" afterPath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/stores/stores.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/users/users.html.twig" afterPath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/users/users.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/collectionCtrl.js" afterPath="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/collectionCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/notificationCtrl.js" afterPath="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/notificationCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/packetlogCtrl.js" afterPath="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/packetlogCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/datasets/logs.js" afterPath="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/datasets/logs.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Resources/public/translations/en.json" afterPath="$PROJECT_DIR$/src/AppBundle/Resources/public/translations/en.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Resources/public/translations/nl.json" afterPath="$PROJECT_DIR$/src/AppBundle/Resources/public/translations/nl.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Resources/views/store/inventory.html.twig" afterPath="$PROJECT_DIR$/src/AppBundle/Resources/views/store/inventory.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Resources/views/store/inventory_info.html.twig" afterPath="$PROJECT_DIR$/src/AppBundle/Resources/views/store/inventory_info.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Resources/views/store/maintenance.html.twig" afterPath="$PROJECT_DIR$/src/AppBundle/Resources/views/store/maintenance.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Resources/views/store/maintenance_info.html.twig" afterPath="$PROJECT_DIR$/src/AppBundle/Resources/views/store/maintenance_info.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Resources/views/stores/stores.html.twig" afterPath="$PROJECT_DIR$/src/AppBundle/Resources/views/stores/stores.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/CollectionBundle/Controller/DataController.php" afterPath="$PROJECT_DIR$/src/CollectionBundle/Controller/DataController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/CollectionBundle/Model/Attachment.php" afterPath="$PROJECT_DIR$/src/CollectionBundle/Model/Attachment.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/CollectionBundle/Services/CollectionHelper.php" afterPath="$PROJECT_DIR$/src/CollectionBundle/Services/CollectionHelper.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DataCollectorBundle/Controller/DataController.php" afterPath="$PROJECT_DIR$/src/DataCollectorBundle/Controller/DataController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/js/fos_js_routes.js" afterPath="$PROJECT_DIR$/web/js/fos_js_routes.js" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -72,7 +36,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="inventory_form.html.twig" pinned="false" current-in-tab="true">
+      <file leaf-file-name="inventory_form.html.twig" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/AdministrationBundle/Resources/views/inventory/inventory_form.html.twig">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="469">
@@ -111,6 +75,16 @@
                 <marker date="1499855826000" expanded="true" signature="4334:4515" ph="..." />
                 <marker date="1499855826000" expanded="true" signature="4632:4755" ph="..." />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CollectionHelper.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/CollectionBundle/Services/CollectionHelper.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="319">
+              <caret line="100" column="49" lean-forward="false" selection-start-line="100" selection-start-column="49" selection-end-line="100" selection-end-column="49" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -267,16 +241,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="decacheSrc.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/filters/decacheSrc.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="12" column="0" lean-forward="false" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="base.html.twig" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Resources/views/base.html.twig">
           <provider selected="true" editor-type-id="text-editor">
@@ -415,7 +379,6 @@
         <option value="$PROJECT_DIR$/src/AppBundle/Resources/public/translations/en.json" />
         <option value="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/attachment/attachment_form.html.twig" />
         <option value="$PROJECT_DIR$/src/CollectionBundle/Model/Attachment.php" />
-        <option value="$PROJECT_DIR$/src/CollectionBundle/Services/CollectionHelper.php" />
         <option value="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/inventory/inventory_form.html.twig" />
         <option value="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/maintenance/periodically/maintenance_form.html.twig" />
         <option value="$PROJECT_DIR$/src/AppBundle/Resources/views/store/maintenance_info.html.twig" />
@@ -425,6 +388,7 @@
         <option value="$PROJECT_DIR$/src/AdministrationBundle/Resources/config/routing.yml" />
         <option value="$PROJECT_DIR$/src/CollectionBundle/Controller/DataController.php" />
         <option value="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/collectionCtrl.js" />
+        <option value="$PROJECT_DIR$/src/CollectionBundle/Services/CollectionHelper.php" />
       </list>
     </option>
   </component>
@@ -2947,12 +2911,12 @@
       <workItem from="1496998184924" duration="95866000" />
       <workItem from="1499062945739" duration="25632000" />
       <workItem from="1499258768289" duration="23987000" />
-      <workItem from="1499847513564" duration="9024000" />
+      <workItem from="1499847513564" duration="9123000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="801886000" />
+    <option name="totallyTimeSpent" value="801985000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="823" extended-state="6" />
@@ -3517,14 +3481,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/CollectionBundle/Services/CollectionHelper.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="574">
-          <caret line="103" column="0" lean-forward="false" selection-start-line="103" selection-start-column="0" selection-end-line="103" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/filters/decacheSrc.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
@@ -3727,6 +3683,14 @@
             <marker date="1499855826000" expanded="true" signature="4334:4515" ph="..." />
             <marker date="1499855826000" expanded="true" signature="4632:4755" ph="..." />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/CollectionBundle/Services/CollectionHelper.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="319">
+          <caret line="100" column="49" lean-forward="false" selection-start-line="100" selection-start-column="49" selection-end-line="100" selection-end-column="49" />
+          <folding />
         </state>
       </provider>
     </entry>
