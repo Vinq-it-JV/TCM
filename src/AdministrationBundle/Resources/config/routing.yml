@@ -401,7 +401,7 @@ administration_collection_upload:
         expose: true
 
 administration_collection_attachment_get:
-    path:     /collection/attachment/{attachmentid}/get
+    path:     /collection/attachment/{attachmentid}/get/{rand}
     defaults: { _controller: CollectionBundle:Data:getCollectionAttachment }
     methods: [GET]
     options:

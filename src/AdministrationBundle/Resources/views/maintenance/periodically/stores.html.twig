@@ -14,12 +14,10 @@
                         <div class="row">
                             <div class="panel-body">
                                 <h4 ng-cloak>
-                                    {% verbatim %}
-                                        <i class="fa fa-fw fa-wrench"></i> {{ 'MAINTENANCE.LABEL' | translate }} - {{ 'MAINTENANCE.PERIODICALLY' | translate }}
-                                    {% endverbatim %}
+                                    <i class="fa fa-fw fa-wrench"></i> {{ ng.translate('MAINTENANCE.LABEL') }} - {{ ng.translate('MAINTENANCE.PERIODICALLY') }}
                                 </h4>
                                 <hr/>
-                                <div class="well">
+                                <div class="well table-responsive">
                                     <section st-table="storesCollection" st-safe-src="stores.stores()">
                                         <div class="row">
                                             <div class="col-md-3 col-xs-6">
@@ -44,22 +42,24 @@
                                                     </tr>
                                                     </thead>
                                                     <tbody>
-                                                    <tr ng-repeat="row in storesCollection">
-                                                        <td ng-cloak>{{ '{{ row.Name }}' }}</td>
-                                                        <td ng-cloak>{{ '{{ row.MainCompany.Name }}' }}</td>
+                                                    {% verbatim %}
+                                                    <tr ng-repeat="store in storesCollection">
+                                                        <td ng-cloak>{{ store.Name }}</td>
+                                                        <td ng-cloak>{{ store.MainCompany.Name }}</td>
                                                         <td ng-cloak class="text-right">
-                                                            <label class="label label-success tag-label" ng-show="{{ '{{ row.IsEnabled }}' }}">{{ ng.translate('YES') }}</label>
-                                                            <label class="label label-danger tag-label" ng-hide="{{ '{{ row.IsEnabled }}' }}">{{ ng.translate('NO') }}</label>
+                                                            <label class="label label-success tag-label" ng-show="store.IsEnabled">{{ 'YES' | translate }}</label>
+                                                            <label class="label label-danger tag-label" ng-hide="store.IsEnabled">{{ 'NO' | translate }}</label>
                                                         </td>
                                                         <td>
                                                             <div class="pull-right">
-                                                                <button type="button" ng-click="showStoreMaintenance(row.Id)"
+                                                                <button type="button" ng-click="showStoreMaintenance(store.Id)"
                                                                         class="btn btn-xs btn-info">
                                                                     <i class="fa fa-search"></i>
                                                                 </button>
                                                             </div>
                                                         </td>
                                                     </tr>
+                                                    {% endverbatim %}
                                                     </tbody>
                                                 </table>
                                             </div>

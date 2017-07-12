@@ -342,7 +342,8 @@
         "CREATED_BY": "Aangemaakt door",
         "EDITED_BY": "Bewerkt door",
         "PUBLISHED": "Gepubliceerd",
-        "UPLOAD": "Upload"
+        "UPLOAD": "Upload",
+        "ROTATE_IMAGE": "Afbeelding draaien 90°"
     },
     "MAINTENANCE": {
         "LABEL": "Onderhoud",

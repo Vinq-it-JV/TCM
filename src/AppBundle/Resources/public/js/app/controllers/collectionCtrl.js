@@ -22,6 +22,7 @@ angular
         $scope.collectioType = '';
         $scope.dzUrl = '/';
         $scope.lightboxImage = '';
+        $scope.attachRand = 0;
 
         $scope.dzOptions = {
             url : $scope.dzUrl,
@@ -155,7 +156,7 @@ angular
 
         $scope.attachmentUrl = function (attachmentid)
         {
-            var route = Routing.generate('administration_collection_attachment_get', {'attachmentid':attachmentid});
+            var route = Routing.generate('administration_collection_attachment_get', {'attachmentid':attachmentid, 'rand':$scope.attachRand});
             return route;
         };
 
@@ -266,6 +267,7 @@ angular
                         break;
                     if (!data.errorcode) {
                         $scope.collections.updAttachment($scope.attachemntId, data.contents.attachment);
+                        $scope.attachRand = new Date().getTime();
                         $scope.showPreviousPage();
                     }
                     break;

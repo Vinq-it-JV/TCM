@@ -18,6 +18,7 @@ class Attachment extends BaseAttachment
     {
         $data = [];
         $data['attachment'] = $this->toArray();
+        $data['attachment']['Rotate'] = false;
 
         return $data;
     }

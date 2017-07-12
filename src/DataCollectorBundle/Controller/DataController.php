@@ -50,16 +50,23 @@ class DataController extends Controller
         foreach ($logs as $log) {
             $logArr = [];
             $data = $log->getPacketData();
+            $logArr['Id'] = $log->getId();
             $logArr['Uid'] = substr($data, 4, 12);
             $logArr['Internal'] = $helper->getMCPTemp(substr($data, 16, 8));
             $logArr['InputStates'] = $helper->getCbInputData(hexdec(substr($data, 2, 2)));
             $logArr['Outputs'] = [];
+            $logArr['DisplayMode'] = 0;
             for ($temp = 0; $temp < ControllerBox::CONTROLLER_DS_OUTPUTS; $temp++) {
-                $logArr['Outputs'][] = $helper->getDsTemperatureData(substr($data, 24 + $temp * 20, 20));
+                $output = $helper->getDsTemperatureData(substr($data, 24 + $temp * 20, 20));
+                $sensor = DsTemperatureSensorQuery::create()->findOneByUid($output['uid']);
+                if (!empty($sensor))
+                    $output['name'] = $sensor->getName();
+                else
+                    $output['name'] = '';
+                $logArr['Outputs'][] = $output;
             }
             $dataArr['packetLog'][] = $logArr;
         }
-
         return JsonResult::create()
             ->setContents($dataArr)
             ->setErrorcode(JsonResult::SUCCESS)

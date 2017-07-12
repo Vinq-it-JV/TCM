@@ -28,6 +28,16 @@ angular
             $scope.BE.get(getdata, $scope.fetchDataOk, $scope.fetchDataFail);
         };
 
+        $scope.changeDisplayMode = function (logid)
+        {
+            $scope.logs.updateDisplayMode(logid);
+        };
+
+        $scope.showData = function () {
+            console.log($scope.logs.logs());
+            console.log($scope.logCollection);
+        };
+
         $scope.fetchDataOk = function (data)
         {
         	switch ($scope.requestType)
@@ -37,8 +47,7 @@ angular
                         break;
                     if (!data.errorcode) {
                         $scope.logs.logsSet(data.contents.packetLog);
-                        $scope.logCollection = [].concat(data.contents.packetLog);
-                        console.log($scope.logCollection);
+                        $scope.logCollection = [].concat($scope.logs.logs());
                     }
                     break;
                 default:

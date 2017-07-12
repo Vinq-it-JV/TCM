@@ -131,6 +131,8 @@ angular
                         $scope.notifications.temperatureNotificationsSet(data.contents.notifications.Temperatures);
                         $scope.inputsCollection = [].concat(data.contents.notifications.Inputs);
                         $scope.temperaturesCollection = [].concat(data.contents.notifications.Temperatures);
+                        console.log($scope.inputsCollection);
+                        console.log($scope.notifications.inputNotifications());
                     }
                     break;
                 case 'handleInputNotification':

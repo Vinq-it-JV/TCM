@@ -15,8 +15,8 @@
                                     <i class="fa fa-book"></i> {{ ng.translate('CONFIGURATION.PACKET_LOG') }}
                                 </h4>
                                 <hr/>
-                                <div class="well">
-                                    <section st-table="logCollection" st-safe-src="log.logs()">
+                                <div class="well table-responsive">
+                                    <section st-table="logCollection" st-safe-src="logs.logs()">
                                         <div class="row">
                                             <div class="col-md-3 col-xs-6">
                                                 <input st-search class="form-control input-sm"
@@ -29,44 +29,44 @@
                                                 <table class="table table-striped table-bordered">
                                                     <thead>
                                                     <tr>
-                                                        <th st-sort="Uid" class="st-sortable col-md-1"
-                                                            ng-cloak>{{ ng.translate('LOG.DEVICE_ID') }}</th>
-                                                        <th class="col-md-1"
-                                                            ng-cloak>{{ ng.translate('LOG.INPUTS') }}</th>
-                                                        <th class="st-nosort st-sortable col-md-1"
-                                                            ng-cloak>{{ ng.translate('LOG.INTERNAL') }}</th>
-                                                        <th class="st-nosort st-sortable col-md-1"
-                                                            ng-cloak>{{ ng.translate('LOG.OUTPUT_1') }}</th>
-                                                        <th class="st-nosort st-sortable col-md-1"
-                                                            ng-cloak>{{ ng.translate('LOG.OUTPUT_2') }}</th>
-                                                        <th class="st-nosort st-sortable col-md-1"
-                                                            ng-cloak>{{ ng.translate('LOG.OUTPUT_3') }}</th>
-                                                        <th class="st-nosort st-sortable col-md-1"
-                                                            ng-cloak>{{ ng.translate('LOG.OUTPUT_4') }}</th>
-                                                        <th class="st-nosort st-sortable col-md-1"
-                                                            ng-cloak>{{ ng.translate('LOG.OUTPUT_5') }}</th>
-                                                        <th class="st-nosort st-sortable col-md-1"
-                                                            ng-cloak>{{ ng.translate('LOG.OUTPUT_6') }}</th>
-                                                        <th class="st-nosort col-md-1 text-right"
-                                                            ng-cloak>{{ ng.translate('ACTION') }}</th>
+                                                        <th st-sort="Uid" class="st-sortable col-md-1" ng-cloak>{{ ng.translate('LOG.DEVICE_ID') }}</th>
+                                                        <th class="col-md-1" ng-cloak>{{ ng.translate('LOG.INPUTS') }}</th>
+                                                        <th st-sort="Internal" class="st-sortable col-md-1 text-right" ng-cloak>{{ ng.translate('LOG.INTERNAL') }}</th>
+                                                        <th class="st-sortable col-md-1 text-right" ng-cloak>{{ ng.translate('LOG.OUTPUT_1') }}</th>
+                                                        <th class="st-sortable col-md-1 text-right" ng-cloak>{{ ng.translate('LOG.OUTPUT_2') }}</th>
+                                                        <th class="st-sortable col-md-1 text-right" ng-cloak>{{ ng.translate('LOG.OUTPUT_3') }}</th>
+                                                        <th class="st-sortable col-md-1 text-right" ng-cloak>{{ ng.translate('LOG.OUTPUT_4') }}</th>
+                                                        <th class="st-sortable col-md-1 text-right" ng-cloak>{{ ng.translate('LOG.OUTPUT_5') }}</th>
+                                                        <th class="st-sortable col-md-1 text-right" ng-cloak>{{ ng.translate('LOG.OUTPUT_6') }}</th>
+                                                        <th class="st-nosort col-md-1 text-right" ng-cloak>{{ ng.translate('ACTION') }}</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
-                                                        {% verbatim %}
                                                         <tr ng-repeat="log in logCollection">
+                                                            {% verbatim %}
                                                             <td ng-cloak>{{ log.Uid }}</td>
                                                             <td ng-cloak>
                                                                 <div class="label" ng-repeat="state in log.InputStates track by $index" ng-class="{'label-danger':!state, 'label-success':state}">
                                                                     <i class="fa fa-fw" ng-class="{'fa-check':state, 'fa-remove':!state}"></i>
                                                                 </div>
                                                             </td>
-                                                            <td ng-cloak>{{ log.Internal | number:2 }}</td>
-                                                            <td ng-repeat="output in log.Outputs" class="text-right"ng-cloak>
-                                                                <div>{{ output.uid }}</div>
+                                                            <td class="text-right" ng-cloak>{{ log.Internal | number:2 }}</td>
+                                                            <td ng-repeat="output in log.Outputs" class="text-right" ng-cloak>
+                                                                <div ng-if="output.uid != '0000000000000000'">
+                                                                    <div ng-if="log.DisplayMode == 0">{{ output.temperature | number:2 }}</div>
+                                                                    <div ng-if="log.DisplayMode == 1" style="font-size: 12px;">{{ output.uid }}</div>
+                                                                    <div ng-if="log.DisplayMode == 2" style="font-size: 12px;">{{ output.name }}</div>
+                                                                </div>
                                                             </td>
-                                                            <td ng-cloak></td>
+                                                            <td ng-cloak>
+                                                                <div class="pull-right">
+                                                                    <div class="bnt btn-xs btn-primary" ng-click="changeDisplayMode(log.Id)">
+                                                                        <i class="fa fa-fw fa-recycle"></i>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                            {% endverbatim %}
                                                         </tr>
-                                                        {% endverbatim %}
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -78,6 +78,9 @@
                                         <div class="col-md-12">
                                             <button ng-click="getPacketlog()" class="btn btn-sm btn-primary pull-left" ng-cloak>
                                                 <i class="fa fa-refresh"></i> {{ ng.translate('REFRESH') }}
+                                            </button>
+                                            <button ng-click="showData()" class="btn btn-sm btn-default pull-right" ng-cloak>
+                                                <i class="fa fa-bell"></i> Display
                                             </button>
                                         </div>
                                     </div>

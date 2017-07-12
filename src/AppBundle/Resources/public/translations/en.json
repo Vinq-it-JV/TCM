@@ -342,7 +342,8 @@
         "CREATED_BY": "Created by",
         "EDITED_BY": "Edited by",
         "PUBLISHED": "Published",
-        "UPLOAD": "Upload"
+        "UPLOAD": "Upload",
+        "ROTATE_IMAGE": "Rotate image 90°"
     },
     "MAINTENANCE": {
         "LABEL": "Maintenance",

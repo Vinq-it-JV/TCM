@@ -77,6 +77,36 @@ class CollectionHelper
         return true;
     }
 
+    public function rotateImageAttachment(Attachment $attachment)
+    {
+        $filename = $attachment->getLinkUrl();
+        $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+        $source = null;
+
+        switch ($ext)
+        {   case 'jpg':
+            case 'jpeg':
+                $source = imagecreatefromjpeg($filename);
+                if (empty($source))
+                    return false;
+                $rotated = imagerotate($source, 90, 0);
+                imagejpeg($rotated, $filename);
+                imagedestroy($source);
+                imagedestroy($rotated);
+                break;
+            case 'png':
+                $source = imagecreatefrompng($filename);
+                if (empty($source))
+                    return false;
+                $rotated = imagerotate($source, 90, 0);
+                imagepng($rotated, $filename);
+                imagedestroy($source);
+                imagedestroy($rotated);
+                break;
+        }
+        return true;
+    }
+
     public function createUUID()
     {
         if (function_exists('openssl_random_pseudo_bytes') === true) {

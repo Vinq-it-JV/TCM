@@ -27,6 +27,14 @@
                 </div>
             </div>
         </div>
+        <div ng-if="collections.attachment().Type == 1" class="form-group">
+            <div class="row">
+                <div class="col-md-2 col-xs-4" ng-cloak><label>{{ 'COLLECTIONS.ROTATE_IMAGE' | translate }}:</label></div>
+                <div class="col-md-10 col-xs-8" ng-cloak>
+                    <input name="Rotate" type="checkbox" ng-model="collections.attachment().Rotate" no-enter/>
+                </div>
+            </div>
+        </div>
         {% endverbatim %}
     </div>
 

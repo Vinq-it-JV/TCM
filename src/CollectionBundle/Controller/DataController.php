@@ -175,7 +175,7 @@ class DataController extends Controller
      * @param $attachmentid
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function getCollectionAttachmentAction(Request $request, $attachmentid)
+    public function getCollectionAttachmentAction(Request $request, $attachmentid, $rand)
     {
         $attachment = AttachmentQuery::create()->findOneById($attachmentid);
         if (!empty($attachment))
@@ -293,6 +293,8 @@ class DataController extends Controller
      */
     protected function saveAttachmentData($attachmentData)
     {
+        $helper = $this->getCollectionHelper();
+
         if (isset($attachmentData->Id)) {
             $attachment = AttachmentQuery::create()->findOneById($attachmentData->Id);
             if (empty($attachment))
@@ -301,6 +303,10 @@ class DataController extends Controller
         if (isset($attachmentData->Name))
         {   $attachment->setName($attachmentData->Name);
             $attachment->save();
+        }
+        if (isset($attachmentData->Rotate))
+        {   if ($attachmentData->Rotate)
+                $helper->rotateImageAttachment($attachment);
         }
         return $attachment;
     }

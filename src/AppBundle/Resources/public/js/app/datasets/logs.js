@@ -4,7 +4,7 @@
  * @name DS_Collections
  * @description
  *
- * ## TCM V2.0 Collections
+ * ## TCM V2.0 Logs
  *
  */
 angular
@@ -81,6 +81,15 @@ angular
                 updRecord: function (record_data) {
                     d_log = angular.copy(record_data);
                     return d_log;
+                },
+                updateDisplayMode: function (record_id) {
+                    var index = recordOnIndex(record_id);
+                    if (index === -1)
+                        return null;
+                    d_logs[index].DisplayMode++;
+                    if (d_logs[index].DisplayMode > 2)
+                        d_logs[index].DisplayMode = 0;
+                    return true;
                 },
                 isValidObject: function (object) {
                     return isValidObject(object);
