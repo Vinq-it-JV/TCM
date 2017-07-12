@@ -22,7 +22,7 @@ angular
         $scope.collectioType = '';
         $scope.dzUrl = '/';
         $scope.lightboxImage = '';
-        $scope.attachRand = 0;
+        $scope.attachRand = new Date().getTime();
 
         $scope.dzOptions = {
             url : $scope.dzUrl,
