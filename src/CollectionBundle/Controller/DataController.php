@@ -8,6 +8,9 @@ use CollectionBundle\Model\Collection;
 use CollectionBundle\Model\CollectionQuery;
 use CollectionBundle\Model\CollectionType;
 use CollectionBundle\Model\CollectionTypeQuery;
+use StoreBundle\Model\MaintenanceType;
+use StoreBundle\Model\MaintenanceTypeQuery;
+use StoreBundle\Model\StoreMaintenanceLog;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -104,8 +107,8 @@ class DataController extends Controller
     {
         if ($request->isMethod('PUT')) {
             $postData = json_decode($request->getContent(), true);
-            if (!empty($postData))
-            {   $collection = $this->saveCollectionData((object)$postData);
+            if (!empty($postData)) {
+                $collection = $this->saveCollectionData((object)$postData);
                 if (!is_bool($collection))
                     return JsonResult::create()
                         ->setContents($collection->getCollectionDataArray())
@@ -129,8 +132,8 @@ class DataController extends Controller
     {
         if ($request->isMethod('DELETE')) {
             $collection = CollectionQuery::create()->findOneById($collectionid);
-            if (!empty($collection))
-            {   $collection->setIsDeleted(true);
+            if (!empty($collection)) {
+                $collection->setIsDeleted(true);
                 $collection->save();
                 return JsonResult::create()
                     ->setErrorcode(JsonResult::SUCCESS)
@@ -152,10 +155,10 @@ class DataController extends Controller
     public function uploadCollectionAction(Request $request, $collectionid)
     {
         $helper = $this->getCollectionHelper();
-        if ($request->isMethod('POST'))
-        {   $collection = CollectionQuery::create()->findOneById($collectionid);
-            if (empty($collection))
-            {   return JsonResult::create()
+        if ($request->isMethod('POST')) {
+            $collection = CollectionQuery::create()->findOneById($collectionid);
+            if (empty($collection)) {
+                return JsonResult::create()
                     ->setMessage('Collection not found!')
                     ->setErrorcode(JsonResult::DANGER)
                     ->make();
@@ -178,8 +181,8 @@ class DataController extends Controller
     public function getCollectionAttachmentAction(Request $request, $attachmentid, $rand)
     {
         $attachment = AttachmentQuery::create()->findOneById($attachmentid);
-        if (!empty($attachment))
-        {   $response = new BinaryFileResponse($attachment->getLinkUrl());
+        if (!empty($attachment)) {
+            $response = new BinaryFileResponse($attachment->getLinkUrl());
             if ($attachment->getType() == Attachment::TYPE_DOCUMENT)
                 $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $attachment->getOriginalName());
             return $response;
@@ -222,16 +225,14 @@ class DataController extends Controller
     {
         if ($request->isMethod('PUT')) {
             $postData = json_decode($request->getContent(), true);
-            if (!empty($postData))
-            {
+            if (!empty($postData)) {
                 $attachment = $this->saveAttachmentData((object)$postData);
                 if (!is_bool($attachment))
                     return JsonResult::create()
                         ->setContents($attachment->getAttachmentDataArray())
                         ->setErrorcode(JsonResult::SUCCESS)
                         ->make();
-            }
-            else
+            } else
                 var_dump('huh');
         }
         return JsonResult::create()
@@ -258,8 +259,8 @@ class DataController extends Controller
             }
         } else
             return false;
-        if (isset($collectionData->Type))
-        {   $type = CollectionTypeQuery::create()->findOneById($collectionData->Type);
+        if (isset($collectionData->Type)) {
+            $type = CollectionTypeQuery::create()->findOneById($collectionData->Type);
             if (!empty($type))
                 $collection->setCollectionType($type);
         }
@@ -283,6 +284,22 @@ class DataController extends Controller
         $collection->setDescription($collectionData->Description);
         $collection->save();
 
+        if (!empty($type)) {
+            if ($type->getId() == CollectionType::TYPE_MAINTENANCE_ID) {
+                $type = MaintenanceTypeQuery::create()->findOneById(MaintenanceType::TYPE_PERIODICALLY_ID);
+                $log = new StoreMaintenanceLog();
+                if (!empty($type))
+                    $log->setMaintenanceType($type);
+                if (isset($collectionData->CollectionStore))
+                    $log->setMaintenanceStore($collectionData->CollectionStore);
+                if (isset($collectionData->Date)) {
+                    $log->setMaintenanceStartedAt($helper->removeTimezone($collectionData->Date->date));
+                    $log->setMaintenanceStoppedAt($log->getMaintenanceStartedAt());
+                }
+                $log->setMaintenanceBy($user->getId());
+                $log->save();
+            }
+        }
         return $collection;
     }
 
@@ -300,12 +317,12 @@ class DataController extends Controller
             if (empty($attachment))
                 return false;
         }
-        if (isset($attachmentData->Name))
-        {   $attachment->setName($attachmentData->Name);
+        if (isset($attachmentData->Name)) {
+            $attachment->setName($attachmentData->Name);
             $attachment->save();
         }
-        if (isset($attachmentData->Rotate))
-        {   if ($attachmentData->Rotate)
+        if (isset($attachmentData->Rotate)) {
+            if ($attachmentData->Rotate)
                 $helper->rotateImageAttachment($attachment);
         }
         return $attachment;

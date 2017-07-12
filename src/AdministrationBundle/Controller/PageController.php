@@ -207,6 +207,19 @@ class PageController extends Controller
         return $this->render('AdministrationBundle:maintenance:periodically/store.html.twig', $storeArr);
     }
 
+    public function maintenanceLogStoresAction(Request $request)
+    {
+        return $this->render('AdministrationBundle:maintenance:log/stores.html.twig');
+    }
+
+    public function maintenanceLogStoreAction(Request $request, $storeid)
+    {
+        $store = StoreQuery::create()->findOneById($storeid);
+        $storeArr = $store->getStoreDataArray();
+
+        return $this->render('AdministrationBundle:maintenance:log/log.html.twig', $storeArr);
+    }
+
     public function inventoryStoresAction(Request $request)
     {
         return $this->render('AdministrationBundle:inventory:stores.html.twig');

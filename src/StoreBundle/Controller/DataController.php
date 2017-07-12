@@ -2,11 +2,15 @@
 
 namespace StoreBundle\Controller;
 
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Response\JsonResult;
 use CompanyBundle\Model\Company;
 use CompanyBundle\Model\CompanyQuery;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
+use StoreBundle\Model\MaintenanceType;
+use StoreBundle\Model\MaintenanceTypeQuery;
+use StoreBundle\Model\StoreMaintenanceLog;
+use StoreBundle\Model\StoreMaintenanceLogQuery;
 use StoreBundle\Model\Store;
 use StoreBundle\Model\StoreQuery;
 use StoreBundle\Model\StoreType;
@@ -224,7 +228,14 @@ class DataController extends Controller
             $store->setMaintenanceStartedAt($date);
             $store->save();
 
-            // TODO: Add new maintenance log row (startdate, storeid, user, type (STARTED / STOPPED)
+            $type = MaintenanceTypeQuery::create()->findOneById(MaintenanceType::TYPE_GENERAL_ID);
+            $log = new StoreMaintenanceLog();
+            $log->setMaintenanceType($type)
+                ->setMaintenanceStore($store->getId())
+                ->setMaintenanceBy($this->getUser()->getId())
+                ->setMaintenanceStartedAt($date)
+                ->save();
+
             return JsonResult::create()
                 ->setErrorcode(JsonResult::SUCCESS)
                 ->make();
@@ -251,7 +262,15 @@ class DataController extends Controller
             $store->setMaintenanceStartedAt(null);
             $store->save();
 
-            // TODO: Add new maintenance log row (startdate, storeid, user, type (STARTED / STOPPED)
+            $log = StoreMaintenanceLogQuery::create()
+                ->filterByMaintenanceStoppedAt(null)
+                ->orderById('DESC')
+                ->findOneByMaintenanceStore($store->getId());
+
+            if (!empty($log)) {
+                $log->setMaintenanceStoppedAt($date);
+                $log->save();
+            }
             return JsonResult::create()
                 ->setErrorcode(JsonResult::SUCCESS)
                 ->make();
@@ -259,6 +278,37 @@ class DataController extends Controller
         return JsonResult::create()
             ->setMessage('Store not in maintenance!')
             ->setErrorcode(JsonResult::DANGER)
+            ->make();
+    }
+
+    /**
+     * Get store maintenance log
+     * @param Request $request
+     * @param $storeid
+     * @return mixed
+     */
+    public function getStoreMaintenanceLogAction(Request $request, $storeid)
+    {
+        $dataArr = [];
+
+        $store = StoreQuery::create()->findOneById($storeid);
+        if (empty($store))
+            return JsonResult::create()
+                ->setMessage('Store not found!')
+                ->setErrorcode(JsonResult::DANGER)
+                ->make();
+
+        $logs = StoreMaintenanceLogQuery::create()
+            ->filterByMaintenanceStoppedAt(null, \Criteria::NOT_EQUAL)
+            ->findByMaintenanceStore($store->getId());
+
+        $dataArr['maintenanceLog'] = [];
+        foreach ($logs as $log)
+            $dataArr['maintenanceLog'][] = $log->getStoreMaintenanceLogDataArray()['maintenancelog'];
+
+        return JsonResult::create()
+            ->setContents($dataArr)
+            ->setErrorcode(JsonResult::SUCCESS)
             ->make();
     }
 

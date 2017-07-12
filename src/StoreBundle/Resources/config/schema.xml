@@ -102,4 +102,28 @@
         <column name="description" type="varchar" size="255" />
     </table>
 
+    <table name="store_maintenance_log">
+        <column name="id" type="integer" primaryKey="true" autoIncrement="true"/>
+        <column name="type" type="integer" />
+        <column name="maintenance_store" type="integer" />
+        <column name="maintenance_by" type="integer" />
+        <column name='maintenance_started_at' type='timestamp' />
+        <column name='maintenance_stopped_at' type='timestamp' />
+        <foreign-key foreignTable="maintenance_type">
+            <reference local="type" foreign="id"/>
+        </foreign-key>
+        <foreign-key foreignTable="store">
+            <reference local="maintenance_store" foreign="id"/>
+        </foreign-key>
+        <foreign-key foreignTable="user">
+            <reference local="maintenance_by" foreign="id"/>
+        </foreign-key>
+    </table>
+
+    <table name="maintenance_type">
+        <column name="id" type="integer" primaryKey="true" autoIncrement="true"/>
+        <column name="name" type="varchar" size="255" />
+        <column name="description" type="varchar" size="255" />
+    </table>
+
 </database>

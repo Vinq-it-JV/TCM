@@ -24,6 +24,7 @@
     "UNLINK": "Unlink",
     "REFRESH": "Refresh",
     "BACK": "Back",
+    "START": "Start",
     "DROPZONE": {
         "DROP_FILES": "Drop files here."
     },
@@ -355,7 +356,17 @@
         "FOR": "for",
         "PERIODICALLY": "Periodically",
         "GENERAL": "General",
-        "FILE": "File"
+        "LOG": "Maintenance log",
+        "FILE": "File",
+        "TYPE": "Type"
+    },
+    "MAINTENANCE_TYPE": {
+        "GENERAL": {
+            "NAME": "General"
+        },
+        "PERIODICALLY": {
+            "NAME": "Periodically"
+        }
     },
     "INVENTORY": {
         "LABEL": "Inventory",
@@ -400,7 +411,8 @@
         "NEW_PASSWORD": "Generate new password for user?",
         "HANDLE_NOTIFICATION": "Handle notification?",
         "DELETE_ENTRY": "Delete entry?",
-        "DELETE_ATTACHMENT": "Delete attachment?"
+        "DELETE_ATTACHMENT": "Delete attachment?",
+        "START_MAINTENANCE": "Start maintenance?"
     },
     "AUTH": {
         "USERNAME": "Username",

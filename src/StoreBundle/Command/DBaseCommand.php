@@ -6,6 +6,8 @@ use CompanyBundle\Model\CompanyType;
 use CompanyBundle\Model\CompanyTypeQuery;
 use CompanyBundle\Model\PaymentMethod;
 use CompanyBundle\Model\PaymentMethodQuery;
+use StoreBundle\Model\MaintenanceType;
+use StoreBundle\Model\MaintenanceTypeQuery;
 use StoreBundle\Model\StoreType;
 use StoreBundle\Model\StoreTypeQuery;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -20,6 +22,7 @@ class DBaseCommand extends ContainerAwareCommand
 {
 
     protected $storeTypeArr = [];
+    protected $maintenanceTypeArr = [];
 
     protected function configure()
     {
@@ -45,11 +48,19 @@ class DBaseCommand extends ContainerAwareCommand
         $this->storeTypeArr['NIGHTSPOT']['Description'] = StoreType::NIGHTSPOT_DESCRIPTION;
     }
 
+    protected function configMaintenanceTypeList()
+    {
+        $this->maintenanceTypeArr[MaintenanceType::TYPE_GENERAL_ID]['Name'] = MaintenanceType::TYPE_GENERAL_NAME;
+        $this->maintenanceTypeArr[MaintenanceType::TYPE_PERIODICALLY_ID]['Name'] = MaintenanceType::TYPE_PERIODICALLY_NAME;
+    }
+
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln("Start database init of store.");
         $this->configStoreTypeList();
+        $this->configMaintenanceTypeList();
         $this->generateStoreTypeList($output);
+        $this->generateMaintenanceTypeList($output);
         $output->writeln("Ready.");
     }
 
@@ -65,6 +76,21 @@ class DBaseCommand extends ContainerAwareCommand
                     ->setDescription($type['Description'])
                     ->save();
                 $output->writeln(sprintf('Created store type: %s', $k));
+            }
+        }
+    }
+
+    protected function generateMaintenanceTypeList(OutputInterface $output)
+    {
+        foreach ($this->maintenanceTypeArr as $k => $type) {
+            $_type = MaintenanceTypeQuery::create()
+                ->findOneById($k);
+            if (empty($_type)) {
+                $_type = new MaintenanceType();
+                $_type
+                    ->setName($type['Name'])
+                    ->save();
+                $output->writeln(sprintf('Created maintenance type: %s', $type['Name']));
             }
         }
     }

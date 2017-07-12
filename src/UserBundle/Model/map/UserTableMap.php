@@ -83,6 +83,7 @@ class UserTableMap extends TableMap
         $this->addRelation('StoreContact', 'StoreBundle\\Model\\StoreContact', RelationMap::ONE_TO_MANY, array('id' => 'contact_id', ), null, null, 'StoreContacts');
         $this->addRelation('StoreInformant', 'StoreBundle\\Model\\StoreInformant', RelationMap::ONE_TO_MANY, array('id' => 'informant_id', ), null, null, 'StoreInformants');
         $this->addRelation('StoreOwner', 'StoreBundle\\Model\\StoreOwner', RelationMap::ONE_TO_MANY, array('id' => 'owner_id', ), null, null, 'StoreOwners');
+        $this->addRelation('StoreMaintenanceLog', 'StoreBundle\\Model\\StoreMaintenanceLog', RelationMap::ONE_TO_MANY, array('id' => 'maintenance_by', ), null, null, 'StoreMaintenanceLogs');
         $this->addRelation('UserRole', 'UserBundle\\Model\\UserRole', RelationMap::ONE_TO_MANY, array('id' => 'user_id', ), 'CASCADE', null, 'UserRoles');
         $this->addRelation('UserAddress', 'UserBundle\\Model\\UserAddress', RelationMap::ONE_TO_MANY, array('id' => 'user_id', ), 'CASCADE', null, 'UserAddresses');
         $this->addRelation('UserEmail', 'UserBundle\\Model\\UserEmail', RelationMap::ONE_TO_MANY, array('id' => 'user_id', ), 'CASCADE', null, 'UserEmails');

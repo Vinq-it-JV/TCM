@@ -2,7 +2,7 @@
 
 {% block contents %}
     {% if app.user %}
-        <div ng-controller="packetlogCtrl" ng-init="getPacketlog()">
+        <div ng-controller="logCtrl" ng-init="getPacketlog()">
             {% block header %}
                 {% include 'AdministrationBundle:header:header.html.twig' %}
             {% endblock %}
@@ -79,9 +79,6 @@
                                             <button ng-click="getPacketlog()" class="btn btn-sm btn-primary pull-left" ng-cloak>
                                                 <i class="fa fa-refresh"></i> {{ ng.translate('REFRESH') }}
                                             </button>
-                                            <button ng-click="showData()" class="btn btn-sm btn-default pull-right" ng-cloak>
-                                                <i class="fa fa-bell"></i> Display
-                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -95,7 +92,7 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script src="{{ asset('bundles/app/js/app/controllers/packetlogCtrl.js') }}"></script>
+    <script src="{{ asset('bundles/app/js/app/controllers/logCtrl.js') }}"></script>
     <script src="{{ asset('bundles/app/js/app/datasets/logs.js') }}"></script>
 {% endblock %}
 

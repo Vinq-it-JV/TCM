@@ -38,6 +38,8 @@ use StoreBundle\Model\StoreEmail;
 use StoreBundle\Model\StoreEmailQuery;
 use StoreBundle\Model\StoreInformant;
 use StoreBundle\Model\StoreInformantQuery;
+use StoreBundle\Model\StoreMaintenanceLog;
+use StoreBundle\Model\StoreMaintenanceLogQuery;
 use StoreBundle\Model\StoreOwner;
 use StoreBundle\Model\StoreOwnerQuery;
 use StoreBundle\Model\StorePeer;
@@ -275,6 +277,12 @@ abstract class BaseStore extends BaseObject implements Persistent
     protected $collStoreOwnersPartial;
 
     /**
+     * @var        PropelObjectCollection|StoreMaintenanceLog[] Collection to store aggregation of StoreMaintenanceLog objects.
+     */
+    protected $collStoreMaintenanceLogs;
+    protected $collStoreMaintenanceLogsPartial;
+
+    /**
      * @var        PropelObjectCollection|Address[] Collection to store aggregation of Address objects.
      */
     protected $collAddresses;
@@ -425,6 +433,12 @@ abstract class BaseStore extends BaseObject implements Persistent
      * @var		PropelObjectCollection
      */
     protected $storeOwnersScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $storeMaintenanceLogsScheduledForDeletion = null;
 
     /**
      * Applies default values to this object.
@@ -1354,6 +1368,8 @@ abstract class BaseStore extends BaseObject implements Persistent
 
             $this->collStoreOwners = null;
 
+            $this->collStoreMaintenanceLogs = null;
+
             $this->collAddresses = null;
             $this->collEmails = null;
             $this->collPhones = null;
@@ -1869,6 +1885,24 @@ abstract class BaseStore extends BaseObject implements Persistent
                 }
             }
 
+            if ($this->storeMaintenanceLogsScheduledForDeletion !== null) {
+                if (!$this->storeMaintenanceLogsScheduledForDeletion->isEmpty()) {
+                    foreach ($this->storeMaintenanceLogsScheduledForDeletion as $storeMaintenanceLog) {
+                        // need to save related object because we set the relation to null
+                        $storeMaintenanceLog->save($con);
+                    }
+                    $this->storeMaintenanceLogsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collStoreMaintenanceLogs !== null) {
+                foreach ($this->collStoreMaintenanceLogs as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
             $this->alreadyInSave = false;
 
         }
@@ -2231,6 +2265,14 @@ abstract class BaseStore extends BaseObject implements Persistent
                     }
                 }
 
+                if ($this->collStoreMaintenanceLogs !== null) {
+                    foreach ($this->collStoreMaintenanceLogs as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
 
             $this->alreadyInValidation = false;
         }
@@ -2419,6 +2461,9 @@ abstract class BaseStore extends BaseObject implements Persistent
             }
             if (null !== $this->collStoreOwners) {
                 $result['StoreOwners'] = $this->collStoreOwners->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collStoreMaintenanceLogs) {
+                $result['StoreMaintenanceLogs'] = $this->collStoreMaintenanceLogs->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
 
@@ -2739,6 +2784,12 @@ abstract class BaseStore extends BaseObject implements Persistent
                 }
             }
 
+            foreach ($this->getStoreMaintenanceLogs() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addStoreMaintenanceLog($relObj->copy($deepCopy));
+                }
+            }
+
             //unflag object copy
             $this->startCopy = false;
         } // if ($deepCopy)
@@ -2988,6 +3039,9 @@ abstract class BaseStore extends BaseObject implements Persistent
         }
         if ('StoreOwner' == $relationName) {
             $this->initStoreOwners();
+        }
+        if ('StoreMaintenanceLog' == $relationName) {
+            $this->initStoreMaintenanceLogs();
         }
     }
 
@@ -5860,6 +5914,281 @@ abstract class BaseStore extends BaseObject implements Persistent
     }
 
     /**
+     * Clears out the collStoreMaintenanceLogs collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Store The current object (for fluent API support)
+     * @see        addStoreMaintenanceLogs()
+     */
+    public function clearStoreMaintenanceLogs()
+    {
+        $this->collStoreMaintenanceLogs = null; // important to set this to null since that means it is uninitialized
+        $this->collStoreMaintenanceLogsPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collStoreMaintenanceLogs collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialStoreMaintenanceLogs($v = true)
+    {
+        $this->collStoreMaintenanceLogsPartial = $v;
+    }
+
+    /**
+     * Initializes the collStoreMaintenanceLogs collection.
+     *
+     * By default this just sets the collStoreMaintenanceLogs collection to an empty array (like clearcollStoreMaintenanceLogs());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initStoreMaintenanceLogs($overrideExisting = true)
+    {
+        if (null !== $this->collStoreMaintenanceLogs && !$overrideExisting) {
+            return;
+        }
+        $this->collStoreMaintenanceLogs = new PropelObjectCollection();
+        $this->collStoreMaintenanceLogs->setModel('StoreMaintenanceLog');
+    }
+
+    /**
+     * Gets an array of StoreMaintenanceLog objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Store is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|StoreMaintenanceLog[] List of StoreMaintenanceLog objects
+     * @throws PropelException
+     */
+    public function getStoreMaintenanceLogs($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collStoreMaintenanceLogsPartial && !$this->isNew();
+        if (null === $this->collStoreMaintenanceLogs || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collStoreMaintenanceLogs) {
+                // return empty collection
+                $this->initStoreMaintenanceLogs();
+            } else {
+                $collStoreMaintenanceLogs = StoreMaintenanceLogQuery::create(null, $criteria)
+                    ->filterByStore($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collStoreMaintenanceLogsPartial && count($collStoreMaintenanceLogs)) {
+                      $this->initStoreMaintenanceLogs(false);
+
+                      foreach ($collStoreMaintenanceLogs as $obj) {
+                        if (false == $this->collStoreMaintenanceLogs->contains($obj)) {
+                          $this->collStoreMaintenanceLogs->append($obj);
+                        }
+                      }
+
+                      $this->collStoreMaintenanceLogsPartial = true;
+                    }
+
+                    $collStoreMaintenanceLogs->getInternalIterator()->rewind();
+
+                    return $collStoreMaintenanceLogs;
+                }
+
+                if ($partial && $this->collStoreMaintenanceLogs) {
+                    foreach ($this->collStoreMaintenanceLogs as $obj) {
+                        if ($obj->isNew()) {
+                            $collStoreMaintenanceLogs[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collStoreMaintenanceLogs = $collStoreMaintenanceLogs;
+                $this->collStoreMaintenanceLogsPartial = false;
+            }
+        }
+
+        return $this->collStoreMaintenanceLogs;
+    }
+
+    /**
+     * Sets a collection of StoreMaintenanceLog objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $storeMaintenanceLogs A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Store The current object (for fluent API support)
+     */
+    public function setStoreMaintenanceLogs(PropelCollection $storeMaintenanceLogs, PropelPDO $con = null)
+    {
+        $storeMaintenanceLogsToDelete = $this->getStoreMaintenanceLogs(new Criteria(), $con)->diff($storeMaintenanceLogs);
+
+
+        $this->storeMaintenanceLogsScheduledForDeletion = $storeMaintenanceLogsToDelete;
+
+        foreach ($storeMaintenanceLogsToDelete as $storeMaintenanceLogRemoved) {
+            $storeMaintenanceLogRemoved->setStore(null);
+        }
+
+        $this->collStoreMaintenanceLogs = null;
+        foreach ($storeMaintenanceLogs as $storeMaintenanceLog) {
+            $this->addStoreMaintenanceLog($storeMaintenanceLog);
+        }
+
+        $this->collStoreMaintenanceLogs = $storeMaintenanceLogs;
+        $this->collStoreMaintenanceLogsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related StoreMaintenanceLog objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related StoreMaintenanceLog objects.
+     * @throws PropelException
+     */
+    public function countStoreMaintenanceLogs(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collStoreMaintenanceLogsPartial && !$this->isNew();
+        if (null === $this->collStoreMaintenanceLogs || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collStoreMaintenanceLogs) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getStoreMaintenanceLogs());
+            }
+            $query = StoreMaintenanceLogQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByStore($this)
+                ->count($con);
+        }
+
+        return count($this->collStoreMaintenanceLogs);
+    }
+
+    /**
+     * Method called to associate a StoreMaintenanceLog object to this object
+     * through the StoreMaintenanceLog foreign key attribute.
+     *
+     * @param    StoreMaintenanceLog $l StoreMaintenanceLog
+     * @return Store The current object (for fluent API support)
+     */
+    public function addStoreMaintenanceLog(StoreMaintenanceLog $l)
+    {
+        if ($this->collStoreMaintenanceLogs === null) {
+            $this->initStoreMaintenanceLogs();
+            $this->collStoreMaintenanceLogsPartial = true;
+        }
+
+        if (!in_array($l, $this->collStoreMaintenanceLogs->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddStoreMaintenanceLog($l);
+
+            if ($this->storeMaintenanceLogsScheduledForDeletion and $this->storeMaintenanceLogsScheduledForDeletion->contains($l)) {
+                $this->storeMaintenanceLogsScheduledForDeletion->remove($this->storeMaintenanceLogsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	StoreMaintenanceLog $storeMaintenanceLog The storeMaintenanceLog object to add.
+     */
+    protected function doAddStoreMaintenanceLog($storeMaintenanceLog)
+    {
+        $this->collStoreMaintenanceLogs[]= $storeMaintenanceLog;
+        $storeMaintenanceLog->setStore($this);
+    }
+
+    /**
+     * @param	StoreMaintenanceLog $storeMaintenanceLog The storeMaintenanceLog object to remove.
+     * @return Store The current object (for fluent API support)
+     */
+    public function removeStoreMaintenanceLog($storeMaintenanceLog)
+    {
+        if ($this->getStoreMaintenanceLogs()->contains($storeMaintenanceLog)) {
+            $this->collStoreMaintenanceLogs->remove($this->collStoreMaintenanceLogs->search($storeMaintenanceLog));
+            if (null === $this->storeMaintenanceLogsScheduledForDeletion) {
+                $this->storeMaintenanceLogsScheduledForDeletion = clone $this->collStoreMaintenanceLogs;
+                $this->storeMaintenanceLogsScheduledForDeletion->clear();
+            }
+            $this->storeMaintenanceLogsScheduledForDeletion[]= $storeMaintenanceLog;
+            $storeMaintenanceLog->setStore(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Store is new, it will return
+     * an empty collection; or if this Store has previously
+     * been saved, it will retrieve related StoreMaintenanceLogs from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Store.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|StoreMaintenanceLog[] List of StoreMaintenanceLog objects
+     */
+    public function getStoreMaintenanceLogsJoinMaintenanceType($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = StoreMaintenanceLogQuery::create(null, $criteria);
+        $query->joinWith('MaintenanceType', $join_behavior);
+
+        return $this->getStoreMaintenanceLogs($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Store is new, it will return
+     * an empty collection; or if this Store has previously
+     * been saved, it will retrieve related StoreMaintenanceLogs from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Store.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|StoreMaintenanceLog[] List of StoreMaintenanceLog objects
+     */
+    public function getStoreMaintenanceLogsJoinUser($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = StoreMaintenanceLogQuery::create(null, $criteria);
+        $query->joinWith('User', $join_behavior);
+
+        return $this->getStoreMaintenanceLogs($query, $con);
+    }
+
+    /**
      * Clears out the collAddresses collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
@@ -7083,6 +7412,11 @@ abstract class BaseStore extends BaseObject implements Persistent
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collStoreMaintenanceLogs) {
+                foreach ($this->collStoreMaintenanceLogs as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collAddresses) {
                 foreach ($this->collAddresses as $o) {
                     $o->clearAllReferences($deep);
@@ -7170,6 +7504,10 @@ abstract class BaseStore extends BaseObject implements Persistent
             $this->collStoreOwners->clearIterator();
         }
         $this->collStoreOwners = null;
+        if ($this->collStoreMaintenanceLogs instanceof PropelCollection) {
+            $this->collStoreMaintenanceLogs->clearIterator();
+        }
+        $this->collStoreMaintenanceLogs = null;
         if ($this->collAddresses instanceof PropelCollection) {
             $this->collAddresses->clearIterator();
         }

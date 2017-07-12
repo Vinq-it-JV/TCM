@@ -337,7 +337,6 @@ administration_maintenance_stores_get:
 administration_maintenance_store:
     path:     /maintenance/store/{storeid}/get
     defaults: { _controller: AdministrationBundle:Page:maintenanceStore }
-    methods: [GET]
     options:
         expose: true
 
@@ -346,6 +345,27 @@ administration_maintenance_store_get:
     defaults: { _controller: CollectionBundle:Data:getStoreMaintenance }
     options:
         expose: true
+
+administration_maintenance_log:
+    path:     /maintenance/store/log
+    defaults: { _controller: AdministrationBundle:Page:maintenanceLogStores }
+    options:
+        expose: true
+
+administration_maintenance_log_store:
+    path:     /maintenance/store/{storeid}/log
+    defaults: { _controller: AdministrationBundle:Page:maintenanceLogStore }
+    methods: [GET]
+    options:
+        expose: true
+
+administration_maintenance_log_store_get:
+    path:     /maintenance/store/{storeid}/log/get
+    defaults: { _controller: StoreBundle:Data:getStoreMaintenanceLog }
+    methods: [GET]
+    options:
+        expose: true
+
 
 #
 # INVENTORY

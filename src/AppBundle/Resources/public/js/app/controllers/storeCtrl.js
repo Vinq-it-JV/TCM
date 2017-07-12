@@ -82,6 +82,11 @@ angular
             $scope.showUrl(Routing.generate('administration_maintenance_store', {'storeid': storeid}));
         };
 
+        $scope.showStoreMaintenanceLog = function (storeid)
+        {
+            $scope.showUrl(Routing.generate('administration_maintenance_log_store', {'storeid': storeid}));
+        };
+
         $scope.showStoreInventory = function (storeid)
         {
             $scope.showUrl(Routing.generate('administration_inventory_store', {'storeid': storeid}));
@@ -89,13 +94,22 @@ angular
 
         $scope.startGeneralMaintenance = function (storeid)
         {
-            $scope.stores.getRecord(storeid);
-            $scope.requestType = 'startGeneralMaintenance';
-            var putdata = {
-                'url': Routing.generate('administration_maintenance_general_start', {'storeid': storeid}),
-                'payload': ''
+            var modalOptions = {
+                closeButtonText: $translate.instant('CANCEL'),
+                actionButtonText: $translate.instant('START'),
+                headerText: $translate.instant('START'),
+                bodyText: $translate.instant('QUESTION.START_MAINTENANCE'),
+                onExecute: function () {
+                    $scope.stores.getRecord(storeid);
+                    $scope.requestType = 'startGeneralMaintenance';
+                    var putdata = {
+                        'url': Routing.generate('administration_maintenance_general_start', {'storeid': storeid}),
+                        'payload': ''
+                    };
+                    $scope.BE.put(putdata, $scope.fetchDataOk, $scope.fetchDataFail);
+                }
             };
-            $scope.BE.put(putdata, $scope.fetchDataOk, $scope.fetchDataFail);
+            Modal.open({}, modalOptions);
         };
 
         $scope.stopGeneralMaintenance = function (storeid)

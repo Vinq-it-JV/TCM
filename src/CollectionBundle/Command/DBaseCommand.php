@@ -59,6 +59,5 @@ class DBaseCommand extends ContainerAwareCommand
             }
         }
     }
-
 }
 

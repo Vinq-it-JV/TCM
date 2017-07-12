@@ -24,6 +24,7 @@
     "UNLINK": "Loskoppelen",
     "REFRESH": "Verversen",
     "BACK": "Terug",
+    "START": "Start",
     "DROPZONE": {
         "DROP_FILES": "Sleep bestanden hier."
     },
@@ -355,7 +356,17 @@
         "FOR": "voor",
         "PERIODICALLY": "Periodiek",
         "GENERAL": "Algemeen",
-        "FILE": "Bestand"
+        "LOG": "Onderhoudslog",
+        "FILE": "Bestand",
+        "TYPE": "Type"
+    },
+    "MAINTENANCE_TYPE": {
+        "GENERAL": {
+            "NAME": "Algemeen"
+        },
+        "PERIODICALLY": {
+            "NAME": "Periodiek"
+        }
     },
     "INVENTORY": {
         "LABEL": "Inventaris",
@@ -400,7 +411,8 @@
         "NEW_PASSWORD": "Nieuw wachtwoord genereren voor gebuiker?",
         "HANDLE_NOTIFICATION": "Notificatie afhandelen?",
         "DELETE_ENTRY": "Gegevens wissen?",
-        "DELETE_ATTACHMENT": "Bijlage verwijderen?"
+        "DELETE_ATTACHMENT": "Bijlage verwijderen?",
+        "START_MAINTENANCE": "Start onderhoud?"
     },
     "AUTH": {
         "USERNAME": "Gebruikersnaam",
