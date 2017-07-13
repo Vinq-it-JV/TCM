@@ -25,6 +25,7 @@
     "REFRESH": "Refresh",
     "BACK": "Back",
     "START": "Start",
+    "MANAGE": "Manage",
     "DROPZONE": {
         "DROP_FILES": "Drop files here."
     },

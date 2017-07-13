@@ -21,10 +21,12 @@
                                 <tr>
                                     <th st-sort="CreatedBy.Name" class="st-sortable col-md-2 col-xs-2"
                                         ng-cloak>{{ ng.translate('COLLECTIONS.NAME') }}</th>
-                                    <th st-sort="Name" class="st-sortable col-md-4 col-xs-4"
+                                    <th st-sort="Name" class="st-sortable col-md-3 col-xs-3"
                                         ng-cloak>{{ ng.translate('COLLECTIONS.DESCRIPTION') }}</th>
                                     <th st-sort="Date.date" class="st-sortable col-md-2 col-xs-2"
                                         ng-cloak>{{ ng.translate('COLLECTIONS.DATE') }}</th>
+                                    <th class="st-nosort col-md-1 col-xs-1 text-center"
+                                        ng-cloak><i class="fa fa-fw fa-paperclip"></i></th>
                                     <th st-sort="IsPublished" class="st-sortable text-right col-md-2 col-xs-2"
                                         ng-cloak>{{ ng.translate('COLLECTIONS.PUBLISHED') }}</th>
                                     <th class="st-nosort text-right col-md-2 col-xs-2"
@@ -37,8 +39,8 @@
                                     <td ng-cloak>{{ row.CreatedBy.Name }}</td>
                                     <td ng-cloak>{{ row.Name }}</td>
                                     <td ng-cloak>{{ row.Date.date | GMT:'DD-MM-YYYY HH:mm' }}</td>
+                                    <td ng-cloak class="text-center"><i ng-show="row.Attachments" class="fa fa-fw fa-paperclip"></i></td>
                                     <td ng-cloak class="text-right">
-                                        <i ng-show="row.Attachments" class="fa fa-fw fa-paperclip"></i>
                                         <label class="label label-success tag-label" ng-show="{{ row.IsPublished }}">{{ 'YES' | translate }}</label>
                                         <label class="label label-danger tag-label" ng-hide="{{ row.IsPublished }}">{{ 'NO' | translate }}</label>
                                     </td>

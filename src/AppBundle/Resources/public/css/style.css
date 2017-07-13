@@ -204,6 +204,37 @@ body {
     left: 50%;
 }
 
+.menu-header {
+    font-size: 1.25em;
+    vertical-align: middle;
+    user-select: none;
+}
+
+.menu-item {
+    font-weight: bold;
+    font-size: 1.25em;
+    cursor: pointer;
+    color: #777777;
+    user-select: none;
+}
+
+.menu-item:hover {
+    text-decoration: none;
+    color: #777777;
+    user-select: none;
+}
+
+.menu-icon {
+    color: #666666;
+}
+
+.menu-separator {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: 0;
+    border-top: 1px solid #eee;
+}
+
 .cg-busy {
     position: fixed;
     top: 0px;

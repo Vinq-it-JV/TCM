@@ -8,7 +8,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="{{ path('administration_dashboard') }}" ng-cloak>{{  ng.translate('ADMINISTRATION.LABEL') }}</a>
+                <a class="navbar-brand" href="{{ path('administration_dashboard') }}" ng-cloak>{{ ng.translate('TCM.LABEL') }} - {{ ng.translate('ADMINISTRATION.LABEL') }}</a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
@@ -37,7 +37,7 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li><a href="{{ path('configuration_stores') }}" ng-cloak> {{ ng.translate('CONFIGURATION.STORES') }} </a></li>
-                            <li><a href="{{ path('configuration_installation') }}" ng-cloak> {{ ng.translate('CONFIGURATION.INSTALLATION') }} </a></li>
+                            <li><a href="{{ path('configuration_installation') }}" ng-cloak> {{ ng.translate('INSTALLATION.SENSORS') }} </a></li>
                             <li><a href="{{ path('configuration_packetlog') }}" ng-cloak> {{ ng.translate('CONFIGURATION.PACKET_LOG') }} </a></li>
                         </ul>
                     </li>

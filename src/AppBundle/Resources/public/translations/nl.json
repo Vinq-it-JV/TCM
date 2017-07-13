@@ -25,6 +25,7 @@
     "REFRESH": "Verversen",
     "BACK": "Terug",
     "START": "Start",
+    "MANAGE": "Beheer",
     "DROPZONE": {
         "DROP_FILES": "Sleep bestanden hier."
     },
