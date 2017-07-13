@@ -3,6 +3,9 @@
 namespace DataCollectorBundle\Command;
 
 use DataCollectorBundle\Model\CollectorLogQuery;
+use DeviceBundle\Model\CbInputLogQuery;
+use DeviceBundle\Model\DsTemperatureSensorLog;
+use DeviceBundle\Model\DsTemperatureSensorLogQuery;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -56,6 +59,17 @@ class CheckLogCommand extends ContainerAwareCommand
 
         $logs = CollectorLogQuery::create()
             ->where('collector_log.created_at < ?', $date)
+            ->delete();
+
+        $date = new \DateTime('today midnight');
+        $date->modify('-12 hours');
+
+        $logs = DsTemperatureSensorLogQuery::create()
+            ->where('ds_temperature_sensor_log.data_collected_at < ?', $date)
+            ->delete();
+
+        $logs = CbInputLogQuery::create()
+            ->where('cb_input_log.data.collected_at < ?', $date)
             ->delete();
 
         // Instead of using delete, we need to use find, and store all data into a file.
