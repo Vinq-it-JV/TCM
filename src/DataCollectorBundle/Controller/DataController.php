@@ -161,6 +161,7 @@ class DataController extends Controller
             $log->setCbInput($_input)
                 ->setSwitchState($input)
                 ->setSwitchWhen($_input->getSwitchWhen())
+                ->setRawData($inputStates)
                 ->setDataCollectedAt($date)
                 ->save();
 
@@ -202,6 +203,7 @@ class DataController extends Controller
             ->setTemperature($data['temperature'])
             ->setLowLimit($temperature->getLowLimit())
             ->setHighLimit($temperature->getHighLimit())
+            ->setRawData($data['raw'])
             ->setDataCollectedAt($date)
             ->save();
 

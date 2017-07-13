@@ -42,6 +42,7 @@ class CollectorHelper
         if ($this->checkCRC8($uid)) {
             $dataArr['uid'] = substr($data, 0, 16);
             $dataArr['temperature'] = $this->getDSTemp($data);
+            $daraArr['raw'] = substr($data, 16, 4);
         }
         return $dataArr;
     }

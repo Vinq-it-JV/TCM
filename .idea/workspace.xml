@@ -2,17 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="282e9c36-730e-4d16-a19d-353a62e794e2" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/dashboard/menu.html.twig" afterPath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/dashboard/menu.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/packetlog/log.html.twig" afterPath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/packetlog/log.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Resources/public/css/style.css" afterPath="$PROJECT_DIR$/src/AppBundle/Resources/public/css/style.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DataCollectorBundle/Controller/DataController.php" afterPath="$PROJECT_DIR$/src/DataCollectorBundle/Controller/DataController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DeviceBundle/Model/map/CbInputTableMap.php" afterPath="$PROJECT_DIR$/src/DeviceBundle/Model/map/CbInputTableMap.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DeviceBundle/Model/map/DsTemperatureSensorTableMap.php" afterPath="$PROJECT_DIR$/src/DeviceBundle/Model/map/DsTemperatureSensorTableMap.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DeviceBundle/Model/om/BaseCbInput.php" afterPath="$PROJECT_DIR$/src/DeviceBundle/Model/om/BaseCbInput.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DeviceBundle/Model/om/BaseCbInputQuery.php" afterPath="$PROJECT_DIR$/src/DeviceBundle/Model/om/BaseCbInputQuery.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DeviceBundle/Model/om/BaseDsTemperatureSensor.php" afterPath="$PROJECT_DIR$/src/DeviceBundle/Model/om/BaseDsTemperatureSensor.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DeviceBundle/Model/om/BaseDsTemperatureSensorQuery.php" afterPath="$PROJECT_DIR$/src/DeviceBundle/Model/om/BaseDsTemperatureSensorQuery.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DeviceBundle/Resources/config/schema.xml" afterPath="$PROJECT_DIR$/src/DeviceBundle/Resources/config/schema.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DataCollectorBundle/Services/CollectorHelper.php" afterPath="$PROJECT_DIR$/src/DataCollectorBundle/Services/CollectorHelper.php" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -39,8 +30,18 @@
       <file leaf-file-name="DataController.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/DataCollectorBundle/Controller/DataController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="280">
-              <caret line="200" column="0" lean-forward="false" selection-start-line="200" selection-start-column="0" selection-end-line="200" selection-end-column="0" />
+            <state relative-caret-position="340">
+              <caret line="206" column="38" lean-forward="true" selection-start-line="206" selection-start-column="38" selection-end-line="206" selection-end-column="38" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CollectorHelper.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/DataCollectorBundle/Services/CollectorHelper.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="300">
+              <caret line="45" column="9" lean-forward="true" selection-start-line="45" selection-start-column="9" selection-end-line="45" selection-end-column="9" />
               <folding />
             </state>
           </provider>
@@ -133,7 +134,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/companies/companies.html.twig" />
         <option value="$PROJECT_DIR$/src/AppBundle/Resources/views/stores/stores.html.twig" />
         <option value="$PROJECT_DIR$/src/AppBundle/Resources/views/store/maintenance.html.twig" />
         <option value="$PROJECT_DIR$/src/AppBundle/Resources/views/store/inventory.html.twig" />
@@ -183,6 +183,7 @@
         <option value="$PROJECT_DIR$/src/AppBundle/Resources/public/css/style.css" />
         <option value="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/dashboard/menu.html.twig" />
         <option value="$PROJECT_DIR$/src/DeviceBundle/Resources/config/schema.xml" />
+        <option value="$PROJECT_DIR$/src/DataCollectorBundle/Services/CollectorHelper.php" />
         <option value="$PROJECT_DIR$/src/DataCollectorBundle/Controller/DataController.php" />
       </list>
     </option>
@@ -1306,6 +1307,28 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="DataCollectorBundle" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="TCM" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="TCM" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DataCollectorBundle" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Services" />
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
           </PATH>
@@ -2806,16 +2829,16 @@
       <workItem from="1496998184924" duration="95866000" />
       <workItem from="1499062945739" duration="25632000" />
       <workItem from="1499258768289" duration="23987000" />
-      <workItem from="1499847513564" duration="24882000" />
+      <workItem from="1499847513564" duration="25107000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="817744000" />
+    <option name="totallyTimeSpent" value="817969000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="823" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27896994" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -2824,7 +2847,7 @@
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32284543" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24892704" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27906978" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27906978" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -2875,14 +2898,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/CollectionBundle/Command/DBaseCommand.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="355">
-          <caret line="61" column="0" lean-forward="false" selection-start-line="61" selection-start-column="0" selection-end-line="61" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/StoreBundle/Command/DBaseCommand.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="205">
@@ -3671,10 +3686,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/DataCollectorBundle/Services/CollectorHelper.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="45" column="9" lean-forward="true" selection-start-line="45" selection-start-column="9" selection-end-line="45" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/DataCollectorBundle/Controller/DataController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="280">
-          <caret line="200" column="0" lean-forward="false" selection-start-line="200" selection-start-column="0" selection-end-line="200" selection-end-column="0" />
+        <state relative-caret-position="340">
+          <caret line="206" column="38" lean-forward="true" selection-start-line="206" selection-start-column="38" selection-end-line="206" selection-end-column="38" />
           <folding />
         </state>
       </provider>
