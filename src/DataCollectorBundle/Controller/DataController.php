@@ -161,7 +161,7 @@ class DataController extends Controller
             $log->setCbInput($_input)
                 ->setSwitchState($input)
                 ->setSwitchWhen($_input->getSwitchWhen())
-                ->setRawData($inputStates)
+                ->setRawData($inputs)
                 ->setDataCollectedAt($date)
                 ->save();
 
