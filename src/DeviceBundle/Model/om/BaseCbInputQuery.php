@@ -13,6 +13,7 @@ use \PropelException;
 use \PropelObjectCollection;
 use \PropelPDO;
 use DeviceBundle\Model\CbInput;
+use DeviceBundle\Model\CbInputLog;
 use DeviceBundle\Model\CbInputPeer;
 use DeviceBundle\Model\CbInputQuery;
 use DeviceBundle\Model\ControllerBox;
@@ -76,6 +77,10 @@ use StoreBundle\Model\Store;
  * @method CbInputQuery leftJoinDeviceGroup($relationAlias = null) Adds a LEFT JOIN clause to the query using the DeviceGroup relation
  * @method CbInputQuery rightJoinDeviceGroup($relationAlias = null) Adds a RIGHT JOIN clause to the query using the DeviceGroup relation
  * @method CbInputQuery innerJoinDeviceGroup($relationAlias = null) Adds a INNER JOIN clause to the query using the DeviceGroup relation
+ *
+ * @method CbInputQuery leftJoinCbInputLog($relationAlias = null) Adds a LEFT JOIN clause to the query using the CbInputLog relation
+ * @method CbInputQuery rightJoinCbInputLog($relationAlias = null) Adds a RIGHT JOIN clause to the query using the CbInputLog relation
+ * @method CbInputQuery innerJoinCbInputLog($relationAlias = null) Adds a INNER JOIN clause to the query using the CbInputLog relation
  *
  * @method CbInputQuery leftJoinCbInputNotification($relationAlias = null) Adds a LEFT JOIN clause to the query using the CbInputNotification relation
  * @method CbInputQuery rightJoinCbInputNotification($relationAlias = null) Adds a RIGHT JOIN clause to the query using the CbInputNotification relation
@@ -1266,6 +1271,80 @@ abstract class BaseCbInputQuery extends ModelCriteria
         return $this
             ->joinDeviceGroup($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'DeviceGroup', '\DeviceBundle\Model\DeviceGroupQuery');
+    }
+
+    /**
+     * Filter the query by a related CbInputLog object
+     *
+     * @param   CbInputLog|PropelObjectCollection $cbInputLog  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 CbInputQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByCbInputLog($cbInputLog, $comparison = null)
+    {
+        if ($cbInputLog instanceof CbInputLog) {
+            return $this
+                ->addUsingAlias(CbInputPeer::ID, $cbInputLog->getInput(), $comparison);
+        } elseif ($cbInputLog instanceof PropelObjectCollection) {
+            return $this
+                ->useCbInputLogQuery()
+                ->filterByPrimaryKeys($cbInputLog->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByCbInputLog() only accepts arguments of type CbInputLog or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the CbInputLog relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return CbInputQuery The current query, for fluid interface
+     */
+    public function joinCbInputLog($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('CbInputLog');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'CbInputLog');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the CbInputLog relation CbInputLog object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   \DeviceBundle\Model\CbInputLogQuery A secondary query class using the current class as primary query
+     */
+    public function useCbInputLogQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinCbInputLog($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'CbInputLog', '\DeviceBundle\Model\CbInputLogQuery');
     }
 
     /**

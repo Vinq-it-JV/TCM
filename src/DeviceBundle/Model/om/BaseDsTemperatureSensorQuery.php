@@ -15,6 +15,7 @@ use \PropelPDO;
 use DeviceBundle\Model\ControllerBox;
 use DeviceBundle\Model\DeviceGroup;
 use DeviceBundle\Model\DsTemperatureSensor;
+use DeviceBundle\Model\DsTemperatureSensorLog;
 use DeviceBundle\Model\DsTemperatureSensorPeer;
 use DeviceBundle\Model\DsTemperatureSensorQuery;
 use NotificationBundle\Model\DsTemperatureNotification;
@@ -76,6 +77,10 @@ use StoreBundle\Model\Store;
  * @method DsTemperatureSensorQuery leftJoinControllerBox($relationAlias = null) Adds a LEFT JOIN clause to the query using the ControllerBox relation
  * @method DsTemperatureSensorQuery rightJoinControllerBox($relationAlias = null) Adds a RIGHT JOIN clause to the query using the ControllerBox relation
  * @method DsTemperatureSensorQuery innerJoinControllerBox($relationAlias = null) Adds a INNER JOIN clause to the query using the ControllerBox relation
+ *
+ * @method DsTemperatureSensorQuery leftJoinDsTemperatureSensorLog($relationAlias = null) Adds a LEFT JOIN clause to the query using the DsTemperatureSensorLog relation
+ * @method DsTemperatureSensorQuery rightJoinDsTemperatureSensorLog($relationAlias = null) Adds a RIGHT JOIN clause to the query using the DsTemperatureSensorLog relation
+ * @method DsTemperatureSensorQuery innerJoinDsTemperatureSensorLog($relationAlias = null) Adds a INNER JOIN clause to the query using the DsTemperatureSensorLog relation
  *
  * @method DsTemperatureSensorQuery leftJoinDsTemperatureNotification($relationAlias = null) Adds a LEFT JOIN clause to the query using the DsTemperatureNotification relation
  * @method DsTemperatureSensorQuery rightJoinDsTemperatureNotification($relationAlias = null) Adds a RIGHT JOIN clause to the query using the DsTemperatureNotification relation
@@ -1257,6 +1262,80 @@ abstract class BaseDsTemperatureSensorQuery extends ModelCriteria
         return $this
             ->joinControllerBox($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'ControllerBox', '\DeviceBundle\Model\ControllerBoxQuery');
+    }
+
+    /**
+     * Filter the query by a related DsTemperatureSensorLog object
+     *
+     * @param   DsTemperatureSensorLog|PropelObjectCollection $dsTemperatureSensorLog  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 DsTemperatureSensorQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByDsTemperatureSensorLog($dsTemperatureSensorLog, $comparison = null)
+    {
+        if ($dsTemperatureSensorLog instanceof DsTemperatureSensorLog) {
+            return $this
+                ->addUsingAlias(DsTemperatureSensorPeer::ID, $dsTemperatureSensorLog->getSensor(), $comparison);
+        } elseif ($dsTemperatureSensorLog instanceof PropelObjectCollection) {
+            return $this
+                ->useDsTemperatureSensorLogQuery()
+                ->filterByPrimaryKeys($dsTemperatureSensorLog->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByDsTemperatureSensorLog() only accepts arguments of type DsTemperatureSensorLog or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the DsTemperatureSensorLog relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return DsTemperatureSensorQuery The current query, for fluid interface
+     */
+    public function joinDsTemperatureSensorLog($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('DsTemperatureSensorLog');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'DsTemperatureSensorLog');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the DsTemperatureSensorLog relation DsTemperatureSensorLog object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   \DeviceBundle\Model\DsTemperatureSensorLogQuery A secondary query class using the current class as primary query
+     */
+    public function useDsTemperatureSensorLogQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinDsTemperatureSensorLog($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'DsTemperatureSensorLog', '\DeviceBundle\Model\DsTemperatureSensorLogQuery');
     }
 
     /**

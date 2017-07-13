@@ -44,7 +44,11 @@
                                                     <tbody>
                                                         <tr ng-repeat="log in logCollection">
                                                             {% verbatim %}
-                                                            <td ng-cloak>{{ log.Uid }}</td>
+                                                            <td ng-cloak>
+                                                                <div ng-if="log.DisplayMode == 0">{{ log.Uid }}</div>
+                                                                <div ng-if="log.DisplayMode == 1">{{ log.Name }}</div>
+                                                                <div ng-if="log.DisplayMode == 2">{{ log.StoreName }}</div>
+                                                            </td>
                                                             <td ng-cloak>
                                                                 <div class="label" ng-repeat="state in log.InputStates track by $index" ng-class="{'label-danger':!state, 'label-success':state}">
                                                                     <i class="fa fa-fw" ng-class="{'fa-check':state, 'fa-remove':!state}"></i>

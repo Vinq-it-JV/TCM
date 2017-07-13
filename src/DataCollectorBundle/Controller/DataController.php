@@ -4,6 +4,8 @@ namespace DataCollectorBundle\Controller;
 
 use DataCollectorBundle\Model\CollectorLog;
 use DataCollectorBundle\Model\CollectorLogQuery;
+use DeviceBundle\Model\CbInputLog;
+use DeviceBundle\Model\DsTemperatureSensorLog;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -64,6 +66,15 @@ class DataController extends Controller
                 else
                     $output['name'] = '';
                 $logArr['Outputs'][] = $output;
+            }
+            $logArr['Name'] = '';
+            $logArr['StoreName'] = '';
+            $controller = ControllerBoxQuery::create()->findOneByUid($logArr['Uid']);
+            if (!empty($controller)) {
+                $logArr['Name'] = $controller->getName();
+                $store = $controller->getStore();
+                if (!empty($store))
+                    $logArr['StoreName'] = $store->getName();
             }
             $dataArr['packetLog'][] = $logArr;
         }
@@ -140,10 +151,19 @@ class DataController extends Controller
                 $_input->setUid($controller->getUid());
                 $_input->setControllerBox($controller);
             }
-            $_input->setInputNumber($inputNr);
-            $_input->setSwitchState($input);
-            $_input->setDataCollectedAt($date);
-            $_input->save();
+            $_input->setInputNumber($inputNr)
+                ->setSwitchState($input)
+                ->setDataCollectedAt($date)
+                ->save();
+
+            // Log input data
+            $log = new CbInputLog();
+            $log->setCbInput($_input)
+                ->setSwitchState($input)
+                ->setSwitchWhen($_input->getSwitchWhen())
+                ->setDataCollectedAt($date)
+                ->save();
+
             $bit <<= 1;
             $inputNr++;
         }
@@ -175,6 +195,16 @@ class DataController extends Controller
         }
         $temperature->setDataCollectedAt($date);
         $temperature->save();
+
+        // Log sensor data
+        $log = new DsTemperatureSensorLog();
+        $log->setDsTemperatureSensor($temperature)
+            ->setTemperature($data['temperature'])
+            ->setLowLimit($temperature->getLowLimit())
+            ->setHighLimit($temperature->getHighLimit())
+            ->setDataCollectedAt($date)
+            ->save();
+
         return true;
     }
 

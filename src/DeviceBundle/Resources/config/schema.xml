@@ -100,4 +100,29 @@
         </foreign-key>
     </table>
 
+    <table name="ds_temperature_sensor_log">
+        <column name="id" type="integer" primaryKey="true" autoIncrement="true" />
+        <column name="sensor" type="integer" />
+        <column name="low_limit" type="varchar" size="10" default="0" />
+        <column name="temperature" type="varchar" size="10" default="0" />
+        <column name="high_limit" type="varchar" size="10" default="30" />
+        <column name="raw_data" type="varchar" size="10" default="0" />
+        <column name="data_collected_at" type="timestamp" default="NULL" />
+        <foreign-key foreignTable="ds_temperature_sensor">
+            <reference local="sensor" foreign="id"/>
+        </foreign-key>
+    </table>
+
+    <table name="cb_input_log">
+        <column name="id" type="integer" primaryKey="true" autoIncrement="true" />
+        <column name="input" type="integer" />
+        <column name="switch_state" type="boolean" default="false" />
+        <column name="switch_when" type="boolean" default="true" />
+        <column name="raw_data" type="varchar" size="10" default="0" />
+        <column name="data_collected_at" type="timestamp" default="NULL" />
+        <foreign-key foreignTable="cb_input">
+            <reference local="input" foreign="id"/>
+        </foreign-key>
+    </table>
+
 </database>

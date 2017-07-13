@@ -20,6 +20,8 @@ use DeviceBundle\Model\ControllerBoxQuery;
 use DeviceBundle\Model\DeviceGroup;
 use DeviceBundle\Model\DeviceGroupQuery;
 use DeviceBundle\Model\DsTemperatureSensor;
+use DeviceBundle\Model\DsTemperatureSensorLog;
+use DeviceBundle\Model\DsTemperatureSensorLogQuery;
 use DeviceBundle\Model\DsTemperatureSensorPeer;
 use DeviceBundle\Model\DsTemperatureSensorQuery;
 use NotificationBundle\Model\DsTemperatureNotification;
@@ -186,6 +188,12 @@ abstract class BaseDsTemperatureSensor extends BaseObject implements Persistent
     protected $aControllerBox;
 
     /**
+     * @var        PropelObjectCollection|DsTemperatureSensorLog[] Collection to store aggregation of DsTemperatureSensorLog objects.
+     */
+    protected $collDsTemperatureSensorLogs;
+    protected $collDsTemperatureSensorLogsPartial;
+
+    /**
      * @var        PropelObjectCollection|DsTemperatureNotification[] Collection to store aggregation of DsTemperatureNotification objects.
      */
     protected $collDsTemperatureNotifications;
@@ -210,6 +218,12 @@ abstract class BaseDsTemperatureSensor extends BaseObject implements Persistent
      * @var        boolean
      */
     protected $alreadyInClearAllReferencesDeep = false;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $dsTemperatureSensorLogsScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -1163,6 +1177,8 @@ abstract class BaseDsTemperatureSensor extends BaseObject implements Persistent
             $this->aStore = null;
             $this->aDeviceGroup = null;
             $this->aControllerBox = null;
+            $this->collDsTemperatureSensorLogs = null;
+
             $this->collDsTemperatureNotifications = null;
 
         } // if (deep)
@@ -1324,6 +1340,24 @@ abstract class BaseDsTemperatureSensor extends BaseObject implements Persistent
                 }
                 $affectedRows += 1;
                 $this->resetModified();
+            }
+
+            if ($this->dsTemperatureSensorLogsScheduledForDeletion !== null) {
+                if (!$this->dsTemperatureSensorLogsScheduledForDeletion->isEmpty()) {
+                    foreach ($this->dsTemperatureSensorLogsScheduledForDeletion as $dsTemperatureSensorLog) {
+                        // need to save related object because we set the relation to null
+                        $dsTemperatureSensorLog->save($con);
+                    }
+                    $this->dsTemperatureSensorLogsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collDsTemperatureSensorLogs !== null) {
+                foreach ($this->collDsTemperatureSensorLogs as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
             }
 
             if ($this->dsTemperatureNotificationsScheduledForDeletion !== null) {
@@ -1618,6 +1652,14 @@ abstract class BaseDsTemperatureSensor extends BaseObject implements Persistent
             }
 
 
+                if ($this->collDsTemperatureSensorLogs !== null) {
+                    foreach ($this->collDsTemperatureSensorLogs as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
                 if ($this->collDsTemperatureNotifications !== null) {
                     foreach ($this->collDsTemperatureNotifications as $referrerFK) {
                         if (!$referrerFK->validate($columns)) {
@@ -1781,6 +1823,9 @@ abstract class BaseDsTemperatureSensor extends BaseObject implements Persistent
             }
             if (null !== $this->aControllerBox) {
                 $result['ControllerBox'] = $this->aControllerBox->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->collDsTemperatureSensorLogs) {
+                $result['DsTemperatureSensorLogs'] = $this->collDsTemperatureSensorLogs->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collDsTemperatureNotifications) {
                 $result['DsTemperatureNotifications'] = $this->collDsTemperatureNotifications->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
@@ -2038,6 +2083,12 @@ abstract class BaseDsTemperatureSensor extends BaseObject implements Persistent
             // store object hash to prevent cycle
             $this->startCopy = true;
 
+            foreach ($this->getDsTemperatureSensorLogs() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addDsTemperatureSensorLog($relObj->copy($deepCopy));
+                }
+            }
+
             foreach ($this->getDsTemperatureNotifications() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addDsTemperatureNotification($relObj->copy($deepCopy));
@@ -2261,9 +2312,237 @@ abstract class BaseDsTemperatureSensor extends BaseObject implements Persistent
      */
     public function initRelation($relationName)
     {
+        if ('DsTemperatureSensorLog' == $relationName) {
+            $this->initDsTemperatureSensorLogs();
+        }
         if ('DsTemperatureNotification' == $relationName) {
             $this->initDsTemperatureNotifications();
         }
+    }
+
+    /**
+     * Clears out the collDsTemperatureSensorLogs collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return DsTemperatureSensor The current object (for fluent API support)
+     * @see        addDsTemperatureSensorLogs()
+     */
+    public function clearDsTemperatureSensorLogs()
+    {
+        $this->collDsTemperatureSensorLogs = null; // important to set this to null since that means it is uninitialized
+        $this->collDsTemperatureSensorLogsPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collDsTemperatureSensorLogs collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialDsTemperatureSensorLogs($v = true)
+    {
+        $this->collDsTemperatureSensorLogsPartial = $v;
+    }
+
+    /**
+     * Initializes the collDsTemperatureSensorLogs collection.
+     *
+     * By default this just sets the collDsTemperatureSensorLogs collection to an empty array (like clearcollDsTemperatureSensorLogs());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initDsTemperatureSensorLogs($overrideExisting = true)
+    {
+        if (null !== $this->collDsTemperatureSensorLogs && !$overrideExisting) {
+            return;
+        }
+        $this->collDsTemperatureSensorLogs = new PropelObjectCollection();
+        $this->collDsTemperatureSensorLogs->setModel('DsTemperatureSensorLog');
+    }
+
+    /**
+     * Gets an array of DsTemperatureSensorLog objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this DsTemperatureSensor is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|DsTemperatureSensorLog[] List of DsTemperatureSensorLog objects
+     * @throws PropelException
+     */
+    public function getDsTemperatureSensorLogs($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collDsTemperatureSensorLogsPartial && !$this->isNew();
+        if (null === $this->collDsTemperatureSensorLogs || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collDsTemperatureSensorLogs) {
+                // return empty collection
+                $this->initDsTemperatureSensorLogs();
+            } else {
+                $collDsTemperatureSensorLogs = DsTemperatureSensorLogQuery::create(null, $criteria)
+                    ->filterByDsTemperatureSensor($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collDsTemperatureSensorLogsPartial && count($collDsTemperatureSensorLogs)) {
+                      $this->initDsTemperatureSensorLogs(false);
+
+                      foreach ($collDsTemperatureSensorLogs as $obj) {
+                        if (false == $this->collDsTemperatureSensorLogs->contains($obj)) {
+                          $this->collDsTemperatureSensorLogs->append($obj);
+                        }
+                      }
+
+                      $this->collDsTemperatureSensorLogsPartial = true;
+                    }
+
+                    $collDsTemperatureSensorLogs->getInternalIterator()->rewind();
+
+                    return $collDsTemperatureSensorLogs;
+                }
+
+                if ($partial && $this->collDsTemperatureSensorLogs) {
+                    foreach ($this->collDsTemperatureSensorLogs as $obj) {
+                        if ($obj->isNew()) {
+                            $collDsTemperatureSensorLogs[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collDsTemperatureSensorLogs = $collDsTemperatureSensorLogs;
+                $this->collDsTemperatureSensorLogsPartial = false;
+            }
+        }
+
+        return $this->collDsTemperatureSensorLogs;
+    }
+
+    /**
+     * Sets a collection of DsTemperatureSensorLog objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $dsTemperatureSensorLogs A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return DsTemperatureSensor The current object (for fluent API support)
+     */
+    public function setDsTemperatureSensorLogs(PropelCollection $dsTemperatureSensorLogs, PropelPDO $con = null)
+    {
+        $dsTemperatureSensorLogsToDelete = $this->getDsTemperatureSensorLogs(new Criteria(), $con)->diff($dsTemperatureSensorLogs);
+
+
+        $this->dsTemperatureSensorLogsScheduledForDeletion = $dsTemperatureSensorLogsToDelete;
+
+        foreach ($dsTemperatureSensorLogsToDelete as $dsTemperatureSensorLogRemoved) {
+            $dsTemperatureSensorLogRemoved->setDsTemperatureSensor(null);
+        }
+
+        $this->collDsTemperatureSensorLogs = null;
+        foreach ($dsTemperatureSensorLogs as $dsTemperatureSensorLog) {
+            $this->addDsTemperatureSensorLog($dsTemperatureSensorLog);
+        }
+
+        $this->collDsTemperatureSensorLogs = $dsTemperatureSensorLogs;
+        $this->collDsTemperatureSensorLogsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related DsTemperatureSensorLog objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related DsTemperatureSensorLog objects.
+     * @throws PropelException
+     */
+    public function countDsTemperatureSensorLogs(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collDsTemperatureSensorLogsPartial && !$this->isNew();
+        if (null === $this->collDsTemperatureSensorLogs || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collDsTemperatureSensorLogs) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getDsTemperatureSensorLogs());
+            }
+            $query = DsTemperatureSensorLogQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByDsTemperatureSensor($this)
+                ->count($con);
+        }
+
+        return count($this->collDsTemperatureSensorLogs);
+    }
+
+    /**
+     * Method called to associate a DsTemperatureSensorLog object to this object
+     * through the DsTemperatureSensorLog foreign key attribute.
+     *
+     * @param    DsTemperatureSensorLog $l DsTemperatureSensorLog
+     * @return DsTemperatureSensor The current object (for fluent API support)
+     */
+    public function addDsTemperatureSensorLog(DsTemperatureSensorLog $l)
+    {
+        if ($this->collDsTemperatureSensorLogs === null) {
+            $this->initDsTemperatureSensorLogs();
+            $this->collDsTemperatureSensorLogsPartial = true;
+        }
+
+        if (!in_array($l, $this->collDsTemperatureSensorLogs->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddDsTemperatureSensorLog($l);
+
+            if ($this->dsTemperatureSensorLogsScheduledForDeletion and $this->dsTemperatureSensorLogsScheduledForDeletion->contains($l)) {
+                $this->dsTemperatureSensorLogsScheduledForDeletion->remove($this->dsTemperatureSensorLogsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	DsTemperatureSensorLog $dsTemperatureSensorLog The dsTemperatureSensorLog object to add.
+     */
+    protected function doAddDsTemperatureSensorLog($dsTemperatureSensorLog)
+    {
+        $this->collDsTemperatureSensorLogs[]= $dsTemperatureSensorLog;
+        $dsTemperatureSensorLog->setDsTemperatureSensor($this);
+    }
+
+    /**
+     * @param	DsTemperatureSensorLog $dsTemperatureSensorLog The dsTemperatureSensorLog object to remove.
+     * @return DsTemperatureSensor The current object (for fluent API support)
+     */
+    public function removeDsTemperatureSensorLog($dsTemperatureSensorLog)
+    {
+        if ($this->getDsTemperatureSensorLogs()->contains($dsTemperatureSensorLog)) {
+            $this->collDsTemperatureSensorLogs->remove($this->collDsTemperatureSensorLogs->search($dsTemperatureSensorLog));
+            if (null === $this->dsTemperatureSensorLogsScheduledForDeletion) {
+                $this->dsTemperatureSensorLogsScheduledForDeletion = clone $this->collDsTemperatureSensorLogs;
+                $this->dsTemperatureSensorLogsScheduledForDeletion->clear();
+            }
+            $this->dsTemperatureSensorLogsScheduledForDeletion[]= $dsTemperatureSensorLog;
+            $dsTemperatureSensorLog->setDsTemperatureSensor(null);
+        }
+
+        return $this;
     }
 
     /**
@@ -2563,6 +2842,11 @@ abstract class BaseDsTemperatureSensor extends BaseObject implements Persistent
     {
         if ($deep && !$this->alreadyInClearAllReferencesDeep) {
             $this->alreadyInClearAllReferencesDeep = true;
+            if ($this->collDsTemperatureSensorLogs) {
+                foreach ($this->collDsTemperatureSensorLogs as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collDsTemperatureNotifications) {
                 foreach ($this->collDsTemperatureNotifications as $o) {
                     $o->clearAllReferences($deep);
@@ -2581,6 +2865,10 @@ abstract class BaseDsTemperatureSensor extends BaseObject implements Persistent
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
 
+        if ($this->collDsTemperatureSensorLogs instanceof PropelCollection) {
+            $this->collDsTemperatureSensorLogs->clearIterator();
+        }
+        $this->collDsTemperatureSensorLogs = null;
         if ($this->collDsTemperatureNotifications instanceof PropelCollection) {
             $this->collDsTemperatureNotifications->clearIterator();
         }

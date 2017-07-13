@@ -261,6 +261,10 @@ body {
     cursor: pointer;
 }
 
+.cursor-default {
+    cursor: default;
+}
+
 .profile-well {
     min-height: 20px;
     padding: 19px;

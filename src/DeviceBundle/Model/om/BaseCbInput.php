@@ -16,6 +16,8 @@ use \PropelException;
 use \PropelObjectCollection;
 use \PropelPDO;
 use DeviceBundle\Model\CbInput;
+use DeviceBundle\Model\CbInputLog;
+use DeviceBundle\Model\CbInputLogQuery;
 use DeviceBundle\Model\CbInputPeer;
 use DeviceBundle\Model\CbInputQuery;
 use DeviceBundle\Model\ControllerBox;
@@ -185,6 +187,12 @@ abstract class BaseCbInput extends BaseObject implements Persistent
     protected $aDeviceGroup;
 
     /**
+     * @var        PropelObjectCollection|CbInputLog[] Collection to store aggregation of CbInputLog objects.
+     */
+    protected $collCbInputLogs;
+    protected $collCbInputLogsPartial;
+
+    /**
      * @var        PropelObjectCollection|CbInputNotification[] Collection to store aggregation of CbInputNotification objects.
      */
     protected $collCbInputNotifications;
@@ -209,6 +217,12 @@ abstract class BaseCbInput extends BaseObject implements Persistent
      * @var        boolean
      */
     protected $alreadyInClearAllReferencesDeep = false;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $cbInputLogsScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -1173,6 +1187,8 @@ abstract class BaseCbInput extends BaseObject implements Persistent
             $this->aStore = null;
             $this->aControllerBox = null;
             $this->aDeviceGroup = null;
+            $this->collCbInputLogs = null;
+
             $this->collCbInputNotifications = null;
 
         } // if (deep)
@@ -1334,6 +1350,24 @@ abstract class BaseCbInput extends BaseObject implements Persistent
                 }
                 $affectedRows += 1;
                 $this->resetModified();
+            }
+
+            if ($this->cbInputLogsScheduledForDeletion !== null) {
+                if (!$this->cbInputLogsScheduledForDeletion->isEmpty()) {
+                    foreach ($this->cbInputLogsScheduledForDeletion as $cbInputLog) {
+                        // need to save related object because we set the relation to null
+                        $cbInputLog->save($con);
+                    }
+                    $this->cbInputLogsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collCbInputLogs !== null) {
+                foreach ($this->collCbInputLogs as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
             }
 
             if ($this->cbInputNotificationsScheduledForDeletion !== null) {
@@ -1628,6 +1662,14 @@ abstract class BaseCbInput extends BaseObject implements Persistent
             }
 
 
+                if ($this->collCbInputLogs !== null) {
+                    foreach ($this->collCbInputLogs as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
                 if ($this->collCbInputNotifications !== null) {
                     foreach ($this->collCbInputNotifications as $referrerFK) {
                         if (!$referrerFK->validate($columns)) {
@@ -1791,6 +1833,9 @@ abstract class BaseCbInput extends BaseObject implements Persistent
             }
             if (null !== $this->aDeviceGroup) {
                 $result['DeviceGroup'] = $this->aDeviceGroup->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->collCbInputLogs) {
+                $result['CbInputLogs'] = $this->collCbInputLogs->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collCbInputNotifications) {
                 $result['CbInputNotifications'] = $this->collCbInputNotifications->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
@@ -2048,6 +2093,12 @@ abstract class BaseCbInput extends BaseObject implements Persistent
             // store object hash to prevent cycle
             $this->startCopy = true;
 
+            foreach ($this->getCbInputLogs() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addCbInputLog($relObj->copy($deepCopy));
+                }
+            }
+
             foreach ($this->getCbInputNotifications() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addCbInputNotification($relObj->copy($deepCopy));
@@ -2271,9 +2322,237 @@ abstract class BaseCbInput extends BaseObject implements Persistent
      */
     public function initRelation($relationName)
     {
+        if ('CbInputLog' == $relationName) {
+            $this->initCbInputLogs();
+        }
         if ('CbInputNotification' == $relationName) {
             $this->initCbInputNotifications();
         }
+    }
+
+    /**
+     * Clears out the collCbInputLogs collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return CbInput The current object (for fluent API support)
+     * @see        addCbInputLogs()
+     */
+    public function clearCbInputLogs()
+    {
+        $this->collCbInputLogs = null; // important to set this to null since that means it is uninitialized
+        $this->collCbInputLogsPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collCbInputLogs collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialCbInputLogs($v = true)
+    {
+        $this->collCbInputLogsPartial = $v;
+    }
+
+    /**
+     * Initializes the collCbInputLogs collection.
+     *
+     * By default this just sets the collCbInputLogs collection to an empty array (like clearcollCbInputLogs());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initCbInputLogs($overrideExisting = true)
+    {
+        if (null !== $this->collCbInputLogs && !$overrideExisting) {
+            return;
+        }
+        $this->collCbInputLogs = new PropelObjectCollection();
+        $this->collCbInputLogs->setModel('CbInputLog');
+    }
+
+    /**
+     * Gets an array of CbInputLog objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this CbInput is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|CbInputLog[] List of CbInputLog objects
+     * @throws PropelException
+     */
+    public function getCbInputLogs($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collCbInputLogsPartial && !$this->isNew();
+        if (null === $this->collCbInputLogs || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collCbInputLogs) {
+                // return empty collection
+                $this->initCbInputLogs();
+            } else {
+                $collCbInputLogs = CbInputLogQuery::create(null, $criteria)
+                    ->filterByCbInput($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collCbInputLogsPartial && count($collCbInputLogs)) {
+                      $this->initCbInputLogs(false);
+
+                      foreach ($collCbInputLogs as $obj) {
+                        if (false == $this->collCbInputLogs->contains($obj)) {
+                          $this->collCbInputLogs->append($obj);
+                        }
+                      }
+
+                      $this->collCbInputLogsPartial = true;
+                    }
+
+                    $collCbInputLogs->getInternalIterator()->rewind();
+
+                    return $collCbInputLogs;
+                }
+
+                if ($partial && $this->collCbInputLogs) {
+                    foreach ($this->collCbInputLogs as $obj) {
+                        if ($obj->isNew()) {
+                            $collCbInputLogs[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collCbInputLogs = $collCbInputLogs;
+                $this->collCbInputLogsPartial = false;
+            }
+        }
+
+        return $this->collCbInputLogs;
+    }
+
+    /**
+     * Sets a collection of CbInputLog objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $cbInputLogs A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return CbInput The current object (for fluent API support)
+     */
+    public function setCbInputLogs(PropelCollection $cbInputLogs, PropelPDO $con = null)
+    {
+        $cbInputLogsToDelete = $this->getCbInputLogs(new Criteria(), $con)->diff($cbInputLogs);
+
+
+        $this->cbInputLogsScheduledForDeletion = $cbInputLogsToDelete;
+
+        foreach ($cbInputLogsToDelete as $cbInputLogRemoved) {
+            $cbInputLogRemoved->setCbInput(null);
+        }
+
+        $this->collCbInputLogs = null;
+        foreach ($cbInputLogs as $cbInputLog) {
+            $this->addCbInputLog($cbInputLog);
+        }
+
+        $this->collCbInputLogs = $cbInputLogs;
+        $this->collCbInputLogsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related CbInputLog objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related CbInputLog objects.
+     * @throws PropelException
+     */
+    public function countCbInputLogs(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collCbInputLogsPartial && !$this->isNew();
+        if (null === $this->collCbInputLogs || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collCbInputLogs) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getCbInputLogs());
+            }
+            $query = CbInputLogQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByCbInput($this)
+                ->count($con);
+        }
+
+        return count($this->collCbInputLogs);
+    }
+
+    /**
+     * Method called to associate a CbInputLog object to this object
+     * through the CbInputLog foreign key attribute.
+     *
+     * @param    CbInputLog $l CbInputLog
+     * @return CbInput The current object (for fluent API support)
+     */
+    public function addCbInputLog(CbInputLog $l)
+    {
+        if ($this->collCbInputLogs === null) {
+            $this->initCbInputLogs();
+            $this->collCbInputLogsPartial = true;
+        }
+
+        if (!in_array($l, $this->collCbInputLogs->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddCbInputLog($l);
+
+            if ($this->cbInputLogsScheduledForDeletion and $this->cbInputLogsScheduledForDeletion->contains($l)) {
+                $this->cbInputLogsScheduledForDeletion->remove($this->cbInputLogsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	CbInputLog $cbInputLog The cbInputLog object to add.
+     */
+    protected function doAddCbInputLog($cbInputLog)
+    {
+        $this->collCbInputLogs[]= $cbInputLog;
+        $cbInputLog->setCbInput($this);
+    }
+
+    /**
+     * @param	CbInputLog $cbInputLog The cbInputLog object to remove.
+     * @return CbInput The current object (for fluent API support)
+     */
+    public function removeCbInputLog($cbInputLog)
+    {
+        if ($this->getCbInputLogs()->contains($cbInputLog)) {
+            $this->collCbInputLogs->remove($this->collCbInputLogs->search($cbInputLog));
+            if (null === $this->cbInputLogsScheduledForDeletion) {
+                $this->cbInputLogsScheduledForDeletion = clone $this->collCbInputLogs;
+                $this->cbInputLogsScheduledForDeletion->clear();
+            }
+            $this->cbInputLogsScheduledForDeletion[]= $cbInputLog;
+            $cbInputLog->setCbInput(null);
+        }
+
+        return $this;
     }
 
     /**
@@ -2573,6 +2852,11 @@ abstract class BaseCbInput extends BaseObject implements Persistent
     {
         if ($deep && !$this->alreadyInClearAllReferencesDeep) {
             $this->alreadyInClearAllReferencesDeep = true;
+            if ($this->collCbInputLogs) {
+                foreach ($this->collCbInputLogs as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collCbInputNotifications) {
                 foreach ($this->collCbInputNotifications as $o) {
                     $o->clearAllReferences($deep);
@@ -2591,6 +2875,10 @@ abstract class BaseCbInput extends BaseObject implements Persistent
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
 
+        if ($this->collCbInputLogs instanceof PropelCollection) {
+            $this->collCbInputLogs->clearIterator();
+        }
+        $this->collCbInputLogs = null;
         if ($this->collCbInputNotifications instanceof PropelCollection) {
             $this->collCbInputNotifications->clearIterator();
         }
