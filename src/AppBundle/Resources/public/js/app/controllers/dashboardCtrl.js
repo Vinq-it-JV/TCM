@@ -82,6 +82,8 @@ angular
 
             $scope.showSensorLog = function (sensor)
             {
+                console.log(sensor);
+
                 if (!$scope.isValidObject(sensor))
                     return;
 
