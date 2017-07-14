@@ -62,7 +62,11 @@ angular
                     tickInterval: 1,
                     labels: {
                         formatter: function () {
-                            return chartConfig.series[0].data[this.value][0]
+                            var times = '';
+                            if (angular.isArray(chartConfig.series[0].data))
+                                if (chartConfig.series[0].data.length)
+                                    times = chartConfig.series[0].data[this.value][0];
+                            return times;
                         },
                         rotation: 90
                     },

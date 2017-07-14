@@ -26,6 +26,7 @@ angular
 
             $scope.activePage = 'dashboard';
             $scope.sensorGroup = null;
+            $scope.getSensorLog = false;
 
             $scope.getStores = function () {
                 $scope.requestType = 'getStores';
@@ -80,22 +81,26 @@ angular
                 $scope.sensorGroup = null;
             };
 
-            $scope.showSensorLog = function (sensor)
-            {
-                console.log(sensor);
-
+            $scope.showSensorLog = function (sensor) {
                 if (!$scope.isValidObject(sensor))
                     return;
-
-                $scope.stopUpdateSensors();
+                $scope.getSensorLog = true;
                 $scope.sensorlog.sensorSet(sensor);
+                $scope.stopUpdateSensors();
+                $scope.getSensorLogData();
+            };
 
-                switch (sensor.TypeId)
+            $scope.getSensorLogData = function ()
+            {
+                if (!$scope.getSensorLog)
+                    return;
+
+                switch ($scope.sensorlog.sensor().TypeId)
                 {
                     case 4:
                         $scope.requestType = 'getInputLog';
                         var getdata = {
-                            'url': Routing.generate('tcm_input_sensor_log', {'sensorid': sensor.Id}),
+                            'url': Routing.generate('tcm_input_sensor_log', {'sensorid': $scope.sensorlog.sensor().Id}),
                             'payload': ''
                         };
                         $scope.BE.get(getdata, $scope.fetchDataOk, $scope.fetchDataFail);
@@ -103,7 +108,7 @@ angular
                     case 3:
                         $scope.requestType = 'getTemperatureLog';
                         var getdata = {
-                            'url': Routing.generate('tcm_temperature_sensor_log', {'sensorid': sensor.Id}),
+                            'url': Routing.generate('tcm_temperature_sensor_log', {'sensorid': $scope.sensorlog.sensor().Id}),
                             'payload': ''
                         };
                         $scope.BE.get(getdata, $scope.fetchDataOk, $scope.fetchDataFail);
@@ -125,7 +130,10 @@ angular
                     headerText: $scope.sensorlog.sensor().Name,
                     bodyText: '',
                     wide: false,
-                    onCancel: function () { },
+                    onCancel: function () {
+                        $scope.getSensorLog = false;
+                        $scope.updateSensors();
+                    },
                     onExecute: function () { },
                     parentScope: $scope
                 };
@@ -145,11 +153,13 @@ angular
 
             $scope.stopUpdateSensors = function ()
             {
-                clearTimeout($scope.updateTimer);
+                $timeout.cancel($scope.updateTimer);
             };
 
             $scope.updateSensors = function () {
                 $scope.updateTimer = $timeout(function () {
+                    if ($scope.getSensorLog)
+                        return;
                     switch ($scope.activePage) {
                         case 'sensors':
                         case 'groupSensors':
@@ -195,7 +205,7 @@ angular
                         break;
                     case 'updateSensors':
                         if (!$scope.isValidObject(data)) {
-                            $timeout.cancel($scope.updateTimer);
+                            $scope.updateSensors();
                             break;
                         }
                         if (!data.errorcode) {
@@ -204,21 +214,21 @@ angular
                         }
                         break;
                     case 'getTemperatureLog':
+                        $scope.getSensorLog = false;
                         if (!$scope.isValidObject(data))
                             break;
                         if (!data.errorcode) {
                             $scope.sensorlog.logdataSet(data.contents.temperatures);
                             $scope.showSensorLogGraph();
-                            $scope.updateSensors();
                         }
                         break;
                     case 'getInputLog':
+                        $scope.getSensorLog = false;
                         if (!$scope.isValidObject(data))
                             break;
                         if (!data.errorcode) {
                             $scope.sensorlog.logdataSet(data.contents.inputss);
                             $scope.showSensorLogGraph();
-                            $scope.updateSensors();
                         }
                         break;
                     default:
