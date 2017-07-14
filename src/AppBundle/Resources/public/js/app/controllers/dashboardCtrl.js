@@ -85,6 +85,7 @@ angular
                 if (!$scope.isValidObject(sensor))
                     return;
 
+                $scope.stopUpdateSensors();
                 $scope.sensorlog.sensorSet(sensor);
 
                 switch (sensor.TypeId)
@@ -138,6 +139,11 @@ angular
 
             $scope.isPage = function (pageid) {
                 return $scope.activePage == pageid;
+            };
+
+            $scope.stopUpdateSensors = function ()
+            {
+                clearTimeout($scope.updateTimer);
             };
 
             $scope.updateSensors = function () {
@@ -201,6 +207,7 @@ angular
                         if (!data.errorcode) {
                             $scope.sensorlog.logdataSet(data.contents.temperatures);
                             $scope.showSensorLogGraph();
+                            $scope.updateSensors();
                         }
                         break;
                     case 'getInputLog':
@@ -209,6 +216,7 @@ angular
                         if (!data.errorcode) {
                             $scope.sensorlog.logdataSet(data.contents.inputss);
                             $scope.showSensorLogGraph();
+                            $scope.updateSensors();
                         }
                         break;
                     default:

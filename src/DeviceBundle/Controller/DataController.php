@@ -165,7 +165,7 @@ class DataController extends Controller
 
         $c = new Criteria();
         $c->addDescendingOrderByColumn('data_collected_at');
-        $c->setLimit(1000);
+        $c->setLimit(100);
 
         $dataArr = [];
         $dataArr['temperatures'] = [];
@@ -190,7 +190,7 @@ class DataController extends Controller
 
         $c = new Criteria();
         $c->addDescendingOrderByColumn('data_collected_at');
-        $c->setLimit(1000);
+        $c->setLimit(100);
 
         $dataArr = [];
         $dataArr['inputs'] = [];

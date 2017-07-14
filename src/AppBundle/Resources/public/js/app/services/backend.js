@@ -24,21 +24,25 @@ angular
 			Http.put(postdata, cb_Success, cb_Fail);
 		},
 		post : function(postdata, cb_Success, cb_Fail) {
+            loaderdelay = 0;
             if (postdata.loaderdelay)
                 loaderdelay = postdata.loaderdelay;
 			loadingPromise = Http.post(postdata, cb_Success, cb_Fail);
 		},
 		put : function(putdata, cb_Success, cb_Fail) {
+            loaderdelay = 0;
             if (putdata.loaderdelay)
                 loaderdelay = putdata.loaderdelay;
 			loadingPromise = Http.put(putdata, cb_Success, cb_Fail);
 		},
 		get : function(getdata, cb_Success, cb_Fail) {
+			loaderdelay = 0;
 			if (getdata.loaderdelay)
 				loaderdelay = getdata.loaderdelay;
 			loadingPromise = Http.get(getdata, cb_Success, cb_Fail);
 		},
         delete : function(deletedata, cb_Success, cb_Fail) {
+            loaderdelay = 0;
             if (deletedata.loaderdelay)
                 loaderdelay = deletedata.loaderdelay;
             loadingPromise = Http.delete(deletedata, cb_Success, cb_Fail);
