@@ -2,20 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="282e9c36-730e-4d16-a19d-353a62e794e2" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/datasets/sensorlog.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/AppBundle/Resources/public/templates/sensorlog.tpl.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Command/TestCommand.php" afterPath="$PROJECT_DIR$/src/AppBundle/Command/TestCommand.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Resources/config/routing.yml" afterPath="$PROJECT_DIR$/src/AppBundle/Resources/config/routing.yml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/dashboardCtrl.js" afterPath="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/dashboardCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/storeCtrl.js" afterPath="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/storeCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Resources/public/translations/en.json" afterPath="$PROJECT_DIR$/src/AppBundle/Resources/public/translations/en.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Resources/public/translations/nl.json" afterPath="$PROJECT_DIR$/src/AppBundle/Resources/public/translations/nl.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Resources/views/store/group_sensors.html.twig" afterPath="$PROJECT_DIR$/src/AppBundle/Resources/views/store/group_sensors.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Resources/views/store/sensors.html.twig" afterPath="$PROJECT_DIR$/src/AppBundle/Resources/views/store/sensors.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Resources/views/store/store.html.twig" afterPath="$PROJECT_DIR$/src/AppBundle/Resources/views/store/store.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DeviceBundle/Controller/DataController.php" afterPath="$PROJECT_DIR$/src/DeviceBundle/Controller/DataController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/js/fos_js_routes.js" afterPath="$PROJECT_DIR$/web/js/fos_js_routes.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Resources/views/stores/stores.html.twig" afterPath="$PROJECT_DIR$/src/AppBundle/Resources/views/stores/stores.html.twig" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -39,12 +26,26 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="DataController.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/DeviceBundle/Controller/DataController.php">
+      <file leaf-file-name="stores.html.twig" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/views/stores/stores.html.twig">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="218">
-              <caret line="203" column="0" lean-forward="false" selection-start-line="203" selection-start-column="0" selection-end-line="203" selection-end-column="0" />
-              <folding />
+            <state relative-caret-position="323">
+              <caret line="109" column="4" lean-forward="false" selection-start-line="109" selection-start-column="4" selection-end-line="109" selection-end-column="4" />
+              <folding>
+                <marker date="1500026411000" expanded="true" signature="2509:3322" ph="..." />
+                <marker date="1500026411000" expanded="true" signature="2661:3264" ph="..." />
+                <marker date="1500026411000" expanded="true" signature="2746:3202" ph="..." />
+                <marker date="1500026411000" expanded="true" signature="2864:3135" ph="..." />
+                <marker date="1500026411000" expanded="true" signature="3935:5127" ph="..." />
+                <marker date="1500026411000" expanded="true" signature="3985:5092" ph="..." />
+                <marker date="1500026411000" expanded="true" signature="4065:5053" ph="..." />
+                <marker date="1500026411000" expanded="true" signature="4185:5010" ph="..." />
+                <marker date="1500026411000" expanded="true" signature="4257:4963" ph="..." />
+                <marker date="1500026411000" expanded="true" signature="4323:4912" ph="..." />
+                <marker date="1500026411000" expanded="false" signature="4433:4449" ph="..." />
+                <marker date="1500026411000" expanded="true" signature="4459:4591" ph="..." />
+                <marker date="1500026411000" expanded="true" signature="4694:4857" ph="..." />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -52,8 +53,8 @@
       <file leaf-file-name="dashboardCtrl.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/dashboardCtrl.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="77">
-              <caret line="89" column="0" lean-forward="false" selection-start-line="89" selection-start-column="0" selection-end-line="89" selection-end-column="0" />
+            <state relative-caret-position="-2638">
+              <caret line="17" column="44" lean-forward="true" selection-start-line="17" selection-start-column="44" selection-end-line="17" selection-end-column="44" />
               <folding />
             </state>
           </provider>
@@ -62,7 +63,7 @@
       <file leaf-file-name="group_sensors.html.twig" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/views/store/group_sensors.html.twig">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1005">
+            <state relative-caret-position="-52">
               <caret line="87" column="58" lean-forward="false" selection-start-line="87" selection-start-column="58" selection-end-line="87" selection-end-column="58" />
               <folding>
                 <marker date="1499948007000" expanded="true" signature="1596:5247" ph="..." />
@@ -94,6 +95,36 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="dashboard.html.twig" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/views/store/dashboard.html.twig">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="dashboard.html.twig" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/views/dashboard/dashboard.html.twig">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-592">
+              <caret line="14" column="110" lean-forward="false" selection-start-line="14" selection-start-column="76" selection-end-line="14" selection-end-column="110" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="store.html.twig" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/views/store/store.html.twig">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="600">
+              <caret line="40" column="4" lean-forward="false" selection-start-line="40" selection-start-column="4" selection-end-line="40" selection-end-column="4" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="sensorlog.tpl.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/public/templates/sensorlog.tpl.html">
           <provider selected="true" editor-type-id="text-editor">
@@ -107,38 +138,8 @@
       <file leaf-file-name="sensorlog.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/datasets/sensorlog.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="332">
-              <caret line="133" column="82" lean-forward="false" selection-start-line="133" selection-start-column="82" selection-end-line="133" selection-end-column="82" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="CheckLogCommand.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/DataCollectorBundle/Command/CheckLogCommand.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="323">
-              <caret line="70" column="0" lean-forward="false" selection-start-line="70" selection-start-column="0" selection-end-line="70" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="highcharts-ng.min.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/public/js/angular-charts/highcharts-ng.min.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="45">
-              <caret line="3" column="50" lean-forward="false" selection-start-line="3" selection-start-column="9" selection-end-line="3" selection-end-column="50" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="routing.yml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/config/routing.yml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="240">
-              <caret line="57" column="64" lean-forward="false" selection-start-line="57" selection-start-column="47" selection-end-line="57" selection-end-column="64" />
+            <state relative-caret-position="135">
+              <caret line="9" column="23" lean-forward="false" selection-start-line="9" selection-start-column="23" selection-end-line="9" selection-end-column="23" />
               <folding />
             </state>
           </provider>
@@ -154,11 +155,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="nl.json" pinned="false" current-in-tab="true">
+      <file leaf-file-name="nl.json" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/public/translations/nl.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
-              <caret line="304" column="21" lean-forward="false" selection-start-line="304" selection-start-column="21" selection-end-line="304" selection-end-column="21" />
+            <state relative-caret-position="270">
+              <caret line="309" column="37" lean-forward="false" selection-start-line="309" selection-start-column="37" selection-end-line="309" selection-end-column="37" />
               <folding />
             </state>
           </provider>
@@ -251,7 +252,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/maintenance/periodically/maintenance_form.html.twig" />
         <option value="$PROJECT_DIR$/src/AppBundle/Resources/views/store/maintenance_info.html.twig" />
         <option value="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/filters/decacheSrc.js" />
         <option value="$PROJECT_DIR$/app/Resources/views/base.html.twig" />
@@ -302,6 +302,7 @@
         <option value="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/datasets/sensorlog.js" />
         <option value="$PROJECT_DIR$/src/AppBundle/Resources/public/translations/en.json" />
         <option value="$PROJECT_DIR$/src/AppBundle/Resources/public/translations/nl.json" />
+        <option value="$PROJECT_DIR$/src/AppBundle/Resources/views/stores/stores.html.twig" />
       </list>
     </option>
   </component>
@@ -2954,12 +2955,12 @@
       <workItem from="1496998184924" duration="95866000" />
       <workItem from="1499062945739" duration="25632000" />
       <workItem from="1499258768289" duration="23987000" />
-      <workItem from="1499847513564" duration="36101000" />
+      <workItem from="1499847513564" duration="36338000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="828963000" />
+    <option name="totallyTimeSpent" value="829200000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="823" extended-state="6" />
@@ -3023,24 +3024,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/StoreBundle/Controller/DataController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="334">
-          <caret line="237" column="0" lean-forward="false" selection-start-line="232" selection-start-column="0" selection-end-line="237" selection-end-column="0" />
-          <folding>
-            <element signature="e#42#99#0#PHP" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/CollectionBundle/Controller/DataController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1015">
-          <caret line="302" column="0" lean-forward="false" selection-start-line="302" selection-start-column="0" selection-end-line="302" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/AdministrationBundle/Resources/views/maintenance/periodically/store.html.twig">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
@@ -3099,14 +3082,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="150">
           <caret line="10" column="0" lean-forward="false" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/views/dashboard/dashboard.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="14" column="110" lean-forward="false" selection-start-line="14" selection-start-column="76" selection-end-line="14" selection-end-column="110" />
           <folding />
         </state>
       </provider>
@@ -3376,14 +3351,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/views/store/store.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="370">
-          <caret line="40" column="4" lean-forward="false" selection-start-line="40" selection-start-column="4" selection-end-line="40" selection-end-column="4" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/appCtrl.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="152">
@@ -3497,6 +3464,46 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/DeviceBundle/Controller/DataController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="218">
+          <caret line="203" column="0" lean-forward="false" selection-start-line="203" selection-start-column="0" selection-end-line="203" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/public/translations/en.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="305" column="0" lean-forward="false" selection-start-line="304" selection-start-column="0" selection-end-line="305" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/public/translations/nl.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="309" column="37" lean-forward="false" selection-start-line="309" selection-start-column="37" selection-end-line="309" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/datasets/sensorlog.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="9" column="23" lean-forward="false" selection-start-line="9" selection-start-column="23" selection-end-line="9" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/dashboardCtrl.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2638">
+          <caret line="17" column="44" lean-forward="true" selection-start-line="17" selection-start-column="44" selection-end-line="17" selection-end-column="44" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/public/templates/sensorlog.tpl.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="128">
@@ -3505,17 +3512,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/dashboardCtrl.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="77">
-          <caret line="89" column="0" lean-forward="false" selection-start-line="89" selection-start-column="0" selection-end-line="89" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/views/store/group_sensors.html.twig">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1005">
+        <state relative-caret-position="-52">
           <caret line="87" column="58" lean-forward="false" selection-start-line="87" selection-start-column="58" selection-end-line="87" selection-end-column="58" />
           <folding>
             <marker date="1499948007000" expanded="true" signature="1596:5247" ph="..." />
@@ -3546,35 +3545,49 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/DeviceBundle/Controller/DataController.php">
+    <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/views/store/store.html.twig">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="218">
-          <caret line="203" column="0" lean-forward="false" selection-start-line="203" selection-start-column="0" selection-end-line="203" selection-end-column="0" />
+        <state relative-caret-position="600">
+          <caret line="40" column="4" lean-forward="false" selection-start-line="40" selection-start-column="4" selection-end-line="40" selection-end-column="4" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/datasets/sensorlog.js">
+    <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/views/store/dashboard.html.twig">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="332">
-          <caret line="133" column="82" lean-forward="false" selection-start-line="133" selection-start-column="82" selection-end-line="133" selection-end-column="82" />
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/public/translations/en.json">
+    <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/views/dashboard/dashboard.html.twig">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="305" column="0" lean-forward="false" selection-start-line="304" selection-start-column="0" selection-end-line="305" selection-end-column="0" />
+        <state relative-caret-position="-592">
+          <caret line="14" column="110" lean-forward="false" selection-start-line="14" selection-start-column="76" selection-end-line="14" selection-end-column="110" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/public/translations/nl.json">
+    <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/views/stores/stores.html.twig">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="304" column="21" lean-forward="false" selection-start-line="304" selection-start-column="21" selection-end-line="304" selection-end-column="21" />
-          <folding />
+        <state relative-caret-position="323">
+          <caret line="109" column="4" lean-forward="false" selection-start-line="109" selection-start-column="4" selection-end-line="109" selection-end-column="4" />
+          <folding>
+            <marker date="1500026411000" expanded="true" signature="2509:3322" ph="..." />
+            <marker date="1500026411000" expanded="true" signature="2661:3264" ph="..." />
+            <marker date="1500026411000" expanded="true" signature="2746:3202" ph="..." />
+            <marker date="1500026411000" expanded="true" signature="2864:3135" ph="..." />
+            <marker date="1500026411000" expanded="true" signature="3935:5127" ph="..." />
+            <marker date="1500026411000" expanded="true" signature="3985:5092" ph="..." />
+            <marker date="1500026411000" expanded="true" signature="4065:5053" ph="..." />
+            <marker date="1500026411000" expanded="true" signature="4185:5010" ph="..." />
+            <marker date="1500026411000" expanded="true" signature="4257:4963" ph="..." />
+            <marker date="1500026411000" expanded="true" signature="4323:4912" ph="..." />
+            <marker date="1500026411000" expanded="false" signature="4433:4449" ph="..." />
+            <marker date="1500026411000" expanded="true" signature="4459:4591" ph="..." />
+            <marker date="1500026411000" expanded="true" signature="4694:4857" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>
