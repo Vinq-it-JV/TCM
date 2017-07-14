@@ -46,6 +46,20 @@ tcm_update_sensors:
     options:
         expose: true
 
+tcm_temperature_sensor_log:
+    path:     /temperature/sensor/{sensorid}/log
+    defaults: { _controller: DeviceBundle:Data:getTemperatureSensorLog }
+    methods: [GET]
+    options:
+        expose: true
+
+tcm_input_sensor_log:
+    path:     /input/sensor/{sensorid}/log
+    defaults: { _controller: DeviceBundle:Data:getInputSensorLog }
+    methods: [GET]
+    options:
+        expose: true
+
 tcm_store_maintenance_get:
     path:     /store/{storeid}/maintenance/get
     defaults: { _controller: AppBundle:Data:getStoreMaintenance }

@@ -9,12 +9,13 @@
  */
 angular
     .module('tcmApp')
-    .controller('dashboardCtrl', ['$rootScope', '$scope', '$translate', '$timeout', 'Modal', 'DS_Stores', 'DS_Sensors', 'DS_Charts',
-        function ($rootScope, $scope, $translate, $timeout, Modal, DS_Stores, DS_Sensors, DS_Charts) {
+    .controller('dashboardCtrl', ['$rootScope', '$scope', '$translate', '$timeout', 'Modal', 'DS_Stores', 'DS_Sensors', 'DS_Charts', 'DS_Sensorlog',
+        function ($rootScope, $scope, $translate, $timeout, Modal, DS_Stores, DS_Sensors, DS_Charts, DS_Sensorlog) {
 
             $scope.stores = DS_Stores;
             $scope.sensors = DS_Sensors;
             $scope.charts = DS_Charts;
+            $scope.sensorlog = DS_Sensorlog;
 
             $scope.test = 0;
 
@@ -79,6 +80,55 @@ angular
                 $scope.sensorGroup = null;
             };
 
+            $scope.showSensorLog = function (sensor)
+            {
+                if (!$scope.isValidObject(sensor))
+                    return;
+
+                $scope.sensorlog.sensorSet(sensor);
+
+                switch (sensor.TypeId)
+                {
+                    case 4:
+                        $scope.requestType = 'getInputLog';
+                        var getdata = {
+                            'url': Routing.generate('tcm_input_sensor_log', {'sensorid': sensor.Id}),
+                            'payload': ''
+                        };
+                        $scope.BE.get(getdata, $scope.fetchDataOk, $scope.fetchDataFail);
+                        break;
+                    case 3:
+                        $scope.requestType = 'getTemperatureLog';
+                        var getdata = {
+                            'url': Routing.generate('tcm_temperature_sensor_log', {'sensorid': sensor.Id}),
+                            'payload': ''
+                        };
+                        $scope.BE.get(getdata, $scope.fetchDataOk, $scope.fetchDataFail);
+                        break;
+                    default:
+                        break;
+                }
+            };
+
+            $scope.showSensorLogGraph = function ()
+            {
+                var modalDefaults = {
+                    templateUrl: templatePrefix + "sensorlog.tpl.html"
+                };
+
+                var modalOptions = {
+                    closeButtonText: $translate.instant('CLOSE'),
+                    actionButtonText: '',
+                    headerText: $scope.sensorlog.sensor().Name,
+                    bodyText: '',
+                    wide: false,
+                    onCancel: function () { },
+                    onExecute: function () { },
+                    parentScope: $scope
+                };
+                Modal.open(modalDefaults, modalOptions);
+            };
+
             $scope.gotoSensor = function (groupid) {
                 if (groupid == 0)
                     $scope.showSensors();
@@ -96,13 +146,11 @@ angular
                         case 'sensors':
                         case 'groupSensors':
                             $scope.requestType = 'updateSensors';
-
                             var getdata = {
                                 'url': Routing.generate('tcm_update_sensors', {'storeid': $scope.stores.store().Id}),
                                 'payload': '',
                                 'loaderdelay': 2000
                             };
-
                             $scope.BE.get(getdata, $scope.fetchDataOk, $scope.fetchDataFail);
                             break;
                         default:
@@ -145,6 +193,22 @@ angular
                         if (!data.errorcode) {
                             $scope.sensors.updateSensors(data.contents.devicegroups);
                             $scope.updateSensors();
+                        }
+                        break;
+                    case 'getTemperatureLog':
+                        if (!$scope.isValidObject(data))
+                            break;
+                        if (!data.errorcode) {
+                            $scope.sensorlog.logdataSet(data.contents.temperatures);
+                            $scope.showSensorLogGraph();
+                        }
+                        break;
+                    case 'getInputLog':
+                        if (!$scope.isValidObject(data))
+                            break;
+                        if (!data.errorcode) {
+                            $scope.sensorlog.logdataSet(data.contents.inputss);
+                            $scope.showSensorLogGraph();
                         }
                         break;
                     default:

@@ -301,6 +301,8 @@
         "ACTIVE": "Actief",
         "EDIT_SENSOR": "Sensor bewerken",
         "UID": "UID Number",
+        "DATE": "Datum",
+        "TIME": "Tijd",
         "NAME": "Naam",
         "INPUT_NUMBER": "Ingang",
         "OUTPUT_NUMBER": "Uitgang",

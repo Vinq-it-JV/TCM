@@ -151,6 +151,63 @@ class DataController extends Controller
     }
 
     /**
+     * Get temperature sensor log
+     * @param Request $request
+     * @param $sensorid
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function getTemperatureSensorLogAction(Request $request, $sensorid)
+    {
+        if (!$request->isMethod('GET'))
+            return JsonResult::create()
+                ->setErrorcode(JsonResult::DANGER)
+                ->make();
+
+        $c = new Criteria();
+        $c->addDescendingOrderByColumn('data_collected_at');
+        $c->setLimit(1000);
+
+        $dataArr = [];
+        $dataArr['temperatures'] = [];
+        $sensor = DsTemperatureSensorQuery::create()->findOneById($sensorid);
+        if (!empty($sensor)) {
+            $logs = $sensor->getDsTemperatureSensorLogs($c);
+            foreach ($logs as $log)
+                $dataArr['temperatures'][] = array($log->getDataCollectedAt()->format('i:s'), (float)sprintf('%.02f', $log->getTemperature()));
+        }
+        return JsonResult::create()
+            ->setContents($dataArr)
+            ->setErrorcode(JsonResult::SUCCESS)
+            ->make();
+    }
+
+    public function getInputSensorLogAction(Request $request, $sensorid)
+    {
+        if (!$request->isMethod('GET'))
+            return JsonResult::create()
+                ->setErrorcode(JsonResult::DANGER)
+                ->make();
+
+        $c = new Criteria();
+        $c->addDescendingOrderByColumn('data_collected_at');
+        $c->setLimit(1000);
+
+        $dataArr = [];
+        $dataArr['inputs'] = [];
+
+        $sensor = CbInputQuery::create()->findOneById($sensorid);
+        if (!empty($sensor)) {
+            $logs = $sensor->getCbInputLogs($c);
+            foreach ($logs as $log)
+                $dataArr['inputs'][] = array($log->getDataCollectedAt()->format('i:s'), (integer)$log->getSwitchState());
+        }
+        return JsonResult::create()
+            ->setContents($dataArr)
+            ->setErrorcode(JsonResult::SUCCESS)
+            ->make();
+    }
+
+    /**
      * Save sensor data
      * @param $sensorData
      * @param $sensorid
@@ -178,7 +235,7 @@ class DataController extends Controller
         if (isset($sensorData->Store)) {
             if (is_numeric($sensorData->Store)) {
                 $store = StoreQuery::create()->findOneById($sensorData->Store);
-                if (!empty($store)){
+                if (!empty($store)) {
                     if ($typeid == ControllerBox::TYPE_ID)
                         $controller = $sensor;
                     else

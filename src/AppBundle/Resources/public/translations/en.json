@@ -301,6 +301,8 @@
         "ACTIVE": "Active",
         "EDIT_SENSOR": "Edit sensor",
         "UID": "UID Number",
+        "DATE": "Date",
+        "TIME": "Time",
         "NAME": "Name",
         "INPUT_NUMBER": "Input",
         "OUTPUT_NUMBER": "Output",

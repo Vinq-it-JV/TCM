@@ -72,8 +72,21 @@ class TestCommand extends ContainerAwareCommand
         //$this->getSuperAdminEmail($output);
         //$this->addCollection($output);
         //$this->createUUID($output);
-        $this->checkTimeDiff($output);
+        //$this->checkTimeDiff($output);
+        $this->getSensorLog($output);
         $output->writeln("Ready.");
+    }
+
+    protected function getSensorLog(OutputInterface $output)
+    {
+        $sensor = DsTemperatureSensorQuery::create()->findOneById(2);
+        if (!empty($sensor)) {
+            $logs = $sensor->getDsTemperatureSensorLogs();
+            if (!empty($logs))
+            {   foreach ($logs as $log)
+                    $output->writeln($log->getTemperature());
+            }
+        }
     }
 
     protected function checkTimeDiff(OutputInterface $output)
@@ -86,8 +99,7 @@ class TestCommand extends ContainerAwareCommand
             $now = $date->format('Y-m-d H:i:s');
             $diffSeconds = strtotime($now) - strtotime($updated);
             $output->writeln(sprintf("now: %d, updated at: %d = diff: %d", strtotime($now), strtotime($updated), $diffSeconds));
-        }
-        else
+        } else
             $output->writeln('Sensor not found');
     }
 
@@ -99,7 +111,7 @@ class TestCommand extends ContainerAwareCommand
 
         $inputs = "6";
         $bit = 0x04;
-        for($i = 1; $i <= 3; $i++) {
+        for ($i = 1; $i <= 3; $i++) {
 
             $output->writeln($inputs & $bit);
             $bit >>= 1;
@@ -136,8 +148,7 @@ class TestCommand extends ContainerAwareCommand
         $c->add('cb_input_notification.is_handled', false);
 
         $input = CbInputQuery::create()->findOneById(1);
-        if (!empty($input))
-        {
+        if (!empty($input)) {
             $notifications['Inputs'] = $input->getCbInputNotifications($c)->toArray();
             var_dump($notifications);
         }

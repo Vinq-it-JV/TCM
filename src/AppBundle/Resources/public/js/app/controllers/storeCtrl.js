@@ -12,7 +12,6 @@ angular
     .controller('storeCtrl', ['$rootScope', '$scope', '$translate', '$timeout', 'Modal', 'DS_Stores',
     function ($rootScope, $scope, $translate, $timeout, Modal, DS_Stores)
     {
-
         $scope.stores = DS_Stores;
         $scope.storesCollection = [];
 
