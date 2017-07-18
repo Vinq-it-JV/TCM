@@ -36,6 +36,8 @@ use StoreBundle\Model\StoreContact;
 use StoreBundle\Model\StoreContactQuery;
 use StoreBundle\Model\StoreEmail;
 use StoreBundle\Model\StoreEmailQuery;
+use StoreBundle\Model\StoreImage;
+use StoreBundle\Model\StoreImageQuery;
 use StoreBundle\Model\StoreInformant;
 use StoreBundle\Model\StoreInformantQuery;
 use StoreBundle\Model\StoreMaintenanceLog;
@@ -85,6 +87,12 @@ abstract class BaseStore extends BaseObject implements Persistent
     protected $id;
 
     /**
+     * The value for the uid field.
+     * @var        string
+     */
+    protected $uid;
+
+    /**
      * The value for the main_company field.
      * @var        int
      */
@@ -101,6 +109,12 @@ abstract class BaseStore extends BaseObject implements Persistent
      * @var        string
      */
     protected $description;
+
+    /**
+     * The value for the image field.
+     * @var        int
+     */
+    protected $image;
 
     /**
      * The value for the type field.
@@ -209,6 +223,11 @@ abstract class BaseStore extends BaseObject implements Persistent
      * @var        Regions
      */
     protected $aRegions;
+
+    /**
+     * @var        StoreImage
+     */
+    protected $aStoreImage;
 
     /**
      * @var        PropelObjectCollection|Collection[] Collection to store aggregation of Collection objects.
@@ -475,6 +494,17 @@ abstract class BaseStore extends BaseObject implements Persistent
     }
 
     /**
+     * Get the [uid] column value.
+     *
+     * @return string
+     */
+    public function getUid()
+    {
+
+        return $this->uid;
+    }
+
+    /**
      * Get the [main_company] column value.
      *
      * @return int
@@ -505,6 +535,17 @@ abstract class BaseStore extends BaseObject implements Persistent
     {
 
         return $this->description;
+    }
+
+    /**
+     * Get the [image] column value.
+     *
+     * @return int
+     */
+    public function getImage()
+    {
+
+        return $this->image;
     }
 
     /**
@@ -781,6 +822,27 @@ abstract class BaseStore extends BaseObject implements Persistent
     } // setId()
 
     /**
+     * Set the value of [uid] column.
+     *
+     * @param  string $v new value
+     * @return Store The current object (for fluent API support)
+     */
+    public function setUid($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->uid !== $v) {
+            $this->uid = $v;
+            $this->modifiedColumns[] = StorePeer::UID;
+        }
+
+
+        return $this;
+    } // setUid()
+
+    /**
      * Set the value of [main_company] column.
      *
      * @param  int $v new value
@@ -846,6 +908,31 @@ abstract class BaseStore extends BaseObject implements Persistent
 
         return $this;
     } // setDescription()
+
+    /**
+     * Set the value of [image] column.
+     *
+     * @param  int $v new value
+     * @return Store The current object (for fluent API support)
+     */
+    public function setImage($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->image !== $v) {
+            $this->image = $v;
+            $this->modifiedColumns[] = StorePeer::IMAGE;
+        }
+
+        if ($this->aStoreImage !== null && $this->aStoreImage->getId() !== $v) {
+            $this->aStoreImage = null;
+        }
+
+
+        return $this;
+    } // setImage()
 
     /**
      * Set the value of [type] column.
@@ -1245,24 +1332,26 @@ abstract class BaseStore extends BaseObject implements Persistent
         try {
 
             $this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
-            $this->main_company = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
-            $this->name = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
-            $this->description = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
-            $this->type = ($row[$startcol + 4] !== null) ? (int) $row[$startcol + 4] : null;
-            $this->code = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
-            $this->website = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
-            $this->region = ($row[$startcol + 7] !== null) ? (int) $row[$startcol + 7] : null;
-            $this->remarks = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
-            $this->payment_method = ($row[$startcol + 9] !== null) ? (int) $row[$startcol + 9] : null;
-            $this->bank_account_number = ($row[$startcol + 10] !== null) ? (string) $row[$startcol + 10] : null;
-            $this->vat_number = ($row[$startcol + 11] !== null) ? (string) $row[$startcol + 11] : null;
-            $this->coc_number = ($row[$startcol + 12] !== null) ? (string) $row[$startcol + 12] : null;
-            $this->is_maintenance = ($row[$startcol + 13] !== null) ? (boolean) $row[$startcol + 13] : null;
-            $this->is_enabled = ($row[$startcol + 14] !== null) ? (boolean) $row[$startcol + 14] : null;
-            $this->is_deleted = ($row[$startcol + 15] !== null) ? (boolean) $row[$startcol + 15] : null;
-            $this->maintenance_started_at = ($row[$startcol + 16] !== null) ? (string) $row[$startcol + 16] : null;
-            $this->created_at = ($row[$startcol + 17] !== null) ? (string) $row[$startcol + 17] : null;
-            $this->updated_at = ($row[$startcol + 18] !== null) ? (string) $row[$startcol + 18] : null;
+            $this->uid = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
+            $this->main_company = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
+            $this->name = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
+            $this->description = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
+            $this->image = ($row[$startcol + 5] !== null) ? (int) $row[$startcol + 5] : null;
+            $this->type = ($row[$startcol + 6] !== null) ? (int) $row[$startcol + 6] : null;
+            $this->code = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
+            $this->website = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
+            $this->region = ($row[$startcol + 9] !== null) ? (int) $row[$startcol + 9] : null;
+            $this->remarks = ($row[$startcol + 10] !== null) ? (string) $row[$startcol + 10] : null;
+            $this->payment_method = ($row[$startcol + 11] !== null) ? (int) $row[$startcol + 11] : null;
+            $this->bank_account_number = ($row[$startcol + 12] !== null) ? (string) $row[$startcol + 12] : null;
+            $this->vat_number = ($row[$startcol + 13] !== null) ? (string) $row[$startcol + 13] : null;
+            $this->coc_number = ($row[$startcol + 14] !== null) ? (string) $row[$startcol + 14] : null;
+            $this->is_maintenance = ($row[$startcol + 15] !== null) ? (boolean) $row[$startcol + 15] : null;
+            $this->is_enabled = ($row[$startcol + 16] !== null) ? (boolean) $row[$startcol + 16] : null;
+            $this->is_deleted = ($row[$startcol + 17] !== null) ? (boolean) $row[$startcol + 17] : null;
+            $this->maintenance_started_at = ($row[$startcol + 18] !== null) ? (string) $row[$startcol + 18] : null;
+            $this->created_at = ($row[$startcol + 19] !== null) ? (string) $row[$startcol + 19] : null;
+            $this->updated_at = ($row[$startcol + 20] !== null) ? (string) $row[$startcol + 20] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -1272,7 +1361,7 @@ abstract class BaseStore extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 19; // 19 = StorePeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 21; // 21 = StorePeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Store object", $e);
@@ -1297,6 +1386,9 @@ abstract class BaseStore extends BaseObject implements Persistent
 
         if ($this->aCompany !== null && $this->main_company !== $this->aCompany->getId()) {
             $this->aCompany = null;
+        }
+        if ($this->aStoreImage !== null && $this->image !== $this->aStoreImage->getId()) {
+            $this->aStoreImage = null;
         }
         if ($this->aStoreType !== null && $this->type !== $this->aStoreType->getId()) {
             $this->aStoreType = null;
@@ -1346,6 +1438,7 @@ abstract class BaseStore extends BaseObject implements Persistent
             $this->aCompany = null;
             $this->aStoreType = null;
             $this->aRegions = null;
+            $this->aStoreImage = null;
             $this->collCollections = null;
 
             $this->collControllerBoxen = null;
@@ -1524,6 +1617,13 @@ abstract class BaseStore extends BaseObject implements Persistent
                     $affectedRows += $this->aRegions->save($con);
                 }
                 $this->setRegions($this->aRegions);
+            }
+
+            if ($this->aStoreImage !== null) {
+                if ($this->aStoreImage->isModified() || $this->aStoreImage->isNew()) {
+                    $affectedRows += $this->aStoreImage->save($con);
+                }
+                $this->setStoreImage($this->aStoreImage);
             }
 
             if ($this->isNew() || $this->isModified()) {
@@ -1932,6 +2032,9 @@ abstract class BaseStore extends BaseObject implements Persistent
         if ($this->isColumnModified(StorePeer::ID)) {
             $modifiedColumns[':p' . $index++]  = '`id`';
         }
+        if ($this->isColumnModified(StorePeer::UID)) {
+            $modifiedColumns[':p' . $index++]  = '`uid`';
+        }
         if ($this->isColumnModified(StorePeer::MAIN_COMPANY)) {
             $modifiedColumns[':p' . $index++]  = '`main_company`';
         }
@@ -1940,6 +2043,9 @@ abstract class BaseStore extends BaseObject implements Persistent
         }
         if ($this->isColumnModified(StorePeer::DESCRIPTION)) {
             $modifiedColumns[':p' . $index++]  = '`description`';
+        }
+        if ($this->isColumnModified(StorePeer::IMAGE)) {
+            $modifiedColumns[':p' . $index++]  = '`image`';
         }
         if ($this->isColumnModified(StorePeer::TYPE)) {
             $modifiedColumns[':p' . $index++]  = '`type`';
@@ -2000,6 +2106,9 @@ abstract class BaseStore extends BaseObject implements Persistent
                     case '`id`':
                         $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
                         break;
+                    case '`uid`':
+                        $stmt->bindValue($identifier, $this->uid, PDO::PARAM_STR);
+                        break;
                     case '`main_company`':
                         $stmt->bindValue($identifier, $this->main_company, PDO::PARAM_INT);
                         break;
@@ -2008,6 +2117,9 @@ abstract class BaseStore extends BaseObject implements Persistent
                         break;
                     case '`description`':
                         $stmt->bindValue($identifier, $this->description, PDO::PARAM_STR);
+                        break;
+                    case '`image`':
+                        $stmt->bindValue($identifier, $this->image, PDO::PARAM_INT);
                         break;
                     case '`type`':
                         $stmt->bindValue($identifier, $this->type, PDO::PARAM_INT);
@@ -2171,6 +2283,12 @@ abstract class BaseStore extends BaseObject implements Persistent
                 }
             }
 
+            if ($this->aStoreImage !== null) {
+                if (!$this->aStoreImage->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aStoreImage->getValidationFailures());
+                }
+            }
+
 
             if (($retval = StorePeer::doValidate($this, $columns)) !== true) {
                 $failureMap = array_merge($failureMap, $retval);
@@ -2312,57 +2430,63 @@ abstract class BaseStore extends BaseObject implements Persistent
                 return $this->getId();
                 break;
             case 1:
-                return $this->getMainCompany();
+                return $this->getUid();
                 break;
             case 2:
-                return $this->getName();
+                return $this->getMainCompany();
                 break;
             case 3:
-                return $this->getDescription();
+                return $this->getName();
                 break;
             case 4:
-                return $this->getType();
+                return $this->getDescription();
                 break;
             case 5:
-                return $this->getCode();
+                return $this->getImage();
                 break;
             case 6:
-                return $this->getWebsite();
+                return $this->getType();
                 break;
             case 7:
-                return $this->getRegion();
+                return $this->getCode();
                 break;
             case 8:
-                return $this->getRemarks();
+                return $this->getWebsite();
                 break;
             case 9:
-                return $this->getPaymentMethod();
+                return $this->getRegion();
                 break;
             case 10:
-                return $this->getBankAccountNumber();
+                return $this->getRemarks();
                 break;
             case 11:
-                return $this->getVatNumber();
+                return $this->getPaymentMethod();
                 break;
             case 12:
-                return $this->getCocNumber();
+                return $this->getBankAccountNumber();
                 break;
             case 13:
-                return $this->getIsMaintenance();
+                return $this->getVatNumber();
                 break;
             case 14:
-                return $this->getIsEnabled();
+                return $this->getCocNumber();
                 break;
             case 15:
-                return $this->getIsDeleted();
+                return $this->getIsMaintenance();
                 break;
             case 16:
-                return $this->getMaintenanceStartedAt();
+                return $this->getIsEnabled();
                 break;
             case 17:
-                return $this->getCreatedAt();
+                return $this->getIsDeleted();
                 break;
             case 18:
+                return $this->getMaintenanceStartedAt();
+                break;
+            case 19:
+                return $this->getCreatedAt();
+                break;
+            case 20:
                 return $this->getUpdatedAt();
                 break;
             default:
@@ -2395,24 +2519,26 @@ abstract class BaseStore extends BaseObject implements Persistent
         $keys = StorePeer::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getId(),
-            $keys[1] => $this->getMainCompany(),
-            $keys[2] => $this->getName(),
-            $keys[3] => $this->getDescription(),
-            $keys[4] => $this->getType(),
-            $keys[5] => $this->getCode(),
-            $keys[6] => $this->getWebsite(),
-            $keys[7] => $this->getRegion(),
-            $keys[8] => $this->getRemarks(),
-            $keys[9] => $this->getPaymentMethod(),
-            $keys[10] => $this->getBankAccountNumber(),
-            $keys[11] => $this->getVatNumber(),
-            $keys[12] => $this->getCocNumber(),
-            $keys[13] => $this->getIsMaintenance(),
-            $keys[14] => $this->getIsEnabled(),
-            $keys[15] => $this->getIsDeleted(),
-            $keys[16] => $this->getMaintenanceStartedAt(),
-            $keys[17] => $this->getCreatedAt(),
-            $keys[18] => $this->getUpdatedAt(),
+            $keys[1] => $this->getUid(),
+            $keys[2] => $this->getMainCompany(),
+            $keys[3] => $this->getName(),
+            $keys[4] => $this->getDescription(),
+            $keys[5] => $this->getImage(),
+            $keys[6] => $this->getType(),
+            $keys[7] => $this->getCode(),
+            $keys[8] => $this->getWebsite(),
+            $keys[9] => $this->getRegion(),
+            $keys[10] => $this->getRemarks(),
+            $keys[11] => $this->getPaymentMethod(),
+            $keys[12] => $this->getBankAccountNumber(),
+            $keys[13] => $this->getVatNumber(),
+            $keys[14] => $this->getCocNumber(),
+            $keys[15] => $this->getIsMaintenance(),
+            $keys[16] => $this->getIsEnabled(),
+            $keys[17] => $this->getIsDeleted(),
+            $keys[18] => $this->getMaintenanceStartedAt(),
+            $keys[19] => $this->getCreatedAt(),
+            $keys[20] => $this->getUpdatedAt(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -2428,6 +2554,9 @@ abstract class BaseStore extends BaseObject implements Persistent
             }
             if (null !== $this->aRegions) {
                 $result['Regions'] = $this->aRegions->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aStoreImage) {
+                $result['StoreImage'] = $this->aStoreImage->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->collCollections) {
                 $result['Collections'] = $this->collCollections->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
@@ -2503,57 +2632,63 @@ abstract class BaseStore extends BaseObject implements Persistent
                 $this->setId($value);
                 break;
             case 1:
-                $this->setMainCompany($value);
+                $this->setUid($value);
                 break;
             case 2:
-                $this->setName($value);
+                $this->setMainCompany($value);
                 break;
             case 3:
-                $this->setDescription($value);
+                $this->setName($value);
                 break;
             case 4:
-                $this->setType($value);
+                $this->setDescription($value);
                 break;
             case 5:
-                $this->setCode($value);
+                $this->setImage($value);
                 break;
             case 6:
-                $this->setWebsite($value);
+                $this->setType($value);
                 break;
             case 7:
-                $this->setRegion($value);
+                $this->setCode($value);
                 break;
             case 8:
-                $this->setRemarks($value);
+                $this->setWebsite($value);
                 break;
             case 9:
-                $this->setPaymentMethod($value);
+                $this->setRegion($value);
                 break;
             case 10:
-                $this->setBankAccountNumber($value);
+                $this->setRemarks($value);
                 break;
             case 11:
-                $this->setVatNumber($value);
+                $this->setPaymentMethod($value);
                 break;
             case 12:
-                $this->setCocNumber($value);
+                $this->setBankAccountNumber($value);
                 break;
             case 13:
-                $this->setIsMaintenance($value);
+                $this->setVatNumber($value);
                 break;
             case 14:
-                $this->setIsEnabled($value);
+                $this->setCocNumber($value);
                 break;
             case 15:
-                $this->setIsDeleted($value);
+                $this->setIsMaintenance($value);
                 break;
             case 16:
-                $this->setMaintenanceStartedAt($value);
+                $this->setIsEnabled($value);
                 break;
             case 17:
-                $this->setCreatedAt($value);
+                $this->setIsDeleted($value);
                 break;
             case 18:
+                $this->setMaintenanceStartedAt($value);
+                break;
+            case 19:
+                $this->setCreatedAt($value);
+                break;
+            case 20:
                 $this->setUpdatedAt($value);
                 break;
         } // switch()
@@ -2581,24 +2716,26 @@ abstract class BaseStore extends BaseObject implements Persistent
         $keys = StorePeer::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
-        if (array_key_exists($keys[1], $arr)) $this->setMainCompany($arr[$keys[1]]);
-        if (array_key_exists($keys[2], $arr)) $this->setName($arr[$keys[2]]);
-        if (array_key_exists($keys[3], $arr)) $this->setDescription($arr[$keys[3]]);
-        if (array_key_exists($keys[4], $arr)) $this->setType($arr[$keys[4]]);
-        if (array_key_exists($keys[5], $arr)) $this->setCode($arr[$keys[5]]);
-        if (array_key_exists($keys[6], $arr)) $this->setWebsite($arr[$keys[6]]);
-        if (array_key_exists($keys[7], $arr)) $this->setRegion($arr[$keys[7]]);
-        if (array_key_exists($keys[8], $arr)) $this->setRemarks($arr[$keys[8]]);
-        if (array_key_exists($keys[9], $arr)) $this->setPaymentMethod($arr[$keys[9]]);
-        if (array_key_exists($keys[10], $arr)) $this->setBankAccountNumber($arr[$keys[10]]);
-        if (array_key_exists($keys[11], $arr)) $this->setVatNumber($arr[$keys[11]]);
-        if (array_key_exists($keys[12], $arr)) $this->setCocNumber($arr[$keys[12]]);
-        if (array_key_exists($keys[13], $arr)) $this->setIsMaintenance($arr[$keys[13]]);
-        if (array_key_exists($keys[14], $arr)) $this->setIsEnabled($arr[$keys[14]]);
-        if (array_key_exists($keys[15], $arr)) $this->setIsDeleted($arr[$keys[15]]);
-        if (array_key_exists($keys[16], $arr)) $this->setMaintenanceStartedAt($arr[$keys[16]]);
-        if (array_key_exists($keys[17], $arr)) $this->setCreatedAt($arr[$keys[17]]);
-        if (array_key_exists($keys[18], $arr)) $this->setUpdatedAt($arr[$keys[18]]);
+        if (array_key_exists($keys[1], $arr)) $this->setUid($arr[$keys[1]]);
+        if (array_key_exists($keys[2], $arr)) $this->setMainCompany($arr[$keys[2]]);
+        if (array_key_exists($keys[3], $arr)) $this->setName($arr[$keys[3]]);
+        if (array_key_exists($keys[4], $arr)) $this->setDescription($arr[$keys[4]]);
+        if (array_key_exists($keys[5], $arr)) $this->setImage($arr[$keys[5]]);
+        if (array_key_exists($keys[6], $arr)) $this->setType($arr[$keys[6]]);
+        if (array_key_exists($keys[7], $arr)) $this->setCode($arr[$keys[7]]);
+        if (array_key_exists($keys[8], $arr)) $this->setWebsite($arr[$keys[8]]);
+        if (array_key_exists($keys[9], $arr)) $this->setRegion($arr[$keys[9]]);
+        if (array_key_exists($keys[10], $arr)) $this->setRemarks($arr[$keys[10]]);
+        if (array_key_exists($keys[11], $arr)) $this->setPaymentMethod($arr[$keys[11]]);
+        if (array_key_exists($keys[12], $arr)) $this->setBankAccountNumber($arr[$keys[12]]);
+        if (array_key_exists($keys[13], $arr)) $this->setVatNumber($arr[$keys[13]]);
+        if (array_key_exists($keys[14], $arr)) $this->setCocNumber($arr[$keys[14]]);
+        if (array_key_exists($keys[15], $arr)) $this->setIsMaintenance($arr[$keys[15]]);
+        if (array_key_exists($keys[16], $arr)) $this->setIsEnabled($arr[$keys[16]]);
+        if (array_key_exists($keys[17], $arr)) $this->setIsDeleted($arr[$keys[17]]);
+        if (array_key_exists($keys[18], $arr)) $this->setMaintenanceStartedAt($arr[$keys[18]]);
+        if (array_key_exists($keys[19], $arr)) $this->setCreatedAt($arr[$keys[19]]);
+        if (array_key_exists($keys[20], $arr)) $this->setUpdatedAt($arr[$keys[20]]);
     }
 
     /**
@@ -2611,9 +2748,11 @@ abstract class BaseStore extends BaseObject implements Persistent
         $criteria = new Criteria(StorePeer::DATABASE_NAME);
 
         if ($this->isColumnModified(StorePeer::ID)) $criteria->add(StorePeer::ID, $this->id);
+        if ($this->isColumnModified(StorePeer::UID)) $criteria->add(StorePeer::UID, $this->uid);
         if ($this->isColumnModified(StorePeer::MAIN_COMPANY)) $criteria->add(StorePeer::MAIN_COMPANY, $this->main_company);
         if ($this->isColumnModified(StorePeer::NAME)) $criteria->add(StorePeer::NAME, $this->name);
         if ($this->isColumnModified(StorePeer::DESCRIPTION)) $criteria->add(StorePeer::DESCRIPTION, $this->description);
+        if ($this->isColumnModified(StorePeer::IMAGE)) $criteria->add(StorePeer::IMAGE, $this->image);
         if ($this->isColumnModified(StorePeer::TYPE)) $criteria->add(StorePeer::TYPE, $this->type);
         if ($this->isColumnModified(StorePeer::CODE)) $criteria->add(StorePeer::CODE, $this->code);
         if ($this->isColumnModified(StorePeer::WEBSITE)) $criteria->add(StorePeer::WEBSITE, $this->website);
@@ -2692,9 +2831,11 @@ abstract class BaseStore extends BaseObject implements Persistent
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
+        $copyObj->setUid($this->getUid());
         $copyObj->setMainCompany($this->getMainCompany());
         $copyObj->setName($this->getName());
         $copyObj->setDescription($this->getDescription());
+        $copyObj->setImage($this->getImage());
         $copyObj->setType($this->getType());
         $copyObj->setCode($this->getCode());
         $copyObj->setWebsite($this->getWebsite());
@@ -2994,6 +3135,58 @@ abstract class BaseStore extends BaseObject implements Persistent
         }
 
         return $this->aRegions;
+    }
+
+    /**
+     * Declares an association between this object and a StoreImage object.
+     *
+     * @param                  StoreImage $v
+     * @return Store The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setStoreImage(StoreImage $v = null)
+    {
+        if ($v === null) {
+            $this->setImage(NULL);
+        } else {
+            $this->setImage($v->getId());
+        }
+
+        $this->aStoreImage = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the StoreImage object, it will not be re-added.
+        if ($v !== null) {
+            $v->addStore($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated StoreImage object
+     *
+     * @param PropelPDO $con Optional Connection object.
+     * @param $doQuery Executes a query to get the object if required
+     * @return StoreImage The associated StoreImage object.
+     * @throws PropelException
+     */
+    public function getStoreImage(PropelPDO $con = null, $doQuery = true)
+    {
+        if ($this->aStoreImage === null && ($this->image !== null) && $doQuery) {
+            $this->aStoreImage = StoreImageQuery::create()->findPk($this->image, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aStoreImage->addStores($this);
+             */
+        }
+
+        return $this->aStoreImage;
     }
 
 
@@ -7316,9 +7509,11 @@ abstract class BaseStore extends BaseObject implements Persistent
     public function clear()
     {
         $this->id = null;
+        $this->uid = null;
         $this->main_company = null;
         $this->name = null;
         $this->description = null;
+        $this->image = null;
         $this->type = null;
         $this->code = null;
         $this->website = null;
@@ -7456,6 +7651,9 @@ abstract class BaseStore extends BaseObject implements Persistent
             if ($this->aRegions instanceof Persistent) {
               $this->aRegions->clearAllReferences($deep);
             }
+            if ($this->aStoreImage instanceof Persistent) {
+              $this->aStoreImage->clearAllReferences($deep);
+            }
 
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
@@ -7535,6 +7733,7 @@ abstract class BaseStore extends BaseObject implements Persistent
         $this->aCompany = null;
         $this->aStoreType = null;
         $this->aRegions = null;
+        $this->aStoreImage = null;
     }
 
     /**

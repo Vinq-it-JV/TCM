@@ -27,7 +27,8 @@
     "START": "Start",
     "MANAGE": "Beheer",
     "DROPZONE": {
-        "DROP_FILES": "Sleep bestanden hier."
+        "DROP_FILES": "Sleep bestanden hier.",
+        "REMOVE_FILE": "Verwijder bestand"
     },
     "ROLE": {
         "USER": "Gebruiker",

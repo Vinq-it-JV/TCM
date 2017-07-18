@@ -72,6 +72,13 @@ tcm_store_inventory_get:
     options:
         expose: true
 
+tcm_store_image_get:
+    path:     /store/image/{imageid}/get/{rand}
+    defaults: { _controller: StoreBundle:Data:getStoreImage }
+    methods: [GET]
+    options:
+        expose: true
+
 tcm_collection_attachment_get:
     path:     /collection/attachment/{attachmentid}/get
     defaults: { _controller: CollectionBundle:Data:getCollectionAttachment }

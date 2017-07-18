@@ -75,4 +75,8 @@ class ClassHelper
         return null;
     }
 
+    public function createFileUUID()
+    {
+        return str_replace('-', '', $this->createUUID());
+    }
 }

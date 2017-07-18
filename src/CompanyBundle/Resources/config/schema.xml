@@ -2,6 +2,7 @@
 <database name="default" defaultIdMethod="native" namespace="CompanyBundle\Model">
     <table name="company">
         <column name="id" type="integer" primaryKey="true" autoIncrement="true" />
+        <column name="uid" type="varchar" size="64"/>
         <column name="name" type="varchar" size="255" />
         <column name="description" type="longvarchar" />
         <column name="type" type="integer" />

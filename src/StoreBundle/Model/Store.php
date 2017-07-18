@@ -57,6 +57,7 @@ class Store extends BaseStore
 
         unset($data['store']['CreatedAt']);
         unset($data['store']['UpdatedAt']);
+        unset($data['store']['Image']['LinkUrl']);
 
         return $data;
     }
@@ -76,6 +77,20 @@ class Store extends BaseStore
         unset($data['store']['UpdatedAt']);
 
         return $data;
+    }
+
+    /**
+     * getImage()
+     * @return int|StoreImage
+     */
+    public function getImage()
+    {
+        $image = parent::getImage();
+        if (is_numeric($image))
+            $image = StoreImageQuery::create()->findOneById($image);
+        if (!empty($image))
+            $image = $image->getStoreImageDataArray(false)['storeimage'];
+        return $image;
     }
 
     /**

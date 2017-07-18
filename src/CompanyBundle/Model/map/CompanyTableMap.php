@@ -43,6 +43,7 @@ class CompanyTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
+        $this->addColumn('uid', 'Uid', 'VARCHAR', false, 64, null);
         $this->addColumn('name', 'Name', 'VARCHAR', false, 255, null);
         $this->addColumn('description', 'Description', 'LONGVARCHAR', false, null, null);
         $this->addForeignKey('type', 'Type', 'INTEGER', 'company_type', 'id', false, null, null);

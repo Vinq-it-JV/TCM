@@ -42,7 +42,6 @@ angular
         $scope.dzMethods = {};
 
         $scope.$on('languageLoaded', function () {
-            $scope.dzOptions.dictDefaultMessage = $translate.instant('DROPZONE.DROP_FILES');
         });
 
         $scope.getCollectionData = function (storeid, collectiontype)
@@ -238,6 +237,7 @@ angular
                         $scope.collections.collectionsSet(data.contents.collections);
                         $scope.collections.templateSet(data.contents.template);
                         $scope.collectionsCollection = [].concat(data.contents.collections);
+                        $scope.dzOptions.dictDefaultMessage = $translate.instant('DROPZONE.DROP_FILES');
                     }
                     break;
                 case 'saveCollectionData':

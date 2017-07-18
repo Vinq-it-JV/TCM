@@ -43,9 +43,11 @@ class StoreTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
+        $this->addColumn('uid', 'Uid', 'VARCHAR', false, 64, null);
         $this->addForeignKey('main_company', 'MainCompany', 'INTEGER', 'company', 'id', false, null, null);
         $this->addColumn('name', 'Name', 'VARCHAR', false, 255, null);
         $this->addColumn('description', 'Description', 'LONGVARCHAR', false, null, null);
+        $this->addForeignKey('image', 'Image', 'INTEGER', 'store_image', 'id', false, null, null);
         $this->addForeignKey('type', 'Type', 'INTEGER', 'store_type', 'id', false, null, null);
         $this->addColumn('code', 'Code', 'VARCHAR', false, 25, null);
         $this->addColumn('website', 'Website', 'VARCHAR', false, 255, null);
@@ -72,6 +74,7 @@ class StoreTableMap extends TableMap
         $this->addRelation('Company', 'CompanyBundle\\Model\\Company', RelationMap::MANY_TO_ONE, array('main_company' => 'id', ), null, null);
         $this->addRelation('StoreType', 'StoreBundle\\Model\\StoreType', RelationMap::MANY_TO_ONE, array('type' => 'id', ), null, null);
         $this->addRelation('Regions', 'CompanyBundle\\Model\\Regions', RelationMap::MANY_TO_ONE, array('region' => 'id', ), null, null);
+        $this->addRelation('StoreImage', 'StoreBundle\\Model\\StoreImage', RelationMap::MANY_TO_ONE, array('image' => 'id', ), null, null);
         $this->addRelation('Collection', 'CollectionBundle\\Model\\Collection', RelationMap::ONE_TO_MANY, array('id' => 'collection_store', ), null, null, 'Collections');
         $this->addRelation('ControllerBox', 'DeviceBundle\\Model\\ControllerBox', RelationMap::ONE_TO_MANY, array('id' => 'main_store', ), null, null, 'ControllerBoxen');
         $this->addRelation('DeviceGroup', 'DeviceBundle\\Model\\DeviceGroup', RelationMap::ONE_TO_MANY, array('id' => 'main_store', ), null, null, 'DeviceGroups');

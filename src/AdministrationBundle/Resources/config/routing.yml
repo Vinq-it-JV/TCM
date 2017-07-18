@@ -298,6 +298,20 @@ administration_store_delete_address:
     options:
         expose: true
 
+administration_store_upload:
+    path:     /store/{storeid}/upload
+    defaults: { _controller: StoreBundle:Data:uploadStoreImage }
+    methods: [POST]
+    options:
+        expose: true
+
+administration_store_image_get:
+    path:     /store/image/{imageid}/get/{rand}
+    defaults: { _controller: StoreBundle:Data:getStoreImage }
+    methods: [GET]
+    options:
+        expose: true
+
 #
 # MAINTENANCE
 #

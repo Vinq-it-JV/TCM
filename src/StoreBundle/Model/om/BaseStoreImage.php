@@ -5,32 +5,34 @@ namespace StoreBundle\Model\om;
 use \BaseObject;
 use \BasePeer;
 use \Criteria;
+use \DateTime;
 use \Exception;
 use \PDO;
 use \Persistent;
 use \Propel;
 use \PropelCollection;
+use \PropelDateTime;
 use \PropelException;
 use \PropelObjectCollection;
 use \PropelPDO;
 use StoreBundle\Model\Store;
+use StoreBundle\Model\StoreImage;
+use StoreBundle\Model\StoreImagePeer;
+use StoreBundle\Model\StoreImageQuery;
 use StoreBundle\Model\StoreQuery;
-use StoreBundle\Model\StoreType;
-use StoreBundle\Model\StoreTypePeer;
-use StoreBundle\Model\StoreTypeQuery;
 
-abstract class BaseStoreType extends BaseObject implements Persistent
+abstract class BaseStoreImage extends BaseObject implements Persistent
 {
     /**
      * Peer class name
      */
-    const PEER = 'StoreBundle\\Model\\StoreTypePeer';
+    const PEER = 'StoreBundle\\Model\\StoreImagePeer';
 
     /**
      * The Peer class.
      * Instance provides a convenient way of calling static methods on a class
      * that calling code may not be able to identify.
-     * @var        StoreTypePeer
+     * @var        StoreImagePeer
      */
     protected static $peer;
 
@@ -47,16 +49,46 @@ abstract class BaseStoreType extends BaseObject implements Persistent
     protected $id;
 
     /**
+     * The value for the uid field.
+     * @var        string
+     */
+    protected $uid;
+
+    /**
+     * The value for the original_name field.
+     * @var        string
+     */
+    protected $original_name;
+
+    /**
      * The value for the name field.
      * @var        string
      */
     protected $name;
 
     /**
-     * The value for the description field.
+     * The value for the link_url field.
      * @var        string
      */
-    protected $description;
+    protected $link_url;
+
+    /**
+     * The value for the filename field.
+     * @var        string
+     */
+    protected $filename;
+
+    /**
+     * The value for the created_at field.
+     * @var        string
+     */
+    protected $created_at;
+
+    /**
+     * The value for the updated_at field.
+     * @var        string
+     */
+    protected $updated_at;
 
     /**
      * @var        PropelObjectCollection|Store[] Collection to store aggregation of Store objects.
@@ -102,6 +134,28 @@ abstract class BaseStoreType extends BaseObject implements Persistent
     }
 
     /**
+     * Get the [uid] column value.
+     *
+     * @return string
+     */
+    public function getUid()
+    {
+
+        return $this->uid;
+    }
+
+    /**
+     * Get the [original_name] column value.
+     *
+     * @return string
+     */
+    public function getOriginalName()
+    {
+
+        return $this->original_name;
+    }
+
+    /**
      * Get the [name] column value.
      *
      * @return string
@@ -113,21 +167,112 @@ abstract class BaseStoreType extends BaseObject implements Persistent
     }
 
     /**
-     * Get the [description] column value.
+     * Get the [link_url] column value.
      *
      * @return string
      */
-    public function getDescription()
+    public function getLinkUrl()
     {
 
-        return $this->description;
+        return $this->link_url;
+    }
+
+    /**
+     * Get the [filename] column value.
+     *
+     * @return string
+     */
+    public function getFilename()
+    {
+
+        return $this->filename;
+    }
+
+    /**
+     * Get the [optionally formatted] temporal [created_at] column value.
+     *
+     *
+     * @param string $format The date/time format string (either date()-style or strftime()-style).
+     *				 If format is null, then the raw DateTime object will be returned.
+     * @return mixed Formatted date/time value as string or DateTime object (if format is null), null if column is null, and 0 if column value is 0000-00-00 00:00:00
+     * @throws PropelException - if unable to parse/validate the date/time value.
+     */
+    public function getCreatedAt($format = null)
+    {
+        if ($this->created_at === null) {
+            return null;
+        }
+
+        if ($this->created_at === '0000-00-00 00:00:00') {
+            // while technically this is not a default value of null,
+            // this seems to be closest in meaning.
+            return null;
+        }
+
+        try {
+            $dt = new DateTime($this->created_at);
+        } catch (Exception $x) {
+            throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->created_at, true), $x);
+        }
+
+        if ($format === null) {
+            // Because propel.useDateTimeClass is true, we return a DateTime object.
+            return $dt;
+        }
+
+        if (strpos($format, '%') !== false) {
+            return strftime($format, $dt->format('U'));
+        }
+
+        return $dt->format($format);
+
+    }
+
+    /**
+     * Get the [optionally formatted] temporal [updated_at] column value.
+     *
+     *
+     * @param string $format The date/time format string (either date()-style or strftime()-style).
+     *				 If format is null, then the raw DateTime object will be returned.
+     * @return mixed Formatted date/time value as string or DateTime object (if format is null), null if column is null, and 0 if column value is 0000-00-00 00:00:00
+     * @throws PropelException - if unable to parse/validate the date/time value.
+     */
+    public function getUpdatedAt($format = null)
+    {
+        if ($this->updated_at === null) {
+            return null;
+        }
+
+        if ($this->updated_at === '0000-00-00 00:00:00') {
+            // while technically this is not a default value of null,
+            // this seems to be closest in meaning.
+            return null;
+        }
+
+        try {
+            $dt = new DateTime($this->updated_at);
+        } catch (Exception $x) {
+            throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->updated_at, true), $x);
+        }
+
+        if ($format === null) {
+            // Because propel.useDateTimeClass is true, we return a DateTime object.
+            return $dt;
+        }
+
+        if (strpos($format, '%') !== false) {
+            return strftime($format, $dt->format('U'));
+        }
+
+        return $dt->format($format);
+
     }
 
     /**
      * Set the value of [id] column.
      *
      * @param  int $v new value
-     * @return StoreType The current object (for fluent API support)
+     * @return StoreImage The current object (for fluent API support)
      */
     public function setId($v)
     {
@@ -137,7 +282,7 @@ abstract class BaseStoreType extends BaseObject implements Persistent
 
         if ($this->id !== $v) {
             $this->id = $v;
-            $this->modifiedColumns[] = StoreTypePeer::ID;
+            $this->modifiedColumns[] = StoreImagePeer::ID;
         }
 
 
@@ -145,10 +290,52 @@ abstract class BaseStoreType extends BaseObject implements Persistent
     } // setId()
 
     /**
+     * Set the value of [uid] column.
+     *
+     * @param  string $v new value
+     * @return StoreImage The current object (for fluent API support)
+     */
+    public function setUid($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->uid !== $v) {
+            $this->uid = $v;
+            $this->modifiedColumns[] = StoreImagePeer::UID;
+        }
+
+
+        return $this;
+    } // setUid()
+
+    /**
+     * Set the value of [original_name] column.
+     *
+     * @param  string $v new value
+     * @return StoreImage The current object (for fluent API support)
+     */
+    public function setOriginalName($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->original_name !== $v) {
+            $this->original_name = $v;
+            $this->modifiedColumns[] = StoreImagePeer::ORIGINAL_NAME;
+        }
+
+
+        return $this;
+    } // setOriginalName()
+
+    /**
      * Set the value of [name] column.
      *
      * @param  string $v new value
-     * @return StoreType The current object (for fluent API support)
+     * @return StoreImage The current object (for fluent API support)
      */
     public function setName($v)
     {
@@ -158,7 +345,7 @@ abstract class BaseStoreType extends BaseObject implements Persistent
 
         if ($this->name !== $v) {
             $this->name = $v;
-            $this->modifiedColumns[] = StoreTypePeer::NAME;
+            $this->modifiedColumns[] = StoreImagePeer::NAME;
         }
 
 
@@ -166,25 +353,92 @@ abstract class BaseStoreType extends BaseObject implements Persistent
     } // setName()
 
     /**
-     * Set the value of [description] column.
+     * Set the value of [link_url] column.
      *
      * @param  string $v new value
-     * @return StoreType The current object (for fluent API support)
+     * @return StoreImage The current object (for fluent API support)
      */
-    public function setDescription($v)
+    public function setLinkUrl($v)
     {
         if ($v !== null) {
             $v = (string) $v;
         }
 
-        if ($this->description !== $v) {
-            $this->description = $v;
-            $this->modifiedColumns[] = StoreTypePeer::DESCRIPTION;
+        if ($this->link_url !== $v) {
+            $this->link_url = $v;
+            $this->modifiedColumns[] = StoreImagePeer::LINK_URL;
         }
 
 
         return $this;
-    } // setDescription()
+    } // setLinkUrl()
+
+    /**
+     * Set the value of [filename] column.
+     *
+     * @param  string $v new value
+     * @return StoreImage The current object (for fluent API support)
+     */
+    public function setFilename($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->filename !== $v) {
+            $this->filename = $v;
+            $this->modifiedColumns[] = StoreImagePeer::FILENAME;
+        }
+
+
+        return $this;
+    } // setFilename()
+
+    /**
+     * Sets the value of [created_at] column to a normalized version of the date/time value specified.
+     *
+     * @param mixed $v string, integer (timestamp), or DateTime value.
+     *               Empty strings are treated as null.
+     * @return StoreImage The current object (for fluent API support)
+     */
+    public function setCreatedAt($v)
+    {
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->created_at !== null || $dt !== null) {
+            $currentDateAsString = ($this->created_at !== null && $tmpDt = new DateTime($this->created_at)) ? $tmpDt->format('Y-m-d H:i:s') : null;
+            $newDateAsString = $dt ? $dt->format('Y-m-d H:i:s') : null;
+            if ($currentDateAsString !== $newDateAsString) {
+                $this->created_at = $newDateAsString;
+                $this->modifiedColumns[] = StoreImagePeer::CREATED_AT;
+            }
+        } // if either are not null
+
+
+        return $this;
+    } // setCreatedAt()
+
+    /**
+     * Sets the value of [updated_at] column to a normalized version of the date/time value specified.
+     *
+     * @param mixed $v string, integer (timestamp), or DateTime value.
+     *               Empty strings are treated as null.
+     * @return StoreImage The current object (for fluent API support)
+     */
+    public function setUpdatedAt($v)
+    {
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->updated_at !== null || $dt !== null) {
+            $currentDateAsString = ($this->updated_at !== null && $tmpDt = new DateTime($this->updated_at)) ? $tmpDt->format('Y-m-d H:i:s') : null;
+            $newDateAsString = $dt ? $dt->format('Y-m-d H:i:s') : null;
+            if ($currentDateAsString !== $newDateAsString) {
+                $this->updated_at = $newDateAsString;
+                $this->modifiedColumns[] = StoreImagePeer::UPDATED_AT;
+            }
+        } // if either are not null
+
+
+        return $this;
+    } // setUpdatedAt()
 
     /**
      * Indicates whether the columns in this object are only set to default values.
@@ -219,8 +473,13 @@ abstract class BaseStoreType extends BaseObject implements Persistent
         try {
 
             $this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
-            $this->name = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
-            $this->description = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
+            $this->uid = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
+            $this->original_name = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
+            $this->name = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
+            $this->link_url = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
+            $this->filename = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
+            $this->created_at = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
+            $this->updated_at = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -230,10 +489,10 @@ abstract class BaseStoreType extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 3; // 3 = StoreTypePeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 8; // 8 = StoreImagePeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
-            throw new PropelException("Error populating StoreType object", $e);
+            throw new PropelException("Error populating StoreImage object", $e);
         }
     }
 
@@ -276,13 +535,13 @@ abstract class BaseStoreType extends BaseObject implements Persistent
         }
 
         if ($con === null) {
-            $con = Propel::getConnection(StoreTypePeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(StoreImagePeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
         // We don't need to alter the object instance pool; we're just modifying this instance
         // already in the pool.
 
-        $stmt = StoreTypePeer::doSelectStmt($this->buildPkeyCriteria(), $con);
+        $stmt = StoreImagePeer::doSelectStmt($this->buildPkeyCriteria(), $con);
         $row = $stmt->fetch(PDO::FETCH_NUM);
         $stmt->closeCursor();
         if (!$row) {
@@ -314,12 +573,12 @@ abstract class BaseStoreType extends BaseObject implements Persistent
         }
 
         if ($con === null) {
-            $con = Propel::getConnection(StoreTypePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(StoreImagePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
 
         $con->beginTransaction();
         try {
-            $deleteQuery = StoreTypeQuery::create()
+            $deleteQuery = StoreImageQuery::create()
                 ->filterByPrimaryKey($this->getPrimaryKey());
             $ret = $this->preDelete($con);
             if ($ret) {
@@ -357,7 +616,7 @@ abstract class BaseStoreType extends BaseObject implements Persistent
         }
 
         if ($con === null) {
-            $con = Propel::getConnection(StoreTypePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(StoreImagePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
 
         $con->beginTransaction();
@@ -366,8 +625,19 @@ abstract class BaseStoreType extends BaseObject implements Persistent
             $ret = $this->preSave($con);
             if ($isInsert) {
                 $ret = $ret && $this->preInsert($con);
+                // timestampable behavior
+                if (!$this->isColumnModified(StoreImagePeer::CREATED_AT)) {
+                    $this->setCreatedAt(time());
+                }
+                if (!$this->isColumnModified(StoreImagePeer::UPDATED_AT)) {
+                    $this->setUpdatedAt(time());
+                }
             } else {
                 $ret = $ret && $this->preUpdate($con);
+                // timestampable behavior
+                if ($this->isModified() && !$this->isColumnModified(StoreImagePeer::UPDATED_AT)) {
+                    $this->setUpdatedAt(time());
+                }
             }
             if ($ret) {
                 $affectedRows = $this->doSave($con);
@@ -377,7 +647,7 @@ abstract class BaseStoreType extends BaseObject implements Persistent
                     $this->postUpdate($con);
                 }
                 $this->postSave($con);
-                StoreTypePeer::addInstanceToPool($this);
+                StoreImagePeer::addInstanceToPool($this);
             } else {
                 $affectedRows = 0;
             }
@@ -456,24 +726,39 @@ abstract class BaseStoreType extends BaseObject implements Persistent
         $modifiedColumns = array();
         $index = 0;
 
-        $this->modifiedColumns[] = StoreTypePeer::ID;
+        $this->modifiedColumns[] = StoreImagePeer::ID;
         if (null !== $this->id) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key (' . StoreTypePeer::ID . ')');
+            throw new PropelException('Cannot insert a value for auto-increment primary key (' . StoreImagePeer::ID . ')');
         }
 
          // check the columns in natural order for more readable SQL queries
-        if ($this->isColumnModified(StoreTypePeer::ID)) {
+        if ($this->isColumnModified(StoreImagePeer::ID)) {
             $modifiedColumns[':p' . $index++]  = '`id`';
         }
-        if ($this->isColumnModified(StoreTypePeer::NAME)) {
+        if ($this->isColumnModified(StoreImagePeer::UID)) {
+            $modifiedColumns[':p' . $index++]  = '`uid`';
+        }
+        if ($this->isColumnModified(StoreImagePeer::ORIGINAL_NAME)) {
+            $modifiedColumns[':p' . $index++]  = '`original_name`';
+        }
+        if ($this->isColumnModified(StoreImagePeer::NAME)) {
             $modifiedColumns[':p' . $index++]  = '`name`';
         }
-        if ($this->isColumnModified(StoreTypePeer::DESCRIPTION)) {
-            $modifiedColumns[':p' . $index++]  = '`description`';
+        if ($this->isColumnModified(StoreImagePeer::LINK_URL)) {
+            $modifiedColumns[':p' . $index++]  = '`link_url`';
+        }
+        if ($this->isColumnModified(StoreImagePeer::FILENAME)) {
+            $modifiedColumns[':p' . $index++]  = '`filename`';
+        }
+        if ($this->isColumnModified(StoreImagePeer::CREATED_AT)) {
+            $modifiedColumns[':p' . $index++]  = '`created_at`';
+        }
+        if ($this->isColumnModified(StoreImagePeer::UPDATED_AT)) {
+            $modifiedColumns[':p' . $index++]  = '`updated_at`';
         }
 
         $sql = sprintf(
-            'INSERT INTO `store_type` (%s) VALUES (%s)',
+            'INSERT INTO `store_image` (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -485,11 +770,26 @@ abstract class BaseStoreType extends BaseObject implements Persistent
                     case '`id`':
                         $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
                         break;
+                    case '`uid`':
+                        $stmt->bindValue($identifier, $this->uid, PDO::PARAM_STR);
+                        break;
+                    case '`original_name`':
+                        $stmt->bindValue($identifier, $this->original_name, PDO::PARAM_STR);
+                        break;
                     case '`name`':
                         $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
                         break;
-                    case '`description`':
-                        $stmt->bindValue($identifier, $this->description, PDO::PARAM_STR);
+                    case '`link_url`':
+                        $stmt->bindValue($identifier, $this->link_url, PDO::PARAM_STR);
+                        break;
+                    case '`filename`':
+                        $stmt->bindValue($identifier, $this->filename, PDO::PARAM_STR);
+                        break;
+                    case '`created_at`':
+                        $stmt->bindValue($identifier, $this->created_at, PDO::PARAM_STR);
+                        break;
+                    case '`updated_at`':
+                        $stmt->bindValue($identifier, $this->updated_at, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -585,7 +885,7 @@ abstract class BaseStoreType extends BaseObject implements Persistent
             $failureMap = array();
 
 
-            if (($retval = StoreTypePeer::doValidate($this, $columns)) !== true) {
+            if (($retval = StoreImagePeer::doValidate($this, $columns)) !== true) {
                 $failureMap = array_merge($failureMap, $retval);
             }
 
@@ -617,7 +917,7 @@ abstract class BaseStoreType extends BaseObject implements Persistent
      */
     public function getByName($name, $type = BasePeer::TYPE_PHPNAME)
     {
-        $pos = StoreTypePeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
+        $pos = StoreImagePeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
         $field = $this->getByPosition($pos);
 
         return $field;
@@ -637,10 +937,25 @@ abstract class BaseStoreType extends BaseObject implements Persistent
                 return $this->getId();
                 break;
             case 1:
-                return $this->getName();
+                return $this->getUid();
                 break;
             case 2:
-                return $this->getDescription();
+                return $this->getOriginalName();
+                break;
+            case 3:
+                return $this->getName();
+                break;
+            case 4:
+                return $this->getLinkUrl();
+                break;
+            case 5:
+                return $this->getFilename();
+                break;
+            case 6:
+                return $this->getCreatedAt();
+                break;
+            case 7:
+                return $this->getUpdatedAt();
                 break;
             default:
                 return null;
@@ -665,15 +980,20 @@ abstract class BaseStoreType extends BaseObject implements Persistent
      */
     public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
     {
-        if (isset($alreadyDumpedObjects['StoreType'][$this->getPrimaryKey()])) {
+        if (isset($alreadyDumpedObjects['StoreImage'][$this->getPrimaryKey()])) {
             return '*RECURSION*';
         }
-        $alreadyDumpedObjects['StoreType'][$this->getPrimaryKey()] = true;
-        $keys = StoreTypePeer::getFieldNames($keyType);
+        $alreadyDumpedObjects['StoreImage'][$this->getPrimaryKey()] = true;
+        $keys = StoreImagePeer::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getId(),
-            $keys[1] => $this->getName(),
-            $keys[2] => $this->getDescription(),
+            $keys[1] => $this->getUid(),
+            $keys[2] => $this->getOriginalName(),
+            $keys[3] => $this->getName(),
+            $keys[4] => $this->getLinkUrl(),
+            $keys[5] => $this->getFilename(),
+            $keys[6] => $this->getCreatedAt(),
+            $keys[7] => $this->getUpdatedAt(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -702,7 +1022,7 @@ abstract class BaseStoreType extends BaseObject implements Persistent
      */
     public function setByName($name, $value, $type = BasePeer::TYPE_PHPNAME)
     {
-        $pos = StoreTypePeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
+        $pos = StoreImagePeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
 
         $this->setByPosition($pos, $value);
     }
@@ -722,10 +1042,25 @@ abstract class BaseStoreType extends BaseObject implements Persistent
                 $this->setId($value);
                 break;
             case 1:
-                $this->setName($value);
+                $this->setUid($value);
                 break;
             case 2:
-                $this->setDescription($value);
+                $this->setOriginalName($value);
+                break;
+            case 3:
+                $this->setName($value);
+                break;
+            case 4:
+                $this->setLinkUrl($value);
+                break;
+            case 5:
+                $this->setFilename($value);
+                break;
+            case 6:
+                $this->setCreatedAt($value);
+                break;
+            case 7:
+                $this->setUpdatedAt($value);
                 break;
         } // switch()
     }
@@ -749,11 +1084,16 @@ abstract class BaseStoreType extends BaseObject implements Persistent
      */
     public function fromArray($arr, $keyType = BasePeer::TYPE_PHPNAME)
     {
-        $keys = StoreTypePeer::getFieldNames($keyType);
+        $keys = StoreImagePeer::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
-        if (array_key_exists($keys[1], $arr)) $this->setName($arr[$keys[1]]);
-        if (array_key_exists($keys[2], $arr)) $this->setDescription($arr[$keys[2]]);
+        if (array_key_exists($keys[1], $arr)) $this->setUid($arr[$keys[1]]);
+        if (array_key_exists($keys[2], $arr)) $this->setOriginalName($arr[$keys[2]]);
+        if (array_key_exists($keys[3], $arr)) $this->setName($arr[$keys[3]]);
+        if (array_key_exists($keys[4], $arr)) $this->setLinkUrl($arr[$keys[4]]);
+        if (array_key_exists($keys[5], $arr)) $this->setFilename($arr[$keys[5]]);
+        if (array_key_exists($keys[6], $arr)) $this->setCreatedAt($arr[$keys[6]]);
+        if (array_key_exists($keys[7], $arr)) $this->setUpdatedAt($arr[$keys[7]]);
     }
 
     /**
@@ -763,11 +1103,16 @@ abstract class BaseStoreType extends BaseObject implements Persistent
      */
     public function buildCriteria()
     {
-        $criteria = new Criteria(StoreTypePeer::DATABASE_NAME);
+        $criteria = new Criteria(StoreImagePeer::DATABASE_NAME);
 
-        if ($this->isColumnModified(StoreTypePeer::ID)) $criteria->add(StoreTypePeer::ID, $this->id);
-        if ($this->isColumnModified(StoreTypePeer::NAME)) $criteria->add(StoreTypePeer::NAME, $this->name);
-        if ($this->isColumnModified(StoreTypePeer::DESCRIPTION)) $criteria->add(StoreTypePeer::DESCRIPTION, $this->description);
+        if ($this->isColumnModified(StoreImagePeer::ID)) $criteria->add(StoreImagePeer::ID, $this->id);
+        if ($this->isColumnModified(StoreImagePeer::UID)) $criteria->add(StoreImagePeer::UID, $this->uid);
+        if ($this->isColumnModified(StoreImagePeer::ORIGINAL_NAME)) $criteria->add(StoreImagePeer::ORIGINAL_NAME, $this->original_name);
+        if ($this->isColumnModified(StoreImagePeer::NAME)) $criteria->add(StoreImagePeer::NAME, $this->name);
+        if ($this->isColumnModified(StoreImagePeer::LINK_URL)) $criteria->add(StoreImagePeer::LINK_URL, $this->link_url);
+        if ($this->isColumnModified(StoreImagePeer::FILENAME)) $criteria->add(StoreImagePeer::FILENAME, $this->filename);
+        if ($this->isColumnModified(StoreImagePeer::CREATED_AT)) $criteria->add(StoreImagePeer::CREATED_AT, $this->created_at);
+        if ($this->isColumnModified(StoreImagePeer::UPDATED_AT)) $criteria->add(StoreImagePeer::UPDATED_AT, $this->updated_at);
 
         return $criteria;
     }
@@ -782,8 +1127,8 @@ abstract class BaseStoreType extends BaseObject implements Persistent
      */
     public function buildPkeyCriteria()
     {
-        $criteria = new Criteria(StoreTypePeer::DATABASE_NAME);
-        $criteria->add(StoreTypePeer::ID, $this->id);
+        $criteria = new Criteria(StoreImagePeer::DATABASE_NAME);
+        $criteria->add(StoreImagePeer::ID, $this->id);
 
         return $criteria;
     }
@@ -824,15 +1169,20 @@ abstract class BaseStoreType extends BaseObject implements Persistent
      * If desired, this method can also make copies of all associated (fkey referrers)
      * objects.
      *
-     * @param object $copyObj An object of StoreType (or compatible) type.
+     * @param object $copyObj An object of StoreImage (or compatible) type.
      * @param boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
      * @param boolean $makeNew Whether to reset autoincrement PKs and make the object new.
      * @throws PropelException
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
+        $copyObj->setUid($this->getUid());
+        $copyObj->setOriginalName($this->getOriginalName());
         $copyObj->setName($this->getName());
-        $copyObj->setDescription($this->getDescription());
+        $copyObj->setLinkUrl($this->getLinkUrl());
+        $copyObj->setFilename($this->getFilename());
+        $copyObj->setCreatedAt($this->getCreatedAt());
+        $copyObj->setUpdatedAt($this->getUpdatedAt());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -866,7 +1216,7 @@ abstract class BaseStoreType extends BaseObject implements Persistent
      * objects.
      *
      * @param boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-     * @return StoreType Clone of current object.
+     * @return StoreImage Clone of current object.
      * @throws PropelException
      */
     public function copy($deepCopy = false)
@@ -886,12 +1236,12 @@ abstract class BaseStoreType extends BaseObject implements Persistent
      * same instance for all member of this class. The method could therefore
      * be static, but this would prevent one from overriding the behavior.
      *
-     * @return StoreTypePeer
+     * @return StoreImagePeer
      */
     public function getPeer()
     {
         if (self::$peer === null) {
-            self::$peer = new StoreTypePeer();
+            self::$peer = new StoreImagePeer();
         }
 
         return self::$peer;
@@ -919,7 +1269,7 @@ abstract class BaseStoreType extends BaseObject implements Persistent
      * This does not modify the database; however, it will remove any associated objects, causing
      * them to be refetched by subsequent calls to accessor method.
      *
-     * @return StoreType The current object (for fluent API support)
+     * @return StoreImage The current object (for fluent API support)
      * @see        addStores()
      */
     public function clearStores()
@@ -967,7 +1317,7 @@ abstract class BaseStoreType extends BaseObject implements Persistent
      * If the $criteria is not null, it is used to always fetch the results from the database.
      * Otherwise the results are fetched from the database the first time, then cached.
      * Next time the same method is called without $criteria, the cached collection is returned.
-     * If this StoreType is new, it will return
+     * If this StoreImage is new, it will return
      * an empty collection or the current collection; the criteria is ignored on a new object.
      *
      * @param Criteria $criteria optional Criteria object to narrow the query
@@ -984,7 +1334,7 @@ abstract class BaseStoreType extends BaseObject implements Persistent
                 $this->initStores();
             } else {
                 $collStores = StoreQuery::create(null, $criteria)
-                    ->filterByStoreType($this)
+                    ->filterByStoreImage($this)
                     ->find($con);
                 if (null !== $criteria) {
                     if (false !== $this->collStoresPartial && count($collStores)) {
@@ -1028,7 +1378,7 @@ abstract class BaseStoreType extends BaseObject implements Persistent
      *
      * @param PropelCollection $stores A Propel collection.
      * @param PropelPDO $con Optional connection object
-     * @return StoreType The current object (for fluent API support)
+     * @return StoreImage The current object (for fluent API support)
      */
     public function setStores(PropelCollection $stores, PropelPDO $con = null)
     {
@@ -1038,7 +1388,7 @@ abstract class BaseStoreType extends BaseObject implements Persistent
         $this->storesScheduledForDeletion = $storesToDelete;
 
         foreach ($storesToDelete as $storeRemoved) {
-            $storeRemoved->setStoreType(null);
+            $storeRemoved->setStoreImage(null);
         }
 
         $this->collStores = null;
@@ -1078,7 +1428,7 @@ abstract class BaseStoreType extends BaseObject implements Persistent
             }
 
             return $query
-                ->filterByStoreType($this)
+                ->filterByStoreImage($this)
                 ->count($con);
         }
 
@@ -1090,7 +1440,7 @@ abstract class BaseStoreType extends BaseObject implements Persistent
      * through the Store foreign key attribute.
      *
      * @param    Store $l Store
-     * @return StoreType The current object (for fluent API support)
+     * @return StoreImage The current object (for fluent API support)
      */
     public function addStore(Store $l)
     {
@@ -1116,12 +1466,12 @@ abstract class BaseStoreType extends BaseObject implements Persistent
     protected function doAddStore($store)
     {
         $this->collStores[]= $store;
-        $store->setStoreType($this);
+        $store->setStoreImage($this);
     }
 
     /**
      * @param	Store $store The store object to remove.
-     * @return StoreType The current object (for fluent API support)
+     * @return StoreImage The current object (for fluent API support)
      */
     public function removeStore($store)
     {
@@ -1132,7 +1482,7 @@ abstract class BaseStoreType extends BaseObject implements Persistent
                 $this->storesScheduledForDeletion->clear();
             }
             $this->storesScheduledForDeletion[]= $store;
-            $store->setStoreType(null);
+            $store->setStoreImage(null);
         }
 
         return $this;
@@ -1142,13 +1492,13 @@ abstract class BaseStoreType extends BaseObject implements Persistent
     /**
      * If this collection has already been initialized with
      * an identical criteria, it returns the collection.
-     * Otherwise if this StoreType is new, it will return
-     * an empty collection; or if this StoreType has previously
+     * Otherwise if this StoreImage is new, it will return
+     * an empty collection; or if this StoreImage has previously
      * been saved, it will retrieve related Stores from storage.
      *
      * This method is protected by default in order to keep the public
      * api reasonable.  You can provide public methods for those you
-     * actually need in StoreType.
+     * actually need in StoreImage.
      *
      * @param Criteria $criteria optional Criteria object to narrow the query
      * @param PropelPDO $con optional connection object
@@ -1167,13 +1517,38 @@ abstract class BaseStoreType extends BaseObject implements Persistent
     /**
      * If this collection has already been initialized with
      * an identical criteria, it returns the collection.
-     * Otherwise if this StoreType is new, it will return
-     * an empty collection; or if this StoreType has previously
+     * Otherwise if this StoreImage is new, it will return
+     * an empty collection; or if this StoreImage has previously
      * been saved, it will retrieve related Stores from storage.
      *
      * This method is protected by default in order to keep the public
      * api reasonable.  You can provide public methods for those you
-     * actually need in StoreType.
+     * actually need in StoreImage.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Store[] List of Store objects
+     */
+    public function getStoresJoinStoreType($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = StoreQuery::create(null, $criteria);
+        $query->joinWith('StoreType', $join_behavior);
+
+        return $this->getStores($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this StoreImage is new, it will return
+     * an empty collection; or if this StoreImage has previously
+     * been saved, it will retrieve related Stores from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in StoreImage.
      *
      * @param Criteria $criteria optional Criteria object to narrow the query
      * @param PropelPDO $con optional connection object
@@ -1188,39 +1563,19 @@ abstract class BaseStoreType extends BaseObject implements Persistent
         return $this->getStores($query, $con);
     }
 
-
-    /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this StoreType is new, it will return
-     * an empty collection; or if this StoreType has previously
-     * been saved, it will retrieve related Stores from storage.
-     *
-     * This method is protected by default in order to keep the public
-     * api reasonable.  You can provide public methods for those you
-     * actually need in StoreType.
-     *
-     * @param Criteria $criteria optional Criteria object to narrow the query
-     * @param PropelPDO $con optional connection object
-     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return PropelObjectCollection|Store[] List of Store objects
-     */
-    public function getStoresJoinStoreImage($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
-    {
-        $query = StoreQuery::create(null, $criteria);
-        $query->joinWith('StoreImage', $join_behavior);
-
-        return $this->getStores($query, $con);
-    }
-
     /**
      * Clears the current object and sets all attributes to their default values
      */
     public function clear()
     {
         $this->id = null;
+        $this->uid = null;
+        $this->original_name = null;
         $this->name = null;
-        $this->description = null;
+        $this->link_url = null;
+        $this->filename = null;
+        $this->created_at = null;
+        $this->updated_at = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
@@ -1265,7 +1620,7 @@ abstract class BaseStoreType extends BaseObject implements Persistent
      */
     public function __toString()
     {
-        return (string) $this->exportTo(StoreTypePeer::DEFAULT_STRING_FORMAT);
+        return (string) $this->exportTo(StoreImagePeer::DEFAULT_STRING_FORMAT);
     }
 
     /**
@@ -1276,6 +1631,20 @@ abstract class BaseStoreType extends BaseObject implements Persistent
     public function isAlreadyInSave()
     {
         return $this->alreadyInSave;
+    }
+
+    // timestampable behavior
+
+    /**
+     * Mark the current object so that the update date doesn't get updated during next save
+     *
+     * @return     StoreImage The current object (for fluent API support)
+     */
+    public function keepUpdateDateUnchanged()
+    {
+        $this->modifiedColumns[] = StoreImagePeer::UPDATED_AT;
+
+        return $this;
     }
 
 }

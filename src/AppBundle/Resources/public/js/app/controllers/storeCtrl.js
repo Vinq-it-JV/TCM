@@ -15,6 +15,45 @@ angular
         $scope.stores = DS_Stores;
         $scope.storesCollection = [];
 
+        $scope.dzUrl = '/';
+        $scope.imageRand = new Date().getTime();
+
+        $scope.dzOptions = {
+            url : $scope.dzUrl,
+            paramName : 'store',
+            maxFilesize : '10',
+            maxFiles: '1',
+            acceptedFiles : 'image/jpeg, images/jpg, image/png',
+            addRemoveLinks : true,
+            autoProcessQueue : true
+        };
+
+        $scope.dzCallbacks = {
+            'success' : function(file, xhr) {
+                $scope.imageRand = new Date().getTime();
+                $scope.reloadPage();
+            }
+        };
+
+        $scope.dzMethods = {};
+
+        $scope.$on('languageLoaded', function () {
+            $scope.initDropzone($scope.stores.store().Id);
+        });
+
+        $scope.initDropzone = function(storeid)
+        {
+            $scope.dzOptions.dictDefaultMessage = $translate.instant('DROPZONE.DROP_FILES');
+            $scope.dzOptions.dictRemoveFile = $translate.instant('DROPZONE.REMOVE_FILE');
+
+            if (!angular.element('#storeDropzone').length)
+                return;
+
+            $scope.dzUrl = Routing.generate('administration_store_upload', {'storeid': storeid});
+            var dz = $scope.dzMethods.getDropzone();
+            dz.options.url = $scope.dzUrl;
+        };
+
         $scope.getStores = function ()
         {
             $scope.requestType = 'getStores';
@@ -220,6 +259,25 @@ angular
             return false;
         };
 
+        $scope.uploadStoreImage = function ()
+        {
+            var storeId = $scope.stores.store().Id;
+            $scope.dzUrl = Routing.generate('administration_store_upload', {'storeid': storeId});
+
+            $scope.BE.showLoader();
+            var dz = $scope.dzMethods.getDropzone();
+            dz.options.url = $scope.dzUrl;
+
+            if (dz.files.length)
+                $scope.dzMethods.processQueue();
+        };
+
+        $scope.imageUrl = function (imageid)
+        {
+            var route = Routing.generate('administration_store_image_get', {'imageid':imageid, 'rand':$scope.imageRand});
+            return route;
+        };
+
         $scope.fetchDataOk = function (data)
         {
         	switch ($scope.requestType)
@@ -241,6 +299,7 @@ angular
                         $scope.stores.updRecord(data.contents.store);
                         $scope.stores.templateSet(data.contents.template);
                         $scope.stores.listsSet(data.contents.lists);
+                        $scope.initDropzone($scope.stores.store().Id);
                     }
                     break;
                 case 'deleteStore':

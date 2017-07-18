@@ -16,6 +16,7 @@ angular
             $scope.sensors = DS_Sensors;
             $scope.charts = DS_Charts;
             $scope.sensorlog = DS_Sensorlog;
+            $scope.imageRand = new Date().getTime();
 
             $scope.test = 0;
 
@@ -180,6 +181,12 @@ angular
             $scope.showGroupSensors = function (groupid) {
                 $scope.sensorGroup = groupid;
                 $scope.activePage = 'groupSensors';
+            };
+
+            $scope.imageUrl = function (imageid)
+            {
+                var route = Routing.generate('tcm_store_image_get', {'imageid':imageid, 'rand':$scope.imageRand});
+                return route;
             };
 
             $scope.fetchDataOk = function (data) {

@@ -23,6 +23,7 @@ use StoreBundle\Model\Store;
 use StoreBundle\Model\StoreAddress;
 use StoreBundle\Model\StoreContact;
 use StoreBundle\Model\StoreEmail;
+use StoreBundle\Model\StoreImage;
 use StoreBundle\Model\StoreInformant;
 use StoreBundle\Model\StoreMaintenanceLog;
 use StoreBundle\Model\StoreOwner;
@@ -37,9 +38,11 @@ use UserBundle\Model\User;
 
 /**
  * @method StoreQuery orderById($order = Criteria::ASC) Order by the id column
+ * @method StoreQuery orderByUid($order = Criteria::ASC) Order by the uid column
  * @method StoreQuery orderByMainCompany($order = Criteria::ASC) Order by the main_company column
  * @method StoreQuery orderByName($order = Criteria::ASC) Order by the name column
  * @method StoreQuery orderByDescription($order = Criteria::ASC) Order by the description column
+ * @method StoreQuery orderByImage($order = Criteria::ASC) Order by the image column
  * @method StoreQuery orderByType($order = Criteria::ASC) Order by the type column
  * @method StoreQuery orderByCode($order = Criteria::ASC) Order by the code column
  * @method StoreQuery orderByWebsite($order = Criteria::ASC) Order by the website column
@@ -57,9 +60,11 @@ use UserBundle\Model\User;
  * @method StoreQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
  *
  * @method StoreQuery groupById() Group by the id column
+ * @method StoreQuery groupByUid() Group by the uid column
  * @method StoreQuery groupByMainCompany() Group by the main_company column
  * @method StoreQuery groupByName() Group by the name column
  * @method StoreQuery groupByDescription() Group by the description column
+ * @method StoreQuery groupByImage() Group by the image column
  * @method StoreQuery groupByType() Group by the type column
  * @method StoreQuery groupByCode() Group by the code column
  * @method StoreQuery groupByWebsite() Group by the website column
@@ -91,6 +96,10 @@ use UserBundle\Model\User;
  * @method StoreQuery leftJoinRegions($relationAlias = null) Adds a LEFT JOIN clause to the query using the Regions relation
  * @method StoreQuery rightJoinRegions($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Regions relation
  * @method StoreQuery innerJoinRegions($relationAlias = null) Adds a INNER JOIN clause to the query using the Regions relation
+ *
+ * @method StoreQuery leftJoinStoreImage($relationAlias = null) Adds a LEFT JOIN clause to the query using the StoreImage relation
+ * @method StoreQuery rightJoinStoreImage($relationAlias = null) Adds a RIGHT JOIN clause to the query using the StoreImage relation
+ * @method StoreQuery innerJoinStoreImage($relationAlias = null) Adds a INNER JOIN clause to the query using the StoreImage relation
  *
  * @method StoreQuery leftJoinCollection($relationAlias = null) Adds a LEFT JOIN clause to the query using the Collection relation
  * @method StoreQuery rightJoinCollection($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Collection relation
@@ -143,9 +152,11 @@ use UserBundle\Model\User;
  * @method Store findOne(PropelPDO $con = null) Return the first Store matching the query
  * @method Store findOneOrCreate(PropelPDO $con = null) Return the first Store matching the query, or a new Store object populated from the query conditions when no match is found
  *
+ * @method Store findOneByUid(string $uid) Return the first Store filtered by the uid column
  * @method Store findOneByMainCompany(int $main_company) Return the first Store filtered by the main_company column
  * @method Store findOneByName(string $name) Return the first Store filtered by the name column
  * @method Store findOneByDescription(string $description) Return the first Store filtered by the description column
+ * @method Store findOneByImage(int $image) Return the first Store filtered by the image column
  * @method Store findOneByType(int $type) Return the first Store filtered by the type column
  * @method Store findOneByCode(string $code) Return the first Store filtered by the code column
  * @method Store findOneByWebsite(string $website) Return the first Store filtered by the website column
@@ -163,9 +174,11 @@ use UserBundle\Model\User;
  * @method Store findOneByUpdatedAt(string $updated_at) Return the first Store filtered by the updated_at column
  *
  * @method array findById(int $id) Return Store objects filtered by the id column
+ * @method array findByUid(string $uid) Return Store objects filtered by the uid column
  * @method array findByMainCompany(int $main_company) Return Store objects filtered by the main_company column
  * @method array findByName(string $name) Return Store objects filtered by the name column
  * @method array findByDescription(string $description) Return Store objects filtered by the description column
+ * @method array findByImage(int $image) Return Store objects filtered by the image column
  * @method array findByType(int $type) Return Store objects filtered by the type column
  * @method array findByCode(string $code) Return Store objects filtered by the code column
  * @method array findByWebsite(string $website) Return Store objects filtered by the website column
@@ -286,7 +299,7 @@ abstract class BaseStoreQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `main_company`, `name`, `description`, `type`, `code`, `website`, `region`, `remarks`, `payment_method`, `bank_account_number`, `vat_number`, `coc_number`, `is_maintenance`, `is_enabled`, `is_deleted`, `maintenance_started_at`, `created_at`, `updated_at` FROM `store` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `uid`, `main_company`, `name`, `description`, `image`, `type`, `code`, `website`, `region`, `remarks`, `payment_method`, `bank_account_number`, `vat_number`, `coc_number`, `is_maintenance`, `is_enabled`, `is_deleted`, `maintenance_started_at`, `created_at`, `updated_at` FROM `store` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -418,6 +431,35 @@ abstract class BaseStoreQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query on the uid column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByUid('fooValue');   // WHERE uid = 'fooValue'
+     * $query->filterByUid('%fooValue%'); // WHERE uid LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $uid The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return StoreQuery The current query, for fluid interface
+     */
+    public function filterByUid($uid = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($uid)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $uid)) {
+                $uid = str_replace('*', '%', $uid);
+                $comparison = Criteria::LIKE;
+            }
+        }
+
+        return $this->addUsingAlias(StorePeer::UID, $uid, $comparison);
+    }
+
+    /**
      * Filter the query on the main_company column
      *
      * Example usage:
@@ -517,6 +559,50 @@ abstract class BaseStoreQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(StorePeer::DESCRIPTION, $description, $comparison);
+    }
+
+    /**
+     * Filter the query on the image column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByImage(1234); // WHERE image = 1234
+     * $query->filterByImage(array(12, 34)); // WHERE image IN (12, 34)
+     * $query->filterByImage(array('min' => 12)); // WHERE image >= 12
+     * $query->filterByImage(array('max' => 12)); // WHERE image <= 12
+     * </code>
+     *
+     * @see       filterByStoreImage()
+     *
+     * @param     mixed $image The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return StoreQuery The current query, for fluid interface
+     */
+    public function filterByImage($image = null, $comparison = null)
+    {
+        if (is_array($image)) {
+            $useMinMax = false;
+            if (isset($image['min'])) {
+                $this->addUsingAlias(StorePeer::IMAGE, $image['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($image['max'])) {
+                $this->addUsingAlias(StorePeer::IMAGE, $image['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(StorePeer::IMAGE, $image, $comparison);
     }
 
     /**
@@ -1259,6 +1345,82 @@ abstract class BaseStoreQuery extends ModelCriteria
         return $this
             ->joinRegions($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Regions', '\CompanyBundle\Model\RegionsQuery');
+    }
+
+    /**
+     * Filter the query by a related StoreImage object
+     *
+     * @param   StoreImage|PropelObjectCollection $storeImage The related object(s) to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 StoreQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByStoreImage($storeImage, $comparison = null)
+    {
+        if ($storeImage instanceof StoreImage) {
+            return $this
+                ->addUsingAlias(StorePeer::IMAGE, $storeImage->getId(), $comparison);
+        } elseif ($storeImage instanceof PropelObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(StorePeer::IMAGE, $storeImage->toKeyValue('PrimaryKey', 'Id'), $comparison);
+        } else {
+            throw new PropelException('filterByStoreImage() only accepts arguments of type StoreImage or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the StoreImage relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return StoreQuery The current query, for fluid interface
+     */
+    public function joinStoreImage($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('StoreImage');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'StoreImage');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the StoreImage relation StoreImage object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   \StoreBundle\Model\StoreImageQuery A secondary query class using the current class as primary query
+     */
+    public function useStoreImageQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinStoreImage($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'StoreImage', '\StoreBundle\Model\StoreImageQuery');
     }
 
     /**

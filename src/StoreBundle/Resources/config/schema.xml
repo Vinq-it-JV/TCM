@@ -2,9 +2,11 @@
 <database name="default" defaultIdMethod="native" namespace="StoreBundle\Model">
     <table name="store">
         <column name="id" type="integer" primaryKey="true" autoIncrement="true" />
+        <column name="uid" type="varchar" size="64"/>
         <column name="main_company" type="integer" />
         <column name="name" type="varchar" size="255" />
         <column name="description" type="longvarchar" />
+        <column name="image" type="integer" />
         <column name="type" type="integer" />
         <column name="code" type="varchar" size="25"/>
         <column name="website" type="varchar" size="255"/>
@@ -27,6 +29,9 @@
         </foreign-key>
         <foreign-key foreignTable="regions">
             <reference local="region" foreign="id"/>
+        </foreign-key>
+        <foreign-key foreignTable="store_image">
+            <reference local="image" foreign="id"/>
         </foreign-key>
     </table>
 
@@ -124,6 +129,16 @@
         <column name="id" type="integer" primaryKey="true" autoIncrement="true"/>
         <column name="name" type="varchar" size="255" />
         <column name="description" type="varchar" size="255" />
+    </table>
+
+    <table name="store_image">
+        <column name="id" type="integer" primaryKey="true" autoIncrement="true"/>
+        <column name="uid" type="varchar" size="64"/>
+        <column name="original_name" type="varchar" size="255"/>
+        <column name="name" type="varchar" size="255"/>
+        <column name="link_url" type="varchar" size="255"/>
+        <column name="filename" type="varchar" size="255"/>
+        <behavior name="timestampable"/>
     </table>
 
 </database>

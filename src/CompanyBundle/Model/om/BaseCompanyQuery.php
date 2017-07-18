@@ -32,6 +32,7 @@ use UserBundle\Model\User;
 
 /**
  * @method CompanyQuery orderById($order = Criteria::ASC) Order by the id column
+ * @method CompanyQuery orderByUid($order = Criteria::ASC) Order by the uid column
  * @method CompanyQuery orderByName($order = Criteria::ASC) Order by the name column
  * @method CompanyQuery orderByDescription($order = Criteria::ASC) Order by the description column
  * @method CompanyQuery orderByType($order = Criteria::ASC) Order by the type column
@@ -49,6 +50,7 @@ use UserBundle\Model\User;
  * @method CompanyQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
  *
  * @method CompanyQuery groupById() Group by the id column
+ * @method CompanyQuery groupByUid() Group by the uid column
  * @method CompanyQuery groupByName() Group by the name column
  * @method CompanyQuery groupByDescription() Group by the description column
  * @method CompanyQuery groupByType() Group by the type column
@@ -112,6 +114,7 @@ use UserBundle\Model\User;
  * @method Company findOne(PropelPDO $con = null) Return the first Company matching the query
  * @method Company findOneOrCreate(PropelPDO $con = null) Return the first Company matching the query, or a new Company object populated from the query conditions when no match is found
  *
+ * @method Company findOneByUid(string $uid) Return the first Company filtered by the uid column
  * @method Company findOneByName(string $name) Return the first Company filtered by the name column
  * @method Company findOneByDescription(string $description) Return the first Company filtered by the description column
  * @method Company findOneByType(int $type) Return the first Company filtered by the type column
@@ -129,6 +132,7 @@ use UserBundle\Model\User;
  * @method Company findOneByUpdatedAt(string $updated_at) Return the first Company filtered by the updated_at column
  *
  * @method array findById(int $id) Return Company objects filtered by the id column
+ * @method array findByUid(string $uid) Return Company objects filtered by the uid column
  * @method array findByName(string $name) Return Company objects filtered by the name column
  * @method array findByDescription(string $description) Return Company objects filtered by the description column
  * @method array findByType(int $type) Return Company objects filtered by the type column
@@ -249,7 +253,7 @@ abstract class BaseCompanyQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `name`, `description`, `type`, `code`, `website`, `region`, `remarks`, `payment_method`, `bank_account_number`, `vat_number`, `coc_number`, `is_enabled`, `is_deleted`, `created_at`, `updated_at` FROM `company` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `uid`, `name`, `description`, `type`, `code`, `website`, `region`, `remarks`, `payment_method`, `bank_account_number`, `vat_number`, `coc_number`, `is_enabled`, `is_deleted`, `created_at`, `updated_at` FROM `company` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -378,6 +382,35 @@ abstract class BaseCompanyQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(CompanyPeer::ID, $id, $comparison);
+    }
+
+    /**
+     * Filter the query on the uid column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByUid('fooValue');   // WHERE uid = 'fooValue'
+     * $query->filterByUid('%fooValue%'); // WHERE uid LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $uid The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return CompanyQuery The current query, for fluid interface
+     */
+    public function filterByUid($uid = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($uid)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $uid)) {
+                $uid = str_replace('*', '%', $uid);
+                $comparison = Criteria::LIKE;
+            }
+        }
+
+        return $this->addUsingAlias(CompanyPeer::UID, $uid, $comparison);
     }
 
     /**

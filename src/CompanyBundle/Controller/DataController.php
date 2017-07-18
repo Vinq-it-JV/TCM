@@ -249,6 +249,8 @@ class DataController extends Controller
                 $company = new Company();
         } else
             return false;
+        if (empty($company->getUid()))
+            $company->setUid($helper->createUUID());
         if (isset($companyData->IsEnabled))
             $company->setIsEnabled($helper->getBooleanValue($companyData->IsEnabled));
         if (isset($companyData->Type)) {

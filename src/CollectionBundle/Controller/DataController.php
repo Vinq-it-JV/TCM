@@ -187,7 +187,9 @@ class DataController extends Controller
                 $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $attachment->getOriginalName());
             return $response;
         }
-        return NULL;
+        return JsonResult::create()
+            ->setErrorcode(JsonResult::WARNING)
+            ->make();
     }
 
     /**

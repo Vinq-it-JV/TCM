@@ -37,16 +37,19 @@ abstract class BaseCompanyPeer
     const TM_CLASS = 'CompanyBundle\\Model\\map\\CompanyTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 16;
+    const NUM_COLUMNS = 17;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 16;
+    const NUM_HYDRATE_COLUMNS = 17;
 
     /** the column name for the id field */
     const ID = 'company.id';
+
+    /** the column name for the uid field */
+    const UID = 'company.uid';
 
     /** the column name for the name field */
     const NAME = 'company.name';
@@ -112,12 +115,12 @@ abstract class BaseCompanyPeer
      * e.g. CompanyPeer::$fieldNames[CompanyPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'Name', 'Description', 'Type', 'Code', 'Website', 'Region', 'Remarks', 'PaymentMethod', 'BankAccountNumber', 'VatNumber', 'CocNumber', 'IsEnabled', 'IsDeleted', 'CreatedAt', 'UpdatedAt', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'name', 'description', 'type', 'code', 'website', 'region', 'remarks', 'paymentMethod', 'bankAccountNumber', 'vatNumber', 'cocNumber', 'isEnabled', 'isDeleted', 'createdAt', 'updatedAt', ),
-        BasePeer::TYPE_COLNAME => array (CompanyPeer::ID, CompanyPeer::NAME, CompanyPeer::DESCRIPTION, CompanyPeer::TYPE, CompanyPeer::CODE, CompanyPeer::WEBSITE, CompanyPeer::REGION, CompanyPeer::REMARKS, CompanyPeer::PAYMENT_METHOD, CompanyPeer::BANK_ACCOUNT_NUMBER, CompanyPeer::VAT_NUMBER, CompanyPeer::COC_NUMBER, CompanyPeer::IS_ENABLED, CompanyPeer::IS_DELETED, CompanyPeer::CREATED_AT, CompanyPeer::UPDATED_AT, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'NAME', 'DESCRIPTION', 'TYPE', 'CODE', 'WEBSITE', 'REGION', 'REMARKS', 'PAYMENT_METHOD', 'BANK_ACCOUNT_NUMBER', 'VAT_NUMBER', 'COC_NUMBER', 'IS_ENABLED', 'IS_DELETED', 'CREATED_AT', 'UPDATED_AT', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'name', 'description', 'type', 'code', 'website', 'region', 'remarks', 'payment_method', 'bank_account_number', 'vat_number', 'coc_number', 'is_enabled', 'is_deleted', 'created_at', 'updated_at', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, )
+        BasePeer::TYPE_PHPNAME => array ('Id', 'Uid', 'Name', 'Description', 'Type', 'Code', 'Website', 'Region', 'Remarks', 'PaymentMethod', 'BankAccountNumber', 'VatNumber', 'CocNumber', 'IsEnabled', 'IsDeleted', 'CreatedAt', 'UpdatedAt', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'uid', 'name', 'description', 'type', 'code', 'website', 'region', 'remarks', 'paymentMethod', 'bankAccountNumber', 'vatNumber', 'cocNumber', 'isEnabled', 'isDeleted', 'createdAt', 'updatedAt', ),
+        BasePeer::TYPE_COLNAME => array (CompanyPeer::ID, CompanyPeer::UID, CompanyPeer::NAME, CompanyPeer::DESCRIPTION, CompanyPeer::TYPE, CompanyPeer::CODE, CompanyPeer::WEBSITE, CompanyPeer::REGION, CompanyPeer::REMARKS, CompanyPeer::PAYMENT_METHOD, CompanyPeer::BANK_ACCOUNT_NUMBER, CompanyPeer::VAT_NUMBER, CompanyPeer::COC_NUMBER, CompanyPeer::IS_ENABLED, CompanyPeer::IS_DELETED, CompanyPeer::CREATED_AT, CompanyPeer::UPDATED_AT, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'UID', 'NAME', 'DESCRIPTION', 'TYPE', 'CODE', 'WEBSITE', 'REGION', 'REMARKS', 'PAYMENT_METHOD', 'BANK_ACCOUNT_NUMBER', 'VAT_NUMBER', 'COC_NUMBER', 'IS_ENABLED', 'IS_DELETED', 'CREATED_AT', 'UPDATED_AT', ),
+        BasePeer::TYPE_FIELDNAME => array ('id', 'uid', 'name', 'description', 'type', 'code', 'website', 'region', 'remarks', 'payment_method', 'bank_account_number', 'vat_number', 'coc_number', 'is_enabled', 'is_deleted', 'created_at', 'updated_at', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, )
     );
 
     /**
@@ -127,12 +130,12 @@ abstract class BaseCompanyPeer
      * e.g. CompanyPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Name' => 1, 'Description' => 2, 'Type' => 3, 'Code' => 4, 'Website' => 5, 'Region' => 6, 'Remarks' => 7, 'PaymentMethod' => 8, 'BankAccountNumber' => 9, 'VatNumber' => 10, 'CocNumber' => 11, 'IsEnabled' => 12, 'IsDeleted' => 13, 'CreatedAt' => 14, 'UpdatedAt' => 15, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'name' => 1, 'description' => 2, 'type' => 3, 'code' => 4, 'website' => 5, 'region' => 6, 'remarks' => 7, 'paymentMethod' => 8, 'bankAccountNumber' => 9, 'vatNumber' => 10, 'cocNumber' => 11, 'isEnabled' => 12, 'isDeleted' => 13, 'createdAt' => 14, 'updatedAt' => 15, ),
-        BasePeer::TYPE_COLNAME => array (CompanyPeer::ID => 0, CompanyPeer::NAME => 1, CompanyPeer::DESCRIPTION => 2, CompanyPeer::TYPE => 3, CompanyPeer::CODE => 4, CompanyPeer::WEBSITE => 5, CompanyPeer::REGION => 6, CompanyPeer::REMARKS => 7, CompanyPeer::PAYMENT_METHOD => 8, CompanyPeer::BANK_ACCOUNT_NUMBER => 9, CompanyPeer::VAT_NUMBER => 10, CompanyPeer::COC_NUMBER => 11, CompanyPeer::IS_ENABLED => 12, CompanyPeer::IS_DELETED => 13, CompanyPeer::CREATED_AT => 14, CompanyPeer::UPDATED_AT => 15, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'NAME' => 1, 'DESCRIPTION' => 2, 'TYPE' => 3, 'CODE' => 4, 'WEBSITE' => 5, 'REGION' => 6, 'REMARKS' => 7, 'PAYMENT_METHOD' => 8, 'BANK_ACCOUNT_NUMBER' => 9, 'VAT_NUMBER' => 10, 'COC_NUMBER' => 11, 'IS_ENABLED' => 12, 'IS_DELETED' => 13, 'CREATED_AT' => 14, 'UPDATED_AT' => 15, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'name' => 1, 'description' => 2, 'type' => 3, 'code' => 4, 'website' => 5, 'region' => 6, 'remarks' => 7, 'payment_method' => 8, 'bank_account_number' => 9, 'vat_number' => 10, 'coc_number' => 11, 'is_enabled' => 12, 'is_deleted' => 13, 'created_at' => 14, 'updated_at' => 15, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, )
+        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Uid' => 1, 'Name' => 2, 'Description' => 3, 'Type' => 4, 'Code' => 5, 'Website' => 6, 'Region' => 7, 'Remarks' => 8, 'PaymentMethod' => 9, 'BankAccountNumber' => 10, 'VatNumber' => 11, 'CocNumber' => 12, 'IsEnabled' => 13, 'IsDeleted' => 14, 'CreatedAt' => 15, 'UpdatedAt' => 16, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'uid' => 1, 'name' => 2, 'description' => 3, 'type' => 4, 'code' => 5, 'website' => 6, 'region' => 7, 'remarks' => 8, 'paymentMethod' => 9, 'bankAccountNumber' => 10, 'vatNumber' => 11, 'cocNumber' => 12, 'isEnabled' => 13, 'isDeleted' => 14, 'createdAt' => 15, 'updatedAt' => 16, ),
+        BasePeer::TYPE_COLNAME => array (CompanyPeer::ID => 0, CompanyPeer::UID => 1, CompanyPeer::NAME => 2, CompanyPeer::DESCRIPTION => 3, CompanyPeer::TYPE => 4, CompanyPeer::CODE => 5, CompanyPeer::WEBSITE => 6, CompanyPeer::REGION => 7, CompanyPeer::REMARKS => 8, CompanyPeer::PAYMENT_METHOD => 9, CompanyPeer::BANK_ACCOUNT_NUMBER => 10, CompanyPeer::VAT_NUMBER => 11, CompanyPeer::COC_NUMBER => 12, CompanyPeer::IS_ENABLED => 13, CompanyPeer::IS_DELETED => 14, CompanyPeer::CREATED_AT => 15, CompanyPeer::UPDATED_AT => 16, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'UID' => 1, 'NAME' => 2, 'DESCRIPTION' => 3, 'TYPE' => 4, 'CODE' => 5, 'WEBSITE' => 6, 'REGION' => 7, 'REMARKS' => 8, 'PAYMENT_METHOD' => 9, 'BANK_ACCOUNT_NUMBER' => 10, 'VAT_NUMBER' => 11, 'COC_NUMBER' => 12, 'IS_ENABLED' => 13, 'IS_DELETED' => 14, 'CREATED_AT' => 15, 'UPDATED_AT' => 16, ),
+        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'uid' => 1, 'name' => 2, 'description' => 3, 'type' => 4, 'code' => 5, 'website' => 6, 'region' => 7, 'remarks' => 8, 'payment_method' => 9, 'bank_account_number' => 10, 'vat_number' => 11, 'coc_number' => 12, 'is_enabled' => 13, 'is_deleted' => 14, 'created_at' => 15, 'updated_at' => 16, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, )
     );
 
     /**
@@ -207,6 +210,7 @@ abstract class BaseCompanyPeer
     {
         if (null === $alias) {
             $criteria->addSelectColumn(CompanyPeer::ID);
+            $criteria->addSelectColumn(CompanyPeer::UID);
             $criteria->addSelectColumn(CompanyPeer::NAME);
             $criteria->addSelectColumn(CompanyPeer::DESCRIPTION);
             $criteria->addSelectColumn(CompanyPeer::TYPE);
@@ -224,6 +228,7 @@ abstract class BaseCompanyPeer
             $criteria->addSelectColumn(CompanyPeer::UPDATED_AT);
         } else {
             $criteria->addSelectColumn($alias . '.id');
+            $criteria->addSelectColumn($alias . '.uid');
             $criteria->addSelectColumn($alias . '.name');
             $criteria->addSelectColumn($alias . '.description');
             $criteria->addSelectColumn($alias . '.type');

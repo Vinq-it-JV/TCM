@@ -2,8 +2,13 @@
 
 namespace StoreBundle\Controller;
 
+use StoreBundle\Model\StoreImage;
+use StoreBundle\Model\StoreImageQuery;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use AppBundle\Response\JsonResult;
 use CompanyBundle\Model\Company;
 use CompanyBundle\Model\CompanyQuery;
@@ -19,6 +24,7 @@ use CompanyBundle\Model\PaymentMethod;
 use CompanyBundle\Model\PaymentMethodQuery;
 use CompanyBundle\Model\Regions;
 use CompanyBundle\Model\RegionsQuery;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use UserBundle\Model\Address;
 use UserBundle\Model\AddressQuery;
 use UserBundle\Model\AddressType;
@@ -313,11 +319,129 @@ class DataController extends Controller
     }
 
     /**
+     * Upload store image
+     * @param Request $request
+     * @param $storeid
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function uploadStoreImageAction(Request $request, $storeid)
+    {
+        if ($request->isMethod('POST')) {
+            $store = StoreQuery::create()->findOneById($storeid);
+            if (empty($store)) {
+                return JsonResult::create()
+                    ->setMessage('Store not found!')
+                    ->setErrorcode(JsonResult::DANGER)
+                    ->make();
+            }
+            $files = $request->files;
+            foreach ($files as $uploadedFile)
+                $this->saveStoreImage($store, $uploadedFile);
+        }
+        return JsonResult::create()
+            ->setErrorcode(JsonResult::SUCCESS)
+            ->make();
+    }
+
+    /**
+     * Get store image (data)
+     * @param Request $request
+     * @param $storeid
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function getStoreImageAction(Request $request, $imageid, $rand)
+    {
+        $image = StoreImageQuery::create()->findOneById($imageid);
+        if (!empty($image)) {
+            $response = new BinaryFileResponse($image->getLinkUrl());
+            $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $image->getOriginalName());
+            return $response;
+        }
+        return JsonResult::create()
+            ->setErrorcode(JsonResult::WARNING)
+            ->make();
+    }
+
+    /**
+     * Save store image
+     * @param Store $store
+     * @param $fileInfo
+     * @return bool
+     */
+    protected function saveStoreImage(Store $store, $fileInfo)
+    {
+        $helper = $this->getHelper();
+
+        $filePath = $this->checkStoreRoot($store);
+        if (!$filePath)
+            return false;
+
+        $fs = new Filesystem();
+        $image = $store->getImage();
+        if (!empty($image)) {
+            $_image = StoreImageQuery::create()->findOneById($image['Id']);
+            if (!empty($_image)) {
+                if ($fs->exists($_image->getLinkUrl())) {
+                    try {
+                        $fs->remove($_image->getLinkUrl());
+                        $_image->delete();
+                    } catch (IOExceptionInterface $e) {
+                    }
+                }
+            }
+        }
+
+        $fileUUID = $helper->createFileUUID();
+        if (empty($fileUUID))
+            return false;
+
+        $originalName = $fileInfo->getClientOriginalName();
+        $ext = pathinfo($originalName, PATHINFO_EXTENSION);
+        $filename = $fileUUID . '.' . $ext;
+
+        $fileInfo->move($filePath, $filename);
+
+        $image = new StoreImage();
+        $image->setUid($helper->createUUID());
+        $image->setOriginalName($originalName);
+        $image->setFilename($filename);
+        $image->setName($originalName);
+        $image->setLinkUrl($filePath . $filename);
+        $image->save();
+
+        $store->setStoreImage($image);
+        $store->save();
+    }
+
+    /**
+     * Check store root
+     * @param Store $store
+     * @return bool|string
+     */
+    protected
+    function checkStoreRoot(Store $store)
+    {
+        $rootDir = $this->container->get('kernel')->getRootDir() . '/';
+        $fs = new Filesystem();
+        $filepath = $rootDir . $this->container->getParameter('store_path') . '/' . $store->getUid();
+
+        if (!$fs->exists($filepath)) {
+            try {
+                $fs->mkdir($filepath);
+            } catch (IOExceptionInterface $e) {
+                return false;
+            }
+        }
+        return $filepath . '/';
+    }
+
+    /**
      * getStoreData($store)
      * @param $store
      * @return array
      */
-    protected function getStoreData($store)
+    protected
+    function getStoreData($store)
     {
         $dataArr = [];
         $listsArr = [];
@@ -342,7 +466,8 @@ class DataController extends Controller
      * @param $storeData
      * @return bool
      */
-    protected function saveStoreData($storeData)
+    protected
+    function saveStoreData($storeData)
     {
         $helper = $this->getHelper();
 
@@ -352,6 +477,8 @@ class DataController extends Controller
                 $store = new Store();
         } else
             return false;
+        if (empty($store->getUid()))
+            $store->setUid($helper->createUUID());
         if (isset($storeData->IsEnabled))
             $store->setIsEnabled($helper->getBooleanValue($storeData->IsEnabled));
         if (isset($storeData->Type)) {
@@ -519,7 +646,8 @@ class DataController extends Controller
      * Get page controller
      * @return object
      */
-    protected function getPageController()
+    protected
+    function getPageController()
     {
         $pc = $this->container->get('page_controller');
         $pc->container = $this->container;
@@ -530,7 +658,8 @@ class DataController extends Controller
      * Get class helper
      * @return object
      */
-    protected function getHelper()
+    protected
+    function getHelper()
     {
         $helper = $this->container->get('class_helper');
         return $helper;

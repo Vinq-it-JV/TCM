@@ -18,6 +18,15 @@
         </div>
     </div>
 
+    {# Store image block #}
+    {% verbatim %}
+    <div class="well" ng-if="stores.store().Image" >
+        <div class="row text-center">
+            <img ng-src="{{ imageUrl(stores.store().Image.Id) }}" width="75%"/>
+        </div>
+    </div>
+    {% endverbatim %}
+
     {# General store information #}
     <h5 ng-cloak>
         <i class="fa fa-info-circle fa-fw"></i> {{ ng.translate('STORE.INFORMATION') }}

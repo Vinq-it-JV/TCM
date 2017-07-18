@@ -27,7 +27,8 @@
     "START": "Start",
     "MANAGE": "Manage",
     "DROPZONE": {
-        "DROP_FILES": "Drop files here."
+        "DROP_FILES": "Drop files here.",
+        "REMOVE_FILE": "Remove file"
     },
     "ROLE": {
         "USER": "User",

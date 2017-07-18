@@ -1,8 +1,22 @@
 <form class="form-horizontal" method="post" name="storeForm"
       action="{{ url('administration_store_save', { 'storeid' : store.Id }) }}" novalidate>
     <div class="panel-body">
+
+        {# Store image block #}
+        {%  if store.Id != 0 %}
+        <div class="well">
+            {% verbatim %}
+            <div class="row text-center">
+                <img ng-if="stores.store().Image" ng-src="{{ imageUrl(stores.store().Image.Id) }}" width="75%"/>
+            </div>
+            <hr/>
+            <ng-dropzone id="storeDropzone" class="dropzone" options="dzOptions" callbacks="dzCallbacks" methods="dzMethods"></ng-dropzone>
+            {% endverbatim %}
+        </div>
+        {% endif %}
+
+        {# Store information block #}
         <div class="well" ng-form="storeDataForm">
-            {# Store information block #}
             <input name="Id" type="hidden" value="{{ store.Id }}"/>
             <div class="form-group">
                 <label class="control-label col-md-2"
