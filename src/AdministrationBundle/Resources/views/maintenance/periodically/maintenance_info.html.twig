@@ -46,11 +46,11 @@
             </h5>
             <hr/>
             <div class="row">
-                <div ng-repeat="attachment in collections.collection().Attachments" class="col-md-3 col-xs-12">
+                <div ng-repeat="attachment in collections.collection().Attachments" class="col-md-6 col-xs-12">
                     <div class="panel panel-default">
                         <div class="panel-body" style="min-height:150px;">
                             <div ng-if="attachment.Type == 1" class="valign">
-                                <img ng-click="showAttachment(attachment)" ng-src="{{ attachmentUrl(attachment.Id) }}" width="100"/>
+                                <img ng-click="showAttachment(attachment)" ng-src="{{ attachmentUrl(attachment.Id) }}" height="100"/>
                             </div>
                             <div ng-if="attachment.Type == 2" class="valign">
                                 <a ng-href="{{ attachmentUrl(attachment.Id) }}" download><i class="fa fa-fw fa-file-pdf-o fa-5x"></i></a>
