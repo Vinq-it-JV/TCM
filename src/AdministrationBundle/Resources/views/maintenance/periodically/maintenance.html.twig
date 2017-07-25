@@ -39,7 +39,7 @@
                                     <td ng-cloak>{{ row.CreatedBy.Name }}</td>
                                     <td ng-cloak>{{ row.Name }}</td>
                                     <td ng-cloak>{{ row.Date.date | GMT:'DD-MM-YYYY HH:mm' }}</td>
-                                    <td ng-cloak class="text-center"><i ng-show="row.Attachments" class="fa fa-fw fa-paperclip"></i></td>
+                                    <td ng-cloak class="text-center"><i ng-show="row.Attachments.length" class="fa fa-fw fa-paperclip"></i></td>
                                     <td ng-cloak class="text-right">
                                         <label class="label label-success tag-label" ng-show="{{ row.IsPublished }}">{{ 'YES' | translate }}</label>
                                         <label class="label label-danger tag-label" ng-hide="{{ row.IsPublished }}">{{ 'NO' | translate }}</label>

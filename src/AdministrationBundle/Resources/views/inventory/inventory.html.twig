@@ -33,7 +33,7 @@
                                 {% verbatim %}
                                 <tr ng-repeat="row in collectionsCollection">
                                     <td ng-cloak>{{ row.Name }}</td>
-                                    <td class="text-center"><i class="fa fa-fw fa-paperclip" ng-if="row.Attachments"></i></td>
+                                    <td class="text-center"><i class="fa fa-fw fa-paperclip" ng-if="row.Attachments.length"></i></td>
                                     <td ng-cloak class="text-right">
                                         <label class="label label-success tag-label" ng-show="{{ row.IsPublished }}">{{ 'YES' | translate }}</label>
                                         <label class="label label-danger tag-label" ng-hide="{{ row.IsPublished }}">{{ 'NO' | translate }}</label>
