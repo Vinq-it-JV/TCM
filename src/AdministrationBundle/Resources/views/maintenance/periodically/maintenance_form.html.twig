@@ -79,28 +79,36 @@
             </h5>
             <hr/>
             <div class="row">
-                <div ng-repeat="attachment in collections.collection().Attachments" class="col-md-3 col-xs-12">
-                    <div class="panel panel-default">
-                        <button class="btn btn-xs btn-primary pull-left" style="margin-top: 5px; margin-left: 5px;" ng-click="editAttachment(attachment.Id)"><i class="fa fa-fw fa-pencil"></i></button>
-                        <button class="btn btn-xs btn-danger pull-right" style="margin-top: 5px; margin-right: 5px;" ng-click="deleteAttachment(attachment.Id)"><i class="fa fa-fw fa-remove"></i></button>
-                        <div class="panel-body" style="min-height:150px;">
-                            <div class="row text-center">
-                                <div ng-if="attachment.Type == 1">
-                                    <img ng-click="showAttachment(attachment)" ng-src="{{ attachmentUrl(attachment.Id) }}" width="100"/>
+                <div class="col-md-12">
+                    <div html-sortable="sortable_option" ng-model="collections.collection().Attachments">
+                        <div class="columns" ng-repeat="attachment in collections.collection().Attachments">
+                            <div class="panel panel-default drag-cursor">
+                                <button class="btn btn-xs btn-primary pull-left" style="margin-top: 5px; margin-left: 5px;"
+                                        ng-click="editAttachment(attachment.Id)"><i class="fa fa-fw fa-pencil"></i></button>
+                                <button class="btn btn-xs btn-danger pull-right" style="margin-top: 5px; margin-right: 5px;"
+                                        ng-click="deleteAttachment(attachment.Id)"><i class="fa fa-fw fa-remove"></i></button>
+                                <div class="panel-body" style="min-height:150px;">
+                                    <div class="row text-center">
+                                        <div ng-if="attachment.Type == 1">
+                                            <img ng-click="showAttachment(attachment)" ng-src="{{ attachmentUrl(attachment.Id) }}"
+                                                 width="100"/>
+                                        </div>
+                                        <div ng-if="attachment.Type == 2">
+                                            <a ng-href="{{ attachmentUrl(attachment.Id) }}" download><i
+                                                        class="fa fa-fw fa-file-pdf-o fa-5x"></i></a>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div ng-if="attachment.Type == 2">
-                                    <a ng-href="{{ attachmentUrl(attachment.Id) }}" download><i class="fa fa-fw fa-file-pdf-o fa-5x"></i></a>
+                                <div class="panel-footer">
+                                    <div class="text-center text-muted">{{ attachment.Name }}</div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="panel-footer">
-                            <div class="text-center text-muted">{{ attachment.Name }}</div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        {% endverbatim %}
+    {% endverbatim %}
     </div>
 
     {# Upload files #}
@@ -109,15 +117,16 @@
     </h5>
     <div class="well">
         {% verbatim %}
-        <ng-dropzone id="maintenance" class="dropzone" options="dzOptions" callbacks="dzCallbacks" methods="dzMethods"></ng-dropzone>
-        {% endverbatim %}
+            <ng-dropzone id="maintenance" class="dropzone" options="dzOptions" callbacks="dzCallbacks" methods="dzMethods"></ng-dropzone>
+            {% endverbatim %}
     </div>
 
     {# Buttons #}
     <div class="panel-footer">
         <div class="row">
             <div class="col-md-12">
-                <button class="btn btn-sm btn-default pull-left" ng-click="showCollections('administration_maintenance')" ng-cloak>
+                <button class="btn btn-sm btn-default pull-left" ng-click="showCollections('administration_maintenance')"
+                        ng-cloak>
                     <i class="fa fa-close"></i> {{ ng.translate('CANCEL') }}
                 </button>
                 <button class="btn btn-sm btn-success pull-right" ng-click="saveCollectionData()"

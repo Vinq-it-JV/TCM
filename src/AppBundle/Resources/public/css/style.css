@@ -65,6 +65,33 @@ body {
     transform: translate(-50%,-75%);
 }
 
+.drag-cursor {
+    cursor: move !important;
+}
+
+[draggable] {
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+    /* Required to make elements draggable in old WebKit */
+    -khtml-user-drag: element;
+    -webkit-user-drag: element;
+}
+
+.html5-sortable .over, .droppable.over {
+    border: 2px dashed #428bca;
+    border-radius: 4px;
+    background: #e1edff;
+    margin-bottom: 0px !important;
+}
+
+.html5-sortable .moving, .droppable.moving {
+    border: none;
+    cursor: move !important;
+    margin-bottom: 0px !important;
+}
+
 .tcmLogo-splash {
     -webkit-animation-duration: 3s;
     -webkit-animation-delay: 0s;

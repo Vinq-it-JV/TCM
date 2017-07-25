@@ -29,13 +29,13 @@ abstract class BaseAttachmentPeer
     const TM_CLASS = 'CollectionBundle\\Model\\map\\AttachmentTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 9;
+    const NUM_COLUMNS = 10;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 9;
+    const NUM_HYDRATE_COLUMNS = 10;
 
     /** the column name for the id field */
     const ID = 'attachment.id';
@@ -45,6 +45,9 @@ abstract class BaseAttachmentPeer
 
     /** the column name for the type field */
     const TYPE = 'attachment.type';
+
+    /** the column name for the position field */
+    const POSITION = 'attachment.position';
 
     /** the column name for the original_name field */
     const ORIGINAL_NAME = 'attachment.original_name';
@@ -83,12 +86,12 @@ abstract class BaseAttachmentPeer
      * e.g. AttachmentPeer::$fieldNames[AttachmentPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'Uid', 'Type', 'OriginalName', 'Name', 'LinkUrl', 'Filename', 'CreatedAt', 'UpdatedAt', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'uid', 'type', 'originalName', 'name', 'linkUrl', 'filename', 'createdAt', 'updatedAt', ),
-        BasePeer::TYPE_COLNAME => array (AttachmentPeer::ID, AttachmentPeer::UID, AttachmentPeer::TYPE, AttachmentPeer::ORIGINAL_NAME, AttachmentPeer::NAME, AttachmentPeer::LINK_URL, AttachmentPeer::FILENAME, AttachmentPeer::CREATED_AT, AttachmentPeer::UPDATED_AT, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'UID', 'TYPE', 'ORIGINAL_NAME', 'NAME', 'LINK_URL', 'FILENAME', 'CREATED_AT', 'UPDATED_AT', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'uid', 'type', 'original_name', 'name', 'link_url', 'filename', 'created_at', 'updated_at', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, )
+        BasePeer::TYPE_PHPNAME => array ('Id', 'Uid', 'Type', 'Position', 'OriginalName', 'Name', 'LinkUrl', 'Filename', 'CreatedAt', 'UpdatedAt', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'uid', 'type', 'position', 'originalName', 'name', 'linkUrl', 'filename', 'createdAt', 'updatedAt', ),
+        BasePeer::TYPE_COLNAME => array (AttachmentPeer::ID, AttachmentPeer::UID, AttachmentPeer::TYPE, AttachmentPeer::POSITION, AttachmentPeer::ORIGINAL_NAME, AttachmentPeer::NAME, AttachmentPeer::LINK_URL, AttachmentPeer::FILENAME, AttachmentPeer::CREATED_AT, AttachmentPeer::UPDATED_AT, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'UID', 'TYPE', 'POSITION', 'ORIGINAL_NAME', 'NAME', 'LINK_URL', 'FILENAME', 'CREATED_AT', 'UPDATED_AT', ),
+        BasePeer::TYPE_FIELDNAME => array ('id', 'uid', 'type', 'position', 'original_name', 'name', 'link_url', 'filename', 'created_at', 'updated_at', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
     );
 
     /**
@@ -98,12 +101,12 @@ abstract class BaseAttachmentPeer
      * e.g. AttachmentPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Uid' => 1, 'Type' => 2, 'OriginalName' => 3, 'Name' => 4, 'LinkUrl' => 5, 'Filename' => 6, 'CreatedAt' => 7, 'UpdatedAt' => 8, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'uid' => 1, 'type' => 2, 'originalName' => 3, 'name' => 4, 'linkUrl' => 5, 'filename' => 6, 'createdAt' => 7, 'updatedAt' => 8, ),
-        BasePeer::TYPE_COLNAME => array (AttachmentPeer::ID => 0, AttachmentPeer::UID => 1, AttachmentPeer::TYPE => 2, AttachmentPeer::ORIGINAL_NAME => 3, AttachmentPeer::NAME => 4, AttachmentPeer::LINK_URL => 5, AttachmentPeer::FILENAME => 6, AttachmentPeer::CREATED_AT => 7, AttachmentPeer::UPDATED_AT => 8, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'UID' => 1, 'TYPE' => 2, 'ORIGINAL_NAME' => 3, 'NAME' => 4, 'LINK_URL' => 5, 'FILENAME' => 6, 'CREATED_AT' => 7, 'UPDATED_AT' => 8, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'uid' => 1, 'type' => 2, 'original_name' => 3, 'name' => 4, 'link_url' => 5, 'filename' => 6, 'created_at' => 7, 'updated_at' => 8, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, )
+        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Uid' => 1, 'Type' => 2, 'Position' => 3, 'OriginalName' => 4, 'Name' => 5, 'LinkUrl' => 6, 'Filename' => 7, 'CreatedAt' => 8, 'UpdatedAt' => 9, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'uid' => 1, 'type' => 2, 'position' => 3, 'originalName' => 4, 'name' => 5, 'linkUrl' => 6, 'filename' => 7, 'createdAt' => 8, 'updatedAt' => 9, ),
+        BasePeer::TYPE_COLNAME => array (AttachmentPeer::ID => 0, AttachmentPeer::UID => 1, AttachmentPeer::TYPE => 2, AttachmentPeer::POSITION => 3, AttachmentPeer::ORIGINAL_NAME => 4, AttachmentPeer::NAME => 5, AttachmentPeer::LINK_URL => 6, AttachmentPeer::FILENAME => 7, AttachmentPeer::CREATED_AT => 8, AttachmentPeer::UPDATED_AT => 9, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'UID' => 1, 'TYPE' => 2, 'POSITION' => 3, 'ORIGINAL_NAME' => 4, 'NAME' => 5, 'LINK_URL' => 6, 'FILENAME' => 7, 'CREATED_AT' => 8, 'UPDATED_AT' => 9, ),
+        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'uid' => 1, 'type' => 2, 'position' => 3, 'original_name' => 4, 'name' => 5, 'link_url' => 6, 'filename' => 7, 'created_at' => 8, 'updated_at' => 9, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
     );
 
     /**
@@ -180,6 +183,7 @@ abstract class BaseAttachmentPeer
             $criteria->addSelectColumn(AttachmentPeer::ID);
             $criteria->addSelectColumn(AttachmentPeer::UID);
             $criteria->addSelectColumn(AttachmentPeer::TYPE);
+            $criteria->addSelectColumn(AttachmentPeer::POSITION);
             $criteria->addSelectColumn(AttachmentPeer::ORIGINAL_NAME);
             $criteria->addSelectColumn(AttachmentPeer::NAME);
             $criteria->addSelectColumn(AttachmentPeer::LINK_URL);
@@ -190,6 +194,7 @@ abstract class BaseAttachmentPeer
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.uid');
             $criteria->addSelectColumn($alias . '.type');
+            $criteria->addSelectColumn($alias . '.position');
             $criteria->addSelectColumn($alias . '.original_name');
             $criteria->addSelectColumn($alias . '.name');
             $criteria->addSelectColumn($alias . '.link_url');

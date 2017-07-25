@@ -45,6 +45,7 @@ class AttachmentTableMap extends TableMap
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
         $this->addColumn('uid', 'Uid', 'VARCHAR', false, 64, null);
         $this->addColumn('type', 'Type', 'INTEGER', false, null, null);
+        $this->addColumn('position', 'Position', 'INTEGER', false, null, 0);
         $this->addColumn('original_name', 'OriginalName', 'VARCHAR', false, 255, null);
         $this->addColumn('name', 'Name', 'VARCHAR', false, 255, null);
         $this->addColumn('link_url', 'LinkUrl', 'VARCHAR', false, 255, null);

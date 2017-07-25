@@ -22,6 +22,7 @@ use CollectionBundle\Model\CollectionAttachment;
  * @method AttachmentQuery orderById($order = Criteria::ASC) Order by the id column
  * @method AttachmentQuery orderByUid($order = Criteria::ASC) Order by the uid column
  * @method AttachmentQuery orderByType($order = Criteria::ASC) Order by the type column
+ * @method AttachmentQuery orderByPosition($order = Criteria::ASC) Order by the position column
  * @method AttachmentQuery orderByOriginalName($order = Criteria::ASC) Order by the original_name column
  * @method AttachmentQuery orderByName($order = Criteria::ASC) Order by the name column
  * @method AttachmentQuery orderByLinkUrl($order = Criteria::ASC) Order by the link_url column
@@ -32,6 +33,7 @@ use CollectionBundle\Model\CollectionAttachment;
  * @method AttachmentQuery groupById() Group by the id column
  * @method AttachmentQuery groupByUid() Group by the uid column
  * @method AttachmentQuery groupByType() Group by the type column
+ * @method AttachmentQuery groupByPosition() Group by the position column
  * @method AttachmentQuery groupByOriginalName() Group by the original_name column
  * @method AttachmentQuery groupByName() Group by the name column
  * @method AttachmentQuery groupByLinkUrl() Group by the link_url column
@@ -52,6 +54,7 @@ use CollectionBundle\Model\CollectionAttachment;
  *
  * @method Attachment findOneByUid(string $uid) Return the first Attachment filtered by the uid column
  * @method Attachment findOneByType(int $type) Return the first Attachment filtered by the type column
+ * @method Attachment findOneByPosition(int $position) Return the first Attachment filtered by the position column
  * @method Attachment findOneByOriginalName(string $original_name) Return the first Attachment filtered by the original_name column
  * @method Attachment findOneByName(string $name) Return the first Attachment filtered by the name column
  * @method Attachment findOneByLinkUrl(string $link_url) Return the first Attachment filtered by the link_url column
@@ -62,6 +65,7 @@ use CollectionBundle\Model\CollectionAttachment;
  * @method array findById(int $id) Return Attachment objects filtered by the id column
  * @method array findByUid(string $uid) Return Attachment objects filtered by the uid column
  * @method array findByType(int $type) Return Attachment objects filtered by the type column
+ * @method array findByPosition(int $position) Return Attachment objects filtered by the position column
  * @method array findByOriginalName(string $original_name) Return Attachment objects filtered by the original_name column
  * @method array findByName(string $name) Return Attachment objects filtered by the name column
  * @method array findByLinkUrl(string $link_url) Return Attachment objects filtered by the link_url column
@@ -173,7 +177,7 @@ abstract class BaseAttachmentQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `uid`, `type`, `original_name`, `name`, `link_url`, `filename`, `created_at`, `updated_at` FROM `attachment` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `uid`, `type`, `position`, `original_name`, `name`, `link_url`, `filename`, `created_at`, `updated_at` FROM `attachment` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -373,6 +377,48 @@ abstract class BaseAttachmentQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(AttachmentPeer::TYPE, $type, $comparison);
+    }
+
+    /**
+     * Filter the query on the position column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByPosition(1234); // WHERE position = 1234
+     * $query->filterByPosition(array(12, 34)); // WHERE position IN (12, 34)
+     * $query->filterByPosition(array('min' => 12)); // WHERE position >= 12
+     * $query->filterByPosition(array('max' => 12)); // WHERE position <= 12
+     * </code>
+     *
+     * @param     mixed $position The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return AttachmentQuery The current query, for fluid interface
+     */
+    public function filterByPosition($position = null, $comparison = null)
+    {
+        if (is_array($position)) {
+            $useMinMax = false;
+            if (isset($position['min'])) {
+                $this->addUsingAlias(AttachmentPeer::POSITION, $position['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($position['max'])) {
+                $this->addUsingAlias(AttachmentPeer::POSITION, $position['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(AttachmentPeer::POSITION, $position, $comparison);
     }
 
     /**

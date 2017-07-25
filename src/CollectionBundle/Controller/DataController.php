@@ -234,8 +234,7 @@ class DataController extends Controller
                         ->setContents($attachment->getAttachmentDataArray())
                         ->setErrorcode(JsonResult::SUCCESS)
                         ->make();
-            } else
-                var_dump('huh');
+            }
         }
         return JsonResult::create()
             ->setMessage('Attachment not saved!')
@@ -300,6 +299,21 @@ class DataController extends Controller
                 }
                 $log->setMaintenanceBy($user->getId());
                 $log->save();
+            }
+        }
+
+        if (isset($collectionData->Attachments)) {
+            if (!empty($collectionData->Attachments)) {
+                $position = 0;
+                foreach ($collectionData->Attachments as $attachment) {
+                    $attachment = (object)$attachment;
+                    $_attachment = AttachmentQuery::create()->findOneById($attachment->Id);
+                    if (!empty($_attachment)) {
+                        $_attachment->setPosition($position);
+                        $_attachment->save();
+                    }
+                    $position++;
+                }
             }
         }
         return $collection;

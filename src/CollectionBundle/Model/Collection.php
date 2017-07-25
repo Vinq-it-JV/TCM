@@ -4,6 +4,7 @@ namespace CollectionBundle\Model;
 
 use CollectionBundle\Model\om\BaseCollection;
 use UserBundle\Model\UserQuery;
+use \Criteria;
 
 class Collection extends BaseCollection
 {
@@ -16,8 +17,12 @@ class Collection extends BaseCollection
         $data = [];
         $data['collection'] = $this->toArray();
 
+        $c = new Criteria();
+        $c->addAscendingOrderByColumn('attachment.position');
+
+        $data['collection']['Attachments'] = [];
         if (!$this->getAttachments()->isEmpty())
-            foreach ($this->getAttachments() as $attachment)
+            foreach ($this->getAttachments($c) as $attachment)
                 $data['collection']['Attachments'][] = $attachment->getAttachmentDataArray()['attachment'];
 
         return $data;

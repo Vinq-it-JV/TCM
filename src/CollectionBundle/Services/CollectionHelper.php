@@ -2,6 +2,7 @@
 namespace CollectionBundle\Services;
 
 use CollectionBundle\Model\Attachment;
+use CollectionBundle\Model\AttachmentQuery;
 use CollectionBundle\Model\Collection;
 use Symfony\Component\DependencyInjection\ContainerInterface as Container;
 use Symfony\Component\Filesystem\Filesystem;
@@ -44,6 +45,16 @@ class CollectionHelper
         if (empty($fileUUID))
             return false;
 
+        $position = 0;
+        $lastAttachment = AttachmentQuery::create()
+            ->filterByCollection($collection)
+            ->orderByPosition('DESC')
+            ->limit(1)
+            ->find();
+
+        if (!empty($lastAttachment))
+            $position = $lastAttachment->getPosition() + 1;
+
         $originalName = $fileInfo->getClientOriginalName();
         $ext = pathinfo($originalName, PATHINFO_EXTENSION);
         $filename = $fileUUID . '.' . $ext;
@@ -55,6 +66,7 @@ class CollectionHelper
         $attachment->setOriginalName($originalName);
         $attachment->setFilename($filename);
         $attachment->setName($originalName);
+        $attachment->setPosition($position);
         $attachment->setType($this->getAttachementType($originalName));
         $attachment->setLinkUrl($filePath . $filename);
         $attachment->save();

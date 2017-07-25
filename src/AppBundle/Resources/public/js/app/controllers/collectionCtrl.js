@@ -41,6 +41,23 @@ angular
 
         $scope.dzMethods = {};
 
+        $scope.dragControlListeners = {
+            orderChanged: function(event) { console.log(event); },
+            allowDuplicates: false,
+            containerPositioning: 'relative',
+            additionalPlaceholderClass: 'sortable-bounds'
+        };
+
+        $scope.sortable_mode = "on";
+
+        $scope.sortable_option = {
+            handle:'div.drag-cursor',
+            construct: function(model) {
+            },
+            stop: function(list, dropped_index) {
+            }
+        };
+
         $scope.$on('languageLoaded', function () {
         });
 

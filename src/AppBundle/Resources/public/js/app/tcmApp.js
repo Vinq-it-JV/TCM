@@ -11,7 +11,7 @@
  *
  */
 angular
-    .module('tcmApp', ['ui.router', 'ui.select', 'toggle-switch', 'ui.tree', 'highcharts-ng', 'ngResource', 'ngCookies', 'ngSanitize', 'LocalStorageModule', 'smart-table', 'ngAnimate', 'ghiscoding.validation', 'pascalprecht.translate', 'cgBusy', 'mgcrea.ngStrap', 'ngMap', 'ng.dropzone'])
+    .module('tcmApp', ['ui.router', 'ui.select', 'toggle-switch', 'ui.tree', 'highcharts-ng', 'ngResource', 'ngCookies', 'ngSanitize', 'LocalStorageModule', 'smart-table', 'ngAnimate', 'ghiscoding.validation', 'pascalprecht.translate', 'cgBusy', 'mgcrea.ngStrap', 'ngMap', 'ng.dropzone', 'html5.sortable'])
     .config(function($translateProvider) {
         $translateProvider.useStaticFilesLoader({
         	files: [{

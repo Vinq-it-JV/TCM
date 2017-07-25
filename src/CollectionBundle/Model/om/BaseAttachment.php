@@ -63,6 +63,13 @@ abstract class BaseAttachment extends BaseObject implements Persistent
     protected $type;
 
     /**
+     * The value for the position field.
+     * Note: this column has a database default value of: 0
+     * @var        int
+     */
+    protected $position;
+
+    /**
      * The value for the original_name field.
      * @var        string
      */
@@ -142,6 +149,27 @@ abstract class BaseAttachment extends BaseObject implements Persistent
     protected $collectionAttachmentsScheduledForDeletion = null;
 
     /**
+     * Applies default values to this object.
+     * This method should be called from the object's constructor (or
+     * equivalent initialization method).
+     * @see        __construct()
+     */
+    public function applyDefaultValues()
+    {
+        $this->position = 0;
+    }
+
+    /**
+     * Initializes internal state of BaseAttachment object.
+     * @see        applyDefaults()
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->applyDefaultValues();
+    }
+
+    /**
      * Get the [id] column value.
      *
      * @return int
@@ -172,6 +200,17 @@ abstract class BaseAttachment extends BaseObject implements Persistent
     {
 
         return $this->type;
+    }
+
+    /**
+     * Get the [position] column value.
+     *
+     * @return int
+     */
+    public function getPosition()
+    {
+
+        return $this->position;
     }
 
     /**
@@ -362,6 +401,27 @@ abstract class BaseAttachment extends BaseObject implements Persistent
     } // setType()
 
     /**
+     * Set the value of [position] column.
+     *
+     * @param  int $v new value
+     * @return Attachment The current object (for fluent API support)
+     */
+    public function setPosition($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->position !== $v) {
+            $this->position = $v;
+            $this->modifiedColumns[] = AttachmentPeer::POSITION;
+        }
+
+
+        return $this;
+    } // setPosition()
+
+    /**
      * Set the value of [original_name] column.
      *
      * @param  string $v new value
@@ -501,6 +561,10 @@ abstract class BaseAttachment extends BaseObject implements Persistent
      */
     public function hasOnlyDefaultValues()
     {
+            if ($this->position !== 0) {
+                return false;
+            }
+
         // otherwise, everything was equal, so return true
         return true;
     } // hasOnlyDefaultValues()
@@ -526,12 +590,13 @@ abstract class BaseAttachment extends BaseObject implements Persistent
             $this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
             $this->uid = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
             $this->type = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
-            $this->original_name = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
-            $this->name = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
-            $this->link_url = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
-            $this->filename = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
-            $this->created_at = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
-            $this->updated_at = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
+            $this->position = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
+            $this->original_name = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
+            $this->name = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
+            $this->link_url = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
+            $this->filename = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
+            $this->created_at = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
+            $this->updated_at = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -541,7 +606,7 @@ abstract class BaseAttachment extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 9; // 9 = AttachmentPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 10; // 10 = AttachmentPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Attachment object", $e);
@@ -819,6 +884,9 @@ abstract class BaseAttachment extends BaseObject implements Persistent
         if ($this->isColumnModified(AttachmentPeer::TYPE)) {
             $modifiedColumns[':p' . $index++]  = '`type`';
         }
+        if ($this->isColumnModified(AttachmentPeer::POSITION)) {
+            $modifiedColumns[':p' . $index++]  = '`position`';
+        }
         if ($this->isColumnModified(AttachmentPeer::ORIGINAL_NAME)) {
             $modifiedColumns[':p' . $index++]  = '`original_name`';
         }
@@ -856,6 +924,9 @@ abstract class BaseAttachment extends BaseObject implements Persistent
                         break;
                     case '`type`':
                         $stmt->bindValue($identifier, $this->type, PDO::PARAM_INT);
+                        break;
+                    case '`position`':
+                        $stmt->bindValue($identifier, $this->position, PDO::PARAM_INT);
                         break;
                     case '`original_name`':
                         $stmt->bindValue($identifier, $this->original_name, PDO::PARAM_STR);
@@ -1027,21 +1098,24 @@ abstract class BaseAttachment extends BaseObject implements Persistent
                 return $this->getType();
                 break;
             case 3:
-                return $this->getOriginalName();
+                return $this->getPosition();
                 break;
             case 4:
-                return $this->getName();
+                return $this->getOriginalName();
                 break;
             case 5:
-                return $this->getLinkUrl();
+                return $this->getName();
                 break;
             case 6:
-                return $this->getFilename();
+                return $this->getLinkUrl();
                 break;
             case 7:
-                return $this->getCreatedAt();
+                return $this->getFilename();
                 break;
             case 8:
+                return $this->getCreatedAt();
+                break;
+            case 9:
                 return $this->getUpdatedAt();
                 break;
             default:
@@ -1076,12 +1150,13 @@ abstract class BaseAttachment extends BaseObject implements Persistent
             $keys[0] => $this->getId(),
             $keys[1] => $this->getUid(),
             $keys[2] => $this->getType(),
-            $keys[3] => $this->getOriginalName(),
-            $keys[4] => $this->getName(),
-            $keys[5] => $this->getLinkUrl(),
-            $keys[6] => $this->getFilename(),
-            $keys[7] => $this->getCreatedAt(),
-            $keys[8] => $this->getUpdatedAt(),
+            $keys[3] => $this->getPosition(),
+            $keys[4] => $this->getOriginalName(),
+            $keys[5] => $this->getName(),
+            $keys[6] => $this->getLinkUrl(),
+            $keys[7] => $this->getFilename(),
+            $keys[8] => $this->getCreatedAt(),
+            $keys[9] => $this->getUpdatedAt(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1136,21 +1211,24 @@ abstract class BaseAttachment extends BaseObject implements Persistent
                 $this->setType($value);
                 break;
             case 3:
-                $this->setOriginalName($value);
+                $this->setPosition($value);
                 break;
             case 4:
-                $this->setName($value);
+                $this->setOriginalName($value);
                 break;
             case 5:
-                $this->setLinkUrl($value);
+                $this->setName($value);
                 break;
             case 6:
-                $this->setFilename($value);
+                $this->setLinkUrl($value);
                 break;
             case 7:
-                $this->setCreatedAt($value);
+                $this->setFilename($value);
                 break;
             case 8:
+                $this->setCreatedAt($value);
+                break;
+            case 9:
                 $this->setUpdatedAt($value);
                 break;
         } // switch()
@@ -1180,12 +1258,13 @@ abstract class BaseAttachment extends BaseObject implements Persistent
         if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
         if (array_key_exists($keys[1], $arr)) $this->setUid($arr[$keys[1]]);
         if (array_key_exists($keys[2], $arr)) $this->setType($arr[$keys[2]]);
-        if (array_key_exists($keys[3], $arr)) $this->setOriginalName($arr[$keys[3]]);
-        if (array_key_exists($keys[4], $arr)) $this->setName($arr[$keys[4]]);
-        if (array_key_exists($keys[5], $arr)) $this->setLinkUrl($arr[$keys[5]]);
-        if (array_key_exists($keys[6], $arr)) $this->setFilename($arr[$keys[6]]);
-        if (array_key_exists($keys[7], $arr)) $this->setCreatedAt($arr[$keys[7]]);
-        if (array_key_exists($keys[8], $arr)) $this->setUpdatedAt($arr[$keys[8]]);
+        if (array_key_exists($keys[3], $arr)) $this->setPosition($arr[$keys[3]]);
+        if (array_key_exists($keys[4], $arr)) $this->setOriginalName($arr[$keys[4]]);
+        if (array_key_exists($keys[5], $arr)) $this->setName($arr[$keys[5]]);
+        if (array_key_exists($keys[6], $arr)) $this->setLinkUrl($arr[$keys[6]]);
+        if (array_key_exists($keys[7], $arr)) $this->setFilename($arr[$keys[7]]);
+        if (array_key_exists($keys[8], $arr)) $this->setCreatedAt($arr[$keys[8]]);
+        if (array_key_exists($keys[9], $arr)) $this->setUpdatedAt($arr[$keys[9]]);
     }
 
     /**
@@ -1200,6 +1279,7 @@ abstract class BaseAttachment extends BaseObject implements Persistent
         if ($this->isColumnModified(AttachmentPeer::ID)) $criteria->add(AttachmentPeer::ID, $this->id);
         if ($this->isColumnModified(AttachmentPeer::UID)) $criteria->add(AttachmentPeer::UID, $this->uid);
         if ($this->isColumnModified(AttachmentPeer::TYPE)) $criteria->add(AttachmentPeer::TYPE, $this->type);
+        if ($this->isColumnModified(AttachmentPeer::POSITION)) $criteria->add(AttachmentPeer::POSITION, $this->position);
         if ($this->isColumnModified(AttachmentPeer::ORIGINAL_NAME)) $criteria->add(AttachmentPeer::ORIGINAL_NAME, $this->original_name);
         if ($this->isColumnModified(AttachmentPeer::NAME)) $criteria->add(AttachmentPeer::NAME, $this->name);
         if ($this->isColumnModified(AttachmentPeer::LINK_URL)) $criteria->add(AttachmentPeer::LINK_URL, $this->link_url);
@@ -1271,6 +1351,7 @@ abstract class BaseAttachment extends BaseObject implements Persistent
     {
         $copyObj->setUid($this->getUid());
         $copyObj->setType($this->getType());
+        $copyObj->setPosition($this->getPosition());
         $copyObj->setOriginalName($this->getOriginalName());
         $copyObj->setName($this->getName());
         $copyObj->setLinkUrl($this->getLinkUrl());
@@ -1805,6 +1886,7 @@ abstract class BaseAttachment extends BaseObject implements Persistent
         $this->id = null;
         $this->uid = null;
         $this->type = null;
+        $this->position = null;
         $this->original_name = null;
         $this->name = null;
         $this->link_url = null;
@@ -1815,6 +1897,7 @@ abstract class BaseAttachment extends BaseObject implements Persistent
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
         $this->clearAllReferences();
+        $this->applyDefaultValues();
         $this->resetModified();
         $this->setNew(true);
         $this->setDeleted(false);
