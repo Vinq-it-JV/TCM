@@ -1,0 +1,56 @@
+email:
+  credentials:
+    label: 'Datos'
+    from: 'administracion '
+    subject: 'Sus datos'
+    header: 'Sus datos para iniciar sesion @'
+    text1: 'Usted esta recibiendo este mensaje porque usted se ha registrado en% dominio%. <br> Hemos generado una nueva contrasena, que se puede utilizar para iniciar la sesion.'
+    text2: 'A continuacion puede ajustar en su perfil la contrasena  a su propia contrasena <br> Si tiene alguna pregunta por favor pongase en contacto con nuestro equipo de soporte a traves de <a href = "mailto :. Soporte @% dominio% ASUNTO: Solicitud de informacion para:%% Nombre de usuario "> Contacte con asistencia </a> <br> <b> use su nombre de usuario en el campo de asunto, de lo contrario no sera procesada su solicitud!</b>'
+    username: 'Usuario'
+    password: 'Contarsena'
+
+  password:
+    label: 'Contrasena'
+    from: 'Administracion '
+    subject: 'Su nueva contrasena'
+    header: 'Su nueva contrasena para iniciar sesion @'
+    text1: 'Usted esta recibiendo este correo electronico porque ha cambiado su contrasena %Domain%.<br><br>Mantener en secreto y en un lugar seguro, no almacenamos esta contrasena!'
+    text2: 'Por favor, haga uso de una contrasena segura que no es facil de adivinar por alguien.<br><br>Si tiene alguna pregunta, por favor pongase en contacto con nuestro equipo de soporte a traves de<a href="mailto:support@%Domain%?SUBJECT:Wachtwoord ondersteuning voor:%Username%">Contacteer Support</a><br><br><b>Utilice su nombre de usuario en el campo del asunto de otra manera no se procesara su solicitud!</b>'
+    username: 'Usuario'
+    password: 'Nueva contrasena'
+
+  notification:
+    label: 'Notificacion'
+    from: 'Notificacion de '
+    subject: 'Notificacion de problemas potenciales'
+    header: 'Hay posibles problemas con %Store%'
+    text1: 'Usted esta recibiendo este mensaje porque esta en la lista de notificaciones de: %Store%.<br><br>A continuacion se muestra una lista de sensores que se encuentran en estado de alerta:<br><br>'
+    text2: 'Informacion sucursal:'
+    text3: 'Persona de contacto:'
+
+  input:
+    switch-when: 'Cambiar cuando: '
+    switch-state: 'Status: '
+    notify-after: 'Notificar despues: '
+    notify-date: 'Fecha de notificar: '
+    high: 'alto'
+    low: 'bajo'
+
+  temperature:
+    low-limit: 'Limite bajo: '
+    high-limit: 'Limite alto: '
+    temperature: 'Temperatura: '
+    notify-date: 'Fecha de notificar: '
+
+COUNTRY:
+  NL_NAME: 'Holanda'
+  BE_NAME: 'Belgica'
+  FR_NAME: 'Francia'
+  DE_NAME: 'Alemania'
+  ES_NAME: 'Espana'
+  IT_NAME: 'Italia'
+  PT_NAME: 'Portugal'
+  GB_NAME: 'Reino Unido'
+
+login:
+  label: 'TCM Iniciar sesion'

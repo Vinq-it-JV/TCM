@@ -12,7 +12,6 @@ angular
     .controller('collectionCtrl', ['$rootScope', '$scope', '$translate', '$timeout', 'Modal', 'DS_Collections',
     function ($rootScope, $scope, $translate, $timeout, Modal, DS_Collections)
     {
-
         $scope.collections = DS_Collections;
         $scope.collectionsCollection = [];
         $scope.activePage = '';
@@ -28,6 +27,9 @@ angular
             url : $scope.dzUrl,
             paramName : 'maintenance',
             maxFilesize : '10',
+            maxFiles: 3,
+            resizeWidth: 1024,
+            parallelUploads: 3,
             acceptedFiles : 'image/jpeg, images/jpg, image/png, application/pdf',
             addRemoveLinks : true,
             autoProcessQueue : false
@@ -60,6 +62,12 @@ angular
 
         $scope.$on('languageLoaded', function () {
         });
+
+        $scope.initDropzone = function()
+        {
+            $scope.dzOptions.dictDefaultMessage = $translate.instant('DROPZONE.DROP_FILES');
+            $scope.dzOptions.dictRemoveFile = $translate.instant('DROPZONE.REMOVE_FILE');
+        };
 
         $scope.getCollectionData = function (storeid, collectiontype)
         {
@@ -139,6 +147,7 @@ angular
         {
             $scope.collections.getRecord(collectionid);
             $scope.activePage = pagetype;
+            $scope.initDropzone();
         };
 
         $scope.removeCollection = function (collectionid)
@@ -254,7 +263,6 @@ angular
                         $scope.collections.collectionsSet(data.contents.collections);
                         $scope.collections.templateSet(data.contents.template);
                         $scope.collectionsCollection = [].concat(data.contents.collections);
-                        $scope.dzOptions.dictDefaultMessage = $translate.instant('DROPZONE.DROP_FILES');
                     }
                     break;
                 case 'saveCollectionData':

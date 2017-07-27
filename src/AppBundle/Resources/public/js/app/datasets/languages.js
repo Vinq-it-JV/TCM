@@ -11,7 +11,8 @@ angular
     function ($rootScope, $translate) {
         
     var d_languages = [{'Id': 'en', 'Name': 'LNG.ENGLISH', 'Flag': ''},
-                       {'Id': 'nl', 'Name': 'LNG.DUTCH', 'Flag': ''}];
+                       {'Id': 'nl', 'Name': 'LNG.DUTCH', 'Flag': ''},
+                       {'Id': 'es', 'Name': 'LNG.SPANISH', 'Flag': ''}];
 
     var d_language = [];
 

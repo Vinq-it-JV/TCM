@@ -10,7 +10,7 @@
                 <img ng-if="stores.store().Image" ng-src="{{ imageUrl(stores.store().Image.Id) }}" width="75%"/>
             </div>
             <hr/>
-            <ng-dropzone id="storeDropzone" class="dropzone" options="dzOptions" callbacks="dzCallbacks" methods="dzMethods"></ng-dropzone>
+            <ng-dropzone ng-if="dzUpdate" id="storeDropzone" class="dropzone" options="dzOptions" callbacks="dzCallbacks" methods="dzMethods"></ng-dropzone>
             {% endverbatim %}
         </div>
         {% endif %}

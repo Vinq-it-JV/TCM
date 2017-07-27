@@ -1,0 +1,472 @@
+{
+    "TCM": {
+        "LABEL": "TCM"
+    },
+    "CLOSE": "Cerrar",
+    "HOME": "Home",
+    "INFO": "Info",
+    "DETAILS": "Detalles",
+    "MENU": "Menu",
+    "PLEASE_WAIT": "Espere por favor...",
+    "SHOW_DETAILS": "Mostrar detalles",
+    "LOCATIONS": "Ubicaciones",
+    "USERS": "Usuarios",
+    "ACTION": "Accion",
+    "SEARCH": "Buscar",
+    "ADD": "Anadir",
+    "SELECT": "Seleccionar...",
+    "CANCEL": "Anular",
+    "DELETE": "Eliminar",
+    "SAVE": "Guardar",
+    "YES": "Si",
+    "NO": "No",
+    "COPY": "Copiar",
+    "UNLINK": "Desconectar",
+    "REFRESH": "Refrescar",
+    "BACK": "Volver",
+    "START": "Iniciar",
+    "MANAGE": "Gestionar",
+    "DROPZONE": {
+        "DROP_FILES": "Arrastrar archivos aqui.",
+        "REMOVE_FILE": "Eliminar archivo"
+    },
+    "ROLE": {
+        "USER": "Usuario",
+        "ADMIN": "Admon",
+        "SUPER_ADMIN": "Super admon",
+        "OWNER": "Propietario",
+        "TECH_BEER": "Tecnologia Cervecera",
+        "TECH_COOLING": "Tecnologia Refrigeracion"
+    },
+    "GENDER": {
+        "MALE": "Hombre",
+        "MALE_SHORT": "M",
+        "FEMALE": "Senora",
+        "FEMALE_SHORT": "F",
+        "OTHER": "Otro",
+        "OTHER_SHORT": "O"
+    },
+    "TITLE": {
+        "MISTER": "Senor",
+        "MISTER_SHORT": "Sr.",
+        "MISSES": "Senora",
+        "MISSES_SHORT": "Sra.",
+        "MISS": "Senorita",
+        "MISS_SHORT": "Srta."
+    },
+    "COUNTRY": {
+        "NL_NAME": "Holanda",
+        "BE_NAME": "Belgica",
+        "FR_NAME": "Francia",
+        "DE_NAME": "Alemania",
+        "ES_NAME": "Espana",
+        "IT_NAME": "Italia",
+        "PT_NAME": "Portugal",
+        "GB_NAME": "Reino Unido"
+    },
+    "ADDRESS_TYPE": {
+        "POST": {
+            "NAME": "Correo",
+            "DESCRIPTION": "Esto es una direccion postal."
+        },
+        "VISIT": {
+            "NAME": "Visitar",
+            "DESCRIPTION": "Esto es una direccion de visitar."
+        },
+        "INVOICE": {
+            "NAME": "Factura",
+            "DESCRIPTION": "Esto es una direccion de facturacion."
+        }
+    },
+    "COMPANY_TYPE": {
+        "BAR": {
+            "NAME": "Bar",
+            "DESCRIPTION": "Esto es un bar."
+        },
+        "RESTAURANT": {
+            "NAME": "Restaurante",
+            "DESCRIPTION": "Esto es un restaurante."
+        },
+        "BRASSERIE": {
+            "NAME": "Braseria",
+            "DESCRIPTION": "Esto es una braseria."
+        },
+        "EATERY": {
+            "NAME": "Restaurante",
+            "DESCRIPTION": "Esto es un restaurante."
+        },
+        "CINEMA": {
+            "NAME": "Cine",
+            "DESCRIPTION": "Esto es un cine."
+        },
+        "HOTEL": {
+            "NAME": "Hotel",
+            "DESCRIPTION": "Esto es un hotel."
+        },
+        "NIGHTSPOT": {
+            "NAME": "Sitio nocturno",
+            "DESCRIPTION": "Esto es un sitio nocturno."
+        },
+        "SERVICE": {
+            "NAME": "Servicios",
+            "DESCRIPTION": "Esto es una empresa de servicios."
+        },
+        "PARENT": {
+            "NAME": "Empresa matriz",
+            "DESCRIPTION": "Esto es una empresa matriz."
+        }
+    },
+    "STORE_TYPE": {
+        "BAR": {
+            "NAME": "Bar",
+            "DESCRIPTION": "Esto es un bar."
+        },
+        "RESTAURANT": {
+            "NAME": "Restaurante",
+            "DESCRIPTION": "Esto es un restaurante."
+        },
+        "BRASSERIE": {
+            "NAME": "Braseria",
+            "DESCRIPTION": "Esto es una braseria."
+        },
+        "EATERY": {
+            "NAME": "Restaurante",
+            "DESCRIPTION": "Esto es un restaurante."
+        },
+        "CINEMA": {
+            "NAME": "Cine",
+            "DESCRIPTION": "Esto es un cine."
+        },
+        "HOTEL": {
+            "NAME": "Hotel",
+            "DESCRIPTION": "Esto es un hotel."
+        },
+        "NIGHTSPOT": {
+            "NAME": "Sitio nocturno",
+            "DESCRIPTION": "Esto es un sitio nocturno."
+        }
+    },
+    "NOTIFY_AFTER": {
+        "DIRECTLY": "Directo",
+        "30_SEC": "30 sec.",
+        "1_MIN": "1 min.",
+        "2_MIN": "2 min.",
+        "5_MIN": "5 min.",
+        "10_MIN": "10 min.",
+        "15_MIN": "15 min.",
+        "30_MIN": "30 min.",
+        "1_HOUR": "1 hora.",
+        "2_HOUR": "2 horas.",
+        "5_HOUR": "5 horas.",
+        "10_HOUR": "10 horas.",
+        "1_DAY": "1 Dia.",
+        "NEVER": "Nunca"
+    },
+    "USER": {
+        "LABEL": "Usuario",
+        "WELCOME": "Bienvenido",
+        "PROFILE": "Perfil",
+        "NAME": "Nombre",
+        "USERNAME": "Nombre de usuario",
+        "FIRST_NAME": "Nombre",
+        "MIDDLE_NAME": "Insercion",
+        "LAST_NAME": "Apellido",
+        "BIRTH_DATE": "Fecha de nacimiento",
+        "GENDER": "Sexo",
+        "TITLE": "Titulo",
+        "EMAIL": "Email",
+        "PHONE": "Numero de telefono",
+        "ADDRESS": "Direccion",
+        "ADDRESS_TYPE": "Tipo de direccion",
+        "ADDRESSES": "Direcciones",
+        "STREET": "Calle",
+        "POSTAL_CODE": "Codigo Postal",
+        "CITY": "Ciudad",
+        "COUNTRY": "Localidad",
+        "MAP_COORDINATES": "Coordinadas de mapa",
+        "ROLES": "Roles",
+        "LANGUAGE": "Lengua",
+        "NEW_PASSWORD": "Nueva contrasena"
+    },
+    "HEADER": {
+        "USERS": "Usuarios",
+        "LOCATIONS": "Ubicaciones",
+        "NOTIFICATIONS": "Notificaciones"
+    },
+    "ADMINISTRATION": {
+        "LABEL": "Administracion"
+    },
+    "COMPANY": {
+        "LABEL": "Empresa",
+        "ACTIVE": "Activo",
+        "CODE": "Codigo",
+        "TYPE": "Tipo",
+        "DESCRIPTION": "Descripcion",
+        "WEBSITE": "Sitio web",
+        "VAT_NUMBER": "N.I.F",
+        "COC_NUMBER": "Numero de camara de comercio",
+        "BANK_ACCOUNT_NUMBER": "IBAN",
+        "COMPANIES": "Empresas",
+        "STORE": "Sucursal",
+        "STORES": "Sucursales",
+        "REGIONS": "Regiones",
+        "REGION": "Region",
+        "NAME": "Nombre",
+        "EMAIL": "Email",
+        "EMAILS": "Emails",
+        "PHONE": "Numero Telefono",
+        "PHONES": "Numeros de telefono",
+        "ADDRESS": "Direccion",
+        "ADDRESS_TYPE": "Tipo de direccion",
+        "ADDRESSES": "Direcciones",
+        "STREET": "Calle",
+        "POSTAL_CODE": "Codigo postal",
+        "CITY": "Ciudad",
+        "COUNTRY": "Localidad",
+        "MAP": "Mapa",
+        "MAP_COORDINATES": "Coordinadas de mapa",
+        "OWNERS": "Propietarios",
+        "CONTACTS": "Persona de contacto",
+        "INFORMANTS": "Informantes",
+        "NOTIFY": "Notificar"
+    },
+    "STORE": {
+        "LABEL": "Sucursal",
+        "ACTIVE": "Activo",
+        "CODE": "Codigo",
+        "TYPE": "Tipo",
+        "DESCRIPTION": "Descripcion",
+        "WEBSITE": "Sitio web",
+        "VAT_NUMBER": "N.I.F.",
+        "COC_NUMBER": "Numero de camara de comercio",
+        "BANK_ACCOUNT_NUMBER": "IBAN",
+        "COMPANY": "Empresa",
+        "COMPANIES": "Empresas",
+        "STORES": "Sucursales",
+        "REGIONS": "Regiones",
+        "REGION": "Region",
+        "NAME": "Nombre",
+        "EMAIL": "Email",
+        "EMAILS": "Emails",
+        "PHONE": "Numero de telefono",
+        "PHONES": "Numeros de telefono",
+        "ADDRESS": "Direccion",
+        "ADDRESS_TYPE": "Tipo de direccion",
+        "ADDRESSES": "Direcciones",
+        "STREET": "Calle",
+        "POSTAL_CODE": "Codigo postal",
+        "CITY": "Localidad",
+        "COUNTRY": "Pais",
+        "MAP": "Mapa",
+        "MAP_COORDINATES": "Coordinadas de mapa",
+        "OWNERS": "Propietarios",
+        "CONTACTS": "Persona de contacto",
+        "INFORMANTS": "Informantes",
+        "NOTIFY": "Notificar",
+        "DEVICE_GROUPS": "Grupos",
+        "INFORMATION": "Informacion",
+        "IN_MAINTENANCE": " Esta sucursal esta actualmente en mantenimiento!",
+        "MAINTENANCE_STARTED": "mantenimiento iniciado: "
+    },
+    "SENSOR_GROUP": {
+        "LABEL": "Etiqueta de grupo",
+        "ADD": "Anadir grupo",
+        "NEW_GROUP": "Grupo nuevo",
+        "EDIT_GROUP": "Editar grupo",
+        "ACTIVE": "Activo",
+        "NAME": "Naam",
+        "DESCRIPTION": "Descripcion"
+    },
+    "CONFIGURATION": {
+        "LABEL": "Configuracion",
+        "STORES": "Sucursales",
+        "INSTALLATION": "Instalacion",
+        "PACKET_LOG": "Registro de paquetes"
+    },
+    "LOG": {
+        "LABEL": "Log",
+        "INPUTS": "Entradas",
+        "DEVICE_ID": "ID del pispositivo",
+        "INTERNAL": "Interno",
+        "OUTPUT_1": "Salida 1",
+        "OUTPUT_2": "Salida 2",
+        "OUTPUT_3": "Salida 3",
+        "OUTPUT_4": "Salida 4",
+        "OUTPUT_5": "Salida 5",
+        "OUTPUT_6": "Salida 6"
+    },
+    "SENSOR": {
+        "LABEL": "Sensor",
+        "SENSORS": "Sensores",
+        "STORE": "Sucursal",
+        "ACTIVE": "Activo",
+        "EDIT_SENSOR": "Sensor de edicion",
+        "UID": "Numero de UID",
+        "DATE": "Fecha",
+        "TIME": "Hora",
+        "NAME": "Nombre",
+        "INPUT_NUMBER": "Entrada",
+        "OUTPUT_NUMBER": "Salida",
+        "DESCRIPTION": "Descripcion",
+        "TEMPERATURE": "Temperatura",
+        "INPUT": "Entrada",
+        "TRIP": "Cubierta",
+        "TRIP_LOW": "Cubierta baja",
+        "TRIP_HIGH": "Cubierta alta",
+        "SWITCH_WHEN": "Cambiar cuando",
+        "HIGH": "Alto",
+        "LOW": "Bajo",
+        "LAST_UPDATED": "Ultima actualizacion: ",
+        "NOTIFY_AFTER": "Notificar despues",
+        "SHOW_SENSOR": "Mostrar sensor",
+        "HANDLED_BY": "Manejado por",
+        "STATE": {
+            "LABEL": "Status",
+            "ACTIVE": "Activo",
+            "INACTIVE": "Inactivo",
+            "NOTIFIED": "Notificacion"
+        }
+    },
+    "COLLECTION_TYPE": {
+        "MAINTENANCE": {
+            "NAME": "Mantenimiento"
+        },
+        "INVENTORY": {
+            "NAME": "Inventario"
+        }
+    },
+    "COLLECTIONS": {
+        "LABEL": "Colecciones",
+        "COLLECTION": "Coleccion",
+        "USER": "Usuario",
+        "NAME": "Nombre",
+        "DESCRIPTION": "Descripcion",
+        "DETAILS": "Detalles",
+        "DATE": "Fecha",
+        "ATTACHMENTS": "Anexos",
+        "CREATED_BY": "Creado por",
+        "EDITED_BY": "Editado por",
+        "PUBLISHED": "Publicado",
+        "UPLOAD": "Subir",
+        "ROTATE_IMAGE": "Rotar imagen 90∞"
+    },
+    "MAINTENANCE": {
+        "LABEL": "Mantenimiento",
+        "STORE": "Sucursal",
+        "STORES": "Sucursales",
+        "START_MAINTENANCE": "Iniciar mantenimiento",
+        "STOP_MAINTENANCE": "detener mantenimiento",
+        "NEW": "Nuevo mantenimiento",
+        "FOR": "para",
+        "PERIODICALLY": "Periodico",
+        "GENERAL": "General",
+        "LOG": "Registro de mantenimiento",
+        "FILE": "Archivo",
+        "TYPE": "Tipo"
+    },
+    "MAINTENANCE_TYPE": {
+        "GENERAL": {
+            "NAME": "General"
+        },
+        "PERIODICALLY": {
+            "NAME": "Periodico"
+        }
+    },
+    "INVENTORY": {
+        "LABEL": "Inventario",
+        "STORE": "Sucursal",
+        "STORES": "Sucursales",
+        "NEW": "Nuevo inventario",
+        "OF": "de",
+        "FILE": "Archivo"
+    },
+    "NOTIFICATIONS": {
+        "LABEL": "Notificaciones",
+        "OPEN_NOTIFICATIONS": "Notificaciones abiertas",
+        "CLOSED_NOTIFICATIONS": "Notificaciones cerradas",
+        "HANDLE": "Manejar"
+    },
+    "INSTALLATION": {
+        "LABEL": "Instalacion",
+        "SENSORS": "Sensores",
+        "NAME": "Nombre",
+        "NUMBER": "#",
+        "UID": "Uid",
+        "TYPE": "Tipo",
+        "ACTIVE": "Activo"
+    },
+    "REGIONS": {
+        "LABEL": "Regios",
+        "REGION": "Regio",
+        "NAME": "Nombre",
+        "DESCRIPTION": "Discripcion"
+    },
+    "QUESTION": {
+        "DELETE_EMAIL": "Borrar direccion Email?",
+        "DELETE_PHONE": "Borrar numero de telefono?",
+        "DELETE_ADDRESS": "Borrar Direccion?",
+        "DELETE_USER": "Borrar usuario?",
+        "DELETE_COMPANY": "Borrar empresa?",
+        "DELETE_REGION": "Borrar regio?",
+        "DELETE_STORE": "Borrar sucursal?",
+        "COPY_COMPANY_DATA": "Copiar datos de empresa?",
+        "DELETE_GROUP": "Borrar Grupo?",
+        "UNLINK_SENSOR": "Desvincular sensor de sucursal?",
+        "NEW_PASSWORD": "Generar nueva contrasena para el usuario?",
+        "HANDLE_NOTIFICATION": "Notificar manipulacion?",
+        "DELETE_ENTRY": "Borrar datos?",
+        "DELETE_ATTACHMENT": "Eliminar anexo?",
+        "START_MAINTENANCE": "Iniciar mantenimiento?"
+    },
+    "AUTH": {
+        "USERNAME": "Usuario",
+        "PASSWORD": "Contrasena",
+        "EMAIL": "Email",
+        "BIRTHDATE": "Fech nacimiento",
+        "LOGIN": "Iniciar sesion",
+        "LOGOUT": "Cerrar sesion",
+        "REGISTER": "Registrar",
+        "USER_REGISTERED": "Su registro se ha completado. Se ha enviado un correo electronico con los datos de activacion. Gracias por su interes.",
+        "INVALID_AGE": "Usted no es lo suficientemente mayor, la edad minima es 18.",
+        "USERNAME_EXISTS": "Nombre de usuario ya existe.",
+        "INVALID_USER_PASS": "usuario / contrasena invalida",
+        "METHOD_REQUIRES_SESSION": "El metodo de autenticacion requiere sesion.",
+        "SESSION_TIMEOUT": "Sesion ha expirado.",
+        "FORGOT_USERPASS": "Olvido su nombre de usuario / contrasena?",
+        "REQUEST_CREDENTIALS": "Solicitar credenciales.",
+        "UNKNOWN_EMAIL": "Direccion de correo electronico desconocida.",
+        "NO_USER_ROLES": "El usuario no tiene roles.",
+        "USER_NOT_ACTIAVED": "El usuario no esta activado.",
+        "USER_LOCKED_OUT": "El usuario esta bloqueado. Intentelo mas tarde.",
+        "EMAIL_CREDENTIALS_SENT": "Sus credenciales se han enviado a su direccion de correo electronico.",
+        "ROLES": "Roles"
+    },
+    "PAYMENT": {
+        "METHOD": "Forma de pago",
+        "NAME": {
+            "METHOD_AUTOMATIC_PAYMENT": "Pago automatico",
+            "METHOD_INVOICE": "Factura",
+            "METHOD_CASH": "Efectivo",
+            "METHOD_BANK_TRANSFER": "Transferencia bancaria"
+        }
+    },
+    "LNG": {
+        "ENGLISH": "Ingles",
+        "DUTCH": "Holandes"
+    },
+    "TOOLTIP": {
+        "DETAILS": "Mostrar detalles"
+    },
+    "HTTP": {
+        "ERROR": "Error HTTP",
+        "ERROR_MESSAGE": "Mensaje de error"
+    },
+    "PROFILE": {
+        "INFO": "Info",
+        "PASSWORD": "Contrasena",
+        "CONFIRM": "Confirmar"
+    },
+    "SPLASH": {
+        "TCM": "TAP CONTROL MANAGER"
+    }
+}

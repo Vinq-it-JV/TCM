@@ -31,6 +31,10 @@ angular
             .setStorageType('sessionStorage')
             .setNotify(true, true);
     })
+    .config(function(dropzoneOpsProvider) {
+        dropzoneOpsProvider.setOptions({
+        })
+    })
     .config(['$urlRouterProvider', '$stateProvider', '$locationProvider', '$translateProvider',
         function ($urlRouterProvider, $stateProvider) {
             $stateProvider

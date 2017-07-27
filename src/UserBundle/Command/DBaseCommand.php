@@ -57,7 +57,7 @@ class DBaseCommand extends ContainerAwareCommand {
 
     protected function configCountryList()
     {
-        $countryCodes = ['NL'=>'NL', 'BE'=>'NL', 'DE'=>'EN', 'FR'=>'EN', 'ES'=>'EN', 'IT'=>'EN', 'PT'=>'EN', 'GB'=>'EN'];
+        $countryCodes = ['NL'=>'NL', 'BE'=>'NL', 'DE'=>'EN', 'FR'=>'EN', 'ES'=>'ES', 'IT'=>'EN', 'PT'=>'EN', 'GB'=>'EN'];
 
         foreach ($countryCodes as $code => $langauge) {
             $this->countryArr[$code]['Name'] = "COUNTRY." . $code . "_NAME";
