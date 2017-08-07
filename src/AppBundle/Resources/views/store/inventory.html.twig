@@ -1,8 +1,10 @@
+{% import 'macros.html.twig' as mc %}
+
 <div class="container">
     <div class="row">
         <div class="panel-body">
             <h4 ng-cloak>
-                <i class="fa fa-fw fa-list"></i> {{ ng.translate('INVENTORY.LABEL') }} {{ ng.translate('INVENTORY.OF') }} {{ store.Name }}
+                <i class="fa fa-fw fa-list"></i> {{ mc.translate('INVENTORY.LABEL') }} {{ mc.translate('INVENTORY.OF') }} {{ store.Name }}
             </h4>
             <hr/>
             <div class="well table-responsive">
@@ -10,7 +12,7 @@
                     <div class="row">
                         <div class="col-md-3 col-xs-6">
                             <input st-search class="form-control input-sm"
-                                   placeholder="{{ ng.translate('SEARCH') }}" type="text" ng-cloak/>
+                                   placeholder="{{ mc.translate('SEARCH') }}" type="text" ng-cloak/>
                         </div>
                     </div>
                     <br/>
@@ -20,11 +22,11 @@
                                 <thead>
                                 <tr>
                                     <th st-sort="Name" class="st-sortable col-md-9 col-xs-7"
-                                        ng-cloak>{{ ng.translate('COLLECTIONS.DESCRIPTION') }}</th>
+                                        ng-cloak>{{ mc.translate('COLLECTIONS.DESCRIPTION') }}</th>
                                     <th st-sort="Attachments" class="st-sortable col-md-1 col-xs-2 text-center"
                                         ng-cloak><i class="fa fa-fw fa-paperclip"></i></th>
                                     <th class="st-nosort text-right col-md-2 col-xs-3"
-                                        ng-cloak>{{ ng.translate('ACTION') }}</th>
+                                        ng-cloak>{{ mc.translate('ACTION') }}</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -62,7 +64,7 @@
                 <div class="panel-heading">
                     <div class="row">
                         <div class="col-xs-12 text-left big-button-text" ng-cloak>
-                            {{ ng.translate('BACK') }}
+                            {{ mc.translate('BACK') }}
                             <i class="fa fa-chevron-left fa-2x fa-fw pull-right"></i>
                         </div>
                     </div>

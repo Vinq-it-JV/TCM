@@ -1,4 +1,5 @@
 {% extends 'base.html.twig' %}
+{% import 'macros.html.twig' as mc %}
 
 {% block page %}
 
@@ -7,23 +8,23 @@
             <div class="col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3">
                 <div class="container-fluid">
                     <form autocomplete="on" ng-submit="BE.showLoader()" name="loginForm" novalidate class="form-css well well-sm" action="{{ path('login_verify') }}" method="post">
-                        <H4 ng-cloak="">{{ ng.translate('LOGIN') }}</H4>
+                        <H4 ng-cloak="">{{ mc.translate('LOGIN') }}</H4>
                         <hr/>
                         {% if error_message | length > 0 %}
-                            <div class="form-error">{{ ng.translate(error_message) }}</div>
+                            <div class="form-error">{{ mc.translate(error_message) }}</div>
                             <hr/>
                         {% endif %}
                         <div class="form-group">
-                            <label for="username" ng-cloak>{{ ng.translate('AUTH.USERNAME') }}</label>
-                            <input class="form-control form-input" id="username" ng-model="AUTH.credentials()._username" name="_username" type="text" focus="true" placeholder="{{ ng.translate('AUTH.USERNAME') }}" validation="min_len:3|required" ng-cloak>
+                            <label for="username" ng-cloak>{{ mc.translate('AUTH.USERNAME') }}</label>
+                            <input class="form-control form-input" id="username" ng-model="AUTH.credentials()._username" name="_username" type="text" focus="true" placeholder="{{ mc.translate('AUTH.USERNAME') }}" validation="min_len:3|required" ng-cloak>
                         </div>
                         <div class="form-group">
-                            <label for="password" ng-cloak>{{ ng.translate('AUTH.PASSWORD') }}</label>
-                            <input class="form-control form-input" id="password" ng-model="AUTH.credentials()._password" name="_password" type="password" placeholder="{{ ng.translate('AUTH.PASSWORD') }}" validation="min_len:6|required" ng-cloak>
+                            <label for="password" ng-cloak>{{ mc.translate('AUTH.PASSWORD') }}</label>
+                            <input class="form-control form-input" id="password" ng-model="AUTH.credentials()._password" name="_password" type="password" placeholder="{{ mc.translate('AUTH.PASSWORD') }}" validation="min_len:6|required" ng-cloak>
                         </div>
                         <div class="row">
                             <div class="col-md-12 col-sm-12">
-                                <input ng-disabled="loginForm.$invalid" class="btn btn-success pull-right" type="submit" id="_submit" name="_submit" value="{{ ng.translate('AUTH.LOGIN') }}" ng-cloak/>
+                                <input ng-disabled="loginForm.$invalid" class="btn btn-success pull-right" type="submit" id="_submit" name="_submit" value="{{ mc.translate('AUTH.LOGIN') }}" ng-cloak/>
                             </div>
                         </div>
                     </form>

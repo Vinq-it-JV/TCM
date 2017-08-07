@@ -135,6 +135,11 @@ angular
                 Modal.open({}, modalOptions);
             };
 
+            $scope.copyDevice = function (device) {
+                $scope.devicegroups.copyDevice(device);
+                $scope.groupsCollection = [].concat($scope.devicegroups.groups());
+            };
+
             $scope.showTreeView = function () {
                 $scope.activePage = 'treeView';
             };

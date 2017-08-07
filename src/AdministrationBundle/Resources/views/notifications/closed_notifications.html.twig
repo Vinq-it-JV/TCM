@@ -1,4 +1,5 @@
 {% extends 'base.html.twig' %}
+{% import 'macros.html.twig' as mc %}
 
 {% block contents %}
     {% if app.user %}
@@ -14,7 +15,7 @@
                         <div class="row">
                             <div class="panel-body">
                                 <h4 ng-cloak>
-                                    <i class="fa fa-circle"></i> {{ ng.translate('NOTIFICATIONS.CLOSED_NOTIFICATIONS') }}
+                                    <i class="fa fa-circle"></i> {{ mc.translate('NOTIFICATIONS.CLOSED_NOTIFICATIONS') }}
                                 </h4>
                                 <hr/>
                                 <div class="well table-responsive">
@@ -25,13 +26,13 @@
                                                     <thead>
                                                     <tr>
                                                         <th st-sort="Sensor.MainStore.Name" class="st-sortable col-md-2 col-xs-2"
-                                                            ng-cloak>{{ ng.translate('SENSOR.STORE') }}</th>
+                                                            ng-cloak>{{ mc.translate('SENSOR.STORE') }}</th>
                                                         <th st-sort="Sensor.Name" class="st-sortable col-md-2 col-xs-2"
-                                                            ng-cloak>{{ ng.translate('SENSOR.NAME') }}</th>
+                                                            ng-cloak>{{ mc.translate('SENSOR.NAME') }}</th>
                                                         <th class="st-sortable col-md-2 col-xs-2"
-                                                            ng-cloak>{{ ng.translate('SENSOR.STATE.LABEL') }}</th>
+                                                            ng-cloak>{{ mc.translate('SENSOR.STATE.LABEL') }}</th>
                                                         <th class="st-sortable col-md-2 col-xs-2"
-                                                            ng-cloak>{{ ng.translate('SENSOR.SWITCH_WHEN') }}</th>
+                                                            ng-cloak>{{ mc.translate('SENSOR.SWITCH_WHEN') }}</th>
                                                         <th st-sort="CreatedAt.date" class="st-sortable col-md-2 col-xs-2"
                                                             ng-cloak><i class="fa fa-fw fa-clock-o"></i></th>
                                                         <th st-sort="HandledBy.Name" class="st-nosort text-right col-md-2 col-xs-2"
@@ -93,13 +94,13 @@
                                                     <thead>
                                                     <tr>
                                                         <th st-sort="Sensor.MainStore.Name" class="st-sortable col-md-2 col-xs-2"
-                                                            ng-cloak>{{ ng.translate('SENSOR.STORE') }}</th>
+                                                            ng-cloak>{{ mc.translate('SENSOR.STORE') }}</th>
                                                         <th st-sort="Sensor.Name" class="st-sortable col-md-2 col-xs-2"
-                                                            ng-cloak>{{ ng.translate('SENSOR.NAME') }}</th>
+                                                            ng-cloak>{{ mc.translate('SENSOR.NAME') }}</th>
                                                         <th class="st-sortable col-md-2 col-xs-2"
-                                                            ng-cloak>{{ ng.translate('SENSOR.TEMPERATURE') }}</th>
+                                                            ng-cloak>{{ mc.translate('SENSOR.TEMPERATURE') }}</th>
                                                         <th class="st-sortable col-md-2 col-xs-2"
-                                                            ng-cloak>{{ ng.translate('SENSOR.TRIP') }}</th>
+                                                            ng-cloak>{{ mc.translate('SENSOR.TRIP') }}</th>
                                                         <th st-sort="CreatedAt.date" class="st-sortable col-md-2 col-xs-2"
                                                             ng-cloak><i class="fa fa-fw fa-clock-o"></i></th>
                                                         <th st-sort="HandledBy.Name" class="st-nosort text-right col-md-2 col-xs-2"

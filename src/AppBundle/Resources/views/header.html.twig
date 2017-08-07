@@ -1,3 +1,5 @@
+{% import 'macros.html.twig' as mc %}
+
 <div class="navbar navbar-default navbar-fixed-top">
     <div role="navigation">
         <div class="container">
@@ -8,7 +10,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="{{ path('tcm_dashboard') }}" ng-cloak>{{ ng.translate('TCM.LABEL') }}</a>
+                <a class="navbar-brand" href="{{ path('tcm_dashboard') }}" ng-cloak>{{ mc.translate('TCM.LABEL') }}</a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right">
@@ -17,9 +19,9 @@
                             <i class="icon-book icon-white"></i><div class="inline" ng-cloak>{{ '{{ AUTH.user().Name }}' }} <b class="caret"></b></div>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="" ng-click="showProfile()" ng-cloak><i class="fa fa-user fa-fw"></i> {{ ng.translate('USER.PROFILE') }} </a></li>
+                            <li><a href="" ng-click="showProfile()" ng-cloak><i class="fa fa-user fa-fw"></i> {{ mc.translate('USER.PROFILE') }} </a></li>
                             <li class="divider"></li>
-                            <li><a href="" ng-click="logout()" ng-cloak><i class="fa fa-sign-out fa-fw"></i> {{ ng.translate('AUTH.LOGOUT') }} </a></li>
+                            <li><a href="" ng-click="logout()" ng-cloak><i class="fa fa-sign-out fa-fw"></i> {{ mc.translate('AUTH.LOGOUT') }} </a></li>
                         </ul>
                     </li>
                 </ul>

@@ -1,8 +1,10 @@
+{% import 'macros.html.twig' as mc %}
+
 <div class="container" ng-form="attachmentForm">
 
     {# Attachment information #}
     <h5 ng-cloak>
-        <i class="fa fa-fw fa-list"></i> {{ ng.translate('INVENTORY.LABEL') }} {{ ng.translate('INVENTORY.OF') }} {{ store.Name }}
+        <i class="fa fa-fw fa-list"></i> {{ mc.translate('INVENTORY.LABEL') }} {{ mc.translate('INVENTORY.OF') }} {{ store.Name }}
     </h5>
     <div class="well">
         {% verbatim %}
@@ -43,11 +45,11 @@
         <div class="row">
             <div class="col-md-12">
                 <button class="btn btn-sm btn-default pull-left" ng-click="showPreviousPage()" ng-cloak>
-                    <i class="fa fa-close"></i> {{ ng.translate('CANCEL') }}
+                    <i class="fa fa-close"></i> {{ mc.translate('CANCEL') }}
                 </button>
                 <button class="btn btn-sm btn-success pull-right" ng-click="saveAttachmentData()"
                         ng-disabled="attachemntForm.$invalid">
-                    <i class="fa fa-floppy-o" ng-cloak></i> {{ ng.translate('SAVE') }}
+                    <i class="fa fa-floppy-o" ng-cloak></i> {{ mc.translate('SAVE') }}
                 </button>
             </div>
         </div>

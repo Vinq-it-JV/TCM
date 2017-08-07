@@ -1,8 +1,10 @@
+{% import 'macros.html.twig' as mc %}
+
 <div class="container">
     <div class="row" ng-show="AUTH.isSuperAdmin()">
         <div class="panel-body">
             <h4 ng-cloak>
-                <i class="fa fa-fw fa-list"></i> {{ ng.translate('INVENTORY.LABEL') }} {{ ng.translate('INVENTORY.OF') }} {{ store.Name }}
+                <i class="fa fa-fw fa-list"></i> {{ mc.translate('INVENTORY.LABEL') }} {{ mc.translate('INVENTORY.OF') }} {{ store.Name }}
             </h4>
             <hr/>
             <div class="well table-responsive">
@@ -10,7 +12,7 @@
                     <div class="row">
                         <div class="col-md-3 col-xs-6">
                             <input st-search class="form-control input-sm"
-                                   placeholder="{{ ng.translate('SEARCH') }}" type="text" ng-cloak/>
+                                   placeholder="{{ mc.translate('SEARCH') }}" type="text" ng-cloak/>
                         </div>
                     </div>
                     <br/>
@@ -20,13 +22,13 @@
                                 <thead>
                                 <tr>
                                     <th st-sort="Name" class="st-sortable col-md-7 col-xs-5"
-                                        ng-cloak>{{ ng.translate('COLLECTIONS.DESCRIPTION') }}</th>
+                                        ng-cloak>{{ mc.translate('COLLECTIONS.DESCRIPTION') }}</th>
                                     <th st-sort="Attachments" class="st-sortable col-md-1 col-xs-2 text-center"
                                         ng-cloak><i class="fa fa-fw fa-paperclip"></i></th>
                                     <th st-sort="IsPublished" class="st-sortable text-right col-md-1 col-xs-2"
-                                        ng-cloak>{{ ng.translate('COLLECTIONS.PUBLISHED') }}</th>
+                                        ng-cloak>{{ mc.translate('COLLECTIONS.PUBLISHED') }}</th>
                                     <th class="st-nosort text-right col-md-2 col-xs-2"
-                                        ng-cloak>{{ ng.translate('ACTION') }}</th>
+                                        ng-cloak>{{ mc.translate('ACTION') }}</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -72,11 +74,11 @@
                 <div class="row">
                     <div class="col-md-12">
                         <button class="btn btn-sm btn-default pull-left" ng-click="pageBack()" ng-cloak>
-                            <i class="fa fa-close"></i> {{ ng.translate('CANCEL') }}
+                            <i class="fa fa-close"></i> {{ mc.translate('CANCEL') }}
                         </button>
                         <button class="btn btn-sm btn-success pull-right"
                                 ng-click="addCollection('inventoryAdd')" ng-cloak>
-                            <i class="fa fa-plus"></i> {{ ng.translate('ADD') }}
+                            <i class="fa fa-plus"></i> {{ mc.translate('ADD') }}
                         </button>
                     </div>
                 </div>

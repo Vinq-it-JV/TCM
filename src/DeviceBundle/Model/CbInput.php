@@ -26,6 +26,7 @@ class CbInput extends BaseCbInput
         $data = [];
         $data['cbinput'] = $this->toArray();
         $data['cbinput']['TypeId'] = self::TYPE_ID;
+        $data['cbinput']['IsCopy'] = false;
 
         unset($data['cbinput']['CreatedAt']);
         unset($data['cbinput']['UpdatedAt']);

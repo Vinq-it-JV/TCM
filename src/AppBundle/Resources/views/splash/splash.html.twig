@@ -1,4 +1,5 @@
 {% extends 'base.html.twig' %}
+{% import 'macros.html.twig' as mc %}
 
 {% block contents %}
 
@@ -15,7 +16,7 @@
                     </div>
                     <div class="text-center col-md-4 col-md-offset-4">
                         <div style="padding-top: 20px;"></div>
-                        <div id="splashText" class="tcmText-splash animated flipInX">{{ ng.translate('SPLASH.TCM') }}</div>
+                        <div id="splashText" class="tcmText-splash animated flipInX">{{ mc.translate('SPLASH.TCM') }}</div>
                     </div>
                 </div>
             </div>

@@ -26,6 +26,7 @@ class DsTemperatureSensor extends BaseDsTemperatureSensor
         $data = [];
         $data['dstemperaturesensor'] = $this->toArray();
         $data['dstemperaturesensor']['TypeId'] = self::TYPE_ID;
+        $data['dstemperaturesensor']['IsCopy'] = false;
 
         unset($data['dstemperaturesensor']['CreatedAt']);
         unset($data['dstemperaturesensor']['UpdatedAt']);

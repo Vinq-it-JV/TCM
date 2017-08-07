@@ -181,6 +181,12 @@ class DataController extends Controller
             ->make();
     }
 
+    /**
+     * Get input sensor log
+     * @param Request $request
+     * @param $sensorid
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
     public function getInputSensorLogAction(Request $request, $sensorid)
     {
         if (!$request->isMethod('GET'))

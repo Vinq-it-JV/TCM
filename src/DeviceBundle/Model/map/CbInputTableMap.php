@@ -73,6 +73,7 @@ class CbInputTableMap extends TableMap
         $this->addRelation('ControllerBox', 'DeviceBundle\\Model\\ControllerBox', RelationMap::MANY_TO_ONE, array('controller' => 'id', ), null, null);
         $this->addRelation('DeviceGroup', 'DeviceBundle\\Model\\DeviceGroup', RelationMap::MANY_TO_ONE, array('group' => 'id', ), null, null);
         $this->addRelation('CbInputLog', 'DeviceBundle\\Model\\CbInputLog', RelationMap::ONE_TO_MANY, array('id' => 'input', ), null, null, 'CbInputLogs');
+        $this->addRelation('DeviceCopy', 'DeviceBundle\\Model\\DeviceCopy', RelationMap::ONE_TO_MANY, array('id' => 'copy_of_input', ), null, null, 'DeviceCopies');
         $this->addRelation('CbInputNotification', 'NotificationBundle\\Model\\CbInputNotification', RelationMap::ONE_TO_MANY, array('id' => 'sensor', ), null, null, 'CbInputNotifications');
     } // buildRelations()
 

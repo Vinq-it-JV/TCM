@@ -1,3 +1,5 @@
+{% import 'macros.html.twig' as mc %}
+
 <form class="form-horizontal" method="post" name="sensorForm"
       action="{{ url('installation_sensor_save', { 'sensorid' : sensor.Id, 'typeid' : sensor.TypeId }) }}" novalidate>
     <div class="panel-body">
@@ -7,7 +9,7 @@
             <input name="TypeId" type="hidden" value="{{ sensor.TypeId }}"/>
             <div class="form-group">
                 <label class="control-label col-md-2"
-                       ng-cloak>{{ ng.translate('SENSOR.ACTIVE') }}</label>
+                       ng-cloak>{{ mc.translate('SENSOR.ACTIVE') }}</label>
                 <div class="col-md-2">
                     {% verbatim %}
                     <input type="hidden" name="IsEnabled" value="{{ sensors.sensor().IsEnabled }}">
@@ -23,7 +25,7 @@
             </div>
             <div class="form-group">
                 <label class="control-label col-md-2"
-                       ng-cloak>{{ ng.translate('SENSOR.STORE') }}</label>
+                       ng-cloak>{{ mc.translate('SENSOR.STORE') }}</label>
                 <div class="col-md-6">
                     {% verbatim %}
                     <input type="hidden" name="Store" value="{{ sensors.sensor().MainStore.Id }}">
@@ -46,10 +48,10 @@
         <div class="row">
             <div class="col-md-12">
                 <a href="{{ path('configuration_installation') }}" class="btn btn-sm btn-default pull-left"
-                   ng-click="BE.showLoader(true)" ng-cloak><i class="fa fa-close"></i> {{ ng.translate('CANCEL') }}</a>
+                   ng-click="BE.showLoader(true)" ng-cloak><i class="fa fa-close"></i> {{ mc.translate('CANCEL') }}</a>
                 <button type="submit" class="btn btn-sm btn-success pull-right" ng-click="BE.showLoader(true)"
                         ng-disabled="sensorForm.$invalid" ng-cloak>
-                    <i class="fa fa-floppy-o"></i> {{ ng.translate('SAVE') }}
+                    <i class="fa fa-floppy-o"></i> {{ mc.translate('SAVE') }}
                 </button>
             </div>
         </div>

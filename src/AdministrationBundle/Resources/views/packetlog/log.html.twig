@@ -1,4 +1,5 @@
 {% extends 'base.html.twig' %}
+{% import 'macros.html.twig' as mc %}
 
 {% block contents %}
     {% if app.user %}
@@ -12,7 +13,7 @@
                         <div class="row">
                             <div class="panel-body">
                                 <h4 ng-cloak>
-                                    <i class="fa fa-book"></i> {{ ng.translate('CONFIGURATION.PACKET_LOG') }}
+                                    <i class="fa fa-book"></i> {{ mc.translate('CONFIGURATION.PACKET_LOG') }}
                                 </h4>
                                 <hr/>
                                 <div class="well table-responsive">
@@ -20,7 +21,7 @@
                                         <div class="row">
                                             <div class="col-md-3 col-xs-6">
                                                 <input st-search class="form-control input-sm"
-                                                       placeholder="{{ ng.translate('SEARCH') }}" type="text" ng-cloak/>
+                                                       placeholder="{{ mc.translate('SEARCH') }}" type="text" ng-cloak/>
                                             </div>
                                         </div>
                                         <br/>
@@ -29,16 +30,16 @@
                                                 <table class="table table-striped table-bordered">
                                                     <thead>
                                                     <tr>
-                                                        <th st-sort="Uid" class="st-sortable col-md-1" ng-cloak>{{ ng.translate('LOG.DEVICE_ID') }}</th>
-                                                        <th class="col-md-1" ng-cloak>{{ ng.translate('LOG.INPUTS') }}</th>
-                                                        <th st-sort="Internal" class="st-sortable col-md-1 text-right" ng-cloak>{{ ng.translate('LOG.INTERNAL') }}</th>
-                                                        <th class="st-sortable col-md-1 text-right" ng-cloak>{{ ng.translate('LOG.OUTPUT_1') }}</th>
-                                                        <th class="st-sortable col-md-1 text-right" ng-cloak>{{ ng.translate('LOG.OUTPUT_2') }}</th>
-                                                        <th class="st-sortable col-md-1 text-right" ng-cloak>{{ ng.translate('LOG.OUTPUT_3') }}</th>
-                                                        <th class="st-sortable col-md-1 text-right" ng-cloak>{{ ng.translate('LOG.OUTPUT_4') }}</th>
-                                                        <th class="st-sortable col-md-1 text-right" ng-cloak>{{ ng.translate('LOG.OUTPUT_5') }}</th>
-                                                        <th class="st-sortable col-md-1 text-right" ng-cloak>{{ ng.translate('LOG.OUTPUT_6') }}</th>
-                                                        <th class="st-nosort col-md-1 text-right" ng-cloak>{{ ng.translate('ACTION') }}</th>
+                                                        <th st-sort="Uid" class="st-sortable col-md-1" ng-cloak>{{ mc.translate('LOG.DEVICE_ID') }}</th>
+                                                        <th class="col-md-1" ng-cloak>{{ mc.translate('LOG.INPUTS') }}</th>
+                                                        <th st-sort="Internal" class="st-sortable col-md-1 text-right" ng-cloak>{{ mc.translate('LOG.INTERNAL') }}</th>
+                                                        <th class="st-sortable col-md-1 text-right" ng-cloak>{{ mc.translate('LOG.OUTPUT_1') }}</th>
+                                                        <th class="st-sortable col-md-1 text-right" ng-cloak>{{ mc.translate('LOG.OUTPUT_2') }}</th>
+                                                        <th class="st-sortable col-md-1 text-right" ng-cloak>{{ mc.translate('LOG.OUTPUT_3') }}</th>
+                                                        <th class="st-sortable col-md-1 text-right" ng-cloak>{{ mc.translate('LOG.OUTPUT_4') }}</th>
+                                                        <th class="st-sortable col-md-1 text-right" ng-cloak>{{ mc.translate('LOG.OUTPUT_5') }}</th>
+                                                        <th class="st-sortable col-md-1 text-right" ng-cloak>{{ mc.translate('LOG.OUTPUT_6') }}</th>
+                                                        <th class="st-nosort col-md-1 text-right" ng-cloak>{{ mc.translate('ACTION') }}</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
@@ -81,7 +82,7 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <button ng-click="getPacketlog()" class="btn btn-sm btn-primary pull-left" ng-cloak>
-                                                <i class="fa fa-refresh"></i> {{ ng.translate('REFRESH') }}
+                                                <i class="fa fa-refresh"></i> {{ mc.translate('REFRESH') }}
                                             </button>
                                         </div>
                                     </div>

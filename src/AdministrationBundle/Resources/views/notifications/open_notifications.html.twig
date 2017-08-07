@@ -1,4 +1,5 @@
 {% extends 'base.html.twig' %}
+{% import 'macros.html.twig' as mc %}
 
 {% block contents %}
     {% if app.user %}
@@ -14,7 +15,7 @@
                         <div class="row">
                             <div class="panel-body">
                                 <h4 ng-cloak>
-                                    <i class="fa fa-circle-o"></i> {{ ng.translate('NOTIFICATIONS.OPEN_NOTIFICATIONS') }}
+                                    <i class="fa fa-circle-o"></i> {{ mc.translate('NOTIFICATIONS.OPEN_NOTIFICATIONS') }}
                                 </h4>
                                 <hr/>
                                 <div class="well table-responsive">
@@ -22,7 +23,7 @@
                                         <div class="row">
                                             <div class="col-md-3 col-xs-6">
                                                 <input st-search class="form-control input-sm"
-                                                       placeholder="{{ ng.translate('SEARCH') }}" type="text" ng-cloak/>
+                                                       placeholder="{{ mc.translate('SEARCH') }}" type="text" ng-cloak/>
                                             </div>
                                         </div>
                                         <br/>
@@ -32,17 +33,17 @@
                                                     <thead>
                                                     <tr>
                                                         <th st-sort="Sensor.MainStore.Name" class="st-sortable col-md-2 col-xs-2"
-                                                            ng-cloak>{{ ng.translate('SENSOR.STORE') }}</th>
+                                                            ng-cloak>{{ mc.translate('SENSOR.STORE') }}</th>
                                                         <th st-sort="Sensor.Name" class="st-sortable col-md-3 col-xs-3"
-                                                            ng-cloak>{{ ng.translate('SENSOR.NAME') }}</th>
+                                                            ng-cloak>{{ mc.translate('SENSOR.NAME') }}</th>
                                                         <th class="st-sortable col-md-2 col-xs-2"
-                                                            ng-cloak>{{ ng.translate('SENSOR.STATE.LABEL') }}</th>
+                                                            ng-cloak>{{ mc.translate('SENSOR.STATE.LABEL') }}</th>
                                                         <th class="st-sortable col-md-2 col-xs-2"
-                                                            ng-cloak>{{ ng.translate('SENSOR.SWITCH_WHEN') }}</th>
+                                                            ng-cloak>{{ mc.translate('SENSOR.SWITCH_WHEN') }}</th>
                                                         <th st-sort="CreatedAt.date" class="st-sortable col-md-2 col-xs-2"
                                                             ng-cloak><i class="fa fa-fw fa-clock-o"></i></th>
                                                         <th class="st-nosort text-right col-md-1 col-xs-1"
-                                                            ng-cloak>{{ ng.translate('ACTION') }}</th>
+                                                            ng-cloak>{{ mc.translate('ACTION') }}</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
@@ -96,7 +97,7 @@
                                         <div class="row">
                                             <div class="col-md-3 col-xs-6">
                                                 <input st-search class="form-control input-sm"
-                                                       placeholder="{{ ng.translate('SEARCH') }}" type="text" ng-cloak/>
+                                                       placeholder="{{ mc.translate('SEARCH') }}" type="text" ng-cloak/>
                                             </div>
                                         </div>
                                         <br/>
@@ -106,17 +107,17 @@
                                                     <thead>
                                                     <tr>
                                                         <th st-sort="Sensor.MainStore.Name" class="st-sortable col-md-2 col-xs-2"
-                                                            ng-cloak>{{ ng.translate('SENSOR.STORE') }}</th>
+                                                            ng-cloak>{{ mc.translate('SENSOR.STORE') }}</th>
                                                         <th st-sort="Sensor.Name" class="st-sortable col-md-3 col-xs-3"
-                                                            ng-cloak>{{ ng.translate('SENSOR.NAME') }}</th>
+                                                            ng-cloak>{{ mc.translate('SENSOR.NAME') }}</th>
                                                         <th class="st-sortable col-md-2 col-xs-2"
-                                                            ng-cloak>{{ ng.translate('SENSOR.TEMPERATURE') }}</th>
+                                                            ng-cloak>{{ mc.translate('SENSOR.TEMPERATURE') }}</th>
                                                         <th class="st-sortable col-md-2 col-xs-2"
-                                                            ng-cloak>{{ ng.translate('SENSOR.TRIP') }}</th>
+                                                            ng-cloak>{{ mc.translate('SENSOR.TRIP') }}</th>
                                                         <th st-sort="CreatedAt.date" class="st-sortable col-md-2 col-xs-2"
                                                             ng-cloak><i class="fa fa-fw fa-clock-o"></i></th>
                                                         <th class="st-nosort text-right col-md-1 col-xs-1"
-                                                            ng-cloak>{{ ng.translate('ACTION') }}</th>
+                                                            ng-cloak>{{ mc.translate('ACTION') }}</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>

@@ -1,8 +1,10 @@
+{% import 'macros.html.twig' as mc %}
+
 <div class="container">
 
     {# Inventory information #}
     <h5 ng-cloak>
-        <i class="fa fa-fw fa-wrench"></i> {{ ng.translate('INVENTORY.LABEL') }} {{ ng.translate('INVENTORY.OF') }} {{ store.Name }}
+        <i class="fa fa-fw fa-wrench"></i> {{ mc.translate('INVENTORY.LABEL') }} {{ mc.translate('INVENTORY.OF') }} {{ store.Name }}
     </h5>
     <div class="well">
         {% verbatim %}
@@ -70,7 +72,7 @@
         <div class="row">
             <div class="col-md-12">
                 <button class="btn btn-sm btn-default pull-left" ng-click="showCollections('administration_inventory')" ng-cloak>
-                    <i class="fa fa-close"></i> {{ ng.translate('CANCEL') }}
+                    <i class="fa fa-close"></i> {{ mc.translate('CANCEL') }}
                 </button>
             </div>
         </div>

@@ -1,18 +1,21 @@
+{% import 'macros.html.twig' as mc %}
+
 <div ng-form="deviceForm">
     <div class="panel-body">
         <h5 ng-cloak>
-            <i class="fa fa-fw" ng-class="{'fa-thermometer':currentDevice.TypeId == 3, 'fa-cog': currentDevice.TypeId == 2 }"></i> {{ ng.translate('SENSOR.EDIT_SENSOR') }}
+            <i class="fa fa-fw" ng-class="{'fa-thermometer':currentDevice.TypeId == 3, 'fa-cog': currentDevice.TypeId == 2 }"></i> {{ mc.translate('SENSOR.EDIT_SENSOR') }}
         </h5>
         <hr/>
         <div class="well">
             {# Sensor information block #}
             <div class="form-group">
                 <label class="control-label col-md-2"
-                       ng-cloak>{{ ng.translate('SENSOR.ACTIVE') }}</label>
+                       ng-cloak>{{ mc.translate('SENSOR.ACTIVE') }}</label>
                 <div class="col-md-2">
                     {% verbatim %}
                     <toggle-switch
                             class="switch-small switch-success"
+                            is-disabled="currentDevice.IsCopy"
                             off-class="switch-small switch-danger"
                             ng-model="currentDevice.IsEnabled"
                             on-label="{{ 'YES' | translate }}"
@@ -23,7 +26,7 @@
             </div>
             <div class="form-group">
                 <label class="control-label col-md-2"
-                       ng-cloak>{{ ng.translate('SENSOR.UID') }}</label>
+                       ng-cloak>{{ mc.translate('SENSOR.UID') }}</label>
                 <div class="col-md-3">
                     <input class="form-control input-sm" name="Uid" type="text" disabled
                            ng-model="currentDevice.Uid" no-enter/>
@@ -31,7 +34,7 @@
             </div>
             <div class="form-group" ng-show="currentDevice.TypeId==3">
                 <label class="control-label col-md-2"
-                       ng-cloak>{{ ng.translate('SENSOR.OUTPUT_NUMBER') }}</label>
+                       ng-cloak>{{ mc.translate('SENSOR.OUTPUT_NUMBER') }}</label>
                 <div class="col-md-3">
                     <input class="form-control input-sm" name="Uid" type="text" disabled
                            ng-model="currentDevice.OutputNumber" no-enter />
@@ -39,7 +42,7 @@
             </div>
             <div class="form-group" ng-show="currentDevice.TypeId==4">
                 <label class="control-label col-md-2"
-                       ng-cloak>{{ ng.translate('SENSOR.INPUT_NUMBER') }}</label>
+                       ng-cloak>{{ mc.translate('SENSOR.INPUT_NUMBER') }}</label>
                 <div class="col-md-3">
                     <input class="form-control input-sm" name="Uid" type="text" disabled
                            ng-model="currentDevice.InputNumber" no-enter />
@@ -47,7 +50,7 @@
             </div>
             <div class="form-group">
                 <label class="control-label col-md-2"
-                       ng-cloak>{{ ng.translate('SENSOR.NAME') }}</label>
+                       ng-cloak>{{ mc.translate('SENSOR.NAME') }}</label>
                 <div class="col-md-6">
                     <input class="form-control input-sm" name="Name" type="text"
                            ng-model="currentDevice.Name" validation="min_len:3|required" no-enter/>
@@ -55,17 +58,17 @@
             </div>
             <div class="form-group">
                 <label class="control-label col-md-2"
-                       ng-cloak>{{ ng.translate('SENSOR.DESCRIPTION') }}</label>
+                       ng-cloak>{{ mc.translate('SENSOR.DESCRIPTION') }}</label>
                 <div class="col-md-10">
                         <textarea class="form-control input-sm no-resize" name="Description"
-                                  ng-model="currentDevice.Description" rows="5"></textarea>
+                                  ng-model="currentDevice.Description" rows="5" ng-readonly="currentDevice.IsCopy"></textarea>
                 </div>
             </div>
-            <div ng-switch="currentDevice.TypeId">
+            <div ng-switch="currentDevice.TypeId" ng-show="!currentDevice.IsCopy">
                 <div ng-switch-when="3">
                     <div class="form-group">
                         <label class="control-label col-md-2"
-                               ng-cloak>{{ ng.translate('SENSOR.TRIP_LOW') }}</label>
+                               ng-cloak>{{ mc.translate('SENSOR.TRIP_LOW') }}</label>
                         <div class="col-md-2">
                             <input class="form-control input-sm" name="LowLimit" type="text"
                                    ng-model="currentDevice.LowLimit" validation="integer_signed|required" no-enter/>
@@ -73,7 +76,7 @@
                     </div>
                     <div class="form-group">
                         <label class="control-label col-md-2"
-                               ng-cloak>{{ ng.translate('SENSOR.TRIP_HIGH') }}</label>
+                               ng-cloak>{{ mc.translate('SENSOR.TRIP_HIGH') }}</label>
                         <div class="col-md-2">
                             <input class="form-control input-sm" name="HighLimit" type="text"
                                    ng-model="currentDevice.HighLimit" validation="integer_signed|required" no-enter/>
@@ -81,7 +84,7 @@
                     </div>
                     <div class="form-group">
                         <label class="control-label col-md-2"
-                               ng-cloak>{{ ng.translate('SENSOR.NOTIFY_AFTER') }}</label>
+                               ng-cloak>{{ mc.translate('SENSOR.NOTIFY_AFTER') }}</label>
                         <div class="col-md-2">
                             {% verbatim %}
                             <ui-select ng-model="currentDevice.NotifyAfter" search-enabled="false" theme="select2" style="width:100%;">
@@ -95,7 +98,7 @@
                 <div ng-switch-when="4">
                     <div class="form-group">
                         <label class="control-label col-md-2"
-                               ng-cloak>{{ ng.translate('SENSOR.SWITCH_WHEN') }}</label>
+                               ng-cloak>{{ mc.translate('SENSOR.SWITCH_WHEN') }}</label>
                         <div class="col-md-2">
                             {% verbatim %}
                             <toggle-switch
@@ -109,7 +112,7 @@
                     </div>
                     <div class="form-group">
                         <label class="control-label col-md-2"
-                               ng-cloak>{{ ng.translate('SENSOR.NOTIFY_AFTER') }}</label>
+                               ng-cloak>{{ mc.translate('SENSOR.NOTIFY_AFTER') }}</label>
                         <div class="col-md-2">
                             {% verbatim %}
                             <ui-select ng-model="currentDevice.NotifyAfter" search-enabled="false" theme="select2" style="width:100%;">
@@ -127,7 +130,7 @@
         <div class="row">
             <div class="col-md-12">
                 <button type="button" class="btn btn-sm btn-success pull-right" ng-click="showTreeView()" ng-disabled="deviceForm.$invalid" ng-cloak>
-                    <i class="fa fa-floppy-o"></i> {{ ng.translate('SAVE') }}
+                    <i class="fa fa-floppy-o"></i> {{ mc.translate('SAVE') }}
                 </button>
             </div>
         </div>

@@ -63,6 +63,7 @@ class DeviceGroupTableMap extends TableMap
         $this->addRelation('ControllerBox', 'DeviceBundle\\Model\\ControllerBox', RelationMap::ONE_TO_MANY, array('id' => 'group', ), null, null, 'ControllerBoxen');
         $this->addRelation('DsTemperatureSensor', 'DeviceBundle\\Model\\DsTemperatureSensor', RelationMap::ONE_TO_MANY, array('id' => 'group', ), null, null, 'DsTemperatureSensors');
         $this->addRelation('CbInput', 'DeviceBundle\\Model\\CbInput', RelationMap::ONE_TO_MANY, array('id' => 'group', ), null, null, 'CbInputs');
+        $this->addRelation('DeviceCopy', 'DeviceBundle\\Model\\DeviceCopy', RelationMap::ONE_TO_MANY, array('id' => 'group', ), null, null, 'DeviceCopies');
     } // buildRelations()
 
     /**

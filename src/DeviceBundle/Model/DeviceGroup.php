@@ -23,6 +23,7 @@ class DeviceGroup extends BaseDeviceGroup
         $data['devicegroup']['TypeId'] = self::TYPE_ID;
         $data['devicegroup']['devices'] = [];
         $data['devicegroup']['State'] = $this->getDeviceGroupStatus();
+        $data['devicegroup']['IsCopy'] = false;
 
         $deviceArr = [];
         if (!$this->getDsTemperatureSensors()->isEmpty()) {

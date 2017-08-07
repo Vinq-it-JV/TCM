@@ -73,6 +73,7 @@ class DsTemperatureSensorTableMap extends TableMap
         $this->addRelation('DeviceGroup', 'DeviceBundle\\Model\\DeviceGroup', RelationMap::MANY_TO_ONE, array('group' => 'id', ), null, null);
         $this->addRelation('ControllerBox', 'DeviceBundle\\Model\\ControllerBox', RelationMap::MANY_TO_ONE, array('controller' => 'id', ), null, null);
         $this->addRelation('DsTemperatureSensorLog', 'DeviceBundle\\Model\\DsTemperatureSensorLog', RelationMap::ONE_TO_MANY, array('id' => 'sensor', ), null, null, 'DsTemperatureSensorLogs');
+        $this->addRelation('DeviceCopy', 'DeviceBundle\\Model\\DeviceCopy', RelationMap::ONE_TO_MANY, array('id' => 'copy_of_sensor', ), null, null, 'DeviceCopies');
         $this->addRelation('DsTemperatureNotification', 'NotificationBundle\\Model\\DsTemperatureNotification', RelationMap::ONE_TO_MANY, array('id' => 'sensor', ), null, null, 'DsTemperatureNotifications');
     } // buildRelations()
 

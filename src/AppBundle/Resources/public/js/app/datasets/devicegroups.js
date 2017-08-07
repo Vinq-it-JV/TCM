@@ -95,6 +95,18 @@ angular
                     d_group = angular.copy(record_data);
                     return d_group;
                 },
+                copyDevice: function (device) {
+                    var _device = angular.copy(device);
+                    var index = recordOnIndex(device.Group);
+                    if (index === -1)
+                        return false;
+                    _device.IsCopy = true;
+                    _device.Position = d_groups[index].devices.length;
+                    _device.Name += ' [' + $translate.instant('A_COPY') + ']';
+                    d_groups[index].devices.push(_device);
+                    console.log(d_groups[index].devices);
+                    return true;
+                },
                 isValidObject: function (object) {
                     return isValidObject(object);
                 }

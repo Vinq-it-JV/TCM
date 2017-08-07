@@ -10,6 +10,7 @@ use CompanyBundle\Model\Informant;
 use CompanyBundle\Model\InformantQuery;
 use DeviceBundle\Model\CbInputQuery;
 use DeviceBundle\Model\ControllerBox;
+use DeviceBundle\Model\DeviceCopy;
 use DeviceBundle\Model\DeviceGroup;
 use DeviceBundle\Model\DeviceGroupQuery;
 use DeviceBundle\Model\DsTemperatureSensor;
@@ -73,8 +74,30 @@ class TestCommand extends ContainerAwareCommand
         //$this->addCollection($output);
         //$this->createUUID($output);
         //$this->checkTimeDiff($output);
-        $this->getSensorLog($output);
+        //$this->getSensorLog($output);
+        $this->copySensor($output);
         $output->writeln("Ready.");
+    }
+
+    protected function copySensor(OutputInterface $output)
+    {
+        $sensor = DsTemperatureSensorQuery::create()->findOneById(6);
+
+//        $copy = new DeviceCopy();
+//        $copy->setCopyOfSensor(6);
+//        $copy->setGroup(2);
+//        $copy->save();
+//
+//        $sensor->addDeviceCopy($copy);
+//        $sensor->save();
+
+        if (!$sensor->getDeviceCopies()->isEmpty())
+        {
+            $output->writeln(sprintf('device has %d copies:', $sensor->getDeviceCopies()->count()));
+            foreach ($sensor->getDeviceCopies() as $i => $deviceCopy) {
+                $output->writeln(sprintf(' - %d placed in group: %s ', $i + 1, $deviceCopy->getDeviceGroup()->getName()));
+            }
+        }
     }
 
     protected function getSensorLog(OutputInterface $output)

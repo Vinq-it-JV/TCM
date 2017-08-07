@@ -1,14 +1,16 @@
+{% import 'macros.html.twig' as mc %}
+
 <div ng-form="groupForm">
     <div class="panel-body">
         <h5 ng-cloak>
-            <i class="fa fa-cubes fa-fw"></i> {{ ng.translate('SENSOR_GROUP.EDIT_GROUP') }}
+            <i class="fa fa-cubes fa-fw"></i> {{ mc.translate('SENSOR_GROUP.EDIT_GROUP') }}
         </h5>
         <hr/>
         <div class="well">
             {# Group information block #}
             <div class="form-group">
                 <label class="control-label col-md-2"
-                       ng-cloak>{{ ng.translate('SENSOR_GROUP.ACTIVE') }}</label>
+                       ng-cloak>{{ mc.translate('SENSOR_GROUP.ACTIVE') }}</label>
                 <div class="col-md-2">
                     {% verbatim %}
                     <toggle-switch
@@ -23,7 +25,7 @@
             </div>
             <div class="form-group">
                 <label class="control-label col-md-2"
-                       ng-cloak>{{ ng.translate('SENSOR_GROUP.NAME') }}</label>
+                       ng-cloak>{{ mc.translate('SENSOR_GROUP.NAME') }}</label>
                 <div class="col-md-6">
                     <input class="form-control input-sm" name="Name" type="text"
                            ng-model="currentGroup.Name" validation="min_len:3|required" no-enter/>
@@ -31,7 +33,7 @@
             </div>
             <div class="form-group">
                 <label class="control-label col-md-2"
-                       ng-cloak>{{ ng.translate('SENSOR_GROUP.DESCRIPTION') }}</label>
+                       ng-cloak>{{ mc.translate('SENSOR_GROUP.DESCRIPTION') }}</label>
                 <div class="col-md-10">
                         <textarea class="form-control input-sm no-resize" name="Description"
                                   ng-model="currentGroup.Description" rows="5"></textarea>
@@ -43,7 +45,7 @@
         <div class="row">
             <div class="col-md-12">
                 <button type="button" class="btn btn-sm btn-success pull-right" ng-click="showTreeView()" ng-disabled="groupForm.$invalid" ng-cloak>
-                    <i class="fa fa-floppy-o"></i> {{ ng.translate('SAVE') }}
+                    <i class="fa fa-floppy-o"></i> {{ mc.translate('SAVE') }}
                 </button>
             </div>
         </div>

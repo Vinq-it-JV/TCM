@@ -44,11 +44,21 @@ class DataController extends Controller
     {
         $storesArr = [];
 
-        $stores = StoreQuery::create()
-            ->filterByIsDeleted(false)
-            ->filterByIsEnabled(true)
-            ->orderByName('ASC')
-            ->find();
+        if ($this->container->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) {
+            $stores = StoreQuery::create()
+                ->filterByIsDeleted(false)
+                ->filterByIsEnabled(true)
+                ->orderByName('ASC')
+                ->find();
+        }
+        else {
+            $stores = StoreQuery::create()
+                ->filterByIsDeleted(false)
+                ->filterByIsEnabled(true)
+                ->filterByOwner($this->getUser())
+                ->orderByName('ASC')
+                ->find();
+        }
 
         foreach ($stores as $store) {
             $storesArr[] = $store->getStoreDataArray()['store'];

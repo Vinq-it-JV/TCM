@@ -89,12 +89,6 @@
         {% endblock %}
     </head>
 
-    {% macro translate(text, params) %}
-        {{ '{{ \'' ~ text ~ '\' | translate: \'' ~ params ~ '\' }}' }}
-    {% endmacro %}
-
-    {% import _self as ng %}
-
     <div cg-busy="{promise:BE.promise(),message:BE.waitText(),minDuration:1000,delay:BE.getLoaderDelay()}"></div>
 
     {% block body %}

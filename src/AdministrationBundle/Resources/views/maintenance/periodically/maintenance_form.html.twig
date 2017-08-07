@@ -1,8 +1,10 @@
+{% import 'macros.html.twig' as mc %}
+
 <div class="container" ng-form="maintenanceForm">
 
     {# Maintenance form #}
     <h5 ng-cloak>
-        <i class="fa fa-fw fa-wrench"></i> {{ ng.translate('MAINTENANCE.LABEL') }} {{ ng.translate('MAINTENANCE.FOR') }} {{ store.Name }}
+        <i class="fa fa-fw fa-wrench"></i> {{ mc.translate('MAINTENANCE.LABEL') }} {{ mc.translate('MAINTENANCE.FOR') }} {{ store.Name }}
     </h5>
     <div class="well">
         {% verbatim %}
@@ -113,7 +115,7 @@
 
     {# Upload files #}
     <h5 ng-cloak>
-        <i class="fa fa-fw fa-upload"></i> {{ ng.translate('COLLECTIONS.UPLOAD') }}
+        <i class="fa fa-fw fa-upload"></i> {{ mc.translate('COLLECTIONS.UPLOAD') }}
     </h5>
     <div class="well">
         {% verbatim %}
@@ -127,11 +129,11 @@
             <div class="col-md-12">
                 <button class="btn btn-sm btn-default pull-left" ng-click="showCollections('administration_maintenance')"
                         ng-cloak>
-                    <i class="fa fa-close"></i> {{ ng.translate('CANCEL') }}
+                    <i class="fa fa-close"></i> {{ mc.translate('CANCEL') }}
                 </button>
                 <button class="btn btn-sm btn-success pull-right" ng-click="saveCollectionData()"
                         ng-disabled="maintenanceForm.$invalid">
-                    <i class="fa fa-floppy-o" ng-cloak></i> {{ ng.translate('SAVE') }}
+                    <i class="fa fa-floppy-o" ng-cloak></i> {{ mc.translate('SAVE') }}
                 </button>
             </div>
         </div>

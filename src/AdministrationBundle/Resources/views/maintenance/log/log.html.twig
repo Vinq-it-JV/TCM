@@ -1,4 +1,5 @@
 {% extends 'base.html.twig' %}
+{% import 'macros.html.twig' as mc %}
 
 {% block contents %}
     {% if app.user %}
@@ -13,7 +14,7 @@
                         <div class="row">
                             <div class="panel-body">
                                 <h4 ng-cloak>
-                                    <i class="fa fa-book"></i> {{ ng.translate('MAINTENANCE.LOG') }}
+                                    <i class="fa fa-book"></i> {{ mc.translate('MAINTENANCE.LOG') }}
                                 </h4>
                                 <hr/>
                                 <div class="well table-responsive">
@@ -21,7 +22,7 @@
                                         <div class="row">
                                             <div class="col-md-3 col-xs-6">
                                                 <input st-search class="form-control input-sm"
-                                                       placeholder="{{ ng.translate('SEARCH') }}" type="text" ng-cloak/>
+                                                       placeholder="{{ mc.translate('SEARCH') }}" type="text" ng-cloak/>
                                             </div>
                                         </div>
                                         <br/>
@@ -30,11 +31,11 @@
                                                 <table class="table table-striped table-bordered">
                                                     <thead>
                                                     <tr>
-                                                        <th st-sort="MaintenanceStore.Name" class="st-sortable col-md-3" ng-cloak>{{ ng.translate('STORE.NAME') }}</th>
-                                                        <th st-sort="Type.Name" class="st-sortable col-md-2" ng-cloak>{{ ng.translate('MAINTENANCE.TYPE') }}</th>
+                                                        <th st-sort="MaintenanceStore.Name" class="st-sortable col-md-3" ng-cloak>{{ mc.translate('STORE.NAME') }}</th>
+                                                        <th st-sort="Type.Name" class="st-sortable col-md-2" ng-cloak>{{ mc.translate('MAINTENANCE.TYPE') }}</th>
                                                         <th st-sort="MaintenanceBy.Name" class="st-sortable col-md-3" ng-cloak><i class="fa fa-fw fa-user"></i></th>
-                                                        <th st-sort="MaintenanceStartedAt.date" class="st-sortable col-md-2" ng-cloak>{{ ng.translate('MAINTENANCE.START_MAINTENANCE') }}</th>
-                                                        <th st-sort="MaintenanceStoppedAt.date" class="st-sortable col-md-2" ng-cloak>{{ ng.translate('MAINTENANCE.STOP_MAINTENANCE') }}</th>
+                                                        <th st-sort="MaintenanceStartedAt.date" class="st-sortable col-md-2" ng-cloak>{{ mc.translate('MAINTENANCE.START_MAINTENANCE') }}</th>
+                                                        <th st-sort="MaintenanceStoppedAt.date" class="st-sortable col-md-2" ng-cloak>{{ mc.translate('MAINTENANCE.STOP_MAINTENANCE') }}</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
@@ -57,7 +58,7 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <button class="btn btn-sm btn-default pull-left" ng-click="pageBack()" ng-cloak>
-                                                <i class="fa fa-close"></i> {{ ng.translate('CANCEL') }}
+                                                <i class="fa fa-close"></i> {{ mc.translate('CANCEL') }}
                                             </button>
                                         </div>
                                     </div>

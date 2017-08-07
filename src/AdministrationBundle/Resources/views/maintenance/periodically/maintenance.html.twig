@@ -1,8 +1,10 @@
+{% import 'macros.html.twig' as mc %}
+
 <div class="container">
     <div class="row" ng-show="AUTH.isSuperAdmin()">
         <div class="panel-body">
             <h4 ng-cloak>
-                <i class="fa fa-fw fa-wrench"></i> {{ ng.translate('MAINTENANCE.LABEL') }} {{ ng.translate('MAINTENANCE.FOR') }} {{ store.Name }}
+                <i class="fa fa-fw fa-wrench"></i> {{ mc.translate('MAINTENANCE.LABEL') }} {{ mc.translate('MAINTENANCE.FOR') }} {{ store.Name }}
             </h4>
             <hr/>
             <div class="well table-responsive">
@@ -10,7 +12,7 @@
                     <div class="row">
                         <div class="col-md-3 col-xs-6">
                             <input st-search class="form-control input-sm"
-                                   placeholder="{{ ng.translate('SEARCH') }}" type="text" ng-cloak/>
+                                   placeholder="{{ mc.translate('SEARCH') }}" type="text" ng-cloak/>
                         </div>
                     </div>
                     <br/>
@@ -20,17 +22,17 @@
                                 <thead>
                                 <tr>
                                     <th st-sort="CreatedBy.Name" class="st-sortable col-md-2 col-xs-2"
-                                        ng-cloak>{{ ng.translate('COLLECTIONS.NAME') }}</th>
+                                        ng-cloak>{{ mc.translate('COLLECTIONS.NAME') }}</th>
                                     <th st-sort="Name" class="st-sortable col-md-3 col-xs-3"
-                                        ng-cloak>{{ ng.translate('COLLECTIONS.DESCRIPTION') }}</th>
+                                        ng-cloak>{{ mc.translate('COLLECTIONS.DESCRIPTION') }}</th>
                                     <th st-sort="Date.date" class="st-sortable col-md-2 col-xs-2"
-                                        ng-cloak>{{ ng.translate('COLLECTIONS.DATE') }}</th>
+                                        ng-cloak>{{ mc.translate('COLLECTIONS.DATE') }}</th>
                                     <th class="st-nosort col-md-1 col-xs-1 text-center"
                                         ng-cloak><i class="fa fa-fw fa-paperclip"></i></th>
                                     <th st-sort="IsPublished" class="st-sortable text-right col-md-2 col-xs-2"
-                                        ng-cloak>{{ ng.translate('COLLECTIONS.PUBLISHED') }}</th>
+                                        ng-cloak>{{ mc.translate('COLLECTIONS.PUBLISHED') }}</th>
                                     <th class="st-nosort text-right col-md-2 col-xs-2"
-                                        ng-cloak>{{ ng.translate('ACTION') }}</th>
+                                        ng-cloak>{{ mc.translate('ACTION') }}</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -78,11 +80,11 @@
                 <div class="row">
                     <div class="col-md-12">
                         <button class="btn btn-sm btn-default pull-left" ng-click="pageBack()" ng-cloak>
-                            <i class="fa fa-close"></i> {{ ng.translate('CANCEL') }}
+                            <i class="fa fa-close"></i> {{ mc.translate('CANCEL') }}
                         </button>
                         <button class="btn btn-sm btn-success pull-right"
                                 ng-click="addCollection('maintenanceAdd')" ng-cloak>
-                            <i class="fa fa-plus"></i> {{ ng.translate('ADD') }}
+                            <i class="fa fa-plus"></i> {{ mc.translate('ADD') }}
                         </button>
                     </div>
                 </div>

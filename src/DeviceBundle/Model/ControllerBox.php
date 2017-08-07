@@ -23,6 +23,7 @@ class ControllerBox extends BaseControllerBox
         $data = [];
         $data['controllerbox'] = $this->toArray();
         $data['controllerbox']['TypeId'] = self::TYPE_ID;
+        $data['controllerbox']['IsCopy'] = false;
 
         unset($data['controllerbox']['CreatedAt']);
         unset($data['controllerbox']['UpdatedAt']);

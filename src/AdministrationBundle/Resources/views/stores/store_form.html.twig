@@ -1,3 +1,5 @@
+{% import 'macros.html.twig' as mc %}
+
 <form class="form-horizontal" method="post" name="storeForm"
       action="{{ url('administration_store_save', { 'storeid' : store.Id }) }}" novalidate>
     <div class="panel-body">
@@ -20,7 +22,7 @@
             <input name="Id" type="hidden" value="{{ store.Id }}"/>
             <div class="form-group">
                 <label class="control-label col-md-2"
-                       ng-cloak>{{ ng.translate('STORE.ACTIVE') }}</label>
+                       ng-cloak>{{ mc.translate('STORE.ACTIVE') }}</label>
                 <div class="col-md-2">
                     {% verbatim %}
                     <input type="hidden" name="IsEnabled" value="{{ stores.store().IsEnabled }}">
@@ -36,7 +38,7 @@
             </div>
             <div class="form-group">
                 <label class="control-label col-md-2"
-                       ng-cloak>{{ ng.translate('STORE.TYPE') }}</label>
+                       ng-cloak>{{ mc.translate('STORE.TYPE') }}</label>
                 <div class="col-md-3">
                     {% verbatim %}
                     <input type="hidden" name="Type" value="{{ stores.store().Type.Id }}">
@@ -49,7 +51,7 @@
             </div>
             <div class="form-group">
                 <label class="control-label col-md-2"
-                       ng-cloak>{{ ng.translate('STORE.COMPANY') }}</label>
+                       ng-cloak>{{ mc.translate('STORE.COMPANY') }}</label>
                 <div class="col-md-6">
                     {% verbatim %}
                     <input type="hidden" name="Company" value="{{ stores.store().MainCompany.Id }}">
@@ -62,7 +64,7 @@
             </div>
             <div class="form-group">
                 <label class="control-label col-md-2"
-                       ng-cloak>{{ ng.translate('STORE.CODE') }}</label>
+                       ng-cloak>{{ mc.translate('STORE.CODE') }}</label>
                 <div class="col-md-3">
                     <input class="form-control input-sm" name="Code" type="text"
                            ng-model="stores.store().Code" validation="min_len:1|required" no-enter/>
@@ -70,7 +72,7 @@
             </div>
             <div class="form-group">
                 <label class="control-label col-md-2"
-                       ng-cloak>{{ ng.translate('STORE.NAME') }}</label>
+                       ng-cloak>{{ mc.translate('STORE.NAME') }}</label>
                 <div class="col-md-6">
                     <input class="form-control input-sm" name="Name" type="text"
                            ng-model="stores.store().Name" validation="min_len:3|required" no-enter/>
@@ -78,7 +80,7 @@
             </div>
             <div class="form-group">
                 <label class="control-label col-md-2"
-                       ng-cloak>{{ ng.translate('STORE.DESCRIPTION') }}</label>
+                       ng-cloak>{{ mc.translate('STORE.DESCRIPTION') }}</label>
                 <div class="col-md-10">
                         <textarea class="form-control input-sm no-resize" name="Description"
                                   ng-model="stores.store().Description" rows="5"></textarea>
@@ -86,7 +88,7 @@
             </div>
             <div class="form-group">
                 <label class="control-label col-md-2"
-                       ng-cloak>{{ ng.translate('STORE.WEBSITE') }}</label>
+                       ng-cloak>{{ mc.translate('STORE.WEBSITE') }}</label>
                 <div class="col-md-6">
                     <input class="form-control input-sm" name="Website" type="text"
                            ng-model="stores.store().Website" validation="url" no-enter/>
@@ -94,7 +96,7 @@
             </div>
             <div class="form-group">
                 <label class="control-label col-md-2"
-                       ng-cloak>{{ ng.translate('STORE.REGION') }}</label>
+                       ng-cloak>{{ mc.translate('STORE.REGION') }}</label>
                 <div class="col-md-3">
                     {% verbatim %}
                         <input type="hidden" name="Region" value="{{ stores.store().Region.Id }}">
@@ -107,7 +109,7 @@
             </div>
             <div class="form-group">
                 <label class="control-label col-md-2"
-                       ng-cloak>{{ ng.translate('STORE.VAT_NUMBER') }}</label>
+                       ng-cloak>{{ mc.translate('STORE.VAT_NUMBER') }}</label>
                 <div class="col-md-4">
                     <input class="form-control input-sm" name="VatNumber" type="text"
                            ng-model="stores.store().VatNumber" no-enter/>
@@ -115,7 +117,7 @@
             </div>
             <div class="form-group">
                 <label class="control-label col-md-2"
-                       ng-cloak>{{ ng.translate('STORE.COC_NUMBER') }}</label>
+                       ng-cloak>{{ mc.translate('STORE.COC_NUMBER') }}</label>
                 <div class="col-md-4">
                     <input class="form-control input-sm" name="CocNumber" type="text"
                            ng-model="stores.store().CocNumber" no-enter/>
@@ -123,7 +125,7 @@
             </div>
             <div class="form-group">
                 <label class="control-label col-md-2"
-                       ng-cloak>{{ ng.translate('PAYMENT.METHOD') }}</label>
+                       ng-cloak>{{ mc.translate('PAYMENT.METHOD') }}</label>
                 <div class="col-md-3">
                     {% verbatim %}
                         <input type="hidden" name="PaymentMethod" value="{{ stores.store().PaymentMethod.Id }}">
@@ -136,7 +138,7 @@
             </div>
             <div class="form-group">
                 <label class="control-label col-md-2"
-                       ng-cloak>{{ ng.translate('STORE.BANK_ACCOUNT_NUMBER') }}</label>
+                       ng-cloak>{{ mc.translate('STORE.BANK_ACCOUNT_NUMBER') }}</label>
                 <div class="col-md-4">
                     {% verbatim %}
                         <input class="form-control input-sm" name="BankAccountNumber" type="text"
@@ -150,7 +152,7 @@
         <div class="well">
             <div class="form-group">
                 <label class="control-label col-md-2 col-xs-12"
-                       ng-cloak>{{ ng.translate('STORE.EMAIL') }}</label>
+                       ng-cloak>{{ mc.translate('STORE.EMAIL') }}</label>
                 {% verbatim %}
                 <div class="col-md-10 col-xs-12">
                     <div ng-repeat="email in stores.store().Emails track by $index">
@@ -186,7 +188,7 @@
         <div class="well">
             <div class="form-group">
                 <label class="control-label col-md-2 col-xs-12"
-                       ng-cloak>{{ ng.translate('STORE.PHONE') }}</label>
+                       ng-cloak>{{ mc.translate('STORE.PHONE') }}</label>
                 {% verbatim %}
                 <div class="col-md-10 col-xs-12">
                     <div ng-repeat="phone in stores.store().Phones track by $index">
@@ -220,7 +222,7 @@
 
         {# Addresses block #}
         <h5 ng-cloak>
-            <i class="fa fa-map-marker fa-fw"></i> {{ ng.translate('STORE.ADDRESSES') }}
+            <i class="fa fa-map-marker fa-fw"></i> {{ mc.translate('STORE.ADDRESSES') }}
         </h5>
         <hr/>
         {% verbatim %}
@@ -353,7 +355,7 @@
 
         {# Owners block #}
         <h5 ng-cloak>
-            <i class="fa fa-users fa-fw"></i> {{ ng.translate('STORE.OWNERS') }}
+            <i class="fa fa-users fa-fw"></i> {{ mc.translate('STORE.OWNERS') }}
         </h5>
         <hr/>
         {% verbatim %}
@@ -399,7 +401,7 @@
 
         {# Contacts block #}
         <h5 ng-cloak>
-            <i class="fa fa-comments fa-fw"></i> {{ ng.translate('STORE.CONTACTS') }}
+            <i class="fa fa-comments fa-fw"></i> {{ mc.translate('STORE.CONTACTS') }}
         </h5>
         <hr/>
         {% verbatim %}
@@ -445,7 +447,7 @@
 
         {# Informants block #}
         <h5 ng-cloak>
-            <i class="fa fa-phone fa-fw"></i> {{ ng.translate('STORE.INFORMANTS') }}
+            <i class="fa fa-phone fa-fw"></i> {{ mc.translate('STORE.INFORMANTS') }}
         </h5>
         <hr/>
         {% verbatim %}
@@ -505,10 +507,10 @@
         <div class="row">
             <div class="col-md-12">
                 <a href="{{ path('administration_stores') }}" class="btn btn-sm btn-default pull-left"
-                   ng-click="BE.showLoader(true)" ng-cloak><i class="fa fa-close"></i> {{ ng.translate('CANCEL') }}</a>
+                   ng-click="BE.showLoader(true)" ng-cloak><i class="fa fa-close"></i> {{ mc.translate('CANCEL') }}</a>
                 <button type="submit" class="btn btn-sm btn-success pull-right" ng-click="BE.showLoader(true)"
                         ng-disabled="storeForm.$invalid||!stores.emails().length">
-                    <i class="fa fa-floppy-o" ng-cloak></i> {{ ng.translate('SAVE') }}
+                    <i class="fa fa-floppy-o" ng-cloak></i> {{ mc.translate('SAVE') }}
                 </button>
             </div>
         </div>

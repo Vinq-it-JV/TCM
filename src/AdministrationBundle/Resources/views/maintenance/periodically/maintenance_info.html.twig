@@ -1,8 +1,10 @@
+{% import 'macros.html.twig' as mc %}
+
 <div class="container">
 
     {# Maintenance information #}
     <h5 ng-cloak>
-        <i class="fa fa-fw fa-list"></i> {{ ng.translate('MAINTENANCE.LABEL') }} {{ ng.translate('MAINTENANCE.FOR') }} {{ store.Name }}
+        <i class="fa fa-fw fa-list"></i> {{ mc.translate('MAINTENANCE.LABEL') }} {{ mc.translate('MAINTENANCE.FOR') }} {{ store.Name }}
     </h5>
     <div class="well">
         {% verbatim %}
@@ -70,7 +72,7 @@
         <div class="row">
             <div class="col-md-12">
                 <button class="btn btn-sm btn-default pull-left" ng-click="showCollections('administration_maintenance')" ng-cloak>
-                    <i class="fa fa-close"></i> {{ ng.translate('CANCEL') }}
+                    <i class="fa fa-close"></i> {{ mc.translate('CANCEL') }}
                 </button>
             </div>
         </div>

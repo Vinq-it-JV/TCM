@@ -1,27 +1,29 @@
+{% import 'macros.html.twig' as mc %}
+
 <div class="page">
     <div class="container">
         <div class="row">
             <div class="col-md-4">
                 <div class="panel panel-default">
                     <div class="panel-heading menu-header cursor-default" ng-cloak>
-                        <i class="fa fa-fw fa-user fa-2x"></i> {{ ng.translate('TCM') }} - {{ '{{ AUTH.user().Name }}' }} !
+                        <i class="fa fa-fw fa-user fa-2x"></i> {{ mc.translate('TCM') }} - {{ '{{ AUTH.user().Name }}' }}
                     </div>
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-12">
-                                <i class="fa fa-fw fa-home fa-2x menu-icon"></i> <a ng-href="{{ path('tcm_dashboard') }}" class="menu-item" ng-cloak>{{ ng.translate('TCM') }}</a>
+                                <i class="fa fa-fw fa-home fa-2x menu-icon"></i> <a ng-href="{{ path('tcm_dashboard') }}" class="menu-item" ng-cloak>{{ mc.translate('TCM') }}</a>
                             </div>
                         </div>
                         <div class="menu-separator"></div>
                         <div class="row">
                             <div class="col-md-12">
-                                <i class="fa fa-fw fa-drivers-license-o fa-2x menu-icon"></i> <a ng-href="" ng-click="showProfile()" class="menu-item" ng-cloak>{{ ng.translate('USER.PROFILE') }}</a>
+                                <i class="fa fa-fw fa-drivers-license-o fa-2x menu-icon"></i> <a ng-href="" ng-click="showProfile()" class="menu-item" ng-cloak>{{ mc.translate('USER.PROFILE') }}</a>
                             </div>
                         </div>
                         <div class="menu-separator"></div>
                         <div class="row">
                             <div class="col-md-12">
-                                <i class="fa fa-fw fa-sign-out fa-2x menu-icon"></i> <a ng-href="{{ path('tcm_logout') }}" class="menu-item" ng-cloak>{{ ng.translate('AUTH.LOGOUT') }}</a>
+                                <i class="fa fa-fw fa-sign-out fa-2x menu-icon"></i> <a ng-href="{{ path('tcm_logout') }}" class="menu-item" ng-cloak>{{ mc.translate('AUTH.LOGOUT') }}</a>
                             </div>
                         </div>
                     </div>
@@ -30,12 +32,12 @@
             <div class="col-md-4">
                 <div class="panel panel-green">
                     <div class="panel-heading menu-header cursor-default" ng-cloak>
-                        <i class="fa fa-fw fa-users fa-2x"></i> {{ ng.translate('USERS') }}
+                        <i class="fa fa-fw fa-users fa-2x"></i> {{ mc.translate('USERS') }}
                     </div>
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-12">
-                                <i class="fa fa-fw fa-address-book fa-2x menu-icon"></i> <a ng-href="{{ path('administration_users') }}" class="menu-item" ng-cloak>{{ ng.translate('MANAGE') }}</a>
+                                <i class="fa fa-fw fa-address-book fa-2x menu-icon"></i> <a ng-href="{{ path('administration_users') }}" class="menu-item" ng-cloak>{{ mc.translate('MANAGE') }}</a>
                             </div>
                         </div>
                     </div>
@@ -44,30 +46,30 @@
             <div class="col-md-4">
                 <div class="panel panel-primary">
                     <div class="panel-heading menu-header cursor-default" ng-cloak>
-                        <i class="fa fa-fw fa-building-o fa-2x"></i> {{ ng.translate('COMPANY.COMPANIES') }}
+                        <i class="fa fa-fw fa-building-o fa-2x"></i> {{ mc.translate('COMPANY.COMPANIES') }}
                     </div>
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-12">
-                                <i class="fa fa-fw fa-building-o fa-2x menu-icon"></i> <a ng-href="{{ path('administration_companies') }}" class="menu-item" ng-cloak>{{ ng.translate('COMPANY.COMPANIES') }}</a>
+                                <i class="fa fa-fw fa-building-o fa-2x menu-icon"></i> <a ng-href="{{ path('administration_companies') }}" class="menu-item" ng-cloak>{{ mc.translate('COMPANY.COMPANIES') }}</a>
                             </div>
                         </div>
                         <div class="menu-separator"></div>
                         <div class="row">
                             <div class="col-md-12">
-                                <i class="fa fa-fw fa-map-marker fa-2x menu-icon"></i> <a ng-href="{{ path('administration_stores') }}" class="menu-item" ng-cloak>{{ ng.translate('COMPANY.STORES') }}</a>
+                                <i class="fa fa-fw fa-map-marker fa-2x menu-icon"></i> <a ng-href="{{ path('administration_stores') }}" class="menu-item" ng-cloak>{{ mc.translate('COMPANY.STORES') }}</a>
                             </div>
                         </div>
                         <div class="menu-separator"></div>
                         <div class="row">
                             <div class="col-md-12">
-                                <i class="fa fa-fw fa-globe fa-2x menu-icon"></i> <a ng-href="{{ path('administration_regions') }}" class="menu-item" ng-cloak>{{ ng.translate('COMPANY.REGIONS') }}</a>
+                                <i class="fa fa-fw fa-globe fa-2x menu-icon"></i> <a ng-href="{{ path('administration_regions') }}" class="menu-item" ng-cloak>{{ mc.translate('COMPANY.REGIONS') }}</a>
                             </div>
                         </div>
                         <div class="menu-separator"></div>
                         <div class="row">
                             <div class="col-md-12">
-                                <i class="fa fa-fw fa-list fa-2x menu-icon"></i> <a ng-href="{{ path('administration_inventory') }}" class="menu-item" ng-cloak>{{ ng.translate('INVENTORY.LABEL') }}</a>
+                                <i class="fa fa-fw fa-list fa-2x menu-icon"></i> <a ng-href="{{ path('administration_inventory') }}" class="menu-item" ng-cloak>{{ mc.translate('INVENTORY.LABEL') }}</a>
                             </div>
                         </div>
                     </div>
@@ -78,24 +80,24 @@
             <div class="col-md-4">
                 <div class="panel panel-info">
                     <div class="panel-heading menu-header cursor-default" ng-cloak>
-                        <i class="fa fa-fw fa-gears fa-2x"></i> {{ ng.translate('CONFIGURATION.LABEL') }}
+                        <i class="fa fa-fw fa-gears fa-2x"></i> {{ mc.translate('CONFIGURATION.LABEL') }}
                     </div>
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-12">
-                                <i class="fa fa-fw fa-map-marker fa-2x menu-icon"></i> <a ng-href="{{ path('configuration_stores') }}" class="menu-item" ng-cloak>{{ ng.translate('CONFIGURATION.STORES') }}</a>
+                                <i class="fa fa-fw fa-map-marker fa-2x menu-icon"></i> <a ng-href="{{ path('configuration_stores') }}" class="menu-item" ng-cloak>{{ mc.translate('CONFIGURATION.STORES') }}</a>
                             </div>
                         </div>
                         <div class="menu-separator"></div>
                         <div class="row">
                             <div class="col-md-12">
-                                <i class="fa fa-fw fa-sitemap fa-2x menu-icon"></i> <a ng-href="{{ path('configuration_installation') }}" class="menu-item" ng-cloak>{{ ng.translate('INSTALLATION.SENSORS') }}</a>
+                                <i class="fa fa-fw fa-sitemap fa-2x menu-icon"></i> <a ng-href="{{ path('configuration_installation') }}" class="menu-item" ng-cloak>{{ mc.translate('INSTALLATION.SENSORS') }}</a>
                             </div>
                         </div>
                         <div class="menu-separator"></div>
                         <div class="row">
                             <div class="col-md-12">
-                                <i class="fa fa-fw fa-book fa-2x menu-icon"></i> <a ng-href="{{ path('configuration_packetlog') }}" class="menu-item" ng-cloak>{{ ng.translate('CONFIGURATION.PACKET_LOG') }}</a>
+                                <i class="fa fa-fw fa-book fa-2x menu-icon"></i> <a ng-href="{{ path('configuration_packetlog') }}" class="menu-item" ng-cloak>{{ mc.translate('CONFIGURATION.PACKET_LOG') }}</a>
                             </div>
                         </div>
                     </div>
@@ -104,24 +106,24 @@
             <div class="col-md-4">
                 <div class="panel panel-yellow">
                     <div class="panel-heading menu-header cursor-default" ng-cloak>
-                        <i class="fa fa-fw fa-wrench fa-2x"></i> {{ ng.translate('MAINTENANCE.LABEL') }}
+                        <i class="fa fa-fw fa-wrench fa-2x"></i> {{ mc.translate('MAINTENANCE.LABEL') }}
                     </div>
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-12">
-                                <i class="fa fa-fw fa-gear fa-2x menu-icon"></i> <a ng-href="{{ path('administration_maintenance_general') }}" class="menu-item" ng-cloak>{{ ng.translate('MAINTENANCE.GENERAL') }}</a>
+                                <i class="fa fa-fw fa-gear fa-2x menu-icon"></i> <a ng-href="{{ path('administration_maintenance_general') }}" class="menu-item" ng-cloak>{{ mc.translate('MAINTENANCE.GENERAL') }}</a>
                             </div>
                         </div>
                         <div class="menu-separator"></div>
                         <div class="row">
                             <div class="col-md-12">
-                                <i class="fa fa-fw fa-calendar-check-o fa-2x menu-icon"></i> <a ng-href="{{ path('administration_maintenance_periodically') }}" class="menu-item" ng-cloak>{{ ng.translate('MAINTENANCE.PERIODICALLY') }}</a>
+                                <i class="fa fa-fw fa-calendar-check-o fa-2x menu-icon"></i> <a ng-href="{{ path('administration_maintenance_periodically') }}" class="menu-item" ng-cloak>{{ mc.translate('MAINTENANCE.PERIODICALLY') }}</a>
                             </div>
                         </div>
                         <div class="menu-separator"></div>
                         <div class="row">
                             <div class="col-md-12">
-                                <i class="fa fa-fw fa-book fa-2x menu-icon"></i> <a ng-href="{{ path('administration_maintenance_log') }}" class="menu-item" ng-cloak>{{ ng.translate('MAINTENANCE.LOG') }}</a>
+                                <i class="fa fa-fw fa-book fa-2x menu-icon"></i> <a ng-href="{{ path('administration_maintenance_log') }}" class="menu-item" ng-cloak>{{ mc.translate('MAINTENANCE.LOG') }}</a>
                             </div>
                         </div>
                     </div>
@@ -130,18 +132,18 @@
             <div class="col-md-4">
                 <div class="panel panel-red">
                     <div class="panel-heading menu-header cursor-default" ng-cloak>
-                        <i class="fa fa-fw fa-exclamation-triangle fa-2x"></i> {{ ng.translate('NOTIFICATIONS.LABEL') }}
+                        <i class="fa fa-fw fa-exclamation-triangle fa-2x"></i> {{ mc.translate('NOTIFICATIONS.LABEL') }}
                     </div>
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-12">
-                                <i class="fa fa-fw fa-circle-o fa-2x menu-icon"></i> <a ng-href="{{ path('administration_open_notifications') }}" class="menu-item" ng-cloak>{{ ng.translate('NOTIFICATIONS.OPEN_NOTIFICATIONS') }}</a>
+                                <i class="fa fa-fw fa-circle-o fa-2x menu-icon"></i> <a ng-href="{{ path('administration_open_notifications') }}" class="menu-item" ng-cloak>{{ mc.translate('NOTIFICATIONS.OPEN_NOTIFICATIONS') }}</a>
                             </div>
                         </div>
                         <div class="menu-separator"></div>
                         <div class="row">
                             <div class="col-md-12">
-                                <i class="fa fa-fw fa-circle fa-2x menu-icon"></i> <a ng-href="{{ path('administration_closed_notifications') }}" class="menu-item" ng-cloak>{{ ng.translate('NOTIFICATIONS.CLOSED_NOTIFICATIONS') }}</a>
+                                <i class="fa fa-fw fa-circle fa-2x menu-icon"></i> <a ng-href="{{ path('administration_closed_notifications') }}" class="menu-item" ng-cloak>{{ mc.translate('NOTIFICATIONS.CLOSED_NOTIFICATIONS') }}</a>
                             </div>
                         </div>
                     </div>

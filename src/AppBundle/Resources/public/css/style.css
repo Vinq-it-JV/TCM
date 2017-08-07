@@ -393,6 +393,19 @@ tr.angular-ui-tree-empty {
     border-color: #4a9ffa;
 }
 
+.sensor-handle-copy {
+    padding: 10px;
+    background: #8ef7b0;
+    color: #FFF;
+    margin-right: 10px;
+}
+
+.sensor-handle-copy:hover {
+    color: #FFF;
+    background: #8ef7b0;
+    border-color: #4afa9f;
+}
+
 .disabled-handle {
     padding: 10px;
     background: #c7c4c7 !important;

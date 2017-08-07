@@ -1,3 +1,5 @@
+{% import 'macros.html.twig' as mc %}
+
 <form class="form-horizontal" method="post" name="companyForm"
       action="{{ url('administration_company_save', { 'companyid' : company.Id }) }}" novalidate>
     <div class="panel-body">
@@ -6,7 +8,7 @@
             <input name="Id" type="hidden" value="{{ company.Id }}"/>
             <div class="form-group">
                 <label class="control-label col-md-2"
-                       ng-cloak>{{ ng.translate('COMPANY.ACTIVE') }}</label>
+                       ng-cloak>{{ mc.translate('COMPANY.ACTIVE') }}</label>
                 <div class="col-md-2">
                     {% verbatim %}
                     <input type="hidden" name="IsEnabled" value="{{ companies.company().IsEnabled }}">
@@ -22,7 +24,7 @@
             </div>
             <div class="form-group">
                 <label class="control-label col-md-2"
-                       ng-cloak>{{ ng.translate('COMPANY.TYPE') }}</label>
+                       ng-cloak>{{ mc.translate('COMPANY.TYPE') }}</label>
                 <div class="col-md-2">
                     {% verbatim %}
                     <input type="hidden" name="Type" value="{{ companies.company().Type.Id }}">
@@ -35,7 +37,7 @@
             </div>
             <div class="form-group">
                 <label class="control-label col-md-2"
-                       ng-cloak>{{ ng.translate('COMPANY.CODE') }}</label>
+                       ng-cloak>{{ mc.translate('COMPANY.CODE') }}</label>
                 <div class="col-md-3">
                     <input class="form-control input-sm" name="Code" type="text"
                            ng-model="companies.company().Code" validation="min_len:1|required" no-enter/>
@@ -43,7 +45,7 @@
             </div>
             <div class="form-group">
                 <label class="control-label col-md-2"
-                       ng-cloak>{{ ng.translate('COMPANY.NAME') }}</label>
+                       ng-cloak>{{ mc.translate('COMPANY.NAME') }}</label>
                 <div class="col-md-6">
                     <input class="form-control input-sm" name="Name" type="text"
                            ng-model="companies.company().Name" validation="min_len:3|required" no-enter/>
@@ -51,7 +53,7 @@
             </div>
             <div class="form-group">
                 <label class="control-label col-md-2"
-                       ng-cloak>{{ ng.translate('COMPANY.DESCRIPTION') }}</label>
+                       ng-cloak>{{ mc.translate('COMPANY.DESCRIPTION') }}</label>
                 <div class="col-md-10">
                         <textarea class="form-control input-sm no-resize" name="Description"
                                   ng-model="companies.company().Description" rows="5"></textarea>
@@ -59,7 +61,7 @@
             </div>
             <div class="form-group">
                 <label class="control-label col-md-2"
-                       ng-cloak>{{ ng.translate('COMPANY.WEBSITE') }}</label>
+                       ng-cloak>{{ mc.translate('COMPANY.WEBSITE') }}</label>
                 <div class="col-md-6">
                     <input class="form-control input-sm" name="Website" type="text"
                            ng-model="companies.company().Website" validation="url" no-enter/>
@@ -67,7 +69,7 @@
             </div>
             <div class="form-group">
                 <label class="control-label col-md-2"
-                       ng-cloak>{{ ng.translate('COMPANY.REGION') }}</label>
+                       ng-cloak>{{ mc.translate('COMPANY.REGION') }}</label>
                 <div class="col-md-3">
                     {% verbatim %}
                         <input type="hidden" name="Region" value="{{ companies.company().Region.Id }}">
@@ -80,7 +82,7 @@
             </div>
             <div class="form-group">
                 <label class="control-label col-md-2"
-                       ng-cloak>{{ ng.translate('COMPANY.VAT_NUMBER') }}</label>
+                       ng-cloak>{{ mc.translate('COMPANY.VAT_NUMBER') }}</label>
                 <div class="col-md-4">
                     <input class="form-control input-sm" name="VatNumber" type="text"
                            ng-model="companies.company().VatNumber" no-enter/>
@@ -88,7 +90,7 @@
             </div>
             <div class="form-group">
                 <label class="control-label col-md-2"
-                       ng-cloak>{{ ng.translate('COMPANY.COC_NUMBER') }}</label>
+                       ng-cloak>{{ mc.translate('COMPANY.COC_NUMBER') }}</label>
                 <div class="col-md-4">
                     <input class="form-control input-sm" name="CocNumber" type="text"
                            ng-model="companies.company().CocNumber" no-enter/>
@@ -96,7 +98,7 @@
             </div>
             <div class="form-group">
                 <label class="control-label col-md-2"
-                       ng-cloak>{{ ng.translate('PAYMENT.METHOD') }}</label>
+                       ng-cloak>{{ mc.translate('PAYMENT.METHOD') }}</label>
                 <div class="col-md-3">
                     {% verbatim %}
                         <input type="hidden" name="PaymentMethod" value="{{ companies.company().PaymentMethod.Id }}">
@@ -109,7 +111,7 @@
             </div>
             <div class="form-group">
                 <label class="control-label col-md-2"
-                       ng-cloak>{{ ng.translate('COMPANY.BANK_ACCOUNT_NUMBER') }}</label>
+                       ng-cloak>{{ mc.translate('COMPANY.BANK_ACCOUNT_NUMBER') }}</label>
                 <div class="col-md-4">
                     {% verbatim %}
                         <input class="form-control input-sm" name="BankAccountNumber" type="text"
@@ -123,7 +125,7 @@
         <div class="well">
             <div class="form-group">
                 <label class="control-label col-md-2 col-xs-12"
-                       ng-cloak>{{ ng.translate('COMPANY.EMAIL') }}</label>
+                       ng-cloak>{{ mc.translate('COMPANY.EMAIL') }}</label>
                 {% verbatim %}
                 <div class="col-md-10 col-xs-12">
                     <div ng-repeat="email in companies.company().Emails track by $index">
@@ -159,7 +161,7 @@
         <div class="well">
             <div class="form-group">
                 <label class="control-label col-md-2 col-xs-12"
-                       ng-cloak>{{ ng.translate('COMPANY.PHONE') }}</label>
+                       ng-cloak>{{ mc.translate('COMPANY.PHONE') }}</label>
                 {% verbatim %}
                 <div class="col-md-10 col-xs-12">
                     <div ng-repeat="phone in companies.company().Phones track by $index">
@@ -193,7 +195,7 @@
 
         {# Addresses block #}
         <h5 ng-cloak>
-            <i class="fa fa-map-marker fa-fw"></i> {{ ng.translate('COMPANY.ADDRESSES') }}
+            <i class="fa fa-map-marker fa-fw"></i> {{ mc.translate('COMPANY.ADDRESSES') }}
         </h5>
         <hr/>
         {% verbatim %}
@@ -326,7 +328,7 @@
 
         {# Owners block #}
         <h5 ng-cloak>
-            <i class="fa fa-users fa-fw"></i> {{ ng.translate('COMPANY.OWNERS') }}
+            <i class="fa fa-users fa-fw"></i> {{ mc.translate('COMPANY.OWNERS') }}
         </h5>
         <hr/>
         {% verbatim %}
@@ -372,7 +374,7 @@
 
         {# Contacts block #}
         <h5 ng-cloak>
-            <i class="fa fa-comments fa-fw"></i> {{ ng.translate('COMPANY.CONTACTS') }}
+            <i class="fa fa-comments fa-fw"></i> {{ mc.translate('COMPANY.CONTACTS') }}
         </h5>
         <hr/>
         {% verbatim %}
@@ -418,7 +420,7 @@
 
         {# Informants block #}
         <h5 ng-cloak>
-            <i class="fa fa-bell fa-fw"></i> {{ ng.translate('COMPANY.INFORMANTS') }}
+            <i class="fa fa-bell fa-fw"></i> {{ mc.translate('COMPANY.INFORMANTS') }}
         </h5>
         <hr/>
         {% verbatim %}
@@ -474,7 +476,7 @@
 
         {# Stores block #}
         <h5 ng-cloak>
-            <i class="fa fa-map-marker fa-fw"></i> {{ ng.translate('COMPANY.STORES') }}
+            <i class="fa fa-map-marker fa-fw"></i> {{ mc.translate('COMPANY.STORES') }}
         </h5>
         <hr/>
         {% verbatim %}
@@ -522,10 +524,10 @@
         <div class="row">
             <div class="col-md-12">
                 <a href="{{ path('administration_companies') }}" class="btn btn-sm btn-default pull-left"
-                   ng-click="BE.showLoader(true)"><i class="fa fa-close" ng-cloak></i> {{ ng.translate('CANCEL') }}</a>
+                   ng-click="BE.showLoader(true)"><i class="fa fa-close" ng-cloak></i> {{ mc.translate('CANCEL') }}</a>
                 <button type="submit" class="btn btn-sm btn-success pull-right" ng-click="BE.showLoader(true)"
                         ng-disabled="companyForm.$invalid||!companies.emails().length">
-                    <i class="fa fa-floppy-o" ng-cloak></i> {{ ng.translate('SAVE') }}
+                    <i class="fa fa-floppy-o" ng-cloak></i> {{ mc.translate('SAVE') }}
                 </button>
             </div>
         </div>

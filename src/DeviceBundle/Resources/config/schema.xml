@@ -125,4 +125,21 @@
         </foreign-key>
     </table>
 
+    <table name="device_copy">
+        <column name="id" type="integer" primaryKey="true" autoIncrement="true" />
+        <column name="name" type="varchar" size="255" default="" />
+        <column name="copy_of_input" type="integer" />
+        <column name="copy_of_sensor" type="integer" />
+        <column name="group" type="integer" />
+        <foreign-key foreignTable="cb_input">
+            <reference local="copy_of_input" foreign="id"/>
+        </foreign-key>
+        <foreign-key foreignTable="ds_temperature_sensor">
+            <reference local="copy_of_sensor" foreign="id"/>
+        </foreign-key>
+        <foreign-key foreignTable="device_group">
+            <reference local="group" foreign="id"/>
+        </foreign-key>
+    </table>
+
 </database>

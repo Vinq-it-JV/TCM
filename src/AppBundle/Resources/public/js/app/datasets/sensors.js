@@ -183,6 +183,5 @@ angular
                 isValidObject: function (object) {
                     return isValidObject(object);
                 }
-            }
-                ;
+            };
         }]);

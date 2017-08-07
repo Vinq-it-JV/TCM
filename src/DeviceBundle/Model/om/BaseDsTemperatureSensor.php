@@ -17,6 +17,8 @@ use \PropelObjectCollection;
 use \PropelPDO;
 use DeviceBundle\Model\ControllerBox;
 use DeviceBundle\Model\ControllerBoxQuery;
+use DeviceBundle\Model\DeviceCopy;
+use DeviceBundle\Model\DeviceCopyQuery;
 use DeviceBundle\Model\DeviceGroup;
 use DeviceBundle\Model\DeviceGroupQuery;
 use DeviceBundle\Model\DsTemperatureSensor;
@@ -194,6 +196,12 @@ abstract class BaseDsTemperatureSensor extends BaseObject implements Persistent
     protected $collDsTemperatureSensorLogsPartial;
 
     /**
+     * @var        PropelObjectCollection|DeviceCopy[] Collection to store aggregation of DeviceCopy objects.
+     */
+    protected $collDeviceCopies;
+    protected $collDeviceCopiesPartial;
+
+    /**
      * @var        PropelObjectCollection|DsTemperatureNotification[] Collection to store aggregation of DsTemperatureNotification objects.
      */
     protected $collDsTemperatureNotifications;
@@ -224,6 +232,12 @@ abstract class BaseDsTemperatureSensor extends BaseObject implements Persistent
      * @var		PropelObjectCollection
      */
     protected $dsTemperatureSensorLogsScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $deviceCopiesScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -1179,6 +1193,8 @@ abstract class BaseDsTemperatureSensor extends BaseObject implements Persistent
             $this->aControllerBox = null;
             $this->collDsTemperatureSensorLogs = null;
 
+            $this->collDeviceCopies = null;
+
             $this->collDsTemperatureNotifications = null;
 
         } // if (deep)
@@ -1354,6 +1370,24 @@ abstract class BaseDsTemperatureSensor extends BaseObject implements Persistent
 
             if ($this->collDsTemperatureSensorLogs !== null) {
                 foreach ($this->collDsTemperatureSensorLogs as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->deviceCopiesScheduledForDeletion !== null) {
+                if (!$this->deviceCopiesScheduledForDeletion->isEmpty()) {
+                    foreach ($this->deviceCopiesScheduledForDeletion as $deviceCopy) {
+                        // need to save related object because we set the relation to null
+                        $deviceCopy->save($con);
+                    }
+                    $this->deviceCopiesScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collDeviceCopies !== null) {
+                foreach ($this->collDeviceCopies as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -1660,6 +1694,14 @@ abstract class BaseDsTemperatureSensor extends BaseObject implements Persistent
                     }
                 }
 
+                if ($this->collDeviceCopies !== null) {
+                    foreach ($this->collDeviceCopies as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
                 if ($this->collDsTemperatureNotifications !== null) {
                     foreach ($this->collDsTemperatureNotifications as $referrerFK) {
                         if (!$referrerFK->validate($columns)) {
@@ -1826,6 +1868,9 @@ abstract class BaseDsTemperatureSensor extends BaseObject implements Persistent
             }
             if (null !== $this->collDsTemperatureSensorLogs) {
                 $result['DsTemperatureSensorLogs'] = $this->collDsTemperatureSensorLogs->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collDeviceCopies) {
+                $result['DeviceCopies'] = $this->collDeviceCopies->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collDsTemperatureNotifications) {
                 $result['DsTemperatureNotifications'] = $this->collDsTemperatureNotifications->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
@@ -2089,6 +2134,12 @@ abstract class BaseDsTemperatureSensor extends BaseObject implements Persistent
                 }
             }
 
+            foreach ($this->getDeviceCopies() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addDeviceCopy($relObj->copy($deepCopy));
+                }
+            }
+
             foreach ($this->getDsTemperatureNotifications() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addDsTemperatureNotification($relObj->copy($deepCopy));
@@ -2314,6 +2365,9 @@ abstract class BaseDsTemperatureSensor extends BaseObject implements Persistent
     {
         if ('DsTemperatureSensorLog' == $relationName) {
             $this->initDsTemperatureSensorLogs();
+        }
+        if ('DeviceCopy' == $relationName) {
+            $this->initDeviceCopies();
         }
         if ('DsTemperatureNotification' == $relationName) {
             $this->initDsTemperatureNotifications();
@@ -2543,6 +2597,281 @@ abstract class BaseDsTemperatureSensor extends BaseObject implements Persistent
         }
 
         return $this;
+    }
+
+    /**
+     * Clears out the collDeviceCopies collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return DsTemperatureSensor The current object (for fluent API support)
+     * @see        addDeviceCopies()
+     */
+    public function clearDeviceCopies()
+    {
+        $this->collDeviceCopies = null; // important to set this to null since that means it is uninitialized
+        $this->collDeviceCopiesPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collDeviceCopies collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialDeviceCopies($v = true)
+    {
+        $this->collDeviceCopiesPartial = $v;
+    }
+
+    /**
+     * Initializes the collDeviceCopies collection.
+     *
+     * By default this just sets the collDeviceCopies collection to an empty array (like clearcollDeviceCopies());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initDeviceCopies($overrideExisting = true)
+    {
+        if (null !== $this->collDeviceCopies && !$overrideExisting) {
+            return;
+        }
+        $this->collDeviceCopies = new PropelObjectCollection();
+        $this->collDeviceCopies->setModel('DeviceCopy');
+    }
+
+    /**
+     * Gets an array of DeviceCopy objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this DsTemperatureSensor is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|DeviceCopy[] List of DeviceCopy objects
+     * @throws PropelException
+     */
+    public function getDeviceCopies($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collDeviceCopiesPartial && !$this->isNew();
+        if (null === $this->collDeviceCopies || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collDeviceCopies) {
+                // return empty collection
+                $this->initDeviceCopies();
+            } else {
+                $collDeviceCopies = DeviceCopyQuery::create(null, $criteria)
+                    ->filterByDsTemperatureSensor($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collDeviceCopiesPartial && count($collDeviceCopies)) {
+                      $this->initDeviceCopies(false);
+
+                      foreach ($collDeviceCopies as $obj) {
+                        if (false == $this->collDeviceCopies->contains($obj)) {
+                          $this->collDeviceCopies->append($obj);
+                        }
+                      }
+
+                      $this->collDeviceCopiesPartial = true;
+                    }
+
+                    $collDeviceCopies->getInternalIterator()->rewind();
+
+                    return $collDeviceCopies;
+                }
+
+                if ($partial && $this->collDeviceCopies) {
+                    foreach ($this->collDeviceCopies as $obj) {
+                        if ($obj->isNew()) {
+                            $collDeviceCopies[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collDeviceCopies = $collDeviceCopies;
+                $this->collDeviceCopiesPartial = false;
+            }
+        }
+
+        return $this->collDeviceCopies;
+    }
+
+    /**
+     * Sets a collection of DeviceCopy objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $deviceCopies A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return DsTemperatureSensor The current object (for fluent API support)
+     */
+    public function setDeviceCopies(PropelCollection $deviceCopies, PropelPDO $con = null)
+    {
+        $deviceCopiesToDelete = $this->getDeviceCopies(new Criteria(), $con)->diff($deviceCopies);
+
+
+        $this->deviceCopiesScheduledForDeletion = $deviceCopiesToDelete;
+
+        foreach ($deviceCopiesToDelete as $deviceCopyRemoved) {
+            $deviceCopyRemoved->setDsTemperatureSensor(null);
+        }
+
+        $this->collDeviceCopies = null;
+        foreach ($deviceCopies as $deviceCopy) {
+            $this->addDeviceCopy($deviceCopy);
+        }
+
+        $this->collDeviceCopies = $deviceCopies;
+        $this->collDeviceCopiesPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related DeviceCopy objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related DeviceCopy objects.
+     * @throws PropelException
+     */
+    public function countDeviceCopies(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collDeviceCopiesPartial && !$this->isNew();
+        if (null === $this->collDeviceCopies || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collDeviceCopies) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getDeviceCopies());
+            }
+            $query = DeviceCopyQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByDsTemperatureSensor($this)
+                ->count($con);
+        }
+
+        return count($this->collDeviceCopies);
+    }
+
+    /**
+     * Method called to associate a DeviceCopy object to this object
+     * through the DeviceCopy foreign key attribute.
+     *
+     * @param    DeviceCopy $l DeviceCopy
+     * @return DsTemperatureSensor The current object (for fluent API support)
+     */
+    public function addDeviceCopy(DeviceCopy $l)
+    {
+        if ($this->collDeviceCopies === null) {
+            $this->initDeviceCopies();
+            $this->collDeviceCopiesPartial = true;
+        }
+
+        if (!in_array($l, $this->collDeviceCopies->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddDeviceCopy($l);
+
+            if ($this->deviceCopiesScheduledForDeletion and $this->deviceCopiesScheduledForDeletion->contains($l)) {
+                $this->deviceCopiesScheduledForDeletion->remove($this->deviceCopiesScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	DeviceCopy $deviceCopy The deviceCopy object to add.
+     */
+    protected function doAddDeviceCopy($deviceCopy)
+    {
+        $this->collDeviceCopies[]= $deviceCopy;
+        $deviceCopy->setDsTemperatureSensor($this);
+    }
+
+    /**
+     * @param	DeviceCopy $deviceCopy The deviceCopy object to remove.
+     * @return DsTemperatureSensor The current object (for fluent API support)
+     */
+    public function removeDeviceCopy($deviceCopy)
+    {
+        if ($this->getDeviceCopies()->contains($deviceCopy)) {
+            $this->collDeviceCopies->remove($this->collDeviceCopies->search($deviceCopy));
+            if (null === $this->deviceCopiesScheduledForDeletion) {
+                $this->deviceCopiesScheduledForDeletion = clone $this->collDeviceCopies;
+                $this->deviceCopiesScheduledForDeletion->clear();
+            }
+            $this->deviceCopiesScheduledForDeletion[]= $deviceCopy;
+            $deviceCopy->setDsTemperatureSensor(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this DsTemperatureSensor is new, it will return
+     * an empty collection; or if this DsTemperatureSensor has previously
+     * been saved, it will retrieve related DeviceCopies from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in DsTemperatureSensor.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|DeviceCopy[] List of DeviceCopy objects
+     */
+    public function getDeviceCopiesJoinCbInput($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = DeviceCopyQuery::create(null, $criteria);
+        $query->joinWith('CbInput', $join_behavior);
+
+        return $this->getDeviceCopies($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this DsTemperatureSensor is new, it will return
+     * an empty collection; or if this DsTemperatureSensor has previously
+     * been saved, it will retrieve related DeviceCopies from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in DsTemperatureSensor.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|DeviceCopy[] List of DeviceCopy objects
+     */
+    public function getDeviceCopiesJoinDeviceGroup($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = DeviceCopyQuery::create(null, $criteria);
+        $query->joinWith('DeviceGroup', $join_behavior);
+
+        return $this->getDeviceCopies($query, $con);
     }
 
     /**
@@ -2847,6 +3176,11 @@ abstract class BaseDsTemperatureSensor extends BaseObject implements Persistent
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collDeviceCopies) {
+                foreach ($this->collDeviceCopies as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collDsTemperatureNotifications) {
                 foreach ($this->collDsTemperatureNotifications as $o) {
                     $o->clearAllReferences($deep);
@@ -2869,6 +3203,10 @@ abstract class BaseDsTemperatureSensor extends BaseObject implements Persistent
             $this->collDsTemperatureSensorLogs->clearIterator();
         }
         $this->collDsTemperatureSensorLogs = null;
+        if ($this->collDeviceCopies instanceof PropelCollection) {
+            $this->collDeviceCopies->clearIterator();
+        }
+        $this->collDeviceCopies = null;
         if ($this->collDsTemperatureNotifications instanceof PropelCollection) {
             $this->collDsTemperatureNotifications->clearIterator();
         }

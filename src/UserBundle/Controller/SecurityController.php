@@ -22,7 +22,7 @@ class SecurityController extends Controller
             $message = $auth->getMessage();
 
         // Prevent loggedin users to view login screen
-        if ($this->container->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY'))
+        if ($this->container->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY'))
             return new RedirectResponse('/');
 
         // Render the login screen

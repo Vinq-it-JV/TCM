@@ -1,3 +1,5 @@
+{% import 'macros.html.twig' as mc %}
+
 <div class="container">
     <div class="row">
         <div class="col-xs-12 col-md-12 col-lg-12">
@@ -29,7 +31,7 @@
 
     {# General store information #}
     <h5 ng-cloak>
-        <i class="fa fa-info-circle fa-fw"></i> {{ ng.translate('STORE.INFORMATION') }}
+        <i class="fa fa-info-circle fa-fw"></i> {{ mc.translate('STORE.INFORMATION') }}
     </h5>
     <div class="well">
         {% verbatim %}
@@ -82,7 +84,7 @@
 
     {# Store email information #}
     <h5 ng-cloak>
-        <i class="fa fa-envelope fa-fw"></i> {{ ng.translate('STORE.EMAILS') }}
+        <i class="fa fa-envelope fa-fw"></i> {{ mc.translate('STORE.EMAILS') }}
     </h5>
     <div class="well">
     {% verbatim %}
@@ -99,7 +101,7 @@
 
     {# Store phone information #}
     <h5 ng-cloak>
-        <i class="fa fa-phone fa-fw"></i> {{ ng.translate('STORE.PHONES') }}
+        <i class="fa fa-phone fa-fw"></i> {{ mc.translate('STORE.PHONES') }}
     </h5>
     <div class="well">
         {% verbatim %}
@@ -116,7 +118,7 @@
 
     {# Store address infromation #}
     <h5 ng-cloak>
-        <i class="fa fa-map-marker fa-fw"></i> {{ ng.translate('STORE.ADDRESSES') }}
+        <i class="fa fa-map-marker fa-fw"></i> {{ mc.translate('STORE.ADDRESSES') }}
     </h5>
     {% verbatim %}
     <div class="well">
@@ -185,7 +187,7 @@
 
     {# Store owners information #}
     <h5 ng-cloak>
-        <i class="fa fa-users fa-fw"></i> {{ ng.translate('STORE.OWNERS') }}
+        <i class="fa fa-users fa-fw"></i> {{ mc.translate('STORE.OWNERS') }}
     </h5>
     {% verbatim %}
     <div class="well">
@@ -208,7 +210,7 @@
 
     {# Store contacts information #}
     <h5 ng-cloak>
-        <i class="fa fa-comments fa-fw"></i> {{ ng.translate('STORE.CONTACTS') }}
+        <i class="fa fa-comments fa-fw"></i> {{ mc.translate('STORE.CONTACTS') }}
     </h5>
     {% verbatim %}
     <div class="well">
@@ -231,7 +233,7 @@
 
     {# Store informants information #}
     <h5 ng-cloak>
-        <i class="fa fa-phone fa-fw"></i> {{ ng.translate('STORE.INFORMANTS') }}
+        <i class="fa fa-phone fa-fw"></i> {{ mc.translate('STORE.INFORMANTS') }}
     </h5>
     {% verbatim %}
     <div class="well">
@@ -264,7 +266,7 @@
                 <div class="panel-heading">
                     <div class="row">
                         <div class="col-xs-12 text-left big-button-text" style="font-size: 30px;" ng-cloak>
-                            {{ ng.translate('BACK') }}
+                            {{ mc.translate('BACK') }}
                             <i class="fa fa-chevron-left fa-2x fa-fw pull-right"></i>
                         </div>
                     </div>

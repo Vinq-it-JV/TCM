@@ -1,3 +1,5 @@
+{% import 'macros.html.twig' as mc %}
+
 <form class="form-horizontal" method="post" name="userForm"
       action="{{ url('administration_user_save', { 'userid' : user.Id }) }}" novalidate>
     <div class="panel-body">
@@ -6,7 +8,7 @@
             <input name="Id" type="hidden" value="{{ user.Id }}"/>
             <div class="form-group">
                 <label class="control-label col-md-2"
-                       ng-cloak>{{ ng.translate('USER.USERNAME') }}</label>
+                       ng-cloak>{{ mc.translate('USER.USERNAME') }}</label>
                 <div class="col-md-6">
                     <input class="form-control input-sm" name="Username" type="text"
                            ng-model="users.user().Username" validation="min_len:3|alpha_num|required" no-enter/>
@@ -14,7 +16,7 @@
             </div>
             <div class="form-group">
                 <label class="control-label col-md-2"
-                       ng-cloak>{{ ng.translate('USER.FIRST_NAME') }}</label>
+                       ng-cloak>{{ mc.translate('USER.FIRST_NAME') }}</label>
                 <div class="col-md-6">
                     <input class="form-control input-sm" name="Firstname" type="text"
                            ng-model="users.user().Firstname" no-enter/>
@@ -22,7 +24,7 @@
             </div>
             <div class="form-group">
                 <label class="control-label col-md-2"
-                       ng-cloak>{{ ng.translate('USER.MIDDLE_NAME') }}</label>
+                       ng-cloak>{{ mc.translate('USER.MIDDLE_NAME') }}</label>
                 <div class="col-md-4">
                     <input class="form-control input-sm" name="Middlename" type="text"
                            ng-model="users.user().Middlename" no-enter/>
@@ -30,7 +32,7 @@
             </div>
             <div class="form-group">
                 <label class="control-label col-md-2"
-                       ng-cloak>{{ ng.translate('USER.LAST_NAME') }}</label>
+                       ng-cloak>{{ mc.translate('USER.LAST_NAME') }}</label>
                 <div class="col-md-6">
                     <input class="form-control input-sm" name="Lastname" type="text"
                            ng-model="users.user().Lastname" no-enter/>
@@ -38,7 +40,7 @@
             </div>
             <div class="form-group">
                 <label class="control-label col-md-2"
-                       ng-cloak>{{ ng.translate('USER.BIRTH_DATE') }}</label>
+                       ng-cloak>{{ mc.translate('USER.BIRTH_DATE') }}</label>
                 <div class="col-md-2">
                     <input class="form-control input-sm" name="BirthDate"
                            ng-model="users.user().BirthDate.date" bs-datepicker
@@ -47,33 +49,33 @@
             </div>
             <div class="form-group">
                 <label class="control-label col-md-2"
-                       ng-cloak>{{ ng.translate('USER.GENDER') }}</label>
+                       ng-cloak>{{ mc.translate('USER.GENDER') }}</label>
                 <div class="col-md-2">
                     <select class="form-control input-sm" name="Gender"
                             ng-model="users.user().Gender"
                             ng-options="gender as (gender.Name | translate) for gender in users.lists().gender track by gender.Id"
                             ng-cloak>
                         <option value="" selected
-                                hidden>{{ ng.translate('SELECT') }}</option>
+                                hidden>{{ mc.translate('SELECT') }}</option>
                     </select>
                 </div>
             </div>
             <div class="form-group">
                 <label class="control-label col-md-2"
-                       ng-cloak>{{ ng.translate('USER.TITLE') }}</label>
+                       ng-cloak>{{ mc.translate('USER.TITLE') }}</label>
                 <div class="col-md-2">
                     <select class="form-control input-sm" name="Title"
                             ng-model="users.user().Title"
                             ng-options="title as (title.Name | translate) for title in users.lists().title track by title.Id"
                             ng-cloak>
                         <option value="" selected
-                                hidden>{{ ng.translate('SELECT') }}</option>
+                                hidden>{{ mc.translate('SELECT') }}</option>
                     </select>
                 </div>
             </div>
             <div class="form-group">
                 <label class="control-label col-md-2 col-xs-12"
-                       ng-cloak>{{ ng.translate('USER.LANGUAGE') }}</label>
+                       ng-cloak>{{ mc.translate('USER.LANGUAGE') }}</label>
                 <div class="col-md-10 col-xs-12">
                     <div class="row">
                         <div class="col-md-3 col-xs-8">
@@ -95,7 +97,7 @@
         <div class="well">
             <div class="form-group">
                 <label class="control-label col-md-2 col-xs-12"
-                       ng-cloak>{{ ng.translate('USER.EMAIL') }}</label>
+                       ng-cloak>{{ mc.translate('USER.EMAIL') }}</label>
                 {% verbatim %}
                 <div class="col-md-10 col-xs-12">
                     <div ng-repeat="email in users.user().Emails track by $index">
@@ -131,7 +133,7 @@
         <div class="well">
             <div class="form-group">
                 <label class="control-label col-md-2 col-xs-12"
-                       ng-cloak>{{ ng.translate('USER.PHONE') }}</label>
+                       ng-cloak>{{ mc.translate('USER.PHONE') }}</label>
                 {% verbatim %}
                 <div class="col-md-10 col-xs-12">
                     <div ng-repeat="phone in users.user().Phones track by $index">
@@ -165,7 +167,7 @@
 
         {# Addresses block #}
         <h5 ng-cloak>
-            <i class="fa fa-envelope"></i> {{ ng.translate('USER.ADDRESSES') }}
+            <i class="fa fa-envelope"></i> {{ mc.translate('USER.ADDRESSES') }}
         </h5>
         <hr/>
         {% verbatim %}
@@ -298,7 +300,7 @@
 
         {# Roles block #}
         <h5 ng-cloak>
-            <i class="fa fa-user-plus"></i> {{ ng.translate('USER.ROLES') }}
+            <i class="fa fa-user-plus"></i> {{ mc.translate('USER.ROLES') }}
         </h5>
         <hr/>
         {% verbatim %}
@@ -328,9 +330,9 @@
         <div class="row">
             <div class="col-md-12">
                 <a href="{{ path('administration_users') }}" class="btn btn-sm btn-default pull-left"
-                   ng-click="BE.showLoader(true)" ng-cloak><i class="fa fa-close"></i> {{ ng.translate('CANCEL') }}</a>
+                   ng-click="BE.showLoader(true)" ng-cloak><i class="fa fa-close"></i> {{ mc.translate('CANCEL') }}</a>
                 <button type="submit" class="btn btn-sm btn-success pull-right" ng-click="BE.showLoader(true)"
-                        ng-disabled="userForm.$invalid||!users.emails().length"><i class="fa fa-floppy-o" ng-cloak></i> {{ ng.translate('SAVE') }}
+                        ng-disabled="userForm.$invalid||!users.emails().length"><i class="fa fa-floppy-o" ng-cloak></i> {{ mc.translate('SAVE') }}
                 </button>
             </div>
         </div>
