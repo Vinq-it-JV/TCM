@@ -178,11 +178,11 @@ angular
                         plotBands: [{
                             from: 0,
                             to: 0.5,
-                            color: '#DF5353' // red
+                            color: '#DDDF0D' // red
                         }, {
                             from: 0.5,
                             to: 1,
-                            color: '#DDDF0D' // green
+                            color: '#DF5353' // green
                         }]
                     }
                 },
