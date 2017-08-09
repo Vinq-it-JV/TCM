@@ -42,7 +42,7 @@ angular
                     },
                     plotLines: [{
                         value: 0,
-                        color: '#55BF3B',
+                        color: '#DDDF0D',
                         dashStyle: 'solid',
                         width: 2,
                         label: {
