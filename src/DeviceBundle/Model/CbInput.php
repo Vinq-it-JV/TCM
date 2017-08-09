@@ -45,6 +45,28 @@ class CbInput extends BaseCbInput
     }
 
     /**
+     * getInputCopiesArray()
+     * @return array
+     */
+    public function getInputCopiesArray($groupId = 0)
+    {
+        $copyArr = [];
+        foreach ($this->getDeviceCopies() as $copy) {
+            $input = CbInputQuery::create()->findOneById($copy->getCopyOfInput());
+            $inputArr = $input->getCbInputDataArray()['cbinput'];
+            $inputArr['Uid'] = $copy->getUid();
+            $inputArr['Name'] = $copy->getName();
+            $inputArr['Position'] = $copy->getPosition();
+            $inputArr['Group'] = $copy->getGroup();
+            $inputArr['MainStore'] = $copy->getMainStore();
+            $inputArr['IsCopy'] = true;
+            if ($copy->getGroup() == $groupId)
+                $copyArr[] = $inputArr;
+        }
+        return $copyArr;
+    }
+
+    /**
      * checkSensorInactive()
      * @return bool
      */

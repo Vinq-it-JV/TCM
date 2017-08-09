@@ -412,6 +412,7 @@
         "DELETE_STORE": "Filiaal verwijderen?",
         "COPY_COMPANY_DATA": "Bedrijfsdata kopiëren?",
         "DELETE_GROUP": "Groep verwijderen?",
+        "DELETE_COPY": "Kopie verwijderen?",
         "UNLINK_SENSOR": "Sensor loskoppelen van filiaal?",
         "NEW_PASSWORD": "Nieuw wachtwoord genereren voor gebuiker?",
         "HANDLE_NOTIFICATION": "Notificatie afhandelen?",

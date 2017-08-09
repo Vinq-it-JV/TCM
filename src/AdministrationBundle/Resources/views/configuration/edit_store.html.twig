@@ -6,7 +6,7 @@
 {% block contents %}
     {% if app.user %}
         {% set ngInit = "getStore(" ~ store.Id ~ ")" %}
-    <div ng-controller="configurationCtrl" ng-init="{{ ngInit }}">
+        <div ng-controller="configurationCtrl" ng-init="{{ ngInit }}">
 
         {% block header %}
             {% include 'AdministrationBundle:header:header.html.twig' %}
@@ -28,7 +28,7 @@
                 </div>
             </div>
         {% endblock %}
-    </div>
+        </div>
     {% endif %}
 {% endblock %}
 

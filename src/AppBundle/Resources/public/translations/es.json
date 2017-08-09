@@ -412,6 +412,7 @@
         "DELETE_STORE": "Borrar sucursal?",
         "COPY_COMPANY_DATA": "Copiar datos de empresa?",
         "DELETE_GROUP": "Borrar Grupo?",
+        "DELETE_COPY": "Borrar copia?",
         "UNLINK_SENSOR": "Desvincular sensor de sucursal?",
         "NEW_PASSWORD": "Generar nueva contrasena para el usuario?",
         "HANDLE_NOTIFICATION": "Notificar manipulacion?",

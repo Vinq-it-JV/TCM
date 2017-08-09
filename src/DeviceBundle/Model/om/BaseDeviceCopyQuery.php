@@ -18,19 +18,26 @@ use DeviceBundle\Model\DeviceCopyPeer;
 use DeviceBundle\Model\DeviceCopyQuery;
 use DeviceBundle\Model\DeviceGroup;
 use DeviceBundle\Model\DsTemperatureSensor;
+use StoreBundle\Model\Store;
 
 /**
  * @method DeviceCopyQuery orderById($order = Criteria::ASC) Order by the id column
+ * @method DeviceCopyQuery orderByUid($order = Criteria::ASC) Order by the uid column
  * @method DeviceCopyQuery orderByName($order = Criteria::ASC) Order by the name column
+ * @method DeviceCopyQuery orderByPosition($order = Criteria::ASC) Order by the position column
  * @method DeviceCopyQuery orderByCopyOfInput($order = Criteria::ASC) Order by the copy_of_input column
  * @method DeviceCopyQuery orderByCopyOfSensor($order = Criteria::ASC) Order by the copy_of_sensor column
  * @method DeviceCopyQuery orderByGroup($order = Criteria::ASC) Order by the group column
+ * @method DeviceCopyQuery orderByMainStore($order = Criteria::ASC) Order by the main_store column
  *
  * @method DeviceCopyQuery groupById() Group by the id column
+ * @method DeviceCopyQuery groupByUid() Group by the uid column
  * @method DeviceCopyQuery groupByName() Group by the name column
+ * @method DeviceCopyQuery groupByPosition() Group by the position column
  * @method DeviceCopyQuery groupByCopyOfInput() Group by the copy_of_input column
  * @method DeviceCopyQuery groupByCopyOfSensor() Group by the copy_of_sensor column
  * @method DeviceCopyQuery groupByGroup() Group by the group column
+ * @method DeviceCopyQuery groupByMainStore() Group by the main_store column
  *
  * @method DeviceCopyQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method DeviceCopyQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -48,19 +55,29 @@ use DeviceBundle\Model\DsTemperatureSensor;
  * @method DeviceCopyQuery rightJoinDeviceGroup($relationAlias = null) Adds a RIGHT JOIN clause to the query using the DeviceGroup relation
  * @method DeviceCopyQuery innerJoinDeviceGroup($relationAlias = null) Adds a INNER JOIN clause to the query using the DeviceGroup relation
  *
+ * @method DeviceCopyQuery leftJoinStore($relationAlias = null) Adds a LEFT JOIN clause to the query using the Store relation
+ * @method DeviceCopyQuery rightJoinStore($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Store relation
+ * @method DeviceCopyQuery innerJoinStore($relationAlias = null) Adds a INNER JOIN clause to the query using the Store relation
+ *
  * @method DeviceCopy findOne(PropelPDO $con = null) Return the first DeviceCopy matching the query
  * @method DeviceCopy findOneOrCreate(PropelPDO $con = null) Return the first DeviceCopy matching the query, or a new DeviceCopy object populated from the query conditions when no match is found
  *
+ * @method DeviceCopy findOneByUid(string $uid) Return the first DeviceCopy filtered by the uid column
  * @method DeviceCopy findOneByName(string $name) Return the first DeviceCopy filtered by the name column
+ * @method DeviceCopy findOneByPosition(int $position) Return the first DeviceCopy filtered by the position column
  * @method DeviceCopy findOneByCopyOfInput(int $copy_of_input) Return the first DeviceCopy filtered by the copy_of_input column
  * @method DeviceCopy findOneByCopyOfSensor(int $copy_of_sensor) Return the first DeviceCopy filtered by the copy_of_sensor column
  * @method DeviceCopy findOneByGroup(int $group) Return the first DeviceCopy filtered by the group column
+ * @method DeviceCopy findOneByMainStore(int $main_store) Return the first DeviceCopy filtered by the main_store column
  *
  * @method array findById(int $id) Return DeviceCopy objects filtered by the id column
+ * @method array findByUid(string $uid) Return DeviceCopy objects filtered by the uid column
  * @method array findByName(string $name) Return DeviceCopy objects filtered by the name column
+ * @method array findByPosition(int $position) Return DeviceCopy objects filtered by the position column
  * @method array findByCopyOfInput(int $copy_of_input) Return DeviceCopy objects filtered by the copy_of_input column
  * @method array findByCopyOfSensor(int $copy_of_sensor) Return DeviceCopy objects filtered by the copy_of_sensor column
  * @method array findByGroup(int $group) Return DeviceCopy objects filtered by the group column
+ * @method array findByMainStore(int $main_store) Return DeviceCopy objects filtered by the main_store column
  */
 abstract class BaseDeviceCopyQuery extends ModelCriteria
 {
@@ -166,7 +183,7 @@ abstract class BaseDeviceCopyQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `name`, `copy_of_input`, `copy_of_sensor`, `group` FROM `device_copy` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `uid`, `name`, `position`, `copy_of_input`, `copy_of_sensor`, `group`, `main_store` FROM `device_copy` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -298,6 +315,35 @@ abstract class BaseDeviceCopyQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query on the uid column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByUid('fooValue');   // WHERE uid = 'fooValue'
+     * $query->filterByUid('%fooValue%'); // WHERE uid LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $uid The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return DeviceCopyQuery The current query, for fluid interface
+     */
+    public function filterByUid($uid = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($uid)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $uid)) {
+                $uid = str_replace('*', '%', $uid);
+                $comparison = Criteria::LIKE;
+            }
+        }
+
+        return $this->addUsingAlias(DeviceCopyPeer::UID, $uid, $comparison);
+    }
+
+    /**
      * Filter the query on the name column
      *
      * Example usage:
@@ -324,6 +370,48 @@ abstract class BaseDeviceCopyQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(DeviceCopyPeer::NAME, $name, $comparison);
+    }
+
+    /**
+     * Filter the query on the position column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByPosition(1234); // WHERE position = 1234
+     * $query->filterByPosition(array(12, 34)); // WHERE position IN (12, 34)
+     * $query->filterByPosition(array('min' => 12)); // WHERE position >= 12
+     * $query->filterByPosition(array('max' => 12)); // WHERE position <= 12
+     * </code>
+     *
+     * @param     mixed $position The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return DeviceCopyQuery The current query, for fluid interface
+     */
+    public function filterByPosition($position = null, $comparison = null)
+    {
+        if (is_array($position)) {
+            $useMinMax = false;
+            if (isset($position['min'])) {
+                $this->addUsingAlias(DeviceCopyPeer::POSITION, $position['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($position['max'])) {
+                $this->addUsingAlias(DeviceCopyPeer::POSITION, $position['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(DeviceCopyPeer::POSITION, $position, $comparison);
     }
 
     /**
@@ -456,6 +544,50 @@ abstract class BaseDeviceCopyQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(DeviceCopyPeer::GROUP, $group, $comparison);
+    }
+
+    /**
+     * Filter the query on the main_store column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByMainStore(1234); // WHERE main_store = 1234
+     * $query->filterByMainStore(array(12, 34)); // WHERE main_store IN (12, 34)
+     * $query->filterByMainStore(array('min' => 12)); // WHERE main_store >= 12
+     * $query->filterByMainStore(array('max' => 12)); // WHERE main_store <= 12
+     * </code>
+     *
+     * @see       filterByStore()
+     *
+     * @param     mixed $mainStore The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return DeviceCopyQuery The current query, for fluid interface
+     */
+    public function filterByMainStore($mainStore = null, $comparison = null)
+    {
+        if (is_array($mainStore)) {
+            $useMinMax = false;
+            if (isset($mainStore['min'])) {
+                $this->addUsingAlias(DeviceCopyPeer::MAIN_STORE, $mainStore['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($mainStore['max'])) {
+                $this->addUsingAlias(DeviceCopyPeer::MAIN_STORE, $mainStore['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(DeviceCopyPeer::MAIN_STORE, $mainStore, $comparison);
     }
 
     /**
@@ -684,6 +816,82 @@ abstract class BaseDeviceCopyQuery extends ModelCriteria
         return $this
             ->joinDeviceGroup($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'DeviceGroup', '\DeviceBundle\Model\DeviceGroupQuery');
+    }
+
+    /**
+     * Filter the query by a related Store object
+     *
+     * @param   Store|PropelObjectCollection $store The related object(s) to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 DeviceCopyQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByStore($store, $comparison = null)
+    {
+        if ($store instanceof Store) {
+            return $this
+                ->addUsingAlias(DeviceCopyPeer::MAIN_STORE, $store->getId(), $comparison);
+        } elseif ($store instanceof PropelObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(DeviceCopyPeer::MAIN_STORE, $store->toKeyValue('PrimaryKey', 'Id'), $comparison);
+        } else {
+            throw new PropelException('filterByStore() only accepts arguments of type Store or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Store relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return DeviceCopyQuery The current query, for fluid interface
+     */
+    public function joinStore($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Store');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Store');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Store relation Store object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   \StoreBundle\Model\StoreQuery A secondary query class using the current class as primary query
+     */
+    public function useStoreQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinStore($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Store', '\StoreBundle\Model\StoreQuery');
     }
 
     /**

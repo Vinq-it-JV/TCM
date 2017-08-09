@@ -45,6 +45,29 @@ class DsTemperatureSensor extends BaseDsTemperatureSensor
     }
 
     /**
+     * getDeviceCopiesArray
+     * @param int $groupId
+     * @return array
+     */
+    public function getDeviceCopiesArray($groupId = 0)
+    {
+        $copyArr = [];
+        foreach ($this->getDeviceCopies() as $copy) {
+            $sensor = DsTemperatureSensorQuery::create()->findOneById($copy->getCopyOfSensor());
+            $sensorArr = $sensor->getDsTemperatureSensorDataArray()['dstemperaturesensor'];
+            $sensorArr['Uid'] = $copy->getUid();
+            $sensorArr['Name'] = $copy->getName();
+            $sensorArr['Position'] = $copy->getPosition();
+            $sensorArr['Group'] = $copy->getGroup();
+            $sensorArr['MainStore'] = $copy->getMainStore();
+            $sensorArr['IsCopy'] = true;
+            if ($copy->getGroup() == $groupId)
+                $copyArr[] = $sensorArr;
+        }
+        return $copyArr;
+    }
+
+    /**
      * checkSensorInactive()
      * @return bool
      */

@@ -43,10 +43,13 @@ class DeviceCopyTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
+        $this->addColumn('uid', 'Uid', 'VARCHAR', false, 32, null);
         $this->addColumn('name', 'Name', 'VARCHAR', false, 255, '');
+        $this->addColumn('position', 'Position', 'INTEGER', false, null, 0);
         $this->addForeignKey('copy_of_input', 'CopyOfInput', 'INTEGER', 'cb_input', 'id', false, null, null);
         $this->addForeignKey('copy_of_sensor', 'CopyOfSensor', 'INTEGER', 'ds_temperature_sensor', 'id', false, null, null);
         $this->addForeignKey('group', 'Group', 'INTEGER', 'device_group', 'id', false, null, null);
+        $this->addForeignKey('main_store', 'MainStore', 'INTEGER', 'store', 'id', false, null, null);
         // validators
     } // initialize()
 
@@ -58,6 +61,7 @@ class DeviceCopyTableMap extends TableMap
         $this->addRelation('CbInput', 'DeviceBundle\\Model\\CbInput', RelationMap::MANY_TO_ONE, array('copy_of_input' => 'id', ), null, null);
         $this->addRelation('DsTemperatureSensor', 'DeviceBundle\\Model\\DsTemperatureSensor', RelationMap::MANY_TO_ONE, array('copy_of_sensor' => 'id', ), null, null);
         $this->addRelation('DeviceGroup', 'DeviceBundle\\Model\\DeviceGroup', RelationMap::MANY_TO_ONE, array('group' => 'id', ), null, null);
+        $this->addRelation('Store', 'StoreBundle\\Model\\Store', RelationMap::MANY_TO_ONE, array('main_store' => 'id', ), null, null);
     } // buildRelations()
 
 } // DeviceCopyTableMap

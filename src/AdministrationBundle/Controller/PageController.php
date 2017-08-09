@@ -146,10 +146,9 @@ class PageController extends Controller
             return $this->storesAction($request);
 
         $storeArr = $store->getStoreDataArray();
-        if (!$store->getDeviceGroups()->isEmpty())
-            foreach ($store->getDeviceGroups() as $group)
-                $storeArr['DeviceGroups'][] = $group->getDeviceGroupDataArray();
-
+//        if (!$store->getDeviceGroups()->isEmpty())
+//            foreach ($store->getDeviceGroups() as $group)
+//                $storeArr['DeviceGroups'][] = $group->getDeviceGroupDataArray();
         return $this->render('AdministrationBundle:configuration:edit_store.html.twig', $storeArr);
     }
 

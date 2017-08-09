@@ -32,6 +32,27 @@ class ClassHelper
         return filter_var($value, FILTER_VALIDATE_BOOLEAN);
     }
 
+    public function isSuperAdmin()
+    {
+        return $this->container->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN');
+    }
+
+    public function recursiveArrayDiff($array1, $array2)
+    {
+        $result = array();
+        foreach ($array1 as $key => $value) {
+            if (array_key_exists($key, $array2)) {
+                if (is_array($value)) {
+                    $recursiveDiff = $this->recursiveArrayDiff($value, $array2[$key]);
+                    if (count($recursiveDiff)) {
+                        $result[$key] = $recursiveDiff;
+                    }
+                }
+            }
+        }
+        return $result;
+    }
+
     public function debug($data)
     {
         print '<pre>';

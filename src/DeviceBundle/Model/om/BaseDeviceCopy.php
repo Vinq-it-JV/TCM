@@ -20,6 +20,8 @@ use DeviceBundle\Model\DeviceGroup;
 use DeviceBundle\Model\DeviceGroupQuery;
 use DeviceBundle\Model\DsTemperatureSensor;
 use DeviceBundle\Model\DsTemperatureSensorQuery;
+use StoreBundle\Model\Store;
+use StoreBundle\Model\StoreQuery;
 
 abstract class BaseDeviceCopy extends BaseObject implements Persistent
 {
@@ -49,11 +51,24 @@ abstract class BaseDeviceCopy extends BaseObject implements Persistent
     protected $id;
 
     /**
+     * The value for the uid field.
+     * @var        string
+     */
+    protected $uid;
+
+    /**
      * The value for the name field.
      * Note: this column has a database default value of: ''
      * @var        string
      */
     protected $name;
+
+    /**
+     * The value for the position field.
+     * Note: this column has a database default value of: 0
+     * @var        int
+     */
+    protected $position;
 
     /**
      * The value for the copy_of_input field.
@@ -74,6 +89,12 @@ abstract class BaseDeviceCopy extends BaseObject implements Persistent
     protected $group;
 
     /**
+     * The value for the main_store field.
+     * @var        int
+     */
+    protected $main_store;
+
+    /**
      * @var        CbInput
      */
     protected $aCbInput;
@@ -87,6 +108,11 @@ abstract class BaseDeviceCopy extends BaseObject implements Persistent
      * @var        DeviceGroup
      */
     protected $aDeviceGroup;
+
+    /**
+     * @var        Store
+     */
+    protected $aStore;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -117,6 +143,7 @@ abstract class BaseDeviceCopy extends BaseObject implements Persistent
     public function applyDefaultValues()
     {
         $this->name = '';
+        $this->position = 0;
     }
 
     /**
@@ -141,6 +168,17 @@ abstract class BaseDeviceCopy extends BaseObject implements Persistent
     }
 
     /**
+     * Get the [uid] column value.
+     *
+     * @return string
+     */
+    public function getUid()
+    {
+
+        return $this->uid;
+    }
+
+    /**
      * Get the [name] column value.
      *
      * @return string
@@ -149,6 +187,17 @@ abstract class BaseDeviceCopy extends BaseObject implements Persistent
     {
 
         return $this->name;
+    }
+
+    /**
+     * Get the [position] column value.
+     *
+     * @return int
+     */
+    public function getPosition()
+    {
+
+        return $this->position;
     }
 
     /**
@@ -185,6 +234,17 @@ abstract class BaseDeviceCopy extends BaseObject implements Persistent
     }
 
     /**
+     * Get the [main_store] column value.
+     *
+     * @return int
+     */
+    public function getMainStore()
+    {
+
+        return $this->main_store;
+    }
+
+    /**
      * Set the value of [id] column.
      *
      * @param  int $v new value
@@ -206,6 +266,27 @@ abstract class BaseDeviceCopy extends BaseObject implements Persistent
     } // setId()
 
     /**
+     * Set the value of [uid] column.
+     *
+     * @param  string $v new value
+     * @return DeviceCopy The current object (for fluent API support)
+     */
+    public function setUid($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->uid !== $v) {
+            $this->uid = $v;
+            $this->modifiedColumns[] = DeviceCopyPeer::UID;
+        }
+
+
+        return $this;
+    } // setUid()
+
+    /**
      * Set the value of [name] column.
      *
      * @param  string $v new value
@@ -225,6 +306,27 @@ abstract class BaseDeviceCopy extends BaseObject implements Persistent
 
         return $this;
     } // setName()
+
+    /**
+     * Set the value of [position] column.
+     *
+     * @param  int $v new value
+     * @return DeviceCopy The current object (for fluent API support)
+     */
+    public function setPosition($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->position !== $v) {
+            $this->position = $v;
+            $this->modifiedColumns[] = DeviceCopyPeer::POSITION;
+        }
+
+
+        return $this;
+    } // setPosition()
 
     /**
      * Set the value of [copy_of_input] column.
@@ -302,6 +404,31 @@ abstract class BaseDeviceCopy extends BaseObject implements Persistent
     } // setGroup()
 
     /**
+     * Set the value of [main_store] column.
+     *
+     * @param  int $v new value
+     * @return DeviceCopy The current object (for fluent API support)
+     */
+    public function setMainStore($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->main_store !== $v) {
+            $this->main_store = $v;
+            $this->modifiedColumns[] = DeviceCopyPeer::MAIN_STORE;
+        }
+
+        if ($this->aStore !== null && $this->aStore->getId() !== $v) {
+            $this->aStore = null;
+        }
+
+
+        return $this;
+    } // setMainStore()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -312,6 +439,10 @@ abstract class BaseDeviceCopy extends BaseObject implements Persistent
     public function hasOnlyDefaultValues()
     {
             if ($this->name !== '') {
+                return false;
+            }
+
+            if ($this->position !== 0) {
                 return false;
             }
 
@@ -338,10 +469,13 @@ abstract class BaseDeviceCopy extends BaseObject implements Persistent
         try {
 
             $this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
-            $this->name = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
-            $this->copy_of_input = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
-            $this->copy_of_sensor = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
-            $this->group = ($row[$startcol + 4] !== null) ? (int) $row[$startcol + 4] : null;
+            $this->uid = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
+            $this->name = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
+            $this->position = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
+            $this->copy_of_input = ($row[$startcol + 4] !== null) ? (int) $row[$startcol + 4] : null;
+            $this->copy_of_sensor = ($row[$startcol + 5] !== null) ? (int) $row[$startcol + 5] : null;
+            $this->group = ($row[$startcol + 6] !== null) ? (int) $row[$startcol + 6] : null;
+            $this->main_store = ($row[$startcol + 7] !== null) ? (int) $row[$startcol + 7] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -351,7 +485,7 @@ abstract class BaseDeviceCopy extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 5; // 5 = DeviceCopyPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 8; // 8 = DeviceCopyPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating DeviceCopy object", $e);
@@ -382,6 +516,9 @@ abstract class BaseDeviceCopy extends BaseObject implements Persistent
         }
         if ($this->aDeviceGroup !== null && $this->group !== $this->aDeviceGroup->getId()) {
             $this->aDeviceGroup = null;
+        }
+        if ($this->aStore !== null && $this->main_store !== $this->aStore->getId()) {
+            $this->aStore = null;
         }
     } // ensureConsistency
 
@@ -425,6 +562,7 @@ abstract class BaseDeviceCopy extends BaseObject implements Persistent
             $this->aCbInput = null;
             $this->aDsTemperatureSensor = null;
             $this->aDeviceGroup = null;
+            $this->aStore = null;
         } // if (deep)
     }
 
@@ -564,6 +702,13 @@ abstract class BaseDeviceCopy extends BaseObject implements Persistent
                 $this->setDeviceGroup($this->aDeviceGroup);
             }
 
+            if ($this->aStore !== null) {
+                if ($this->aStore->isModified() || $this->aStore->isNew()) {
+                    $affectedRows += $this->aStore->save($con);
+                }
+                $this->setStore($this->aStore);
+            }
+
             if ($this->isNew() || $this->isModified()) {
                 // persist changes
                 if ($this->isNew()) {
@@ -604,8 +749,14 @@ abstract class BaseDeviceCopy extends BaseObject implements Persistent
         if ($this->isColumnModified(DeviceCopyPeer::ID)) {
             $modifiedColumns[':p' . $index++]  = '`id`';
         }
+        if ($this->isColumnModified(DeviceCopyPeer::UID)) {
+            $modifiedColumns[':p' . $index++]  = '`uid`';
+        }
         if ($this->isColumnModified(DeviceCopyPeer::NAME)) {
             $modifiedColumns[':p' . $index++]  = '`name`';
+        }
+        if ($this->isColumnModified(DeviceCopyPeer::POSITION)) {
+            $modifiedColumns[':p' . $index++]  = '`position`';
         }
         if ($this->isColumnModified(DeviceCopyPeer::COPY_OF_INPUT)) {
             $modifiedColumns[':p' . $index++]  = '`copy_of_input`';
@@ -615,6 +766,9 @@ abstract class BaseDeviceCopy extends BaseObject implements Persistent
         }
         if ($this->isColumnModified(DeviceCopyPeer::GROUP)) {
             $modifiedColumns[':p' . $index++]  = '`group`';
+        }
+        if ($this->isColumnModified(DeviceCopyPeer::MAIN_STORE)) {
+            $modifiedColumns[':p' . $index++]  = '`main_store`';
         }
 
         $sql = sprintf(
@@ -630,8 +784,14 @@ abstract class BaseDeviceCopy extends BaseObject implements Persistent
                     case '`id`':
                         $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
                         break;
+                    case '`uid`':
+                        $stmt->bindValue($identifier, $this->uid, PDO::PARAM_STR);
+                        break;
                     case '`name`':
                         $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
+                        break;
+                    case '`position`':
+                        $stmt->bindValue($identifier, $this->position, PDO::PARAM_INT);
                         break;
                     case '`copy_of_input`':
                         $stmt->bindValue($identifier, $this->copy_of_input, PDO::PARAM_INT);
@@ -641,6 +801,9 @@ abstract class BaseDeviceCopy extends BaseObject implements Persistent
                         break;
                     case '`group`':
                         $stmt->bindValue($identifier, $this->group, PDO::PARAM_INT);
+                        break;
+                    case '`main_store`':
+                        $stmt->bindValue($identifier, $this->main_store, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -759,6 +922,12 @@ abstract class BaseDeviceCopy extends BaseObject implements Persistent
                 }
             }
 
+            if ($this->aStore !== null) {
+                if (!$this->aStore->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aStore->getValidationFailures());
+                }
+            }
+
 
             if (($retval = DeviceCopyPeer::doValidate($this, $columns)) !== true) {
                 $failureMap = array_merge($failureMap, $retval);
@@ -804,16 +973,25 @@ abstract class BaseDeviceCopy extends BaseObject implements Persistent
                 return $this->getId();
                 break;
             case 1:
-                return $this->getName();
+                return $this->getUid();
                 break;
             case 2:
-                return $this->getCopyOfInput();
+                return $this->getName();
                 break;
             case 3:
-                return $this->getCopyOfSensor();
+                return $this->getPosition();
                 break;
             case 4:
+                return $this->getCopyOfInput();
+                break;
+            case 5:
+                return $this->getCopyOfSensor();
+                break;
+            case 6:
                 return $this->getGroup();
+                break;
+            case 7:
+                return $this->getMainStore();
                 break;
             default:
                 return null;
@@ -845,10 +1023,13 @@ abstract class BaseDeviceCopy extends BaseObject implements Persistent
         $keys = DeviceCopyPeer::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getId(),
-            $keys[1] => $this->getName(),
-            $keys[2] => $this->getCopyOfInput(),
-            $keys[3] => $this->getCopyOfSensor(),
-            $keys[4] => $this->getGroup(),
+            $keys[1] => $this->getUid(),
+            $keys[2] => $this->getName(),
+            $keys[3] => $this->getPosition(),
+            $keys[4] => $this->getCopyOfInput(),
+            $keys[5] => $this->getCopyOfSensor(),
+            $keys[6] => $this->getGroup(),
+            $keys[7] => $this->getMainStore(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -864,6 +1045,9 @@ abstract class BaseDeviceCopy extends BaseObject implements Persistent
             }
             if (null !== $this->aDeviceGroup) {
                 $result['DeviceGroup'] = $this->aDeviceGroup->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aStore) {
+                $result['Store'] = $this->aStore->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
         }
 
@@ -903,16 +1087,25 @@ abstract class BaseDeviceCopy extends BaseObject implements Persistent
                 $this->setId($value);
                 break;
             case 1:
-                $this->setName($value);
+                $this->setUid($value);
                 break;
             case 2:
-                $this->setCopyOfInput($value);
+                $this->setName($value);
                 break;
             case 3:
-                $this->setCopyOfSensor($value);
+                $this->setPosition($value);
                 break;
             case 4:
+                $this->setCopyOfInput($value);
+                break;
+            case 5:
+                $this->setCopyOfSensor($value);
+                break;
+            case 6:
                 $this->setGroup($value);
+                break;
+            case 7:
+                $this->setMainStore($value);
                 break;
         } // switch()
     }
@@ -939,10 +1132,13 @@ abstract class BaseDeviceCopy extends BaseObject implements Persistent
         $keys = DeviceCopyPeer::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
-        if (array_key_exists($keys[1], $arr)) $this->setName($arr[$keys[1]]);
-        if (array_key_exists($keys[2], $arr)) $this->setCopyOfInput($arr[$keys[2]]);
-        if (array_key_exists($keys[3], $arr)) $this->setCopyOfSensor($arr[$keys[3]]);
-        if (array_key_exists($keys[4], $arr)) $this->setGroup($arr[$keys[4]]);
+        if (array_key_exists($keys[1], $arr)) $this->setUid($arr[$keys[1]]);
+        if (array_key_exists($keys[2], $arr)) $this->setName($arr[$keys[2]]);
+        if (array_key_exists($keys[3], $arr)) $this->setPosition($arr[$keys[3]]);
+        if (array_key_exists($keys[4], $arr)) $this->setCopyOfInput($arr[$keys[4]]);
+        if (array_key_exists($keys[5], $arr)) $this->setCopyOfSensor($arr[$keys[5]]);
+        if (array_key_exists($keys[6], $arr)) $this->setGroup($arr[$keys[6]]);
+        if (array_key_exists($keys[7], $arr)) $this->setMainStore($arr[$keys[7]]);
     }
 
     /**
@@ -955,10 +1151,13 @@ abstract class BaseDeviceCopy extends BaseObject implements Persistent
         $criteria = new Criteria(DeviceCopyPeer::DATABASE_NAME);
 
         if ($this->isColumnModified(DeviceCopyPeer::ID)) $criteria->add(DeviceCopyPeer::ID, $this->id);
+        if ($this->isColumnModified(DeviceCopyPeer::UID)) $criteria->add(DeviceCopyPeer::UID, $this->uid);
         if ($this->isColumnModified(DeviceCopyPeer::NAME)) $criteria->add(DeviceCopyPeer::NAME, $this->name);
+        if ($this->isColumnModified(DeviceCopyPeer::POSITION)) $criteria->add(DeviceCopyPeer::POSITION, $this->position);
         if ($this->isColumnModified(DeviceCopyPeer::COPY_OF_INPUT)) $criteria->add(DeviceCopyPeer::COPY_OF_INPUT, $this->copy_of_input);
         if ($this->isColumnModified(DeviceCopyPeer::COPY_OF_SENSOR)) $criteria->add(DeviceCopyPeer::COPY_OF_SENSOR, $this->copy_of_sensor);
         if ($this->isColumnModified(DeviceCopyPeer::GROUP)) $criteria->add(DeviceCopyPeer::GROUP, $this->group);
+        if ($this->isColumnModified(DeviceCopyPeer::MAIN_STORE)) $criteria->add(DeviceCopyPeer::MAIN_STORE, $this->main_store);
 
         return $criteria;
     }
@@ -1022,10 +1221,13 @@ abstract class BaseDeviceCopy extends BaseObject implements Persistent
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
+        $copyObj->setUid($this->getUid());
         $copyObj->setName($this->getName());
+        $copyObj->setPosition($this->getPosition());
         $copyObj->setCopyOfInput($this->getCopyOfInput());
         $copyObj->setCopyOfSensor($this->getCopyOfSensor());
         $copyObj->setGroup($this->getGroup());
+        $copyObj->setMainStore($this->getMainStore());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1241,15 +1443,70 @@ abstract class BaseDeviceCopy extends BaseObject implements Persistent
     }
 
     /**
+     * Declares an association between this object and a Store object.
+     *
+     * @param                  Store $v
+     * @return DeviceCopy The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setStore(Store $v = null)
+    {
+        if ($v === null) {
+            $this->setMainStore(NULL);
+        } else {
+            $this->setMainStore($v->getId());
+        }
+
+        $this->aStore = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the Store object, it will not be re-added.
+        if ($v !== null) {
+            $v->addDeviceCopy($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated Store object
+     *
+     * @param PropelPDO $con Optional Connection object.
+     * @param $doQuery Executes a query to get the object if required
+     * @return Store The associated Store object.
+     * @throws PropelException
+     */
+    public function getStore(PropelPDO $con = null, $doQuery = true)
+    {
+        if ($this->aStore === null && ($this->main_store !== null) && $doQuery) {
+            $this->aStore = StoreQuery::create()->findPk($this->main_store, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aStore->addDeviceCopies($this);
+             */
+        }
+
+        return $this->aStore;
+    }
+
+    /**
      * Clears the current object and sets all attributes to their default values
      */
     public function clear()
     {
         $this->id = null;
+        $this->uid = null;
         $this->name = null;
+        $this->position = null;
         $this->copy_of_input = null;
         $this->copy_of_sensor = null;
         $this->group = null;
+        $this->main_store = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
@@ -1282,6 +1539,9 @@ abstract class BaseDeviceCopy extends BaseObject implements Persistent
             if ($this->aDeviceGroup instanceof Persistent) {
               $this->aDeviceGroup->clearAllReferences($deep);
             }
+            if ($this->aStore instanceof Persistent) {
+              $this->aStore->clearAllReferences($deep);
+            }
 
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
@@ -1289,6 +1549,7 @@ abstract class BaseDeviceCopy extends BaseObject implements Persistent
         $this->aCbInput = null;
         $this->aDsTemperatureSensor = null;
         $this->aDeviceGroup = null;
+        $this->aStore = null;
     }
 
     /**

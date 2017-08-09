@@ -80,6 +80,7 @@ class StoreTableMap extends TableMap
         $this->addRelation('DeviceGroup', 'DeviceBundle\\Model\\DeviceGroup', RelationMap::ONE_TO_MANY, array('id' => 'main_store', ), null, null, 'DeviceGroups');
         $this->addRelation('DsTemperatureSensor', 'DeviceBundle\\Model\\DsTemperatureSensor', RelationMap::ONE_TO_MANY, array('id' => 'main_store', ), null, null, 'DsTemperatureSensors');
         $this->addRelation('CbInput', 'DeviceBundle\\Model\\CbInput', RelationMap::ONE_TO_MANY, array('id' => 'main_store', ), null, null, 'CbInputs');
+        $this->addRelation('DeviceCopy', 'DeviceBundle\\Model\\DeviceCopy', RelationMap::ONE_TO_MANY, array('id' => 'main_store', ), null, null, 'DeviceCopies');
         $this->addRelation('StoreAddress', 'StoreBundle\\Model\\StoreAddress', RelationMap::ONE_TO_MANY, array('id' => 'store_id', ), 'CASCADE', null, 'StoreAddresses');
         $this->addRelation('StoreEmail', 'StoreBundle\\Model\\StoreEmail', RelationMap::ONE_TO_MANY, array('id' => 'store_id', ), 'CASCADE', null, 'StoreEmails');
         $this->addRelation('StorePhone', 'StoreBundle\\Model\\StorePhone', RelationMap::ONE_TO_MANY, array('id' => 'store_id', ), 'CASCADE', null, 'StorePhones');

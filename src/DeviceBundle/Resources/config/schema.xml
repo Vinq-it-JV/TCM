@@ -127,10 +127,13 @@
 
     <table name="device_copy">
         <column name="id" type="integer" primaryKey="true" autoIncrement="true" />
+        <column name="uid" type="varchar" size="32"/>
         <column name="name" type="varchar" size="255" default="" />
+        <column name="position" type="integer" default="0" />
         <column name="copy_of_input" type="integer" />
         <column name="copy_of_sensor" type="integer" />
         <column name="group" type="integer" />
+        <column name="main_store" type="integer" />
         <foreign-key foreignTable="cb_input">
             <reference local="copy_of_input" foreign="id"/>
         </foreign-key>
@@ -139,6 +142,9 @@
         </foreign-key>
         <foreign-key foreignTable="device_group">
             <reference local="group" foreign="id"/>
+        </foreign-key>
+        <foreign-key foreignTable="store">
+            <reference local="main_store" foreign="id"/>
         </foreign-key>
     </table>
 

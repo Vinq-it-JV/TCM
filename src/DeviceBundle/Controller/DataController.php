@@ -2,18 +2,21 @@
 
 namespace DeviceBundle\Controller;
 
+use \Criteria;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+
 use DeviceBundle\Model\CbInput;
 use DeviceBundle\Model\CbInputQuery;
 use DeviceBundle\Model\ControllerBox;
 use DeviceBundle\Model\ControllerBoxQuery;
+use DeviceBundle\Model\DeviceCopy;
+use DeviceBundle\Model\DeviceCopyQuery;
 use DeviceBundle\Model\DeviceGroup;
 use DeviceBundle\Model\DeviceGroupQuery;
 use DeviceBundle\Model\DsTemperatureSensor;
 use DeviceBundle\Model\DsTemperatureSensorQuery;
-use \Criteria;
 use StoreBundle\Model\Store;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Response\JsonResult;
 use StoreBundle\Model\StoreQuery;
 
@@ -28,7 +31,6 @@ class DataController extends Controller
     public function getStoresAction(Request $request)
     {
         $storesArr = [];
-
         $stores = StoreQuery::create()
             ->filterByIsDeleted(false)
             ->find();
@@ -359,15 +361,16 @@ class DataController extends Controller
         $deviceArr = [];
         /* @var $store Store */
         if (!$store->getDeviceGroups()->isEmpty()) {
-            foreach ($store->getDeviceGroups() as $group) {
-                $deviceArr[] = $group->getDeviceGroupdataArray()['devicegroup'];
+            foreach ($store->getDeviceGroups() as $k => $group) {
+                $deviceArr[] = $group->getDeviceGroupDataArray()['devicegroup'];
             }
         }
 
         if (!$store->getDsTemperatureSensors()->isEmpty()) {
-            foreach ($store->getDsTemperatureSensors() as $sensor) {
-                if (empty($sensor->getGroup()))
+            foreach ($store->getDsTemperatureSensors() as $k => $sensor) {
+                if (empty($sensor->getGroup())) {
                     $deviceArr[] = $sensor->getDsTemperatureSensorDataArray()['dstemperaturesensor'];
+                }
             }
         }
 
@@ -384,10 +387,20 @@ class DataController extends Controller
                     $deviceArr[] = $controller->getControllerBoxDataArray()['controllerbox'];
         }
 
+        if (!$store->getDeviceCopies()->isEmpty()) {
+            foreach ($store->getDeviceCopies() as $copy) {
+                $copyArr = $copy->getDeviceCopyArray(0);
+                if (!empty($copyArr))
+                    $deviceArr = array_merge($deviceArr, $copyArr);
+            }
+        }
+
         usort($deviceArr, function ($a, $b) {
             $a = (object)$a;
             $b = (object)$b;
-            return $a->Position > $b->Position;
+            if (isset($a->Position) && isset($b->Position))
+                return $a->Position > $b->Position;
+            return false;
         });
 
         $dataArr['devicegroups'] = $deviceArr;
@@ -403,16 +416,15 @@ class DataController extends Controller
     protected function saveStoreData($storeData, $storeid)
     {
         $helper = $this->getHelper();
-
         $store = StoreQuery::create()->findOneById($storeid);
 
         if (!empty($store)) {
             $groups = $store->getDeviceGroupsIdArray();
+            $copies = $this->getDeviceCopyIdArray();
             $_groups = [];
-
+            $_copies = [];
             foreach ($storeData as $index => $device) {
                 $device = (object)$device;
-
                 if ($device->TypeId == DeviceGroup::TYPE_ID) {
                     if ($device->Id)
                         $_groups[] = $device->Id;
@@ -420,30 +432,61 @@ class DataController extends Controller
                     if (!empty($device->devices)) {
                         foreach ($device->devices as $position => $sensor) {
                             $sensor = (object)$sensor;
-                            if (empty($sensor->MainStore))
-                                $this->updateSensor($sensor, $position);
-                            else {
-                                $this->updateSensor($sensor, $position, $device);
+                            if ($sensor->IsCopy) {
+                                $_copies[] = $sensor->Uid;
+                                $sensor->Position = $position;
+                                $sensor->Group = $device->Id;
+                                $this->copySensor($sensor);
+                            } else {
+                                if (empty($sensor->MainStore))
+                                    $this->updateSensor($sensor, $position);
+                                else {
+                                    $this->updateSensor($sensor, $position, $device);
+                                }
                             }
                         }
                     }
                 } else {
                     $device->Group = 0;
                     $sensor = $device;
-                    $this->updateSensor($sensor, $index);
+                    if ($sensor->IsCopy) {
+                        $_copies[] = $sensor->Uid;
+                        $sensor->Position = $index;
+                        $this->copySensor($sensor);
+                    } else
+                        $this->updateSensor($sensor, $index);
                 }
             }
             $toRemove = array_diff($groups, $_groups);
-
             foreach ($toRemove as $group => $id) {
                 $_group = DeviceGroupQuery::create()->findOneById($id);
                 if (!empty($_group))
                     $store->removeDeviceGroup($_group);
             }
             $store->save();
+            $toRemove = array_diff($copies, $_copies);
+            if (!empty($toRemove)) {
+                foreach ($toRemove as $copy => $uid) {
+                    $_copy = DeviceCopyQuery::create()->findOneByUid($uid);
+                    if (!empty($_copy))
+                        $_copy->delete();
+                }
+            }
         }
-
         return true;
+    }
+
+    /**
+     * Get device copy id array
+     * @return array
+     */
+    protected function getDeviceCopyIdArray()
+    {
+        $copiesArr = [];
+        $copies = DeviceCopyQuery::create()->find();
+        foreach ($copies as $copy)
+            $copiesArr[] = $copy->getUid();
+        return $copiesArr;
     }
 
     /**
@@ -466,12 +509,48 @@ class DataController extends Controller
     }
 
     /**
+     * Copy sensor (create if new)
+     * @param $sensor
+     */
+    protected function copySensor($sensor)
+    {
+        $copy = null;
+        $helper = $this->getHelper();
+        switch ($sensor->TypeId) {
+            case DsTemperatureSensor::TYPE_ID:
+                $copy = DeviceCopyQuery::create()->findOneByUid($sensor->Uid);
+                break;
+            case CbInput::TYPE_ID:
+                $copy = DeviceCopyQuery::create()->findOneByUid($sensor->Uid);
+                break;
+        }
+        if (empty($copy)) {
+            $copy = new DeviceCopy();
+            $copy->setUid($helper->createFileUUID());
+        }
+        $copy->setName($sensor->Name);
+        $copy->setPosition($sensor->Position);
+        $copy->setGroup($sensor->Group);
+        $copy->setMainStore($sensor->MainStore);
+        switch ($sensor->TypeId) {
+            case DsTemperatureSensor::TYPE_ID:
+                $copy->setCopyOfSensor($sensor->Id);
+                break;
+            case CbInput::TYPE_ID:
+                $copy->setCopyOfInput($sensor->Id);
+                break;
+        }
+        $copy->save();
+    }
+
+    /**
      * Update sensor data
      * @param $sensor
      * @param int $index
      * @param null $group
      */
-    protected function updateSensor($sensor, $index = 0, $group = null)
+    protected
+    function updateSensor($sensor, $index = 0, $group = null)
     {
         $groupDetach = false;
         if (!empty($group))
@@ -536,7 +615,8 @@ class DataController extends Controller
      * Get class helper
      * @return object
      */
-    protected function getHelper()
+    protected
+    function getHelper()
     {
         $helper = $this->container->get('class_helper');
         return $helper;

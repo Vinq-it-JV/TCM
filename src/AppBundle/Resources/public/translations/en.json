@@ -412,6 +412,7 @@
         "DELETE_STORE": "Delete store?",
         "COPY_COMPANY_DATA": "Copy all company data?",
         "DELETE_GROUP": "Delete group?",
+        "DELETE_COPY": "Delete copy?",
         "UNLINK_SENSOR": "Unlink sensor / device from store?",
         "NEW_PASSWORD": "Generate new password for user?",
         "HANDLE_NOTIFICATION": "Handle notification?",

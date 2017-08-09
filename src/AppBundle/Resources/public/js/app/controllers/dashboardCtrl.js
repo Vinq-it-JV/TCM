@@ -198,6 +198,8 @@ angular
                             $scope.stores.storesSet(data.contents.stores);
                             $scope.storesCollection = [].concat(data.contents.stores);
                         }
+                        else
+                            $scope.showRoute('tcm_dashboard');
                         break;
                     case 'getStore':
                         if (!$scope.isValidObject(data))
@@ -209,6 +211,8 @@ angular
                             $scope.sensors.setSensorCharts();
                             $scope.updateSensors();
                         }
+                        else
+                            $scope.showRoute('tcm_dashboard');
                         break;
                     case 'updateSensors':
                         if (!$scope.isValidObject(data)) {
@@ -219,6 +223,8 @@ angular
                             $scope.sensors.updateSensors(data.contents.devicegroups);
                             $scope.updateSensors();
                         }
+                        else
+                            $scope.showRoute('tcm_dashboard');
                         break;
                     case 'getTemperatureLog':
                         $scope.getSensorLog = false;
@@ -228,6 +234,8 @@ angular
                             $scope.sensorlog.logdataSet(data.contents.temperatures);
                             $scope.showSensorLogGraph();
                         }
+                        else
+                            $scope.showRoute('tcm_dashboard');
                         break;
                     case 'getInputLog':
                         $scope.getSensorLog = false;
@@ -237,6 +245,8 @@ angular
                             $scope.sensorlog.logdataSet(data.contents.inputss);
                             $scope.showSensorLogGraph();
                         }
+                        else
+                            $scope.showRoute('tcm_dashboard');
                         break;
                     default:
                         break;

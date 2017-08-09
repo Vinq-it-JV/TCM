@@ -44,22 +44,7 @@ class DataController extends Controller
     {
         $storesArr = [];
 
-        if ($this->container->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) {
-            $stores = StoreQuery::create()
-                ->filterByIsDeleted(false)
-                ->filterByIsEnabled(true)
-                ->orderByName('ASC')
-                ->find();
-        }
-        else {
-            $stores = StoreQuery::create()
-                ->filterByIsDeleted(false)
-                ->filterByIsEnabled(true)
-                ->filterByOwner($this->getUser())
-                ->orderByName('ASC')
-                ->find();
-        }
-
+        $stores = $this->getStoresQuery();
         foreach ($stores as $store) {
             $storesArr[] = $store->getStoreDataArray()['store'];
         }
@@ -78,13 +63,18 @@ class DataController extends Controller
      */
     public function getStoreAction(Request $request, $storeid)
     {
-        $store = StoreQuery::create()->findOneById($storeid);
+        $dataArr = [];
+        $result = JsonResult::SUCCESS;
+        $store = $this->getStoreQuery($storeid);
 
-        $dataArr = $this->getStoreData($store);
+        if (!empty($store))
+            $dataArr = $this->getStoreData($store);
+        else
+            $result = JsonResult::DANGER;
 
         return JsonResult::create()
             ->setContents($dataArr)
-            ->setErrorcode(JsonResult::SUCCESS)
+            ->setErrorcode($result)
             ->make();
     }
 
@@ -97,8 +87,8 @@ class DataController extends Controller
     public function updateSensorsAction(Request $request, $storeid)
     {
         $dataArr = [];
+        $store = $this->getStoreQuery($storeid);
 
-        $store = StoreQuery::create()->findOneById($storeid);
         if (!empty($store))
             $dataArr = $this->getStoreDeviceGroups($store);
 
@@ -106,69 +96,6 @@ class DataController extends Controller
             ->setContents($dataArr)
             ->setErrorcode(JsonResult::SUCCESS)
             ->make();
-    }
-
-    /**
-     * getStoreData($store)
-     * @param $store
-     * @return array
-     */
-    protected function getStoreData($store)
-    {
-        $dataArr = [];
-        $listsArr = [];
-
-        $dataArr = array_merge($dataArr, $store->getStoreDataArray(), ['template' => $store->getFullStoreTemplateArray()]);
-        $dataArr = array_merge($dataArr, $this->getStoreDeviceGroups($store));
-
-        $dataArr = array_merge($dataArr, ['lists' => $listsArr]);
-        return $dataArr;
-    }
-
-    /**
-     * Get store device groups
-     * @param $store
-     * @return array
-     */
-    protected function getStoreDeviceGroups($store)
-    {
-        $dataArr = [];
-        $deviceArr = [];
-        /* @var $store Store */
-        if (!$store->getDeviceGroups()->isEmpty()) {
-            foreach ($store->getDeviceGroups() as $group) {
-                $deviceArr[] = $group->getDeviceGroupdataArray()['devicegroup'];
-            }
-        }
-
-        if (!$store->getDsTemperatureSensors()->isEmpty()) {
-            foreach ($store->getDsTemperatureSensors() as $sensor) {
-                if (empty($sensor->getGroup()))
-                    $deviceArr[] = $sensor->getDsTemperatureSensorDataArray()['dstemperaturesensor'];
-            }
-        }
-
-        if (!$store->getCbInputs()->isEmpty()) {
-            foreach ($store->getCbInputs() as $input) {
-                if (empty($input->getDeviceGroup()))
-                    $deviceArr[] = $input->getCbInputDataArray()['cbinput'];
-            }
-        }
-
-        if (!$store->getControllerBoxen()->isEmpty()) {
-            foreach ($store->getControllerBoxen() as $controller)
-                if (empty($controller->getDeviceGroup()))
-                    $deviceArr[] = $controller->getControllerBoxDataArray()['controllerbox'];
-        }
-
-        usort($deviceArr, function ($a, $b) {
-            $a = (object)$a;
-            $b = (object)$b;
-            return $a->Position > $b->Position;
-        });
-
-        $dataArr['devicegroups'] = $deviceArr;
-        return $dataArr;
     }
 
     /**
@@ -247,6 +174,118 @@ class DataController extends Controller
             ->setContents($dataArr)
             ->setErrorcode(JsonResult::SUCCESS)
             ->make();
+    }
+
+    /**
+     * Get store query
+     * @param $storeid
+     * @return Store
+     */
+    protected function getStoreQuery($storeid)
+    {
+        $helper = $this->getHelper();
+        if ($helper->isSuperAdmin())
+            return StoreQuery::create()->findOneById($storeid);
+        return StoreQuery::create()
+            ->filterByOwner($this->getUser())
+            ->_or()
+            ->filterByContact($this->getUser())
+            ->findOneById($storeid);
+    }
+
+    /**
+     * Get stores query
+     * @return array|mixed|\PropelObjectCollection
+     */
+    protected function getStoresQuery()
+    {
+        $helper = $this->getHelper();
+        if ($helper->isSuperAdmin())
+        {   return StoreQuery::create()
+            ->filterByIsDeleted(false)
+            ->filterByIsEnabled(true)
+            ->orderByName('ASC')
+            ->find();
+        }
+        return StoreQuery::create()
+            ->filterByIsDeleted(false)
+            ->filterByIsEnabled(true)
+            ->filterByOwner($this->getUser())
+            ->_or()
+            ->filterByContact($this->getUser())
+            ->orderByName('ASC')
+            ->groupById()
+            ->find();
+    }
+
+    /**
+     * getStoreData($store)
+     * @param $store
+     * @return array
+     */
+    protected function getStoreData($store)
+    {
+        $dataArr = [];
+        $listsArr = [];
+
+        $dataArr = array_merge($dataArr, $store->getStoreDataArray(), ['template' => $store->getFullStoreTemplateArray()]);
+        $dataArr = array_merge($dataArr, $this->getStoreDeviceGroups($store));
+        $dataArr = array_merge($dataArr, ['lists' => $listsArr]);
+        return $dataArr;
+    }
+
+    /**
+     * Get store device groups
+     * @param $store
+     * @return array
+     */
+    protected function getStoreDeviceGroups($store)
+    {
+        $dataArr = [];
+        $deviceArr = [];
+        /* @var $store Store */
+        if (!$store->getDeviceGroups()->isEmpty()) {
+            foreach ($store->getDeviceGroups() as $group) {
+                $deviceArr[] = $group->getDeviceGroupdataArray()['devicegroup'];
+            }
+        }
+
+        if (!$store->getDsTemperatureSensors()->isEmpty()) {
+            foreach ($store->getDsTemperatureSensors() as $sensor) {
+                if (empty($sensor->getGroup()))
+                    $deviceArr[] = $sensor->getDsTemperatureSensorDataArray()['dstemperaturesensor'];
+            }
+        }
+
+        if (!$store->getCbInputs()->isEmpty()) {
+            foreach ($store->getCbInputs() as $input) {
+                if (empty($input->getDeviceGroup()))
+                    $deviceArr[] = $input->getCbInputDataArray()['cbinput'];
+            }
+        }
+
+        if (!$store->getControllerBoxen()->isEmpty()) {
+            foreach ($store->getControllerBoxen() as $controller)
+                if (empty($controller->getDeviceGroup()))
+                    $deviceArr[] = $controller->getControllerBoxDataArray()['controllerbox'];
+        }
+
+        if (!$store->getDeviceCopies()->isEmpty()) {
+            foreach ($store->getDeviceCopies() as $copy) {
+                $copyArr = $copy->getDeviceCopyArray(0);
+                if (!empty($copyArr))
+                    $deviceArr = array_merge($deviceArr, $copyArr);
+            }
+        }
+
+        usort($deviceArr, function ($a, $b) {
+            $a = (object)$a;
+            $b = (object)$b;
+            return $a->Position > $b->Position;
+        });
+
+        $dataArr['devicegroups'] = $deviceArr;
+        return $dataArr;
     }
 
     /**

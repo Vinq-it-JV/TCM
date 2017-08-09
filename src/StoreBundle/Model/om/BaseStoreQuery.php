@@ -17,6 +17,7 @@ use CompanyBundle\Model\Company;
 use CompanyBundle\Model\Regions;
 use DeviceBundle\Model\CbInput;
 use DeviceBundle\Model\ControllerBox;
+use DeviceBundle\Model\DeviceCopy;
 use DeviceBundle\Model\DeviceGroup;
 use DeviceBundle\Model\DsTemperatureSensor;
 use StoreBundle\Model\Store;
@@ -120,6 +121,10 @@ use UserBundle\Model\User;
  * @method StoreQuery leftJoinCbInput($relationAlias = null) Adds a LEFT JOIN clause to the query using the CbInput relation
  * @method StoreQuery rightJoinCbInput($relationAlias = null) Adds a RIGHT JOIN clause to the query using the CbInput relation
  * @method StoreQuery innerJoinCbInput($relationAlias = null) Adds a INNER JOIN clause to the query using the CbInput relation
+ *
+ * @method StoreQuery leftJoinDeviceCopy($relationAlias = null) Adds a LEFT JOIN clause to the query using the DeviceCopy relation
+ * @method StoreQuery rightJoinDeviceCopy($relationAlias = null) Adds a RIGHT JOIN clause to the query using the DeviceCopy relation
+ * @method StoreQuery innerJoinDeviceCopy($relationAlias = null) Adds a INNER JOIN clause to the query using the DeviceCopy relation
  *
  * @method StoreQuery leftJoinStoreAddress($relationAlias = null) Adds a LEFT JOIN clause to the query using the StoreAddress relation
  * @method StoreQuery rightJoinStoreAddress($relationAlias = null) Adds a RIGHT JOIN clause to the query using the StoreAddress relation
@@ -1791,6 +1796,80 @@ abstract class BaseStoreQuery extends ModelCriteria
         return $this
             ->joinCbInput($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'CbInput', '\DeviceBundle\Model\CbInputQuery');
+    }
+
+    /**
+     * Filter the query by a related DeviceCopy object
+     *
+     * @param   DeviceCopy|PropelObjectCollection $deviceCopy  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 StoreQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByDeviceCopy($deviceCopy, $comparison = null)
+    {
+        if ($deviceCopy instanceof DeviceCopy) {
+            return $this
+                ->addUsingAlias(StorePeer::ID, $deviceCopy->getMainStore(), $comparison);
+        } elseif ($deviceCopy instanceof PropelObjectCollection) {
+            return $this
+                ->useDeviceCopyQuery()
+                ->filterByPrimaryKeys($deviceCopy->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByDeviceCopy() only accepts arguments of type DeviceCopy or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the DeviceCopy relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return StoreQuery The current query, for fluid interface
+     */
+    public function joinDeviceCopy($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('DeviceCopy');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'DeviceCopy');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the DeviceCopy relation DeviceCopy object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   \DeviceBundle\Model\DeviceCopyQuery A secondary query class using the current class as primary query
+     */
+    public function useDeviceCopyQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinDeviceCopy($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'DeviceCopy', '\DeviceBundle\Model\DeviceCopyQuery');
     }
 
     /**

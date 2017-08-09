@@ -9,7 +9,7 @@
                     <ol ui-tree-nodes ng-model="groupsCollection" data-ui-tree="treeOptions"  data-empty-placeholder-enabled="true">
                         <li ng-repeat="group in groupsCollection" ui-tree-node data-expand-on-hover="true" ng-if="group.MainStore||group.Group">
                             <div ui-tree-handle class="tree-node tree-node-content angular-ui-tree-handle"
-                                 ng-class="{ 'disabled-handle': group.isEnabled, 'group-handle': group.TypeId == 1, 'sensor-handle': !group.IsCopy, 'sensor-handle-copy': group.IsCopy }">
+                                 ng-class="{ 'disabled-handle': group.isEnabled, 'group-handle': group.TypeId == 1, 'sensor-handle': !group.IsCopy&&group.TypeId!=1, 'sensor-handle-copy': group.IsCopy&&group.TypeId!=1 }">
                                 <div class="row" ng-show="group.TypeId==1">
                                     <div class="col-md-10 col-xs-8">
                                         <span class="btn-group" ng-cloak>
@@ -76,6 +76,12 @@
                                                data-nodrag>
                                                 <span class="fa fa-copy fa-fw"></span>
                                             </a>
+                                            <a class="btn btn-danger btn-xs"
+                                               ng-click="removeCopy(group)"
+                                               ng-show="group.IsCopy"
+                                               data-nodrag>
+                                                <span class="fa fa-remove fa-fw"></span>
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
@@ -122,6 +128,12 @@
                                                        ng-show="(device.TypeId==3||device.TypeId==4)&&!device.IsCopy"
                                                        data-nodrag>
                                                         <span class="fa fa-copy fa-fw"></span>
+                                                    </a>
+                                                    <a class="btn btn-danger btn-xs"
+                                                       ng-click="removeCopy(device)"
+                                                       ng-show="device.IsCopy"
+                                                       data-nodrag>
+                                                        <span class="fa fa-remove fa-fw"></span>
                                                     </a>
                                                 </div>
                                             </div>

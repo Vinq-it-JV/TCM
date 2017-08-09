@@ -29,7 +29,6 @@ angular
                     return true;
                 },
                 beforeDrop: function (event) {
-                    //console.log(event.source.nodeScope.$modelValue);
                     if (!$scope.isValidObject(event.dest.nodesScope.$parent.$modelValue))
                         return true;
                     if ($scope.isValidObject(event.source.nodeScope.$modelValue))
@@ -138,6 +137,33 @@ angular
             $scope.copyDevice = function (device) {
                 $scope.devicegroups.copyDevice(device);
                 $scope.groupsCollection = [].concat($scope.devicegroups.groups());
+            };
+
+            $scope.removeCopy = function (copy) {
+                var modalOptions = {
+                    closeButtonText: $translate.instant('CANCEL'),
+                    actionButtonText: $translate.instant('DELETE'),
+                    headerText: $translate.instant('DELETE'),
+                    bodyText: $translate.instant('QUESTION.DELETE_COPY'),
+                    onExecute: function () {
+                        for (group in $scope.groupsCollection) {
+                            var sensor = $scope.groupsCollection[group];
+                            if (sensor.Id == copy.Id && sensor.IsCopy) {
+                                var index = $scope.groupsCollection.indexOf(sensor);
+                                $scope.groupsCollection.splice(index, 1);
+                                continue;
+                            }
+                            for (sensor in $scope.groupsCollection[group].devices) {
+                                var device = $scope.groupsCollection[group].devices[sensor];
+                                if (device.Id == copy.Id && device.IsCopy) {
+                                    var index = $scope.groupsCollection[group].devices.indexOf(device);
+                                    $scope.groupsCollection[group].devices.splice(index, 1);
+                                }
+                            }
+                        }
+                    }
+                };
+                Modal.open({}, modalOptions);
             };
 
             $scope.showTreeView = function () {
