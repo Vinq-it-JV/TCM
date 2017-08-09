@@ -182,7 +182,7 @@ angular
                         }, {
                             from: 0.5,
                             to: 1,
-                            color: '#55BF3B' // green
+                            color: '#DDDF0D' // green
                         }]
                     }
                 },
