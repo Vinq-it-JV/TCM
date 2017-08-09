@@ -42,7 +42,7 @@ angular
                     },
                     plotLines: [{
                         value: 0,
-                        color: 'red',
+                        color: '#55BF3B',
                         dashStyle: 'solid',
                         width: 2,
                         label: {
@@ -50,7 +50,7 @@ angular
                         }
                     }, {
                         value: 0,
-                        color: 'green',
+                        color: '#DF5353',
                         dashStyle: 'solid',
                         width: 2,
                         label: {
