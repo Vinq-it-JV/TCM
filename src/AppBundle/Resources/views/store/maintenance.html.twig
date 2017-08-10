@@ -39,7 +39,7 @@
                                     <td ng-cloak>{{ row.CreatedBy.Name }}</td>
                                     <td ng-cloak>{{ row.Name }}</td>
                                     <td ng-cloak>{{ row.Date.date | GMT:'DD-MM-YYYY HH:mm' }}</td>
-                                    <td class="text-center"><i class="fa fa-fw fa-paperclip" ng-if="row.Attachments"></i></td>
+                                    <td class="text-center"><i class="fa fa-fw fa-paperclip" ng-if="row.Attachments.length"></i></td>
                                     <td>
                                         <div class="pull-right">
                                             <button type="button" ng-click="showCollection(row.Id, 'maintenanceInfo')"
