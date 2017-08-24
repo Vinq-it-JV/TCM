@@ -202,10 +202,10 @@ class DataController extends Controller
         $helper = $this->getHelper();
         if ($helper->isSuperAdmin())
         {   return StoreQuery::create()
-            ->filterByIsDeleted(false)
-            ->filterByIsEnabled(true)
-            ->orderByName('ASC')
-            ->find();
+                ->filterByIsDeleted(false)
+                ->filterByIsEnabled(true)
+                ->orderByName('ASC')
+                ->find();
         }
         return StoreQuery::create()
             ->filterByIsDeleted(false)
