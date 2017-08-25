@@ -52,7 +52,6 @@ angular
                 $scope.BE.setLoaderDelay(0);
                 if ($scope.initOnce)
                     return;
-
                 $scope.LNG.changeLanguage($translate.proposedLanguage());
                 $scope.BE.waitTextSet('PLEASE_WAIT');
                 $scope.BE.initialize($scope.initOk, $scope.initFail);
@@ -245,5 +244,20 @@ angular
 
             $scope.trimAll = function (data) {
                 return data.replace(/\s+/g, '');
+            };
+
+            $scope.createUid = function () {
+                function s4() {
+                    return Math.floor((1 + Math.random()) * 0x10000)
+                        .toString(16)
+                        .substring(1);
+                }
+                return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+                    s4() + '-' + s4() + s4() + s4();
+            };
+
+            $scope.str_replace = function (search, replace, subject) {
+                var string = subject;
+                return string.replace(new RegExp(search, 'g'), replace);
             };
         }]);

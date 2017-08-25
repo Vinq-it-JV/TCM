@@ -135,7 +135,9 @@ angular
             };
 
             $scope.copyDevice = function (device) {
-                $scope.devicegroups.copyDevice(device);
+                var _device = $scope.devicegroups.copyDevice(device);
+                var uid = $scope.str_replace('-', '', $scope.createUid());
+                _device.Uid = uid;
                 $scope.groupsCollection = [].concat($scope.devicegroups.groups());
             };
 
@@ -148,14 +150,14 @@ angular
                     onExecute: function () {
                         for (group in $scope.groupsCollection) {
                             var sensor = $scope.groupsCollection[group];
-                            if (sensor.Id == copy.Id && sensor.IsCopy) {
+                            if (sensor.Uid == copy.Uid && sensor.IsCopy) {
                                 var index = $scope.groupsCollection.indexOf(sensor);
                                 $scope.groupsCollection.splice(index, 1);
                                 continue;
                             }
                             for (sensor in $scope.groupsCollection[group].devices) {
                                 var device = $scope.groupsCollection[group].devices[sensor];
-                                if (device.Id == copy.Id && device.IsCopy) {
+                                if (device.Uid == copy.Uid && device.IsCopy) {
                                     var index = $scope.groupsCollection[group].devices.indexOf(device);
                                     $scope.groupsCollection[group].devices.splice(index, 1);
                                 }

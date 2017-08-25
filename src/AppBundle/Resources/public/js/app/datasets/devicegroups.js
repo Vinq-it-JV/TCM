@@ -104,7 +104,7 @@ angular
                     _device.Position = d_groups[index].devices.length;
                     _device.Name += ' [' + $translate.instant('A_COPY') + ']';
                     d_groups[index].devices.push(_device);
-                    return true;
+                    return _device;
                 },
                 isValidObject: function (object) {
                     return isValidObject(object);

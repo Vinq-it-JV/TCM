@@ -417,10 +417,9 @@ class DataController extends Controller
     {
         $helper = $this->getHelper();
         $store = StoreQuery::create()->findOneById($storeid);
-
         if (!empty($store)) {
             $groups = $store->getDeviceGroupsIdArray();
-            $copies = $this->getDeviceCopyIdArray();
+            $copies = $this->getDeviceCopyIdArray($storeid);
             $_groups = [];
             $_copies = [];
             foreach ($storeData as $index => $device) {
@@ -480,10 +479,10 @@ class DataController extends Controller
      * Get device copy id array
      * @return array
      */
-    protected function getDeviceCopyIdArray()
+    protected function getDeviceCopyIdArray($storeid)
     {
         $copiesArr = [];
-        $copies = DeviceCopyQuery::create()->find();
+        $copies = DeviceCopyQuery::create()->findByMainStore($storeid);
         foreach ($copies as $copy)
             $copiesArr[] = $copy->getUid();
         return $copiesArr;
