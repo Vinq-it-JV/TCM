@@ -9,8 +9,6 @@ use DeviceBundle\Model\DsTemperatureSensorLog;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 
 use DeviceBundle\Model\CbInput;
 use DeviceBundle\Model\CbInputQuery;
@@ -190,9 +188,6 @@ class DataController extends Controller
 
         if (empty($temperature))
             $temperature = new DsTemperatureSensor();
-
-        file_put_contents('data.txt', $uid . ' - ', FILE_APPEND);
-        file_put_contents('data.txt', $date->format('H:i:s / d-m-Y') . PHP_EOL, FILE_APPEND);
 
         $temperature->setUid($uid);
         $temperature->setOutputNumber($output);
