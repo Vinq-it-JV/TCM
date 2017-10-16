@@ -175,7 +175,7 @@ class DataController extends Controller
     {
         $uid = $data['uid'];
 
-        if (empty($controller) || empty($uid) || !hexdec($uid))
+        if (empty($controller) || empty($uid))
             return false;
 
         $date = new \DateTime();
