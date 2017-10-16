@@ -81,8 +81,10 @@ class DsTemperatureSensor extends BaseDsTemperatureSensor
         $date = new \DateTime();
         $now = $date->format('Y-m-d H:i:s');
         $updated = $this->getDataCollectedAt('Y-m-d H:i:s');
+        var_dump($now);
+        var_dump($updated);
         $diffSeconds = strtotime($now) - strtotime($updated);
-        echo sprintf('state %d: diff: %ld', $this->getState(), $diffSeconds);
+        echo sprintf('state %d: diff: %ld', $this->getState(), $diffSeconds) . PHP_EOL;
         if ($this->getState() != self::STATE_NOTIFY) {
             if ($diffSeconds >= self::INACTIVITY_TIME) {
                 $this->setState(self::STATE_INACTIVE);
