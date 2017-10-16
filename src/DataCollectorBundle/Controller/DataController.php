@@ -178,8 +178,10 @@ class DataController extends Controller
     {
         $uid = $data['uid'];
 
-        if (empty($controller) || empty($uid))
+        if (empty($controller) || empty($uid)) {
+            file_put_contents('data.txt', $uid . ' - empty or no controller' . PHP_EOL, FILE_APPEND);
             return false;
+        }
 
         $date = new \DateTime();
 
