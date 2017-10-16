@@ -78,6 +78,7 @@ class DataController extends Controller
             }
             $dataArr['packetLog'][] = $logArr;
         }
+
         return JsonResult::create()
             ->setContents($dataArr)
             ->setErrorcode(JsonResult::SUCCESS)
@@ -96,8 +97,11 @@ class DataController extends Controller
 
     protected function parseControllerDataV3($version, $data)
     {
-        if (strlen($data) != self::CONTROLLER_V3_PACKET_LENGTH)
-            return;
+        if (strlen($data) != self::CONTROLLER_V3_PACKET_LENGTH) {
+            file_put_contents('data.txt', 'te kort');
+        }
+
+        return;
 
         $helper = $this->getCollectorHelper();
         $inputs = hexdec(substr($data, 2, 2));
@@ -127,6 +131,7 @@ class DataController extends Controller
         $controller->setDataCollectedAt($date);
         $controller->setInternalTemperature($temperature);
         $controller->save();
+
         return $controller;
     }
 
@@ -168,6 +173,7 @@ class DataController extends Controller
             $bit <<= 1;
             $inputNr++;
         }
+
         return true;
     }
 
@@ -217,6 +223,7 @@ class DataController extends Controller
     protected function getCollectorHelper()
     {
         $helper = $this->container->get('collector_helper');
+
         return $helper;
     }
 
