@@ -98,10 +98,9 @@ class DataController extends Controller
     protected function parseControllerDataV3($version, $data)
     {
         if (strlen($data) != self::CONTROLLER_V3_PACKET_LENGTH) {
-            file_put_contents('data.txt', 'te kort');
+            return;
         }
 
-        return;
 
         $helper = $this->getCollectorHelper();
         $inputs = hexdec(substr($data, 2, 2));
@@ -191,6 +190,9 @@ class DataController extends Controller
 
         if (empty($temperature))
             $temperature = new DsTemperatureSensor();
+
+        file_put_contents('data.txt', $uid . ' - ', FILE_APPEND);
+        file_put_contents('data.txt', $date . PHP_EOL, FILE_APPEND);
 
         $temperature->setUid($uid);
         $temperature->setOutputNumber($output);
