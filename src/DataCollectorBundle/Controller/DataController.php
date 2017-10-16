@@ -192,7 +192,7 @@ class DataController extends Controller
             $temperature = new DsTemperatureSensor();
 
         file_put_contents('data.txt', $uid . ' - ', FILE_APPEND);
-        file_put_contents('data.txt', $date . PHP_EOL, FILE_APPEND);
+        file_put_contents('data.txt', $date->format('H:i:s / d-m-Y') . PHP_EOL, FILE_APPEND);
 
         $temperature->setUid($uid);
         $temperature->setOutputNumber($output);
