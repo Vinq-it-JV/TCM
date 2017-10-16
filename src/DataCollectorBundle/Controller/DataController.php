@@ -179,15 +179,12 @@ class DataController extends Controller
         $uid = $data['uid'];
 
         if (empty($controller) || empty($uid)) {
-            file_put_contents('data.txt', $uid . ' - empty or no controller' . PHP_EOL, FILE_APPEND);
             return false;
         }
 
         $date = new \DateTime();
 
         $temperature = DsTemperatureSensorQuery::create()->findOneByUid($uid);
-        file_put_contents('data.txt', $uid . ' - ', FILE_APPEND);
-        file_put_contents('data.txt', $date->format('H:i:s / d-m-Y') . ' - ', FILE_APPEND);
         if (empty($temperature))
             $temperature = new DsTemperatureSensor();
 
@@ -201,9 +198,6 @@ class DataController extends Controller
         }
         $temperature->setDataCollectedAt($date);
         $temperature->save();
-
-        file_put_contents('data.txt', 'updated' . '-', FILE_APPEND);
-        file_put_contents('data.txt', PHP_EOL, FILE_APPEND);
 
         // Log sensor data
         $log = new DsTemperatureSensorLog();
