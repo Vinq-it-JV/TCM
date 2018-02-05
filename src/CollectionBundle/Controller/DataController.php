@@ -18,6 +18,7 @@ use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 use AppBundle\Response\JsonResult;
+use Symfony\Component\VarDumper\VarDumper;
 
 class DataController extends Controller
 {
@@ -62,7 +63,9 @@ class DataController extends Controller
     /**
      * Get store inventory log
      * @param Request $request
-     * @param $storeid
+     * @param         $storeid
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     * @throws \PropelException
      */
     public function getStoreInventoryAction(Request $request, $storeid)
     {
@@ -85,6 +88,46 @@ class DataController extends Controller
         $collection = new Collection();
         $collection->setId(0);
         $collection->setType(CollectionType::TYPE_INVENTORY_ID);
+        $collection->setDate($date);
+        $collection->setCollectionStore($storeid);
+
+        $dataArr['collections'] = $inventoryLogs;
+        $dataArr['template'] = $collection->getFullCollectionTemplateArray()['collection'];
+
+        return JsonResult::create()
+            ->setContents($dataArr)
+            ->setErrorcode(JsonResult::SUCCESS)
+            ->make();
+    }
+
+    /**
+     * Get store beertech info
+     * @param Request $request
+     * @param         $storeid
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     * @throws \PropelException
+     */
+    public function getStoreBeertechAction(Request $request, $storeid)
+    {
+        $dataArr = [];
+        $inventoryLogs = [];
+        $date = new \DateTime();
+
+        $type = CollectionTypeQuery::create()->findOneById(CollectionType::TYPE_BEER_TECH_ID);
+
+        $collections = CollectionQuery::create()
+            ->filterByCollectionType($type)
+            ->filterByCollectionStore($storeid)
+            ->filterByIsDeleted(false)
+            ->orderByDate('DESC')
+            ->find();
+
+        foreach ($collections as $collection)
+            $inventoryLogs[] = $collection->getCollectionDataArray()['collection'];
+
+        $collection = new Collection();
+        $collection->setId(0);
+        $collection->setType(CollectionType::TYPE_BEER_TECH_ID);
         $collection->setDate($date);
         $collection->setCollectionStore($storeid);
 

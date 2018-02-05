@@ -334,6 +334,18 @@
         },
         "INVENTORY": {
             "NAME": "Inventory"
+        },
+        "BEER_TECH": {
+            "NAME": "Beer technology"
+        },
+        "WINE_TECH": {
+            "NAME": "Wine technology"
+        },
+        "POSTMIX_TECH": {
+            "NAME": "Postmix technology"
+        },
+        "COOL_TECH": {
+            "NAME": "Cooling technology"
         }
     },
     "COLLECTIONS": {
@@ -372,6 +384,10 @@
         "PERIODICALLY": {
             "NAME": "Periodically"
         }
+    },
+    "BEER_TECH": {
+        "LABEL": "Beer technology",
+        "OF": "of"
     },
     "INVENTORY": {
         "LABEL": "Inventory",

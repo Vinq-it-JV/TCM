@@ -47,10 +47,26 @@ twig:
 # Propel Configuration
 propel:
     dbal:
-        driver:    %database_driver%
+        driver:     %database_driver%
         user:       %database_user%
         password:   %database_password%
         dsn:        %database_driver%:host=%database_host%;dbname=%database_name%;charset=UTF8
+#        options:
+#            charset:              utf8
+#            engine:               InnoDB
+
+
+#propel:
+#    database:
+#        connections:
+#            mysource:
+#              adapter:    %database_driver%
+#              classname:  Propel\Runtime\Connection\DebugPDO
+#              dsn:        mysql:host=localhost;dbname=%database_name%
+#              user:       %database_user%
+#              password:   %database_password%
+#              attributes:
+
 
 # Swiftmailer Configuration
 swiftmailer:

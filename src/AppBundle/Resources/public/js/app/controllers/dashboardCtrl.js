@@ -61,6 +61,11 @@ angular
                 $scope.showUrl(Routing.generate('tcm_store_maintenance', {'storeid': $scope.stores.store().Id}));
             };
 
+            $scope.showBeerTech = function () {
+
+                $scope.showUrl(Routing.generate('tcm_store_beertech', {'storeid': $scope.stores.store().Id}));
+            };
+
             $scope.showStore = function (storeid) {
                 $scope.showUrl(Routing.generate('tcm_store_show', {'storeid': storeid}));
             };

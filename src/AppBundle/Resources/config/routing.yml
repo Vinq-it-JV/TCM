@@ -40,6 +40,12 @@ tcm_store_maintenance:
     options:
         expose: true
 
+tcm_store_beertech:
+    path:     /store/{storeid}/beertech
+    defaults: { _controller: AppBundle:Page:storeBeerTech }
+    options:
+        expose: true
+
 tcm_update_sensors:
     path:     /store/{storeid}/sensors/update
     defaults: { _controller: AppBundle:Data:updateSensors }
@@ -69,6 +75,12 @@ tcm_store_maintenance_get:
 tcm_store_inventory_get:
     path:     /store/{storeid}/inventory/get
     defaults: { _controller: AppBundle:Data:getStoreInventory }
+    options:
+        expose: true
+
+tcm_store_beertech_get:
+    path:     /store/{storeid}/beertech/get
+    defaults: { _controller: AppBundle:Data:getStoreBeerTech }
     options:
         expose: true
 

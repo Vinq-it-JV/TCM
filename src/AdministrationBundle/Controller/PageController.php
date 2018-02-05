@@ -233,6 +233,20 @@ class PageController extends Controller
         return $this->render('AdministrationBundle:inventory:store.html.twig', $storeArr);
     }
 
+    public function beertechStoresAction(Request $request)
+    {
+        return $this->render('AdministrationBundle:beertech:stores.html.twig');
+    }
+
+    public function beertechStoreAction(Request $request, $storeid)
+    {
+        $store = StoreQuery::create()->findOneById($storeid);
+        $storeArr = $store->getStoreDataArray();
+        $storeArr['collectionType'] = 'administration_beertech';
+
+        return $this->render('AdministrationBundle:beertech:store.html.twig', $storeArr);
+    }
+
     public function openNotificationsAction(Request $request)
     {
         return $this->render('AdministrationBundle:notifications:open_notifications.html.twig');

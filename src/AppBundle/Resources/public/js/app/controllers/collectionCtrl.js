@@ -92,7 +92,14 @@ angular
                 case 'administration_inventory':
                     requestUrl = Routing.generate('administration_inventory_store_get', {'storeid': $scope.storeId});
                     break;
+                case 'beertech':
+                    requestUrl = Routing.generate('tcm_store_beertech_get', {'storeid': $scope.storeId});
+                    break;
+                case 'administration_beertech':
+                    requestUrl = Routing.generate('administration_beertech_store_get', {'storeid': $scope.storeId});
+                    break;
                 default:
+                    console.log('Undefined getCollectionData for page: ' + $scope.activePage);
                     break;
             }
 
@@ -309,6 +316,9 @@ angular
                     break;
                 case 'administration_inventory':
                     $scope.showUrl(Routing.generate('administration_inventory_store', {'storeid': $scope.storeId}));
+                    break;
+                case 'administration_beertech':
+                    $scope.showUrl(Routing.generate('administration_beertech_store', {'storeid': $scope.storeId}));
                     break;
                 default:
                     console.log('No collection url for type: ' + $scope.collectionType);

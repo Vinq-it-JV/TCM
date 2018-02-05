@@ -20,6 +20,7 @@ use CompanyBundle\Model\PaymentMethod;
 use CompanyBundle\Model\PaymentMethodQuery;
 use CompanyBundle\Model\Regions;
 use CompanyBundle\Model\RegionsQuery;
+use Symfony\Component\VarDumper\VarDumper;
 use UserBundle\Model\Address;
 use UserBundle\Model\AddressQuery;
 use UserBundle\Model\AddressType;
@@ -168,6 +169,45 @@ class DataController extends Controller
         $collection->setCollectionStore($storeid);
 
         $dataArr['collections'] = $inventoryLogs;
+        $dataArr['template'] = $collection->getFullCollectionTemplateArray()['collection'];
+
+        return JsonResult::create()
+            ->setContents($dataArr)
+            ->setErrorcode(JsonResult::SUCCESS)
+            ->make();
+    }
+
+    /**
+     * Get store beer tech
+     * @param Request $request
+     * @param $storeid
+     */
+    public function getStoreBeerTechAction(Request $request, $storeid)
+    {
+        $dataArr = [];
+        $beertechLogs = [];
+        $date = new \DateTime();
+
+        $type = CollectionTypeQuery::create()->findOneById(CollectionType::TYPE_BEER_TECH_ID);
+
+        $collections = CollectionQuery::create()
+            ->filterByCollectionType($type)
+            ->filterByCollectionStore($storeid)
+            ->filterByIsPublished(true)
+            ->filterByIsDeleted(false)
+            ->orderByDate('DESC')
+            ->find();
+
+        foreach ($collections as $collection)
+            $beertechLogs[] = $collection->getCollectionDataArray()['collection'];
+
+        $collection = new Collection();
+        $collection->setId(0);
+        $collection->setType(CollectionType::TYPE_BEER_TECH_ID);
+        $collection->setDate($date);
+        $collection->setCollectionStore($storeid);
+
+        $dataArr['collections'] = $beertechLogs;
         $dataArr['template'] = $collection->getFullCollectionTemplateArray()['collection'];
 
         return JsonResult::create()

@@ -23,6 +23,12 @@
                     <div ng-switch-when="inventoryInfo">
                         {% include 'AppBundle:store:inventory_info.html.twig' %}
                     </div>
+                    <div ng-switch-when="beertech">
+                        {% include 'AppBundle:store:beertech.html.twig' %}
+                    </div>
+                    <div ng-switch-when="beertechInfo">
+                        {% include 'AppBundle:store:beertech_info.html.twig' %}
+                    </div>
                 </div>
             {% endblock %}
         </div>

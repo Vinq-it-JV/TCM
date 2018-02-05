@@ -131,6 +131,11 @@ angular
             $scope.showUrl(Routing.generate('administration_inventory_store', {'storeid': storeid}));
         };
 
+        $scope.showStoreBeertech = function (storeid)
+        {
+            $scope.showUrl(Routing.generate('administration_beertech_store', {'storeid': storeid}));
+        };
+
         $scope.startGeneralMaintenance = function (storeid)
         {
             var modalOptions = {
@@ -301,7 +306,6 @@ angular
                         $scope.stores.templateSet(data.contents.template);
                         $scope.stores.listsSet(data.contents.lists);
                         $scope.initDropzone($scope.stores.store().Id);
-                        console.log('update');
                     }
                     break;
                 case 'deleteStore':

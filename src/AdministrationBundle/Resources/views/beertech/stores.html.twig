@@ -1,0 +1,83 @@
+{% extends 'base.html.twig' %}
+{% import 'macros.html.twig' as mc %}
+
+{% block contents %}
+    {% if app.user %}
+        <div ng-controller="storeCtrl" ng-init="getStores()">
+
+            {% block header %}
+                {% include 'AdministrationBundle:header:header.html.twig' %}
+            {% endblock %}
+
+            {% block page %}
+                <div class="page">
+                    <div class="container">
+                        <div class="row">
+                            <div class="panel-body">
+                                <h4 ng-cloak>
+                                    <i class="fa fa-fw fa-beer"></i> {{ mc.translate('BEER_TECH.LABEL') }}
+                                </h4>
+                                <hr/>
+                                <div class="well table-responsive">
+                                    <section st-table="storesCollection" st-safe-src="stores.stores()">
+                                        <div class="row">
+                                            <div class="col-md-3 col-xs-6">
+                                                <input st-search class="form-control input-sm"
+                                                       placeholder="{{ mc.translate('SEARCH') }}" type="text" ng-cloak/>
+                                            </div>
+                                        </div>
+                                        <br/>
+                                        <div class="row">
+                                            <div class="col-md-12 col-xs-12">
+                                                <table class="table table-striped table-bordered">
+                                                    <thead>
+                                                    <tr>
+                                                        <th st-sort="Name" class="st-sortable col-md-4 col-xs-3"
+                                                            ng-cloak>{{ mc.translate('STORE.LABEL') }}</th>
+                                                        <th st-sort="MainCompany" class="st-sortable col-md-4 col-xs-3"
+                                                            ng-cloak>{{ mc.translate('STORE.COMPANY') }}</th>
+                                                        <th st-sort="IsEnabled" class="st-sortable col-md-1 col-xs-3 text-right"
+                                                            ng-cloak>{{ mc.translate('STORE.ACTIVE') }}</th>
+                                                        <th class="st-nosort text-right col-md-2 col-xs-3"
+                                                            ng-cloak>{{ mc.translate('ACTION') }}</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {% verbatim %}
+                                                    <tr ng-repeat="store in storesCollection">
+                                                        <td ng-cloak>{{ store.Name }}</td>
+                                                        <td ng-cloak>{{ store.MainCompany.Name }}</td>
+                                                        <td ng-cloak class="text-right">
+                                                            <label class="label label-success tag-label" ng-show="store.IsEnabled">{{ 'YES' | translate }}</label>
+                                                            <label class="label label-danger tag-label" ng-hide="store.IsEnabled">{{ 'NO' | translate }}</label>
+                                                        </td>
+                                                        <td>
+                                                            <div class="pull-right">
+                                                                <button type="button" ng-click="showStoreBeertech(store.Id)"
+                                                                        class="btn btn-xs btn-info">
+                                                                    <i class="fa fa-search"></i>
+                                                                </button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    {% endverbatim %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </section>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endblock %}
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('bundles/app/js/app/controllers/storeCtrl.js') }}"></script>
+    <script src="{{ asset('bundles/app/js/app/datasets/stores.js') }}"></script>
+{% endblock %}
+

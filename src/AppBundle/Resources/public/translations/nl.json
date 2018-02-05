@@ -334,6 +334,18 @@
         },
         "INVENTORY": {
             "NAME": "Inventaris"
+        },
+        "BEER_TECH": {
+            "NAME": "Biertechniek"
+        },
+        "WINE_TECH": {
+            "NAME": "Wijntechniek"
+        },
+        "POSTMIX_TECH": {
+            "NAME": "Postmix"
+        },
+        "COOL_TECH": {
+            "NAME": "Koeltecniek"
         }
     },
     "COLLECTIONS": {
@@ -372,6 +384,10 @@
         "PERIODICALLY": {
             "NAME": "Periodiek"
         }
+    },
+    "BEER_TECH": {
+        "LABEL": "Biertechniek",
+        "OF": "van"
     },
     "INVENTORY": {
         "LABEL": "Inventaris",

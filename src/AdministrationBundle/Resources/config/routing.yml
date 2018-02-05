@@ -411,6 +411,36 @@ administration_inventory_store_get:
         expose: true
 
 #
+# BEER TECHNOLOGY
+#
+
+administration_beertech:
+    path:     /beertech/stores
+    defaults: { _controller: AdministrationBundle:Page:beertechStores }
+    options:
+        expose: true
+
+administration_beertech_stores_get:
+    path:     /beertech/stores/get
+    defaults: { _controller: StoreBundle:Data:getStores }
+    methods: [GET]
+    options:
+        expose: true
+
+administration_beertech_store:
+    path:     /beertech/store/{storeid}/get
+    defaults: { _controller: AdministrationBundle:Page:beertechStore }
+    methods: [GET]
+    options:
+        expose: true
+
+administration_beertech_store_get:
+    path:     /beertech/store/{storeid}/beertech/get
+    defaults: { _controller: CollectionBundle:Data:getStoreBeertech }
+    options:
+        expose: true
+
+#
 # COLLECTIONS (GENERAL)
 #
 administration_collection_save:

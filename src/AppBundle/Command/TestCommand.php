@@ -6,38 +6,25 @@ use CollectionBundle\Model\Collection;
 use CollectionBundle\Model\CollectionType;
 use CollectionBundle\Model\CollectionTypeQuery;
 use CompanyBundle\Model\Company;
-use CompanyBundle\Model\Informant;
-use CompanyBundle\Model\InformantQuery;
+use Criteria;
 use DeviceBundle\Model\CbInputQuery;
 use DeviceBundle\Model\ControllerBox;
-use DeviceBundle\Model\DeviceCopy;
 use DeviceBundle\Model\DeviceGroup;
-use DeviceBundle\Model\DeviceGroupQuery;
 use DeviceBundle\Model\DsTemperatureSensor;
 use DeviceBundle\Model\DsTemperatureSensorQuery;
 use NotificationBundle\Model\CbInputNotificationQuery;
-use NotificationBundle\Model\DeviceNotification;
-use NotificationBundle\Model\DsTemperatureNotification;
 use NotificationBundle\Model\DsTemperatureNotificationQuery;
 use StoreBundle\Model\StoreQuery;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-
-use UserBundle\Model\EmailQuery;
-use UserBundle\Model\User;
-use UserBundle\Model\UserAddress;
-use UserBundle\Model\UserQuery;
+use UserBundle\Model\Address;
 use UserBundle\Model\Email;
-use UserBundle\Model\UserGender;
-use UserBundle\Model\UserGenderQuery;
+use UserBundle\Model\Phone;
+use UserBundle\Model\User;
+use UserBundle\Model\UserQuery;
 use UserBundle\Model\UserTitle;
 use UserBundle\Model\UserTitleQuery;
-use UserBundle\Model\Address;
-use UserBundle\Model\Phone;
-use StoreBundle\Model\Store;
-
-use \Criteria;
 
 
 /**
@@ -75,6 +62,7 @@ class TestCommand extends ContainerAwareCommand
         //$this->createUUID($output);
         //$this->checkTimeDiff($output);
         //$this->getSensorLog($output);
+
         $this->copySensor($output);
         $output->writeln("Ready.");
     }
@@ -91,8 +79,7 @@ class TestCommand extends ContainerAwareCommand
 //        $sensor->addDeviceCopy($copy);
 //        $sensor->save();
 
-        if (!$sensor->getDeviceCopies()->isEmpty())
-        {
+        if (!$sensor->getDeviceCopies()->isEmpty()) {
             $output->writeln(sprintf('device has %d copies:', $sensor->getDeviceCopies()->count()));
             foreach ($sensor->getDeviceCopies() as $i => $deviceCopy) {
                 $output->writeln(sprintf(' - %d placed in group: %s ', $i + 1, $deviceCopy->getDeviceGroup()->getName()));
@@ -105,8 +92,8 @@ class TestCommand extends ContainerAwareCommand
         $sensor = DsTemperatureSensorQuery::create()->findOneById(2);
         if (!empty($sensor)) {
             $logs = $sensor->getDsTemperatureSensorLogs();
-            if (!empty($logs))
-            {   foreach ($logs as $log)
+            if (!empty($logs)) {
+                foreach ($logs as $log)
                     $output->writeln($log->getTemperature());
             }
         }
@@ -317,6 +304,7 @@ class TestCommand extends ContainerAwareCommand
         $email = $user->getEmails()->getFirst();
         if (empty($email)) {
             $output->writeln('User has no email address!');
+
             return;
         }
         $email = $email->getEmail();
@@ -325,7 +313,7 @@ class TestCommand extends ContainerAwareCommand
             ->setTo($email, $user->getUsername())
             ->setFrom('noreply@' . $domain, $translator->trans('email.credentials.from') . $domain)
             ->setSubject($translator->trans('email.credentials.subject'))
-            ->setBody($templating->render('UserBundle:email:credentials.html.twig', array('User' => $user, 'Password' => $password, 'Domain' => $domain)), 'text/html');
+            ->setBody($templating->render('UserBundle:email:credentials.html.twig', ['User' => $user, 'Password' => $password, 'Domain' => $domain]), 'text/html');
 
         $mailer->send($mail);
     }
