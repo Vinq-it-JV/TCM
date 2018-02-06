@@ -184,6 +184,11 @@ class DataController extends Controller
 
         $date = new \DateTime();
 
+        // If Uid = 0000000000000000 
+        if (hexdec($uid) == 0) {
+            return false;
+        }
+
         $temperature = DsTemperatureSensorQuery::create()->findOneByUid($uid);
         if (empty($temperature))
             $temperature = new DsTemperatureSensor();
