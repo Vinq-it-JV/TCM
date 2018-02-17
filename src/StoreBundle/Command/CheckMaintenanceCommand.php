@@ -2,14 +2,9 @@
 
 namespace StoreBundle\Command;
 
-use DeviceBundle\Model\CbInputQuery;
-use DeviceBundle\Model\DsTemperatureSensorQuery;
-use NotificationBundle\Model\CbInputNotificationQuery;
-use NotificationBundle\Model\DsTemperatureNotificationQuery;
-use StoreBundle\Model\Store;
+use StoreBundle\Model\StoreMaintenanceLogQuery;
 use StoreBundle\Model\StoreQuery;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -30,7 +25,7 @@ class CheckMaintenanceCommand extends ContainerAwareCommand
 
     /**
      * Execute function
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
      * @return boolean
      */
@@ -62,6 +57,16 @@ class CheckMaintenanceCommand extends ContainerAwareCommand
                 $store->setIsMaintenance(false);
                 $store->setMaintenanceStartedAt(null);
                 $store->save();
+
+                $log = StoreMaintenanceLogQuery::create()
+                    ->filterByMaintenanceStoppedAt(null)
+                    ->orderById('DESC')
+                    ->findOneByMaintenanceStore($store->getId());
+
+                if (!empty($log)) {
+                    $log->setMaintenanceStoppedAt($currentDate);
+                    $log->save();
+                }
                 $output->writeln(sprintf("store '%s' released from maintenance (auto off).", $store->getName()));
             }
         }
