@@ -5,6 +5,13 @@ tcm_data_collector:
     options:
         expose: true
 
+tcm_data_collector_get:
+    path:     /data/collector/get
+    methods:  [GET]
+    defaults: { _controller: DataCollectorBundle:Data:getCollectData }
+    options:
+        expose: true
+
 tcm_data_collector_test:
     path:     /data/collector/test
     defaults: { _controller: DataCollectorBundle:Data:testPostData }

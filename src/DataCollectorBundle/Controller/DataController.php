@@ -26,6 +26,17 @@ class DataController extends Controller
     const CONTROLLER_V3 = 3;
     const CONTROLLER_V3_PACKET_LENGTH = 144;
 
+    public function getCollectDataAction(Request $request)
+    {
+        $log = new CollectorLog();
+        $data = $request->get('p');
+        $this->collectControllerData($data);
+        $log->setPacketData($data);
+        $log->save();
+
+        return new Response();
+    }
+
     public function collectDataAction(Request $request)
     {
         $log = new CollectorLog();
@@ -89,6 +100,8 @@ class DataController extends Controller
         switch ($version) {
             case self::CONTROLLER_V3:
                 $this->parseControllerDataV3($version, $data);
+                break;
+            default:
                 break;
         }
     }

@@ -2,7 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="282e9c36-730e-4d16-a19d-353a62e794e2" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/app/config/parameters.yml.dist" afterPath="$PROJECT_DIR$/app/config/parameters.yml.dist" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change beforePath="$PROJECT_DIR$/src/DataCollectorBundle/Controller/DataController.php" afterPath="$PROJECT_DIR$/src/DataCollectorBundle/Controller/DataController.php" />
+      <change beforePath="$PROJECT_DIR$/src/DataCollectorBundle/Resources/config/routing.yml" afterPath="$PROJECT_DIR$/src/DataCollectorBundle/Resources/config/routing.yml" />
+      <change beforePath="$PROJECT_DIR$/web/app.php" afterPath="$PROJECT_DIR$/web/app.php" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -29,65 +32,27 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="PageController.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/AdministrationBundle/Controller/PageController.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="230" column="63" lean-forward="false" selection-start-line="230" selection-start-column="39" selection-end-line="230" selection-end-column="63" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="stores.html.twig" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/AdministrationBundle/Resources/views/beertech/stores.html.twig">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="825">
-              <caret line="55" column="113" lean-forward="false" selection-start-line="55" selection-start-column="96" selection-end-line="55" selection-end-column="113" />
-              <folding>
-                <marker date="1517834984000" expanded="true" signature="3000:4399" ph="..." />
-                <marker date="1517834984000" expanded="true" signature="3283:3669" ph="..." />
-                <marker date="1517834984000" expanded="true" signature="3730:4341" ph="..." />
-                <marker date="1517834984000" expanded="true" signature="3815:4279" ph="..." />
-                <marker date="1517834984000" expanded="true" signature="3941:4212" ph="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DataController.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/CollectionBundle/Controller/DataController.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1695">
-              <caret line="129" column="62" lean-forward="false" selection-start-line="129" selection-start-column="62" selection-end-line="129" selection-end-column="62" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="DataController.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/DataCollectorBundle/Controller/DataController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="242">
-              <caret line="192" column="32" lean-forward="false" selection-start-line="192" selection-start-column="32" selection-end-line="192" selection-end-column="32" />
+            <state relative-caret-position="150">
+              <caret line="25" column="28" lean-forward="true" selection-start-line="25" selection-start-column="28" selection-end-line="25" selection-end-column="28" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CheckMaintenanceCommand.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/StoreBundle/Command/CheckMaintenanceCommand.php">
+      <file leaf-file-name="app.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/web/app.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="201">
-              <caret line="66" column="17" lean-forward="false" selection-start-line="66" selection-start-column="17" selection-end-line="66" selection-end-column="17" />
-              <folding>
-                <element signature="e#39#86#0#PHP" expanded="true" />
-              </folding>
+            <state relative-caret-position="120">
+              <caret line="8" column="2" lean-forward="false" selection-start-line="8" selection-start-column="2" selection-end-line="8" selection-end-column="2" />
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="parameters.yml.dist" pinned="false" current-in-tab="true">
+      <file leaf-file-name="parameters.yml.dist" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/config/parameters.yml.dist">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="330">
@@ -97,43 +62,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DataController.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/StoreBundle/Controller/DataController.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="253">
-              <caret line="278" column="13" lean-forward="false" selection-start-line="270" selection-start-column="12" selection-end-line="278" selection-end-column="13" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="parameters.yml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/config/parameters.yml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="240">
-              <caret line="16" column="30" lean-forward="true" selection-start-line="16" selection-start-column="4" selection-end-line="16" selection-end-column="30" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="BaseStore.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/StoreBundle/Model/om/BaseStore.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="27">
-              <caret line="705" column="20" lean-forward="false" selection-start-line="705" selection-start-column="20" selection-end-line="705" selection-end-column="20" />
-              <folding>
-                <marker date="1502196347000" expanded="true" signature="68640:68676" ph="INSERT INTO `store`... " />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="routing.yml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/AdministrationBundle/Resources/config/routing.yml">
+        <entry file="file://$PROJECT_DIR$/src/DataCollectorBundle/Resources/config/routing.yml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="6465">
-              <caret line="431" column="68" lean-forward="false" selection-start-line="431" selection-start-column="55" selection-end-line="431" selection-end-column="68" />
+            <state relative-caret-position="180">
+              <caret line="12" column="20" lean-forward="false" selection-start-line="12" selection-start-column="20" selection-end-line="12" selection-end-column="20" />
               <folding />
             </state>
           </provider>
@@ -152,8 +85,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>tcm_store_inventory</find>
-      <find>getStoreIn</find>
       <find>storeIn</find>
       <find>showIn</find>
       <find>tcm_store_inventory_get</find>
@@ -182,6 +113,8 @@
       <find>date_diff</find>
       <find>$store-&gt;setIsMaintenance(false)</find>
       <find>const</find>
+      <find>testPostData</find>
+      <find>php</find>
     </findStrings>
     <replaceStrings>
       <replace>&quot;</replace>
@@ -230,7 +163,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/AppBundle/Services/ClassHelper.php" />
         <option value="$PROJECT_DIR$/src/DeviceBundle/Model/CbInput.php" />
         <option value="$PROJECT_DIR$/src/DeviceBundle/Model/DeviceCopy.php" />
         <option value="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/datasets/devicegroups.js" />
@@ -257,7 +189,6 @@
         <option value="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/dashboardCtrl.js" />
         <option value="$PROJECT_DIR$/src/AppBundle/Resources/views/store/dashboard.html.twig" />
         <option value="$PROJECT_DIR$/src/AppBundle/Resources/views/store/beertech_info.html.twig" />
-        <option value="$PROJECT_DIR$/web/app.php" />
         <option value="$PROJECT_DIR$/web/bundles/app/js/app/controllers/collectionCtrl.js" />
         <option value="$PROJECT_DIR$/src/AppBundle/Controller/PageController.php" />
         <option value="$PROJECT_DIR$/src/AppBundle/Resources/public/translations/en.json" />
@@ -277,10 +208,12 @@
         <option value="$PROJECT_DIR$/src/CollectionBundle/Controller/DataController.php" />
         <option value="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/collectionCtrl.js" />
         <option value="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/storeCtrl.js" />
-        <option value="$PROJECT_DIR$/src/DataCollectorBundle/Controller/DataController.php" />
         <option value="$PROJECT_DIR$/app/config/parameters.yml" />
         <option value="$PROJECT_DIR$/src/StoreBundle/Command/CheckMaintenanceCommand.php" />
         <option value="$PROJECT_DIR$/app/config/parameters.yml.dist" />
+        <option value="$PROJECT_DIR$/src/DataCollectorBundle/Resources/config/routing.yml" />
+        <option value="$PROJECT_DIR$/src/DataCollectorBundle/Controller/DataController.php" />
+        <option value="$PROJECT_DIR$/web/app.php" />
       </list>
     </option>
   </component>
@@ -342,8 +275,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -371,14 +304,57 @@
               <item name="tcm" type="b2602c69:ProjectViewProjectNode" />
               <item name="tcm" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="DeviceBundle" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="AdministrationBundle" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
             <path>
               <item name="tcm" type="b2602c69:ProjectViewProjectNode" />
               <item name="tcm" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="DeviceBundle" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="AdministrationBundle" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="Resources" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="tcm" type="b2602c69:ProjectViewProjectNode" />
+              <item name="tcm" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="AdministrationBundle" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="Resources" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="config" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="tcm" type="b2602c69:ProjectViewProjectNode" />
+              <item name="tcm" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="DataCollectorBundle" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="tcm" type="b2602c69:ProjectViewProjectNode" />
+              <item name="tcm" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="DataCollectorBundle" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="Command" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="tcm" type="b2602c69:ProjectViewProjectNode" />
+              <item name="tcm" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="DataCollectorBundle" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="Controller" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="tcm" type="b2602c69:ProjectViewProjectNode" />
+              <item name="tcm" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="DataCollectorBundle" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="Resources" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="tcm" type="b2602c69:ProjectViewProjectNode" />
+              <item name="tcm" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="DataCollectorBundle" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="Resources" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="config" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
             <path>
               <item name="tcm" type="b2602c69:ProjectViewProjectNode" />
@@ -412,6 +388,11 @@
               <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="StoreBundle" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="Model" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="tcm" type="b2602c69:ProjectViewProjectNode" />
+              <item name="tcm" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="web" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
           </expand>
           <select />
@@ -575,7 +556,8 @@
       <workItem from="1517743750891" duration="8696000" />
       <workItem from="1517932680416" duration="686000" />
       <workItem from="1518525955675" duration="2854000" />
-      <workItem from="1518865894758" duration="2513000" />
+      <workItem from="1518865894758" duration="2690000" />
+      <workItem from="1519657585376" duration="1785000" />
     </task>
     <servers />
   </component>
@@ -585,13 +567,13 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="969766000" />
+    <option name="totallyTimeSpent" value="971728000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1440" height="827" extended-state="6" />
+    <frame x="0" y="23" width="1440" height="827" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22174536" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22460657" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -638,67 +620,11 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="php">
-          <url>file://$PROJECT_DIR$/src/DataCollectorBundle/Controller/DataController.php</url>
-          <line>4</line>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-      </breakpoints>
       <option name="time" value="3" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/CollectionBundle/Command/DBaseCommand.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="23" column="51" lean-forward="false" selection-start-line="23" selection-start-column="24" selection-end-line="23" selection-end-column="51" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/CompanyBundle/Model/Regions.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-407">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/AdministrationBundle/Controller/DataController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/AppBundle/Services/ClassHelper.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1096">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/views/store/inventory.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="525">
-          <caret line="35" column="122" lean-forward="false" selection-start-line="35" selection-start-column="122" selection-end-line="35" selection-end-column="122" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/views/store/dashboard.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1500">
-          <caret line="100" column="42" lean-forward="false" selection-start-line="100" selection-start-column="42" selection-end-line="100" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/logs/prod.log">
-      <provider selected="true" editor-type-id="LogFileEditorProvider">
-        <state relative-caret-position="-2832">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/logs/dev.log">
       <provider selected="true" editor-type-id="LogFileEditorProvider">
         <state relative-caret-position="-49299">
@@ -738,13 +664,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="239">
           <caret line="65" column="67" lean-forward="false" selection-start-line="65" selection-start-column="49" selection-end-line="65" selection-end-column="67" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/app.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="2" lean-forward="false" selection-start-line="8" selection-start-column="2" selection-end-line="8" selection-end-column="2" />
         </state>
       </provider>
     </entry>
@@ -864,7 +783,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="150">
           <caret line="10" column="55" lean-forward="false" selection-start-line="10" selection-start-column="55" selection-end-line="10" selection-end-column="55" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -872,7 +790,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1725">
           <caret line="115" column="94" lean-forward="false" selection-start-line="115" selection-start-column="76" selection-end-line="115" selection-end-column="94" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -880,21 +797,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="660">
           <caret line="44" column="57" lean-forward="false" selection-start-line="44" selection-start-column="44" selection-end-line="44" selection-end-column="57" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/AdministrationBundle/Resources/config/routing.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6465">
-          <caret line="431" column="68" lean-forward="false" selection-start-line="431" selection-start-column="55" selection-end-line="431" selection-end-column="68" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/AdministrationBundle/Controller/PageController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
+        <state relative-caret-position="3180">
           <caret line="230" column="63" lean-forward="false" selection-start-line="230" selection-start-column="39" selection-end-line="230" selection-end-column="63" />
           <folding />
         </state>
@@ -964,7 +872,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-111">
           <caret line="21" column="20" lean-forward="false" selection-start-line="21" selection-start-column="20" selection-end-line="21" selection-end-column="20" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -972,7 +879,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1220">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -980,21 +886,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1014">
           <caret line="47" column="35" lean-forward="false" selection-start-line="47" selection-start-column="35" selection-end-line="47" selection-end-column="35" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/DataCollectorBundle/Controller/DataController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="242">
-          <caret line="192" column="32" lean-forward="false" selection-start-line="192" selection-start-column="32" selection-end-line="192" selection-end-column="32" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/StoreBundle/Model/om/BaseStore.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="27">
+        <state relative-caret-position="9720">
           <caret line="705" column="20" lean-forward="false" selection-start-line="705" selection-start-column="20" selection-end-line="705" selection-end-column="20" />
           <folding>
             <marker date="1502196347000" expanded="true" signature="68640:68676" ph="INSERT INTO `store`... " />
@@ -1004,7 +901,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/StoreBundle/Controller/DataController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="253">
+        <state relative-caret-position="3660">
           <caret line="278" column="13" lean-forward="false" selection-start-line="270" selection-start-column="12" selection-end-line="278" selection-end-column="13" />
           <folding />
         </state>
@@ -1012,19 +909,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/StoreBundle/Command/CheckMaintenanceCommand.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="201">
+        <state relative-caret-position="930">
           <caret line="66" column="17" lean-forward="false" selection-start-line="66" selection-start-column="17" selection-end-line="66" selection-end-column="17" />
           <folding>
-            <element signature="e#39#86#0#PHP" expanded="true" />
+            <element signature="e#39#86#0#PHP" expanded="false" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/config/parameters.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="16" column="30" lean-forward="true" selection-start-line="16" selection-start-column="4" selection-end-line="16" selection-end-column="30" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1032,6 +921,94 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="330">
           <caret line="22" column="4" lean-forward="false" selection-start-line="22" selection-start-column="4" selection-end-line="22" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/DataCollectorBundle/Command/CheckDeviceCommand.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-403">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/DataCollectorBundle/Command/CheckLogCommand.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/config/config.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/config/security.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="41" column="23" lean-forward="false" selection-start-line="41" selection-start-column="19" selection-end-line="41" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/config/routing.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/CompanyBundle/Resources/config/routing.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/config/parameters.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="16" column="30" lean-forward="false" selection-start-line="16" selection-start-column="4" selection-end-line="16" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/AdministrationBundle/Resources/config/routing.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="485">
+          <caret line="431" column="68" lean-forward="false" selection-start-line="431" selection-start-column="55" selection-end-line="431" selection-end-column="68" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/DataCollectorBundle/Resources/config/routing.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="12" column="20" lean-forward="false" selection-start-line="12" selection-start-column="20" selection-end-line="12" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/DataCollectorBundle/Controller/DataController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="25" column="28" lean-forward="true" selection-start-line="25" selection-start-column="28" selection-end-line="25" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/app.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="8" column="2" lean-forward="false" selection-start-line="8" selection-start-column="2" selection-end-line="8" selection-end-column="2" />
           <folding />
         </state>
       </provider>
