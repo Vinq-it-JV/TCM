@@ -112,7 +112,6 @@ class DataController extends Controller
             return;
         }
 
-
         $helper = $this->getCollectorHelper();
         $inputs = hexdec(substr($data, 2, 2));
         $controllerUid = substr($data, 4, 12);
@@ -133,8 +132,9 @@ class DataController extends Controller
 
         $controller = ControllerBoxQuery::create()->findOneByUid($uid);
 
-        if (empty($controller))
+        if (empty($controller)) {
             $controller = new ControllerBox();
+        }
         $controller->setUid($uid);
         $controller->setVersion($version);
         $controller->setState(ControllerBox::STATE_ACTIVE);
@@ -147,8 +147,9 @@ class DataController extends Controller
 
     protected function updateInputs($inputs, $controller = null)
     {
-        if (empty($controller))
+        if (empty($controller)) {
             return false;
+        }
 
         $helper = $this->getCollectorHelper();
         $date = new \DateTime();
@@ -160,8 +161,9 @@ class DataController extends Controller
         foreach ($inputStates as $input) {
             $_input = CbInputQuery::create()
                 ->findOneByArray(['ControllerBox' => $controller, 'InputNumber' => $inputNr]);
-            if (empty($_input))
+            if (empty($_input)) {
                 $_input = new CbInput();
+            }
             if (!empty($controller)) {
                 $_input->setUid($controller->getUid());
                 $_input->setControllerBox($controller);
@@ -203,16 +205,18 @@ class DataController extends Controller
         }
 
         $temperature = DsTemperatureSensorQuery::create()->findOneByUid($uid);
-        if (empty($temperature))
+        if (empty($temperature)) {
             $temperature = new DsTemperatureSensor();
+        }
 
         $temperature->setUid($uid);
         $temperature->setOutputNumber($output);
         $temperature->setTemperature($data['temperature']);
         if (!empty($controller)) {
             $temperature->setControllerBox($controller);
-            if (!empty($controller->getMainStore()))
+            if (!empty($controller->getMainStore())) {
                 $temperature->setMainStore($controller->getMainStore());
+            }
         }
         $temperature->setDataCollectedAt($date);
         $temperature->save();

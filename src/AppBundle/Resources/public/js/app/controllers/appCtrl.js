@@ -186,7 +186,8 @@ angular
                 $window.location.reload();
             };
 
-            $scope.pageBack = function () {
+            $scope.pageBack = function (page) {
+                $scope.LS.set('subPage', page);
                 $window.history.back();
             };
 

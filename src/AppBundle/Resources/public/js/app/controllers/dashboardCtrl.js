@@ -29,6 +29,11 @@ angular
             $scope.sensorGroup = null;
             $scope.getSensorLog = false;
 
+            if ($scope.LS.get('subPage')) {
+                $scope.activePage = $scope.LS.get('subPage');
+                $scope.LS.set('subPage', '');
+            }
+
             $scope.getStores = function () {
                 $scope.requestType = 'getStores';
 
@@ -56,7 +61,7 @@ angular
                 $scope.showUrl(Routing.generate('tcm_store_inventory', {'storeid': $scope.stores.store().Id}));
             };
 
-            $scope.showMaintenance = function () {
+            $scope.showPeriodicMaintenance = function () {
 
                 $scope.showUrl(Routing.generate('tcm_store_maintenance', {'storeid': $scope.stores.store().Id}));
             };
@@ -72,6 +77,10 @@ angular
 
             $scope.showDashboard = function () {
                 $scope.activePage = 'dashboard';
+            };
+
+            $scope.showMaintenance = function () {
+                $scope.activePage = 'maintenance';
             };
 
             $scope.showInformation = function () {
