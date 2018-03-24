@@ -31,6 +31,7 @@ use StoreBundle\Model\StoreOwner;
 use StoreBundle\Model\StorePeer;
 use StoreBundle\Model\StorePhone;
 use StoreBundle\Model\StoreQuery;
+use StoreBundle\Model\StoreStock;
 use StoreBundle\Model\StoreType;
 use UserBundle\Model\Address;
 use UserBundle\Model\Email;
@@ -153,6 +154,10 @@ use UserBundle\Model\User;
  * @method StoreQuery leftJoinStoreMaintenanceLog($relationAlias = null) Adds a LEFT JOIN clause to the query using the StoreMaintenanceLog relation
  * @method StoreQuery rightJoinStoreMaintenanceLog($relationAlias = null) Adds a RIGHT JOIN clause to the query using the StoreMaintenanceLog relation
  * @method StoreQuery innerJoinStoreMaintenanceLog($relationAlias = null) Adds a INNER JOIN clause to the query using the StoreMaintenanceLog relation
+ *
+ * @method StoreQuery leftJoinStoreStock($relationAlias = null) Adds a LEFT JOIN clause to the query using the StoreStock relation
+ * @method StoreQuery rightJoinStoreStock($relationAlias = null) Adds a RIGHT JOIN clause to the query using the StoreStock relation
+ * @method StoreQuery innerJoinStoreStock($relationAlias = null) Adds a INNER JOIN clause to the query using the StoreStock relation
  *
  * @method Store findOne(PropelPDO $con = null) Return the first Store matching the query
  * @method Store findOneOrCreate(PropelPDO $con = null) Return the first Store matching the query, or a new Store object populated from the query conditions when no match is found
@@ -2388,6 +2393,80 @@ abstract class BaseStoreQuery extends ModelCriteria
         return $this
             ->joinStoreMaintenanceLog($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'StoreMaintenanceLog', '\StoreBundle\Model\StoreMaintenanceLogQuery');
+    }
+
+    /**
+     * Filter the query by a related StoreStock object
+     *
+     * @param   StoreStock|PropelObjectCollection $storeStock  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 StoreQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByStoreStock($storeStock, $comparison = null)
+    {
+        if ($storeStock instanceof StoreStock) {
+            return $this
+                ->addUsingAlias(StorePeer::ID, $storeStock->getStoreId(), $comparison);
+        } elseif ($storeStock instanceof PropelObjectCollection) {
+            return $this
+                ->useStoreStockQuery()
+                ->filterByPrimaryKeys($storeStock->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByStoreStock() only accepts arguments of type StoreStock or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the StoreStock relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return StoreQuery The current query, for fluid interface
+     */
+    public function joinStoreStock($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('StoreStock');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'StoreStock');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the StoreStock relation StoreStock object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   \StoreBundle\Model\StoreStockQuery A secondary query class using the current class as primary query
+     */
+    public function useStoreStockQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinStoreStock($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'StoreStock', '\StoreBundle\Model\StoreStockQuery');
     }
 
     /**

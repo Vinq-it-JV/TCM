@@ -11,6 +11,4 @@ class MaintenanceType extends BaseMaintenanceType
 
     const TYPE_PERIODICALLY_ID = 2;
     const TYPE_PERIODICALLY_NAME = 'MAINTENANCE_TYPE.PERIODICALLY.NAME';
-
-
 }

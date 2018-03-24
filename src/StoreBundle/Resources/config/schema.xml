@@ -141,4 +141,34 @@
         <behavior name="timestampable"/>
     </table>
 
+    <table name="store_stock">
+        <column name="id" type="integer" primaryKey="true" autoIncrement="true"/>
+        <column name="collection_type" type="integer" />
+        <column name="store_id" type="integer" />
+        <column name="code" type="varchar" size="32" />
+        <column name="name" type="varchar" size="255" />
+        <column name="description" type="varchar" size="255" />
+        <column name="image_id" type="integer" />
+        <column name="stock_value" type="float" />
+        <column name="stock_min" type="float" />
+        <column name="stock_max" type="float" />
+        <behavior name="timestampable"/>
+        <foreign-key foreignTable="store">
+            <reference local="store_id" foreign="id"/>
+        </foreign-key>
+        <foreign-key foreignTable="stock_image">
+            <reference local="image_id" foreign="id"/>
+        </foreign-key>
+    </table>
+
+    <table name="stock_image">
+        <column name="id" type="integer" primaryKey="true" autoIncrement="true"/>
+        <column name="uid" type="varchar" size="64"/>
+        <column name="original_name" type="varchar" size="255"/>
+        <column name="name" type="varchar" size="255"/>
+        <column name="link_url" type="varchar" size="255"/>
+        <column name="filename" type="varchar" size="255"/>
+        <behavior name="timestampable"/>
+    </table>
+
 </database>

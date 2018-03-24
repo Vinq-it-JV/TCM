@@ -88,6 +88,7 @@ class StoreTableMap extends TableMap
         $this->addRelation('StoreInformant', 'StoreBundle\\Model\\StoreInformant', RelationMap::ONE_TO_MANY, array('id' => 'store_id', ), 'CASCADE', null, 'StoreInformants');
         $this->addRelation('StoreOwner', 'StoreBundle\\Model\\StoreOwner', RelationMap::ONE_TO_MANY, array('id' => 'store_id', ), 'CASCADE', null, 'StoreOwners');
         $this->addRelation('StoreMaintenanceLog', 'StoreBundle\\Model\\StoreMaintenanceLog', RelationMap::ONE_TO_MANY, array('id' => 'maintenance_store', ), null, null, 'StoreMaintenanceLogs');
+        $this->addRelation('StoreStock', 'StoreBundle\\Model\\StoreStock', RelationMap::ONE_TO_MANY, array('id' => 'store_id', ), null, null, 'StoreStocks');
         $this->addRelation('Address', 'UserBundle\\Model\\Address', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'Addresses');
         $this->addRelation('Email', 'UserBundle\\Model\\Email', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'Emails');
         $this->addRelation('Phone', 'UserBundle\\Model\\Phone', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'Phones');

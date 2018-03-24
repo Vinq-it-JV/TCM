@@ -50,6 +50,8 @@ use StoreBundle\Model\StorePeer;
 use StoreBundle\Model\StorePhone;
 use StoreBundle\Model\StorePhoneQuery;
 use StoreBundle\Model\StoreQuery;
+use StoreBundle\Model\StoreStock;
+use StoreBundle\Model\StoreStockQuery;
 use StoreBundle\Model\StoreType;
 use StoreBundle\Model\StoreTypeQuery;
 use UserBundle\Model\Address;
@@ -310,6 +312,12 @@ abstract class BaseStore extends BaseObject implements Persistent
     protected $collStoreMaintenanceLogsPartial;
 
     /**
+     * @var        PropelObjectCollection|StoreStock[] Collection to store aggregation of StoreStock objects.
+     */
+    protected $collStoreStocks;
+    protected $collStoreStocksPartial;
+
+    /**
      * @var        PropelObjectCollection|Address[] Collection to store aggregation of Address objects.
      */
     protected $collAddresses;
@@ -472,6 +480,12 @@ abstract class BaseStore extends BaseObject implements Persistent
      * @var		PropelObjectCollection
      */
     protected $storeMaintenanceLogsScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $storeStocksScheduledForDeletion = null;
 
     /**
      * Applies default values to this object.
@@ -1479,6 +1493,8 @@ abstract class BaseStore extends BaseObject implements Persistent
 
             $this->collStoreMaintenanceLogs = null;
 
+            $this->collStoreStocks = null;
+
             $this->collAddresses = null;
             $this->collEmails = null;
             $this->collPhones = null;
@@ -2037,6 +2053,24 @@ abstract class BaseStore extends BaseObject implements Persistent
                 }
             }
 
+            if ($this->storeStocksScheduledForDeletion !== null) {
+                if (!$this->storeStocksScheduledForDeletion->isEmpty()) {
+                    foreach ($this->storeStocksScheduledForDeletion as $storeStock) {
+                        // need to save related object because we set the relation to null
+                        $storeStock->save($con);
+                    }
+                    $this->storeStocksScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collStoreStocks !== null) {
+                foreach ($this->collStoreStocks as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
             $this->alreadyInSave = false;
 
         }
@@ -2433,6 +2467,14 @@ abstract class BaseStore extends BaseObject implements Persistent
                     }
                 }
 
+                if ($this->collStoreStocks !== null) {
+                    foreach ($this->collStoreStocks as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
 
             $this->alreadyInValidation = false;
         }
@@ -2638,6 +2680,9 @@ abstract class BaseStore extends BaseObject implements Persistent
             }
             if (null !== $this->collStoreMaintenanceLogs) {
                 $result['StoreMaintenanceLogs'] = $this->collStoreMaintenanceLogs->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collStoreStocks) {
+                $result['StoreStocks'] = $this->collStoreStocks->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
 
@@ -2982,6 +3027,12 @@ abstract class BaseStore extends BaseObject implements Persistent
                 }
             }
 
+            foreach ($this->getStoreStocks() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addStoreStock($relObj->copy($deepCopy));
+                }
+            }
+
             //unflag object copy
             $this->startCopy = false;
         } // if ($deepCopy)
@@ -3289,6 +3340,9 @@ abstract class BaseStore extends BaseObject implements Persistent
         }
         if ('StoreMaintenanceLog' == $relationName) {
             $this->initStoreMaintenanceLogs();
+        }
+        if ('StoreStock' == $relationName) {
+            $this->initStoreStocks();
         }
     }
 
@@ -6736,6 +6790,256 @@ abstract class BaseStore extends BaseObject implements Persistent
     }
 
     /**
+     * Clears out the collStoreStocks collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Store The current object (for fluent API support)
+     * @see        addStoreStocks()
+     */
+    public function clearStoreStocks()
+    {
+        $this->collStoreStocks = null; // important to set this to null since that means it is uninitialized
+        $this->collStoreStocksPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collStoreStocks collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialStoreStocks($v = true)
+    {
+        $this->collStoreStocksPartial = $v;
+    }
+
+    /**
+     * Initializes the collStoreStocks collection.
+     *
+     * By default this just sets the collStoreStocks collection to an empty array (like clearcollStoreStocks());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initStoreStocks($overrideExisting = true)
+    {
+        if (null !== $this->collStoreStocks && !$overrideExisting) {
+            return;
+        }
+        $this->collStoreStocks = new PropelObjectCollection();
+        $this->collStoreStocks->setModel('StoreStock');
+    }
+
+    /**
+     * Gets an array of StoreStock objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Store is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|StoreStock[] List of StoreStock objects
+     * @throws PropelException
+     */
+    public function getStoreStocks($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collStoreStocksPartial && !$this->isNew();
+        if (null === $this->collStoreStocks || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collStoreStocks) {
+                // return empty collection
+                $this->initStoreStocks();
+            } else {
+                $collStoreStocks = StoreStockQuery::create(null, $criteria)
+                    ->filterByStore($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collStoreStocksPartial && count($collStoreStocks)) {
+                      $this->initStoreStocks(false);
+
+                      foreach ($collStoreStocks as $obj) {
+                        if (false == $this->collStoreStocks->contains($obj)) {
+                          $this->collStoreStocks->append($obj);
+                        }
+                      }
+
+                      $this->collStoreStocksPartial = true;
+                    }
+
+                    $collStoreStocks->getInternalIterator()->rewind();
+
+                    return $collStoreStocks;
+                }
+
+                if ($partial && $this->collStoreStocks) {
+                    foreach ($this->collStoreStocks as $obj) {
+                        if ($obj->isNew()) {
+                            $collStoreStocks[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collStoreStocks = $collStoreStocks;
+                $this->collStoreStocksPartial = false;
+            }
+        }
+
+        return $this->collStoreStocks;
+    }
+
+    /**
+     * Sets a collection of StoreStock objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $storeStocks A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Store The current object (for fluent API support)
+     */
+    public function setStoreStocks(PropelCollection $storeStocks, PropelPDO $con = null)
+    {
+        $storeStocksToDelete = $this->getStoreStocks(new Criteria(), $con)->diff($storeStocks);
+
+
+        $this->storeStocksScheduledForDeletion = $storeStocksToDelete;
+
+        foreach ($storeStocksToDelete as $storeStockRemoved) {
+            $storeStockRemoved->setStore(null);
+        }
+
+        $this->collStoreStocks = null;
+        foreach ($storeStocks as $storeStock) {
+            $this->addStoreStock($storeStock);
+        }
+
+        $this->collStoreStocks = $storeStocks;
+        $this->collStoreStocksPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related StoreStock objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related StoreStock objects.
+     * @throws PropelException
+     */
+    public function countStoreStocks(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collStoreStocksPartial && !$this->isNew();
+        if (null === $this->collStoreStocks || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collStoreStocks) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getStoreStocks());
+            }
+            $query = StoreStockQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByStore($this)
+                ->count($con);
+        }
+
+        return count($this->collStoreStocks);
+    }
+
+    /**
+     * Method called to associate a StoreStock object to this object
+     * through the StoreStock foreign key attribute.
+     *
+     * @param    StoreStock $l StoreStock
+     * @return Store The current object (for fluent API support)
+     */
+    public function addStoreStock(StoreStock $l)
+    {
+        if ($this->collStoreStocks === null) {
+            $this->initStoreStocks();
+            $this->collStoreStocksPartial = true;
+        }
+
+        if (!in_array($l, $this->collStoreStocks->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddStoreStock($l);
+
+            if ($this->storeStocksScheduledForDeletion and $this->storeStocksScheduledForDeletion->contains($l)) {
+                $this->storeStocksScheduledForDeletion->remove($this->storeStocksScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	StoreStock $storeStock The storeStock object to add.
+     */
+    protected function doAddStoreStock($storeStock)
+    {
+        $this->collStoreStocks[]= $storeStock;
+        $storeStock->setStore($this);
+    }
+
+    /**
+     * @param	StoreStock $storeStock The storeStock object to remove.
+     * @return Store The current object (for fluent API support)
+     */
+    public function removeStoreStock($storeStock)
+    {
+        if ($this->getStoreStocks()->contains($storeStock)) {
+            $this->collStoreStocks->remove($this->collStoreStocks->search($storeStock));
+            if (null === $this->storeStocksScheduledForDeletion) {
+                $this->storeStocksScheduledForDeletion = clone $this->collStoreStocks;
+                $this->storeStocksScheduledForDeletion->clear();
+            }
+            $this->storeStocksScheduledForDeletion[]= $storeStock;
+            $storeStock->setStore(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Store is new, it will return
+     * an empty collection; or if this Store has previously
+     * been saved, it will retrieve related StoreStocks from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Store.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|StoreStock[] List of StoreStock objects
+     */
+    public function getStoreStocksJoinStockImage($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = StoreStockQuery::create(null, $criteria);
+        $query->joinWith('StockImage', $join_behavior);
+
+        return $this->getStoreStocks($query, $con);
+    }
+
+    /**
      * Clears out the collAddresses collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
@@ -7971,6 +8275,11 @@ abstract class BaseStore extends BaseObject implements Persistent
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collStoreStocks) {
+                foreach ($this->collStoreStocks as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collAddresses) {
                 foreach ($this->collAddresses as $o) {
                     $o->clearAllReferences($deep);
@@ -8069,6 +8378,10 @@ abstract class BaseStore extends BaseObject implements Persistent
             $this->collStoreMaintenanceLogs->clearIterator();
         }
         $this->collStoreMaintenanceLogs = null;
+        if ($this->collStoreStocks instanceof PropelCollection) {
+            $this->collStoreStocks->clearIterator();
+        }
+        $this->collStoreStocks = null;
         if ($this->collAddresses instanceof PropelCollection) {
             $this->collAddresses->clearIterator();
         }

@@ -15,6 +15,7 @@ use DeviceBundle\Model\DsTemperatureSensorQuery;
 use NotificationBundle\Model\CbInputNotificationQuery;
 use NotificationBundle\Model\DsTemperatureNotificationQuery;
 use StoreBundle\Model\StoreQuery;
+use StoreBundle\Model\StoreStock;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -43,9 +44,7 @@ class TestCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln("Test command");
-
-        $data = "{'arrangementen_favorieten_id':'3379792','favorieten_id':null,'ownedFavorietItem':'0','fav_class':'','datum_toegevoegd':null,'omschrijving':null,'class':'video','link_to_id':null,'link_to_publisher':null,'link_type':'none','link_status':'none','titel':'a:5:{s:7:\'content\';s:41:\'https:\/\/www.youtube.com\/embed\/KUK_prdIQW4\';s:5:\'embed\';s:1:\'0\';s:7:\'caption\';s:0:\'\';s:5:\'align\';s:6:\'center\';s:6:\'iframe\';s:1:\'0\';}','bestanden_id':null,'lokatie':null,'bestandsnaam':'','order_id':'57','target':'_blank','editable':'with-warning','favorietclass':null,'locked_timestamp':null,'locked_user_id':null,'last_edit_timestamp':'2018-03-07 16:34:07','last_edit_user_id':'65746','comment':'','locker_email':null,'voornaam':null,'achternaam':null,'tussenvoegsel':null,'nickname':null,'properties':false,'content':'https:\/\/www.youtube.com\/embed\/KUK_prdIQW4','embed':'0','caption':'','align':'center','iframe':'0','teleblikvideo':false,'video_url':'https:\/\/youtu.be\/KUK_prdIQW4','shortUrl':'https:\/\/youtu.be\/KUK_prdIQW4'}";
-        $output->write(json_decode($data, true));
+        //$this->createStock($output);
         //$this->createUser($output);
         //$this->getUsers($output);
         //$this->getFullUserTemplate($output);
@@ -68,6 +67,26 @@ class TestCommand extends ContainerAwareCommand
 
         //$this->copySensor($output);
         $output->writeln("Ready.");
+    }
+
+    protected function createStock(OutputInterface $output)
+    {
+        $store = StoreQuery::create()->findOneByUid('fad5a7c0-2b6a-4d8b-bfeb-0cb4cf2c1a0b');
+
+        $output->writeln(sprintf('Store %s found.', $store->getName()));
+
+        $stockItem = new StoreStock();
+        $stockItem->setStore($store);
+        $stockItem->setCollectionType(CollectionType::TYPE_BEER_TECH_ID);
+        $stockItem->setCode('234567');
+        $stockItem->setName('Grolsch');
+        $stockItem->setDescription('Dit is grolsch bier.');
+        $stockItem->setStockValue(50.25);
+        $stockItem->setStockMin(20.30);
+        $stockItem->setStockMax(200.30);
+        $stockItem->save();
+
+        $output->writeln('Item added to store');
     }
 
     protected function copySensor(OutputInterface $output)
