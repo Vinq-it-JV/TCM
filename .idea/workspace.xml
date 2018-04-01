@@ -2,50 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="282e9c36-730e-4d16-a19d-353a62e794e2" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/maintenance/log/log_info.html.twig" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/maintenance/log/log_list.html.twig" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/StoreBundle/Model/StockImage.php" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/StoreBundle/Model/StockImagePeer.php" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/StoreBundle/Model/StockImageQuery.php" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/StoreBundle/Model/StoreStock.php" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/StoreBundle/Model/StoreStockPeer.php" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/StoreBundle/Model/StoreStockQuery.php" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/app/config/config.yml" afterPath="$PROJECT_DIR$/app/config/config.yml" />
-      <change beforePath="$PROJECT_DIR$/app/config/parameters.yml.dist" afterPath="$PROJECT_DIR$/app/config/parameters.yml.dist" />
-      <change beforePath="$PROJECT_DIR$/src/AdministrationBundle/Resources/config/routing.yml" afterPath="$PROJECT_DIR$/src/AdministrationBundle/Resources/config/routing.yml" />
-      <change beforePath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/beertech/beertech.html.twig" afterPath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/beertech/beertech.html.twig" />
-      <change beforePath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/beertech/beertech_form.html.twig" afterPath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/beertech/beertech_form.html.twig" />
-      <change beforePath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/companies/company_form.html.twig" afterPath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/companies/company_form.html.twig" />
-      <change beforePath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/inventory/inventory.html.twig" afterPath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/inventory/inventory.html.twig" />
-      <change beforePath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/maintenance/log/log.html.twig" afterPath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/maintenance/log/log.html.twig" />
-      <change beforePath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/maintenance/periodically/maintenance.html.twig" afterPath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/maintenance/periodically/maintenance.html.twig" />
-      <change beforePath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/maintenance/periodically/maintenance_form.html.twig" afterPath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/maintenance/periodically/maintenance_form.html.twig" />
-      <change beforePath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/stores/store_form.html.twig" afterPath="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/stores/store_form.html.twig" />
-      <change beforePath="$PROJECT_DIR$/src/AppBundle/Controller/DataController.php" afterPath="$PROJECT_DIR$/src/AppBundle/Controller/DataController.php" />
-      <change beforePath="$PROJECT_DIR$/src/AppBundle/Resources/public/js/angular-dropzone/ng-dropzone.min.js" afterPath="$PROJECT_DIR$/src/AppBundle/Resources/public/js/angular-dropzone/ng-dropzone.min.js" />
-      <change beforePath="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/collectionCtrl.js" afterPath="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/collectionCtrl.js" />
-      <change beforePath="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/logCtrl.js" afterPath="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/logCtrl.js" />
-      <change beforePath="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/storeCtrl.js" afterPath="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/storeCtrl.js" />
-      <change beforePath="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/tcmApp.js" afterPath="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/tcmApp.js" />
-      <change beforePath="$PROJECT_DIR$/src/AppBundle/Resources/views/store/beertech.html.twig" afterPath="$PROJECT_DIR$/src/AppBundle/Resources/views/store/beertech.html.twig" />
-      <change beforePath="$PROJECT_DIR$/src/AppBundle/Resources/views/store/beertech_info.html.twig" afterPath="$PROJECT_DIR$/src/AppBundle/Resources/views/store/beertech_info.html.twig" />
-      <change beforePath="$PROJECT_DIR$/src/AppBundle/Resources/views/store/inventory.html.twig" afterPath="$PROJECT_DIR$/src/AppBundle/Resources/views/store/inventory.html.twig" />
-      <change beforePath="$PROJECT_DIR$/src/AppBundle/Resources/views/store/maintenance.html.twig" afterPath="$PROJECT_DIR$/src/AppBundle/Resources/views/store/maintenance.html.twig" />
       <change beforePath="$PROJECT_DIR$/src/CollectionBundle/Controller/DataController.php" afterPath="$PROJECT_DIR$/src/CollectionBundle/Controller/DataController.php" />
-      <change beforePath="$PROJECT_DIR$/src/CollectionBundle/Model/map/CollectionTableMap.php" afterPath="$PROJECT_DIR$/src/CollectionBundle/Model/map/CollectionTableMap.php" />
-      <change beforePath="$PROJECT_DIR$/src/CollectionBundle/Model/om/BaseCollection.php" afterPath="$PROJECT_DIR$/src/CollectionBundle/Model/om/BaseCollection.php" />
-      <change beforePath="$PROJECT_DIR$/src/CollectionBundle/Model/om/BaseCollectionQuery.php" afterPath="$PROJECT_DIR$/src/CollectionBundle/Model/om/BaseCollectionQuery.php" />
-      <change beforePath="$PROJECT_DIR$/src/StoreBundle/Controller/DataController.php" afterPath="$PROJECT_DIR$/src/StoreBundle/Controller/DataController.php" />
-      <change beforePath="$PROJECT_DIR$/src/StoreBundle/Model/map/StoreMaintenanceLogTableMap.php" afterPath="$PROJECT_DIR$/src/StoreBundle/Model/map/StoreMaintenanceLogTableMap.php" />
-      <change beforePath="$PROJECT_DIR$/src/StoreBundle/Model/om/BaseMaintenanceType.php" afterPath="$PROJECT_DIR$/src/StoreBundle/Model/om/BaseMaintenanceType.php" />
-      <change beforePath="$PROJECT_DIR$/src/StoreBundle/Model/om/BaseStore.php" afterPath="$PROJECT_DIR$/src/StoreBundle/Model/om/BaseStore.php" />
-      <change beforePath="$PROJECT_DIR$/src/StoreBundle/Model/om/BaseStoreMaintenanceLog.php" afterPath="$PROJECT_DIR$/src/StoreBundle/Model/om/BaseStoreMaintenanceLog.php" />
-      <change beforePath="$PROJECT_DIR$/src/StoreBundle/Model/om/BaseStoreMaintenanceLogPeer.php" afterPath="$PROJECT_DIR$/src/StoreBundle/Model/om/BaseStoreMaintenanceLogPeer.php" />
-      <change beforePath="$PROJECT_DIR$/src/StoreBundle/Model/om/BaseStoreMaintenanceLogQuery.php" afterPath="$PROJECT_DIR$/src/StoreBundle/Model/om/BaseStoreMaintenanceLogQuery.php" />
-      <change beforePath="$PROJECT_DIR$/src/StoreBundle/Resources/config/schema.xml" afterPath="$PROJECT_DIR$/src/StoreBundle/Resources/config/schema.xml" />
-      <change beforePath="$PROJECT_DIR$/src/UserBundle/Model/om/BaseUser.php" afterPath="$PROJECT_DIR$/src/UserBundle/Model/om/BaseUser.php" />
-      <change beforePath="$PROJECT_DIR$/web/js/fos_js_routes.js" afterPath="$PROJECT_DIR$/web/js/fos_js_routes.js" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -78,7 +35,7 @@
       <file leaf-file-name="DataController.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/StoreBundle/Controller/DataController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="90">
+            <state relative-caret-position="-1464">
               <caret line="337" column="51" lean-forward="false" selection-start-line="337" selection-start-column="51" selection-end-line="337" selection-end-column="51" />
               <folding>
                 <element signature="e#42#85#0#PHP" expanded="true" />
@@ -97,11 +54,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="logCtrl.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="logCtrl.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/logCtrl.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="458">
-              <caret line="95" column="0" lean-forward="true" selection-start-line="95" selection-start-column="0" selection-end-line="95" selection-end-column="0" />
+              <caret line="95" column="0" lean-forward="false" selection-start-line="95" selection-start-column="0" selection-end-line="95" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -159,7 +116,7 @@
         <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/collectionCtrl.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="379">
-              <caret line="265" column="0" lean-forward="true" selection-start-line="240" selection-start-column="0" selection-end-line="265" selection-end-column="0" />
+              <caret line="265" column="0" lean-forward="false" selection-start-line="240" selection-start-column="0" selection-end-line="265" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -174,11 +131,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DataController.php" pinned="false" current-in-tab="false">
+      <file leaf-file-name="DataController.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/CollectionBundle/Controller/DataController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1016">
-              <caret line="337" column="49" lean-forward="false" selection-start-line="337" selection-start-column="49" selection-end-line="337" selection-end-column="49" />
+            <state relative-caret-position="138">
+              <caret line="348" column="17" lean-forward="true" selection-start-line="348" selection-start-column="17" selection-end-line="348" selection-end-column="17" />
               <folding>
                 <element signature="e#47#85#0#PHP" expanded="true" />
               </folding>
@@ -236,9 +193,9 @@
       <find>getStoreMaintenanceLogList</find>
       <find>st-persist</find>
       <find>TYPE_PER</find>
-      <find>StoreMaintenanceLog</find>
       <find>getStoreMaintenanceLogDataArray</find>
       <find>showAttachment</find>
+      <find>StoreMaintenanceLog</find>
     </findStrings>
     <replaceStrings>
       <replace>&quot;</replace>
@@ -334,10 +291,10 @@
         <option value="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/maintenance/log/log_info.html.twig" />
         <option value="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/maintenance/log/log.html.twig" />
         <option value="$PROJECT_DIR$/src/StoreBundle/Resources/config/schema.xml" />
-        <option value="$PROJECT_DIR$/src/CollectionBundle/Controller/DataController.php" />
         <option value="$PROJECT_DIR$/src/AdministrationBundle/Resources/views/maintenance/log/log_list.html.twig" />
         <option value="$PROJECT_DIR$/src/StoreBundle/Controller/DataController.php" />
         <option value="$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/logCtrl.js" />
+        <option value="$PROJECT_DIR$/src/CollectionBundle/Controller/DataController.php" />
       </list>
     </option>
   </component>
@@ -906,7 +863,7 @@
       <workItem from="1520945034761" duration="2665000" />
       <workItem from="1521549234243" duration="841000" />
       <workItem from="1521887089118" duration="4715000" />
-      <workItem from="1522220676246" duration="40879000" />
+      <workItem from="1522220676246" duration="41675000" />
     </task>
     <servers />
   </component>
@@ -916,7 +873,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1029952000" />
+    <option name="totallyTimeSpent" value="1030748000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -929,6 +886,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="825" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24606581" sideWeight="0.49452055" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32876712" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -939,7 +897,7 @@
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32968536" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32968536" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24892704" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.33150685" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.33150685" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24248926" sideWeight="0.50547945" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -1753,16 +1711,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/CollectionBundle/Controller/DataController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1016">
-          <caret line="337" column="49" lean-forward="false" selection-start-line="337" selection-start-column="49" selection-end-line="337" selection-end-column="49" />
-          <folding>
-            <element signature="e#47#85#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/StoreBundle/Model/StoreMaintenanceLog.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
@@ -1775,16 +1723,6 @@
       <provider selected="true" editor-type-id="LogFileEditorProvider">
         <state relative-caret-position="-169">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/StoreBundle/Controller/DataController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="337" column="51" lean-forward="false" selection-start-line="337" selection-start-column="51" selection-end-line="337" selection-end-column="51" />
-          <folding>
-            <element signature="e#42#85#0#PHP" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1835,7 +1773,7 @@
     <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/collectionCtrl.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="379">
-          <caret line="265" column="0" lean-forward="true" selection-start-line="240" selection-start-column="0" selection-end-line="265" selection-end-column="0" />
+          <caret line="265" column="0" lean-forward="false" selection-start-line="240" selection-start-column="0" selection-end-line="265" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -1843,8 +1781,28 @@
     <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/public/js/app/controllers/logCtrl.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="458">
-          <caret line="95" column="0" lean-forward="true" selection-start-line="95" selection-start-column="0" selection-end-line="95" selection-end-column="0" />
+          <caret line="95" column="0" lean-forward="false" selection-start-line="95" selection-start-column="0" selection-end-line="95" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/StoreBundle/Controller/DataController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1464">
+          <caret line="337" column="51" lean-forward="false" selection-start-line="337" selection-start-column="51" selection-end-line="337" selection-end-column="51" />
+          <folding>
+            <element signature="e#42#85#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/CollectionBundle/Controller/DataController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="138">
+          <caret line="348" column="17" lean-forward="true" selection-start-line="348" selection-start-column="17" selection-end-line="348" selection-end-column="17" />
+          <folding>
+            <element signature="e#47#85#0#PHP" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

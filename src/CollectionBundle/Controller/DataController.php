@@ -294,12 +294,14 @@ class DataController extends Controller
     {
         $helper = $this->getClassHelper();
         $user = $this->getUser();
+        $newCollection = false;
 
         if (isset($collectionData->Id)) {
             $collection = CollectionQuery::create()->findOneById($collectionData->Id);
             if (empty($collection)) {
                 $collection = new Collection();
                 $collection->setUid($helper->createUUID());
+                $newCollection = true;
             }
         } else
             return false;
@@ -331,18 +333,20 @@ class DataController extends Controller
         if (!empty($type)) {
             if ($type->getId() == CollectionType::TYPE_MAINTENANCE_ID) {
                 $type = MaintenanceTypeQuery::create()->findOneById(MaintenanceType::TYPE_PERIODICALLY_ID);
-                $log = new StoreMaintenanceLog();
-                if (!empty($type))
-                    $log->setMaintenanceType($type);
-                $log->setCollection($collection);
-                if (isset($collectionData->CollectionStore))
-                    $log->setMaintenanceStore($collectionData->CollectionStore);
-                if (isset($collectionData->Date)) {
-                    $log->setMaintenanceStartedAt($helper->removeTimezone($collectionData->Date->date));
-                    $log->setMaintenanceStoppedAt($log->getMaintenanceStartedAt());
+                if ($newCollection) {
+                    $log = new StoreMaintenanceLog();
+                    if (!empty($type))
+                        $log->setMaintenanceType($type);
+                    $log->setCollection($collection);
+                    if (isset($collectionData->CollectionStore))
+                        $log->setMaintenanceStore($collectionData->CollectionStore);
+                    if (isset($collectionData->Date)) {
+                        $log->setMaintenanceStartedAt($helper->removeTimezone($collectionData->Date->date));
+                        $log->setMaintenanceStoppedAt($log->getMaintenanceStartedAt());
+                    }
+                    $log->setMaintenanceBy($user->getId());
+                    $log->save();
                 }
-                $log->setMaintenanceBy($user->getId());
-                $log->save();
             }
         }
 
