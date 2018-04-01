@@ -14,45 +14,45 @@ angular
     {
         $scope.stores = DS_Stores;
         $scope.storesCollection = [];
-
-        $scope.dzUrl = '/';
+        $scope.dzShow = false;
         $scope.imageRand = new Date().getTime();
-        $scope.dzUpdate = false;
 
         $scope.dzOptions = {
-            url : $scope.dzUrl,
-            paramName : 'store',
-            maxFilesize : '10',
+            url: '/',
+            paramName: 'store',
+            maxFilesize: '10',
             maxFiles: '1',
             resizeWidth: '1024',
-            acceptedFiles : 'image/jpeg, images/jpg, image/png',
-            addRemoveLinks : true,
-            autoProcessQueue : true
+            acceptedFiles: 'image/jpeg, images/jpg, image/png',
+            addRemoveLinks: true,
+            autoProcessQueue: true
         };
 
         $scope.dzCallbacks = {
             'success' : function(file, xhr) {
                 $scope.imageRand = new Date().getTime();
+                console.log('upload ready');
                 $scope.reloadPage();
+            },
+            'processing' : function (file) {
+                var dz = $scope.dzMethods.getDropzone();
+                dz.options.url = Routing.generate('administration_store_upload', {'storeid': $scope.stores.store().Id});
             }
         };
 
         $scope.dzMethods = {};
 
         $scope.$on('languageLoaded', function () {
-            $scope.dzOptions.dictDefaultMessage = $translate.instant('DROPZONE.DROP_FILES');
+            $scope.initDropzone();
+            $timeout( function () {
+                $scope.dzShow = true;
+            }, 1000);
         });
 
-        $scope.initDropzone = function(storeid)
+        $scope.initDropzone = function()
         {
-            $scope.dzUpdate = true;
-            if (!angular.element('#storeDropzone').length)
-                return;
-            $scope.dzUrl = Routing.generate('administration_store_upload', {'storeid': storeid});
-            var dz = $scope.dzMethods.getDropzone();
-            dz.options.url = $scope.dzUrl;
-            dz.options.dictDefaultMessage = $translate.instant('DROPZONE.DROP_FILES');
-            dz.options.dictRemoveFile = $translate.instant('DROPZONE.REMOVE_FILE');
+            $scope.dzOptions.dictDefaultMessage = $translate.instant('DROPZONE.DROP_FILES');
+            $scope.dzOptions.dictRemoveFile = $translate.instant('DROPZONE.REMOVE_FILE');
         };
 
         $scope.getStores = function ()
@@ -305,7 +305,6 @@ angular
                         $scope.stores.updRecord(data.contents.store);
                         $scope.stores.templateSet(data.contents.template);
                         $scope.stores.listsSet(data.contents.lists);
-                        $scope.initDropzone($scope.stores.store().Id);
                     }
                     break;
                 case 'deleteStore':

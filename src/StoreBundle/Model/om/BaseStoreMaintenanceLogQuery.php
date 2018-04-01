@@ -12,6 +12,7 @@ use \PropelCollection;
 use \PropelException;
 use \PropelObjectCollection;
 use \PropelPDO;
+use CollectionBundle\Model\Collection;
 use StoreBundle\Model\MaintenanceType;
 use StoreBundle\Model\Store;
 use StoreBundle\Model\StoreMaintenanceLog;
@@ -22,6 +23,7 @@ use UserBundle\Model\User;
 /**
  * @method StoreMaintenanceLogQuery orderById($order = Criteria::ASC) Order by the id column
  * @method StoreMaintenanceLogQuery orderByType($order = Criteria::ASC) Order by the type column
+ * @method StoreMaintenanceLogQuery orderByCollectionId($order = Criteria::ASC) Order by the collection_id column
  * @method StoreMaintenanceLogQuery orderByMaintenanceStore($order = Criteria::ASC) Order by the maintenance_store column
  * @method StoreMaintenanceLogQuery orderByMaintenanceBy($order = Criteria::ASC) Order by the maintenance_by column
  * @method StoreMaintenanceLogQuery orderByMaintenanceStartedAt($order = Criteria::ASC) Order by the maintenance_started_at column
@@ -29,6 +31,7 @@ use UserBundle\Model\User;
  *
  * @method StoreMaintenanceLogQuery groupById() Group by the id column
  * @method StoreMaintenanceLogQuery groupByType() Group by the type column
+ * @method StoreMaintenanceLogQuery groupByCollectionId() Group by the collection_id column
  * @method StoreMaintenanceLogQuery groupByMaintenanceStore() Group by the maintenance_store column
  * @method StoreMaintenanceLogQuery groupByMaintenanceBy() Group by the maintenance_by column
  * @method StoreMaintenanceLogQuery groupByMaintenanceStartedAt() Group by the maintenance_started_at column
@@ -42,6 +45,10 @@ use UserBundle\Model\User;
  * @method StoreMaintenanceLogQuery rightJoinMaintenanceType($relationAlias = null) Adds a RIGHT JOIN clause to the query using the MaintenanceType relation
  * @method StoreMaintenanceLogQuery innerJoinMaintenanceType($relationAlias = null) Adds a INNER JOIN clause to the query using the MaintenanceType relation
  *
+ * @method StoreMaintenanceLogQuery leftJoinCollection($relationAlias = null) Adds a LEFT JOIN clause to the query using the Collection relation
+ * @method StoreMaintenanceLogQuery rightJoinCollection($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Collection relation
+ * @method StoreMaintenanceLogQuery innerJoinCollection($relationAlias = null) Adds a INNER JOIN clause to the query using the Collection relation
+ *
  * @method StoreMaintenanceLogQuery leftJoinStore($relationAlias = null) Adds a LEFT JOIN clause to the query using the Store relation
  * @method StoreMaintenanceLogQuery rightJoinStore($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Store relation
  * @method StoreMaintenanceLogQuery innerJoinStore($relationAlias = null) Adds a INNER JOIN clause to the query using the Store relation
@@ -54,6 +61,7 @@ use UserBundle\Model\User;
  * @method StoreMaintenanceLog findOneOrCreate(PropelPDO $con = null) Return the first StoreMaintenanceLog matching the query, or a new StoreMaintenanceLog object populated from the query conditions when no match is found
  *
  * @method StoreMaintenanceLog findOneByType(int $type) Return the first StoreMaintenanceLog filtered by the type column
+ * @method StoreMaintenanceLog findOneByCollectionId(int $collection_id) Return the first StoreMaintenanceLog filtered by the collection_id column
  * @method StoreMaintenanceLog findOneByMaintenanceStore(int $maintenance_store) Return the first StoreMaintenanceLog filtered by the maintenance_store column
  * @method StoreMaintenanceLog findOneByMaintenanceBy(int $maintenance_by) Return the first StoreMaintenanceLog filtered by the maintenance_by column
  * @method StoreMaintenanceLog findOneByMaintenanceStartedAt(string $maintenance_started_at) Return the first StoreMaintenanceLog filtered by the maintenance_started_at column
@@ -61,6 +69,7 @@ use UserBundle\Model\User;
  *
  * @method array findById(int $id) Return StoreMaintenanceLog objects filtered by the id column
  * @method array findByType(int $type) Return StoreMaintenanceLog objects filtered by the type column
+ * @method array findByCollectionId(int $collection_id) Return StoreMaintenanceLog objects filtered by the collection_id column
  * @method array findByMaintenanceStore(int $maintenance_store) Return StoreMaintenanceLog objects filtered by the maintenance_store column
  * @method array findByMaintenanceBy(int $maintenance_by) Return StoreMaintenanceLog objects filtered by the maintenance_by column
  * @method array findByMaintenanceStartedAt(string $maintenance_started_at) Return StoreMaintenanceLog objects filtered by the maintenance_started_at column
@@ -170,7 +179,7 @@ abstract class BaseStoreMaintenanceLogQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `type`, `maintenance_store`, `maintenance_by`, `maintenance_started_at`, `maintenance_stopped_at` FROM `store_maintenance_log` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `type`, `collection_id`, `maintenance_store`, `maintenance_by`, `maintenance_started_at`, `maintenance_stopped_at` FROM `store_maintenance_log` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -343,6 +352,50 @@ abstract class BaseStoreMaintenanceLogQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(StoreMaintenanceLogPeer::TYPE, $type, $comparison);
+    }
+
+    /**
+     * Filter the query on the collection_id column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByCollectionId(1234); // WHERE collection_id = 1234
+     * $query->filterByCollectionId(array(12, 34)); // WHERE collection_id IN (12, 34)
+     * $query->filterByCollectionId(array('min' => 12)); // WHERE collection_id >= 12
+     * $query->filterByCollectionId(array('max' => 12)); // WHERE collection_id <= 12
+     * </code>
+     *
+     * @see       filterByCollection()
+     *
+     * @param     mixed $collectionId The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return StoreMaintenanceLogQuery The current query, for fluid interface
+     */
+    public function filterByCollectionId($collectionId = null, $comparison = null)
+    {
+        if (is_array($collectionId)) {
+            $useMinMax = false;
+            if (isset($collectionId['min'])) {
+                $this->addUsingAlias(StoreMaintenanceLogPeer::COLLECTION_ID, $collectionId['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($collectionId['max'])) {
+                $this->addUsingAlias(StoreMaintenanceLogPeer::COLLECTION_ID, $collectionId['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(StoreMaintenanceLogPeer::COLLECTION_ID, $collectionId, $comparison);
     }
 
     /**
@@ -593,6 +646,82 @@ abstract class BaseStoreMaintenanceLogQuery extends ModelCriteria
         return $this
             ->joinMaintenanceType($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'MaintenanceType', '\StoreBundle\Model\MaintenanceTypeQuery');
+    }
+
+    /**
+     * Filter the query by a related Collection object
+     *
+     * @param   Collection|PropelObjectCollection $collection The related object(s) to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 StoreMaintenanceLogQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByCollection($collection, $comparison = null)
+    {
+        if ($collection instanceof Collection) {
+            return $this
+                ->addUsingAlias(StoreMaintenanceLogPeer::COLLECTION_ID, $collection->getId(), $comparison);
+        } elseif ($collection instanceof PropelObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(StoreMaintenanceLogPeer::COLLECTION_ID, $collection->toKeyValue('PrimaryKey', 'Id'), $comparison);
+        } else {
+            throw new PropelException('filterByCollection() only accepts arguments of type Collection or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Collection relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return StoreMaintenanceLogQuery The current query, for fluid interface
+     */
+    public function joinCollection($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Collection');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Collection');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Collection relation Collection object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   \CollectionBundle\Model\CollectionQuery A secondary query class using the current class as primary query
+     */
+    public function useCollectionQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinCollection($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Collection', '\CollectionBundle\Model\CollectionQuery');
     }
 
     /**

@@ -23,6 +23,23 @@
         </div>
         <div class="form-group">
             <div class="row">
+                <div class="col-md-2 col-xs-4" ng-cloak><label>{{ 'COLLECTIONS.DATE' | translate }}:</label></div>
+                <div class="col-md-2 col-xs-4" ng-cloak>
+                    <input class="form-control input-sm" name="Date"
+                           ng-model="collections.collection().Date.date" bs-datepicker
+                           data-date-format="dd-MM-yyyy" data-max-date="today" required/>
+                </div>
+                <div class="col-md-2 col-xs-4" ng-cloak>
+                    <input class="form-control input-sm" name="Time"
+                           ng-model="collections.collection().Date.date" bs-timepicker
+                           data-default-time="false"
+                           data-time-format="HH:mm" required/>
+                </div>
+
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
                 <div class="col-md-2 col-xs-4" ng-cloak><label>{{ 'COLLECTIONS.NAME' | translate }}:</label></div>
                 <div class="col-md-10 col-xs-8" ng-cloak>
                     <input class="form-control input-sm" name="Name" type="text"

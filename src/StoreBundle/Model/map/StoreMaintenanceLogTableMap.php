@@ -44,6 +44,7 @@ class StoreMaintenanceLogTableMap extends TableMap
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
         $this->addForeignKey('type', 'Type', 'INTEGER', 'maintenance_type', 'id', false, null, null);
+        $this->addForeignKey('collection_id', 'CollectionId', 'INTEGER', 'collection', 'id', false, null, null);
         $this->addForeignKey('maintenance_store', 'MaintenanceStore', 'INTEGER', 'store', 'id', false, null, null);
         $this->addForeignKey('maintenance_by', 'MaintenanceBy', 'INTEGER', 'user', 'id', false, null, null);
         $this->addColumn('maintenance_started_at', 'MaintenanceStartedAt', 'TIMESTAMP', false, null, null);
@@ -57,6 +58,7 @@ class StoreMaintenanceLogTableMap extends TableMap
     public function buildRelations()
     {
         $this->addRelation('MaintenanceType', 'StoreBundle\\Model\\MaintenanceType', RelationMap::MANY_TO_ONE, array('type' => 'id', ), null, null);
+        $this->addRelation('Collection', 'CollectionBundle\\Model\\Collection', RelationMap::MANY_TO_ONE, array('collection_id' => 'id', ), null, null);
         $this->addRelation('Store', 'StoreBundle\\Model\\Store', RelationMap::MANY_TO_ONE, array('maintenance_store' => 'id', ), null, null);
         $this->addRelation('User', 'UserBundle\\Model\\User', RelationMap::MANY_TO_ONE, array('maintenance_by' => 'id', ), null, null);
     } // buildRelations()

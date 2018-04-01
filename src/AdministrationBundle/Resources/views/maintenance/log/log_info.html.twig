@@ -2,16 +2,16 @@
 
 <div class="container">
 
-    {# Beertech information #}
+    {# Maintenance information #}
     <h5 ng-cloak>
-        <i class="fa fa-fw fa-list"></i> {{ mc.translate('BEER_TECH.LABEL') }} {{ mc.translate('BEER_TECH.OF') }} {{ store.Name }}
+        <i class="fa fa-fw fa-list"></i> {{ mc.translate('MAINTENANCE.LABEL') }} {{ mc.translate('MAINTENANCE.FOR') }} {{ store.Name }}
     </h5>
     <div class="well">
         {% verbatim %}
         <div class="form-group">
             <div class="row">
                 <div class="col-md-2 col-xs-4" ng-cloak><label>{{ 'COLLECTIONS.DATE' | translate }}:</label></div>
-                <div class="col-md-10 col-xs-8" ng-cloak>{{ collections.collection().CreatedAt.date | GMT:'DD-MM-YYYY HH:mm' }}</div>
+                <div class="col-md-10 col-xs-8" ng-cloak>{{ collections.collection().Date.date | GMT:'DD-MM-YYYY HH:mm' }}</div>
             </div>
         </div>
         <div class="form-group">
@@ -38,7 +38,7 @@
         <div class="form-group">
             <div class="row" ng-show="collections.collection().EditedBy">
                 <div class="col-md-2 col-xs-4" ng-cloak><label>{{ 'COLLECTIONS.EDITED_BY' | translate }}:</label></div>
-                <div class="col-md-10 col-xs-8" ng-cloak>{{ collections.collection().EditedBy.Name }} ({{ collections.collection().UpdatedAt.date | GMT:'DD-MM-YYYY H:mm:ss' }})</div>
+                <div class="col-md-10 col-xs-8" ng-cloak>{{ collections.collection().EditedBy.Name }} ({{ collections.collection().UpdatedAt.date | GMT:'DD-MM-YYYY HH:mm' }})</div>
             </div>
         </div>
         <div ng-show="collections.collection().Attachments">
@@ -51,13 +51,11 @@
                 <div ng-repeat="attachment in collections.collection().Attachments" class="col-md-6 col-xs-12">
                     <div class="panel panel-default">
                         <div class="panel-body" style="min-height:150px;">
-                            <div class="row text-center">
-                                <div ng-if="attachment.Type == 1">
-                                    <img ng-click="showAttachment(attachment)" ng-src="{{ attachmentUrl(attachment.Id) }}" height="130"/>
-                                </div>
-                                <div ng-if="attachment.Type == 2">
-                                    <a ng-href="{{ attachmentUrl(attachment.Id) }}" download><i class="fa fa-fw fa-file-pdf-o fa-5x"></i></a>
-                                </div>
+                            <div ng-if="attachment.Type == 1" class="valign">
+                                <img ng-click="showAttachment(attachment)" ng-src="{{ attachmentUrl(attachment.Id) }}" height="100"/>
+                            </div>
+                            <div ng-if="attachment.Type == 2" class="valign">
+                                <a ng-href="{{ attachmentUrl(attachment.Id) }}" download><i class="fa fa-fw fa-file-pdf-o fa-5x"></i></a>
                             </div>
                         </div>
                         <div class="panel-footer">
@@ -70,18 +68,12 @@
         {% endverbatim %}
     </div>
 
-    {# Back button #}
-    <div class="row">
-        <div class="col-xs-12 col-md-12 col-lg-12">
-            <div class="panel panel-info cursor-pointer" ng-click="showCollections('beertech')">
-                <div class="panel-heading">
-                    <div class="row">
-                        <div class="col-xs-12 text-left big-button-text" style="font-size: 30px;" ng-cloak>
-                            {{ mc.translate('BACK') }}
-                            <i class="fa fa-chevron-left fa-2x fa-fw pull-right"></i>
-                        </div>
-                    </div>
-                </div>
+    <div class="panel-footer">
+        <div class="row">
+            <div class="col-md-12">
+                <button class="btn btn-sm btn-default pull-left" ng-click="showLoglist()" ng-cloak>
+                    <i class="fa fa-close"></i> {{ mc.translate('CANCEL') }}
+                </button>
             </div>
         </div>
     </div>

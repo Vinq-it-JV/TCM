@@ -19,5 +19,6 @@ parameters:
 
     domain_name:        phnctrl.nl
     logins:             3
-    collection_path:    collectiondata
+    collection_path:    data/collectiondata
+    store_path:         data/storedata
     maintenance_auto_off: 7200

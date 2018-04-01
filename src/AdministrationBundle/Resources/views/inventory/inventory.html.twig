@@ -22,7 +22,7 @@
                                 <thead>
                                 <tr>
                                     <th st-sort="Name" class="st-sortable col-md-7 col-xs-5"
-                                        ng-cloak>{{ mc.translate('COLLECTIONS.DESCRIPTION') }}</th>
+                                        ng-cloak>{{ mc.translate('COLLECTIONS.NAME') }}</th>
                                     <th st-sort="Attachments" class="st-sortable col-md-1 col-xs-2 text-center"
                                         ng-cloak><i class="fa fa-fw fa-paperclip"></i></th>
                                     <th st-sort="IsPublished" class="st-sortable text-right col-md-1 col-xs-2"
@@ -59,7 +59,7 @@
                                 </tr>
                                 {% endverbatim %}
                                 </tbody>
-                                <tfoot ng-show="collectionsCollection.length > 10">
+                                <tfoot ng-show="collections.collections().length > 10">
                                 <tr>
                                     <td class="text-center" st-pagination="" st-items-by-page="10" colspan="5">
                                     </td>

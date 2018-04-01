@@ -13,6 +13,8 @@ use \Propel;
 use \PropelDateTime;
 use \PropelException;
 use \PropelPDO;
+use CollectionBundle\Model\Collection;
+use CollectionBundle\Model\CollectionQuery;
 use StoreBundle\Model\MaintenanceType;
 use StoreBundle\Model\MaintenanceTypeQuery;
 use StoreBundle\Model\Store;
@@ -57,6 +59,12 @@ abstract class BaseStoreMaintenanceLog extends BaseObject implements Persistent
     protected $type;
 
     /**
+     * The value for the collection_id field.
+     * @var        int
+     */
+    protected $collection_id;
+
+    /**
      * The value for the maintenance_store field.
      * @var        int
      */
@@ -84,6 +92,11 @@ abstract class BaseStoreMaintenanceLog extends BaseObject implements Persistent
      * @var        MaintenanceType
      */
     protected $aMaintenanceType;
+
+    /**
+     * @var        Collection
+     */
+    protected $aCollection;
 
     /**
      * @var        Store
@@ -135,6 +148,17 @@ abstract class BaseStoreMaintenanceLog extends BaseObject implements Persistent
     {
 
         return $this->type;
+    }
+
+    /**
+     * Get the [collection_id] column value.
+     *
+     * @return int
+     */
+    public function getCollectionId()
+    {
+
+        return $this->collection_id;
     }
 
     /**
@@ -286,6 +310,31 @@ abstract class BaseStoreMaintenanceLog extends BaseObject implements Persistent
     } // setType()
 
     /**
+     * Set the value of [collection_id] column.
+     *
+     * @param  int $v new value
+     * @return StoreMaintenanceLog The current object (for fluent API support)
+     */
+    public function setCollectionId($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->collection_id !== $v) {
+            $this->collection_id = $v;
+            $this->modifiedColumns[] = StoreMaintenanceLogPeer::COLLECTION_ID;
+        }
+
+        if ($this->aCollection !== null && $this->aCollection->getId() !== $v) {
+            $this->aCollection = null;
+        }
+
+
+        return $this;
+    } // setCollectionId()
+
+    /**
      * Set the value of [maintenance_store] column.
      *
      * @param  int $v new value
@@ -415,10 +464,11 @@ abstract class BaseStoreMaintenanceLog extends BaseObject implements Persistent
 
             $this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
             $this->type = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
-            $this->maintenance_store = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
-            $this->maintenance_by = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
-            $this->maintenance_started_at = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
-            $this->maintenance_stopped_at = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
+            $this->collection_id = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
+            $this->maintenance_store = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
+            $this->maintenance_by = ($row[$startcol + 4] !== null) ? (int) $row[$startcol + 4] : null;
+            $this->maintenance_started_at = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
+            $this->maintenance_stopped_at = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -428,7 +478,7 @@ abstract class BaseStoreMaintenanceLog extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 6; // 6 = StoreMaintenanceLogPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 7; // 7 = StoreMaintenanceLogPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating StoreMaintenanceLog object", $e);
@@ -453,6 +503,9 @@ abstract class BaseStoreMaintenanceLog extends BaseObject implements Persistent
 
         if ($this->aMaintenanceType !== null && $this->type !== $this->aMaintenanceType->getId()) {
             $this->aMaintenanceType = null;
+        }
+        if ($this->aCollection !== null && $this->collection_id !== $this->aCollection->getId()) {
+            $this->aCollection = null;
         }
         if ($this->aStore !== null && $this->maintenance_store !== $this->aStore->getId()) {
             $this->aStore = null;
@@ -500,6 +553,7 @@ abstract class BaseStoreMaintenanceLog extends BaseObject implements Persistent
         if ($deep) {  // also de-associate any related objects?
 
             $this->aMaintenanceType = null;
+            $this->aCollection = null;
             $this->aStore = null;
             $this->aUser = null;
         } // if (deep)
@@ -627,6 +681,13 @@ abstract class BaseStoreMaintenanceLog extends BaseObject implements Persistent
                 $this->setMaintenanceType($this->aMaintenanceType);
             }
 
+            if ($this->aCollection !== null) {
+                if ($this->aCollection->isModified() || $this->aCollection->isNew()) {
+                    $affectedRows += $this->aCollection->save($con);
+                }
+                $this->setCollection($this->aCollection);
+            }
+
             if ($this->aStore !== null) {
                 if ($this->aStore->isModified() || $this->aStore->isNew()) {
                     $affectedRows += $this->aStore->save($con);
@@ -684,6 +745,9 @@ abstract class BaseStoreMaintenanceLog extends BaseObject implements Persistent
         if ($this->isColumnModified(StoreMaintenanceLogPeer::TYPE)) {
             $modifiedColumns[':p' . $index++]  = '`type`';
         }
+        if ($this->isColumnModified(StoreMaintenanceLogPeer::COLLECTION_ID)) {
+            $modifiedColumns[':p' . $index++]  = '`collection_id`';
+        }
         if ($this->isColumnModified(StoreMaintenanceLogPeer::MAINTENANCE_STORE)) {
             $modifiedColumns[':p' . $index++]  = '`maintenance_store`';
         }
@@ -712,6 +776,9 @@ abstract class BaseStoreMaintenanceLog extends BaseObject implements Persistent
                         break;
                     case '`type`':
                         $stmt->bindValue($identifier, $this->type, PDO::PARAM_INT);
+                        break;
+                    case '`collection_id`':
+                        $stmt->bindValue($identifier, $this->collection_id, PDO::PARAM_INT);
                         break;
                     case '`maintenance_store`':
                         $stmt->bindValue($identifier, $this->maintenance_store, PDO::PARAM_INT);
@@ -830,6 +897,12 @@ abstract class BaseStoreMaintenanceLog extends BaseObject implements Persistent
                 }
             }
 
+            if ($this->aCollection !== null) {
+                if (!$this->aCollection->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aCollection->getValidationFailures());
+                }
+            }
+
             if ($this->aStore !== null) {
                 if (!$this->aStore->validate($columns)) {
                     $failureMap = array_merge($failureMap, $this->aStore->getValidationFailures());
@@ -890,15 +963,18 @@ abstract class BaseStoreMaintenanceLog extends BaseObject implements Persistent
                 return $this->getType();
                 break;
             case 2:
-                return $this->getMaintenanceStore();
+                return $this->getCollectionId();
                 break;
             case 3:
-                return $this->getMaintenanceBy();
+                return $this->getMaintenanceStore();
                 break;
             case 4:
-                return $this->getMaintenanceStartedAt();
+                return $this->getMaintenanceBy();
                 break;
             case 5:
+                return $this->getMaintenanceStartedAt();
+                break;
+            case 6:
                 return $this->getMaintenanceStoppedAt();
                 break;
             default:
@@ -932,10 +1008,11 @@ abstract class BaseStoreMaintenanceLog extends BaseObject implements Persistent
         $result = array(
             $keys[0] => $this->getId(),
             $keys[1] => $this->getType(),
-            $keys[2] => $this->getMaintenanceStore(),
-            $keys[3] => $this->getMaintenanceBy(),
-            $keys[4] => $this->getMaintenanceStartedAt(),
-            $keys[5] => $this->getMaintenanceStoppedAt(),
+            $keys[2] => $this->getCollectionId(),
+            $keys[3] => $this->getMaintenanceStore(),
+            $keys[4] => $this->getMaintenanceBy(),
+            $keys[5] => $this->getMaintenanceStartedAt(),
+            $keys[6] => $this->getMaintenanceStoppedAt(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -945,6 +1022,9 @@ abstract class BaseStoreMaintenanceLog extends BaseObject implements Persistent
         if ($includeForeignObjects) {
             if (null !== $this->aMaintenanceType) {
                 $result['MaintenanceType'] = $this->aMaintenanceType->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aCollection) {
+                $result['Collection'] = $this->aCollection->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aStore) {
                 $result['Store'] = $this->aStore->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
@@ -993,15 +1073,18 @@ abstract class BaseStoreMaintenanceLog extends BaseObject implements Persistent
                 $this->setType($value);
                 break;
             case 2:
-                $this->setMaintenanceStore($value);
+                $this->setCollectionId($value);
                 break;
             case 3:
-                $this->setMaintenanceBy($value);
+                $this->setMaintenanceStore($value);
                 break;
             case 4:
-                $this->setMaintenanceStartedAt($value);
+                $this->setMaintenanceBy($value);
                 break;
             case 5:
+                $this->setMaintenanceStartedAt($value);
+                break;
+            case 6:
                 $this->setMaintenanceStoppedAt($value);
                 break;
         } // switch()
@@ -1030,10 +1113,11 @@ abstract class BaseStoreMaintenanceLog extends BaseObject implements Persistent
 
         if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
         if (array_key_exists($keys[1], $arr)) $this->setType($arr[$keys[1]]);
-        if (array_key_exists($keys[2], $arr)) $this->setMaintenanceStore($arr[$keys[2]]);
-        if (array_key_exists($keys[3], $arr)) $this->setMaintenanceBy($arr[$keys[3]]);
-        if (array_key_exists($keys[4], $arr)) $this->setMaintenanceStartedAt($arr[$keys[4]]);
-        if (array_key_exists($keys[5], $arr)) $this->setMaintenanceStoppedAt($arr[$keys[5]]);
+        if (array_key_exists($keys[2], $arr)) $this->setCollectionId($arr[$keys[2]]);
+        if (array_key_exists($keys[3], $arr)) $this->setMaintenanceStore($arr[$keys[3]]);
+        if (array_key_exists($keys[4], $arr)) $this->setMaintenanceBy($arr[$keys[4]]);
+        if (array_key_exists($keys[5], $arr)) $this->setMaintenanceStartedAt($arr[$keys[5]]);
+        if (array_key_exists($keys[6], $arr)) $this->setMaintenanceStoppedAt($arr[$keys[6]]);
     }
 
     /**
@@ -1047,6 +1131,7 @@ abstract class BaseStoreMaintenanceLog extends BaseObject implements Persistent
 
         if ($this->isColumnModified(StoreMaintenanceLogPeer::ID)) $criteria->add(StoreMaintenanceLogPeer::ID, $this->id);
         if ($this->isColumnModified(StoreMaintenanceLogPeer::TYPE)) $criteria->add(StoreMaintenanceLogPeer::TYPE, $this->type);
+        if ($this->isColumnModified(StoreMaintenanceLogPeer::COLLECTION_ID)) $criteria->add(StoreMaintenanceLogPeer::COLLECTION_ID, $this->collection_id);
         if ($this->isColumnModified(StoreMaintenanceLogPeer::MAINTENANCE_STORE)) $criteria->add(StoreMaintenanceLogPeer::MAINTENANCE_STORE, $this->maintenance_store);
         if ($this->isColumnModified(StoreMaintenanceLogPeer::MAINTENANCE_BY)) $criteria->add(StoreMaintenanceLogPeer::MAINTENANCE_BY, $this->maintenance_by);
         if ($this->isColumnModified(StoreMaintenanceLogPeer::MAINTENANCE_STARTED_AT)) $criteria->add(StoreMaintenanceLogPeer::MAINTENANCE_STARTED_AT, $this->maintenance_started_at);
@@ -1115,6 +1200,7 @@ abstract class BaseStoreMaintenanceLog extends BaseObject implements Persistent
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
         $copyObj->setType($this->getType());
+        $copyObj->setCollectionId($this->getCollectionId());
         $copyObj->setMaintenanceStore($this->getMaintenanceStore());
         $copyObj->setMaintenanceBy($this->getMaintenanceBy());
         $copyObj->setMaintenanceStartedAt($this->getMaintenanceStartedAt());
@@ -1230,6 +1316,58 @@ abstract class BaseStoreMaintenanceLog extends BaseObject implements Persistent
     }
 
     /**
+     * Declares an association between this object and a Collection object.
+     *
+     * @param                  Collection $v
+     * @return StoreMaintenanceLog The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setCollection(Collection $v = null)
+    {
+        if ($v === null) {
+            $this->setCollectionId(NULL);
+        } else {
+            $this->setCollectionId($v->getId());
+        }
+
+        $this->aCollection = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the Collection object, it will not be re-added.
+        if ($v !== null) {
+            $v->addStoreMaintenanceLog($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated Collection object
+     *
+     * @param PropelPDO $con Optional Connection object.
+     * @param $doQuery Executes a query to get the object if required
+     * @return Collection The associated Collection object.
+     * @throws PropelException
+     */
+    public function getCollection(PropelPDO $con = null, $doQuery = true)
+    {
+        if ($this->aCollection === null && ($this->collection_id !== null) && $doQuery) {
+            $this->aCollection = CollectionQuery::create()->findPk($this->collection_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aCollection->addStoreMaintenanceLogs($this);
+             */
+        }
+
+        return $this->aCollection;
+    }
+
+    /**
      * Declares an association between this object and a Store object.
      *
      * @param                  Store $v
@@ -1340,6 +1478,7 @@ abstract class BaseStoreMaintenanceLog extends BaseObject implements Persistent
     {
         $this->id = null;
         $this->type = null;
+        $this->collection_id = null;
         $this->maintenance_store = null;
         $this->maintenance_by = null;
         $this->maintenance_started_at = null;
@@ -1369,6 +1508,9 @@ abstract class BaseStoreMaintenanceLog extends BaseObject implements Persistent
             if ($this->aMaintenanceType instanceof Persistent) {
               $this->aMaintenanceType->clearAllReferences($deep);
             }
+            if ($this->aCollection instanceof Persistent) {
+              $this->aCollection->clearAllReferences($deep);
+            }
             if ($this->aStore instanceof Persistent) {
               $this->aStore->clearAllReferences($deep);
             }
@@ -1380,6 +1522,7 @@ abstract class BaseStoreMaintenanceLog extends BaseObject implements Persistent
         } // if ($deep)
 
         $this->aMaintenanceType = null;
+        $this->aCollection = null;
         $this->aStore = null;
         $this->aUser = null;
     }

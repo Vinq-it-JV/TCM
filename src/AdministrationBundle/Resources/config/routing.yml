@@ -366,6 +366,12 @@ administration_maintenance_log:
     options:
         expose: true
 
+administration_maintenance_log_get:
+    path:     /maintenance/log/{logid}/get
+    defaults: { _controller: StoreBundle:Data:getStoreMaintenanceLog }
+    options:
+        expose: true
+
 administration_maintenance_log_store:
     path:     /maintenance/store/{storeid}/log
     defaults: { _controller: AdministrationBundle:Page:maintenanceLogStore }
@@ -375,7 +381,7 @@ administration_maintenance_log_store:
 
 administration_maintenance_log_store_get:
     path:     /maintenance/store/{storeid}/log/get
-    defaults: { _controller: StoreBundle:Data:getStoreMaintenanceLog }
+    defaults: { _controller: StoreBundle:Data:getStoreMaintenanceLogList }
     methods: [GET]
     options:
         expose: true

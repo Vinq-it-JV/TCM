@@ -70,6 +70,7 @@ class CollectionTableMap extends TableMap
         $this->addRelation('UserRelatedByCreatedBy', 'UserBundle\\Model\\User', RelationMap::MANY_TO_ONE, array('created_by' => 'id', ), null, null);
         $this->addRelation('UserRelatedByEditedBy', 'UserBundle\\Model\\User', RelationMap::MANY_TO_ONE, array('edited_by' => 'id', ), null, null);
         $this->addRelation('CollectionAttachment', 'CollectionBundle\\Model\\CollectionAttachment', RelationMap::ONE_TO_MANY, array('id' => 'collection_id', ), null, null, 'CollectionAttachments');
+        $this->addRelation('StoreMaintenanceLog', 'StoreBundle\\Model\\StoreMaintenanceLog', RelationMap::ONE_TO_MANY, array('id' => 'collection_id', ), null, null, 'StoreMaintenanceLogs');
         $this->addRelation('Attachment', 'CollectionBundle\\Model\\Attachment', RelationMap::MANY_TO_MANY, array(), null, null, 'Attachments');
     } // buildRelations()
 

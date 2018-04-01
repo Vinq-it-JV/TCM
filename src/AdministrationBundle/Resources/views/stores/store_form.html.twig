@@ -1,7 +1,7 @@
 {% import 'macros.html.twig' as mc %}
 
 <form class="form-horizontal" method="post" name="storeForm"
-      action="{{ url('administration_store_save', { 'storeid' : store.Id }) }}" novalidate>
+      action="{{ url('administration_store_save', { 'storeid' : store.Id }) }}" novalidate autocomplete="off">
     <div class="panel-body">
 
         {# Store image block #}
@@ -12,7 +12,7 @@
                 <img ng-if="stores.store().Image" ng-src="{{ imageUrl(stores.store().Image.Id) }}" width="75%"/>
             </div>
             <hr/>
-            <ng-dropzone ng-if="dzUpdate" id="storeDropzone" class="dropzone" options="dzOptions" callbacks="dzCallbacks" methods="dzMethods"></ng-dropzone>
+            <ng-dropzone ng-if="dzShow" id="storeDropzone" class="dropzone" options="dzOptions" callbacks="dzCallbacks" methods="dzMethods"></ng-dropzone>
             {% endverbatim %}
         </div>
         {% endif %}

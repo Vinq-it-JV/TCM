@@ -2,6 +2,7 @@
 
 namespace StoreBundle\Controller;
 
+use CollectionBundle\Model\CollectionQuery;
 use StoreBundle\Model\StoreImage;
 use StoreBundle\Model\StoreImageQuery;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -288,12 +289,12 @@ class DataController extends Controller
     }
 
     /**
-     * Get store maintenance log
+     * Get store maintenance log list
      * @param Request $request
      * @param $storeid
      * @return mixed
      */
-    public function getStoreMaintenanceLogAction(Request $request, $storeid)
+    public function getStoreMaintenanceLogListAction(Request $request, $storeid)
     {
         $dataArr = [];
 
@@ -305,12 +306,41 @@ class DataController extends Controller
                 ->make();
 
         $logs = StoreMaintenanceLogQuery::create()
+            ->orderById('DESC')
             ->filterByMaintenanceStoppedAt(null, \Criteria::NOT_EQUAL)
             ->findByMaintenanceStore($store->getId());
 
-        $dataArr['maintenanceLog'] = [];
+        $dataArr['maintenanceLogList'] = [];
         foreach ($logs as $log)
-            $dataArr['maintenanceLog'][] = $log->getStoreMaintenanceLogDataArray()['maintenancelog'];
+            $dataArr['maintenanceLogList'][] = $log->getStoreMaintenanceLogDataArray()['maintenancelog'];
+
+        return JsonResult::create()
+            ->setContents($dataArr)
+            ->setErrorcode(JsonResult::SUCCESS)
+            ->make();
+    }
+
+    /**
+     * Get store maintenance log
+     * @param Request $request
+     * @param $storeid
+     * @return mixed
+     */
+    public function getStoreMaintenanceLogAction(Request $request, $logid)
+    {
+        $dataArr = [];
+
+        $collection = CollectionQuery::create()
+            ->findOneById($logid);
+
+        if (empty($collection)) {
+            return JsonResult::create()
+                ->setMessage('Collection not found!')
+                ->setErrorcode(JsonResult::DANGER)
+                ->make();
+        }
+
+        $dataArr['maintenanceLog'] = $collection->getCollectionDataArray()['collection'];
 
         return JsonResult::create()
             ->setContents($dataArr)
@@ -375,7 +405,6 @@ class DataController extends Controller
         $filePath = $this->checkStoreRoot($store);
         if (!$filePath)
             return false;
-
         $fs = new Filesystem();
         $image = $store->getImage();
         if (!empty($image)) {
@@ -418,8 +447,7 @@ class DataController extends Controller
      * @param Store $store
      * @return bool|string
      */
-    protected
-    function checkStoreRoot(Store $store)
+    protected function checkStoreRoot(Store $store)
     {
         $rootDir = $this->container->get('kernel')->getRootDir() . '/';
         $fs = new Filesystem();

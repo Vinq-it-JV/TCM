@@ -19,25 +19,30 @@ angular
         $scope.storeId = 0;
         $scope.attachmentId = 0;
         $scope.collectioType = '';
-        $scope.dzUrl = '/';
+        $scope.dzShow = false;
         $scope.lightboxImage = '';
+
         $scope.attachRand = new Date().getTime();
 
         $scope.dzOptions = {
-            url : $scope.dzUrl,
-            paramName : 'maintenance',
-            maxFilesize : '10',
+            url : '/',
+            paramName: 'maintenance',
+            maxFilesize: '10',
             maxFiles: 3,
             resizeWidth: 1024,
             parallelUploads: 3,
-            acceptedFiles : 'image/jpeg, images/jpg, image/png, application/pdf',
-            addRemoveLinks : true,
-            autoProcessQueue : false
+            acceptedFiles: 'image/jpeg, images/jpg, image/png, application/pdf',
+            addRemoveLinks: true,
+            autoProcessQueue: false
         };
 
         $scope.dzCallbacks = {
             'success' : function(file, xhr) {
                 $scope.showCollectionUrl();
+            },
+            'processing' : function (file) {
+                var dz = $scope.dzMethods.getDropzone();
+                dz.options.url = Routing.generate('administration_collection_upload', {'collectionid': $scope.collections.collection().Id});
             }
         };
 
@@ -61,6 +66,10 @@ angular
         };
 
         $scope.$on('languageLoaded', function () {
+            $scope.initDropzone();
+            $timeout( function () {
+                $scope.dzShow = true;
+            }, 1000);
         });
 
         $scope.initDropzone = function()
@@ -125,12 +134,8 @@ angular
 
         $scope.uploadCollectionAttachments = function ()
         {
-            var collectionId = $scope.collections.collection().Id;
-            $scope.dzUrl = Routing.generate('administration_collection_upload', {'collectionid': collectionId});
-
             $scope.BE.showLoader();
             var dz = $scope.dzMethods.getDropzone();
-            dz.options.url = $scope.dzUrl;
 
             if (dz.files.length)
                 $scope.dzMethods.processQueue();

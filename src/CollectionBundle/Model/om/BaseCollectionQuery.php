@@ -20,6 +20,7 @@ use CollectionBundle\Model\CollectionQuery;
 use CollectionBundle\Model\CollectionType;
 use CompanyBundle\Model\Company;
 use StoreBundle\Model\Store;
+use StoreBundle\Model\StoreMaintenanceLog;
 use UserBundle\Model\User;
 
 /**
@@ -80,6 +81,10 @@ use UserBundle\Model\User;
  * @method CollectionQuery leftJoinCollectionAttachment($relationAlias = null) Adds a LEFT JOIN clause to the query using the CollectionAttachment relation
  * @method CollectionQuery rightJoinCollectionAttachment($relationAlias = null) Adds a RIGHT JOIN clause to the query using the CollectionAttachment relation
  * @method CollectionQuery innerJoinCollectionAttachment($relationAlias = null) Adds a INNER JOIN clause to the query using the CollectionAttachment relation
+ *
+ * @method CollectionQuery leftJoinStoreMaintenanceLog($relationAlias = null) Adds a LEFT JOIN clause to the query using the StoreMaintenanceLog relation
+ * @method CollectionQuery rightJoinStoreMaintenanceLog($relationAlias = null) Adds a RIGHT JOIN clause to the query using the StoreMaintenanceLog relation
+ * @method CollectionQuery innerJoinStoreMaintenanceLog($relationAlias = null) Adds a INNER JOIN clause to the query using the StoreMaintenanceLog relation
  *
  * @method Collection findOne(PropelPDO $con = null) Return the first Collection matching the query
  * @method Collection findOneOrCreate(PropelPDO $con = null) Return the first Collection matching the query, or a new Collection object populated from the query conditions when no match is found
@@ -1290,6 +1295,80 @@ abstract class BaseCollectionQuery extends ModelCriteria
         return $this
             ->joinCollectionAttachment($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'CollectionAttachment', '\CollectionBundle\Model\CollectionAttachmentQuery');
+    }
+
+    /**
+     * Filter the query by a related StoreMaintenanceLog object
+     *
+     * @param   StoreMaintenanceLog|PropelObjectCollection $storeMaintenanceLog  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 CollectionQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByStoreMaintenanceLog($storeMaintenanceLog, $comparison = null)
+    {
+        if ($storeMaintenanceLog instanceof StoreMaintenanceLog) {
+            return $this
+                ->addUsingAlias(CollectionPeer::ID, $storeMaintenanceLog->getCollectionId(), $comparison);
+        } elseif ($storeMaintenanceLog instanceof PropelObjectCollection) {
+            return $this
+                ->useStoreMaintenanceLogQuery()
+                ->filterByPrimaryKeys($storeMaintenanceLog->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByStoreMaintenanceLog() only accepts arguments of type StoreMaintenanceLog or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the StoreMaintenanceLog relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return CollectionQuery The current query, for fluid interface
+     */
+    public function joinStoreMaintenanceLog($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('StoreMaintenanceLog');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'StoreMaintenanceLog');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the StoreMaintenanceLog relation StoreMaintenanceLog object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   \StoreBundle\Model\StoreMaintenanceLogQuery A secondary query class using the current class as primary query
+     */
+    public function useStoreMaintenanceLogQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinStoreMaintenanceLog($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'StoreMaintenanceLog', '\StoreBundle\Model\StoreMaintenanceLogQuery');
     }
 
     /**

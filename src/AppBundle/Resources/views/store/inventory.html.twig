@@ -22,7 +22,7 @@
                                 <thead>
                                 <tr>
                                     <th st-sort="Name" class="st-sortable col-md-9 col-xs-7"
-                                        ng-cloak>{{ mc.translate('COLLECTIONS.DESCRIPTION') }}</th>
+                                        ng-cloak>{{ mc.translate('COLLECTIONS.NAME') }}</th>
                                     <th st-sort="Attachments" class="st-sortable col-md-1 col-xs-2 text-center"
                                         ng-cloak><i class="fa fa-fw fa-paperclip"></i></th>
                                     <th class="st-nosort text-right col-md-2 col-xs-3"
@@ -45,7 +45,7 @@
                                 </tr>
                                 {% endverbatim %}
                                 </tbody>
-                                <tfoot ng-show="collectionsCollection.length > 10">
+                                <tfoot ng-show="collections.collections().length > 10">
                                     <tr>
                                         <td class="text-center" st-pagination="" st-items-by-page="10" colspan="3">
                                         </td>
@@ -63,7 +63,7 @@
             <div class="panel panel-info cursor-pointer" ng-click="pageBack()">
                 <div class="panel-heading">
                     <div class="row">
-                        <div class="col-xs-12 text-left big-button-text" ng-cloak>
+                        <div class="col-xs-12 text-left big-button-text" style="font-size: 30px;" ng-cloak>
                             {{ mc.translate('BACK') }}
                             <i class="fa fa-chevron-left fa-2x fa-fw pull-right"></i>
                         </div>

@@ -39,7 +39,7 @@ class DataController extends Controller
             ->filterByCollectionType($type)
             ->filterByCollectionStore($storeid)
             ->filterByIsDeleted(false)
-            ->orderByDate('DESC')
+            ->orderBy('id','DESC')
             ->find();
 
         foreach ($collections as $collection)
@@ -79,7 +79,7 @@ class DataController extends Controller
             ->filterByCollectionType($type)
             ->filterByCollectionStore($storeid)
             ->filterByIsDeleted(false)
-            ->orderByDate('DESC')
+            ->orderBy('name', 'ASC')
             ->find();
 
         foreach ($collections as $collection)
@@ -119,7 +119,7 @@ class DataController extends Controller
             ->filterByCollectionType($type)
             ->filterByCollectionStore($storeid)
             ->filterByIsDeleted(false)
-            ->orderByDate('DESC')
+            ->orderBy('id', 'DESC')
             ->find();
 
         foreach ($collections as $collection)
@@ -334,6 +334,7 @@ class DataController extends Controller
                 $log = new StoreMaintenanceLog();
                 if (!empty($type))
                     $log->setMaintenanceType($type);
+                $log->setCollection($collection);
                 if (isset($collectionData->CollectionStore))
                     $log->setMaintenanceStore($collectionData->CollectionStore);
                 if (isset($collectionData->Date)) {

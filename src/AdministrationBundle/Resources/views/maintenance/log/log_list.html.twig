@@ -1,0 +1,71 @@
+<div class="container">
+    <div class="row">
+        <div class="panel-body">
+            <h4 ng-cloak>
+                <i class="fa fa-book"></i> {{ mc.translate('MAINTENANCE.LOG') }}
+            </h4>
+            <hr/>
+            <div class="well table-responsive">
+                <section st-table="logCollection" st-safe-src="logs.logs()" st-persist="maintenanceLog">
+                    <div class="row">
+                        <div class="col-md-3 col-xs-6">
+                            <input st-search class="form-control input-sm"
+                                   placeholder="{{ mc.translate('SEARCH') }}" type="text" ng-cloak/>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12">
+                            <table class="table table-striped table-bordered">
+                                <thead>
+                                <tr>
+                                    <th st-sort="MaintenanceStore.Name" class="st-sortable col-md-3" ng-cloak>{{ mc.translate('STORE.NAME') }}</th>
+                                    <th st-sort="Type.Name" class="st-sortable col-md-2" ng-cloak>{{ mc.translate('MAINTENANCE.TYPE') }}</th>
+                                    <th st-sort="MaintenanceBy.Name" class="st-sortable col-md-3" ng-cloak><i class="fa fa-fw fa-user"></i></th>
+                                    <th st-sort="MaintenanceStartedAt.date" class="st-sortable col-md-2" ng-cloak>{{ mc.translate('MAINTENANCE.START_MAINTENANCE') }}</th>
+                                    <th st-sort="MaintenanceStoppedAt.date" class="st-sortable col-md-2" ng-cloak>{{ mc.translate('MAINTENANCE.STOP_MAINTENANCE') }}</th>
+                                    <th class="st-nosort text-right col-md-2 col-xs-2" ng-cloak>{{ mc.translate('ACTION') }}</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="log in logCollection">
+                                    {% verbatim %}
+                                    <td ng-cloak>{{ log.MaintenanceStore.Name }}</td>
+                                    <td ng-cloak>{{ log.Type.Name | translate }}</td>
+                                    <td ng-cloak>{{ log.MaintenanceBy.Name }}</td>
+                                    <td ng-cloak>{{ log.MaintenanceStartedAt.date | GMT:'DD-MM-YYYY H:mm' }}</td>
+                                    <td ng-cloak>{{ log.MaintenanceStoppedAt.date | GMT:'DD-MM-YYYY H:mm' }}</td>
+                                    <td>
+                                        <div class="pull-right" ng-if="log.Type.Id == 2 && log.CollectionId">
+                                            <button type="button" ng-click="showLog(log.CollectionId)"
+                                                class="btn btn-xs btn-info">
+                                                <i class="fa fa-search"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                    {% endverbatim %}
+                                </tr>
+                                </tbody>
+                                <tfoot ng-show="logs.logs().length > 10">
+                                <tr>
+                                    <td class="text-center" st-pagination="" st-items-by-page="10" colspan="6">
+                                    </td>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="panel-footer">
+                <div class="row">
+                    <div class="col-md-12">
+                        <button class="btn btn-sm btn-default pull-left" ng-click="pageBack()" ng-cloak>
+                            <i class="fa fa-close"></i> {{ mc.translate('CANCEL') }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

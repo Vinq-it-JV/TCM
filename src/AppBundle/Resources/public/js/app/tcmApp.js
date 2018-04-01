@@ -11,7 +11,7 @@
  *
  */
 angular
-    .module('tcmApp', ['ui.router', 'ui.select', 'toggle-switch', 'ui.tree', 'highcharts-ng', 'ngResource', 'ngCookies', 'ngSanitize', 'LocalStorageModule', 'smart-table', 'ngAnimate', 'ghiscoding.validation', 'pascalprecht.translate', 'cgBusy', 'mgcrea.ngStrap', 'ngMap', 'ng.dropzone', 'html5.sortable'])
+    .module('tcmApp', ['ui.router', 'ui.select', 'toggle-switch', 'ui.tree', 'highcharts-ng', 'ngResource', 'ngCookies', 'ngSanitize', 'LocalStorageModule', 'smart-table', 'ngAnimate', 'ghiscoding.validation', 'pascalprecht.translate', 'cgBusy', 'mgcrea.ngStrap', 'ngMap', 'thatisuday.dropzone', 'html5.sortable'])
     .config(function($translateProvider) {
         $translateProvider.useStaticFilesLoader({
         	files: [{
@@ -33,6 +33,8 @@ angular
     })
     .config(function(dropzoneOpsProvider) {
         dropzoneOpsProvider.setOptions({
+            url : '/',
+            maxFilesize : '10'
         })
     })
     .config(['$urlRouterProvider', '$stateProvider', '$locationProvider', '$translateProvider',

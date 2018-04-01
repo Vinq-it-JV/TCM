@@ -117,7 +117,7 @@ class DataController extends Controller
             ->filterByCollectionStore($storeid)
             ->filterByIsPublished(true)
             ->filterByIsDeleted(false)
-            ->orderByDate('DESC')
+            ->orderBy('id', 'DESC')
             ->find();
 
         foreach ($collections as $collection)
@@ -156,7 +156,7 @@ class DataController extends Controller
             ->filterByCollectionStore($storeid)
             ->filterByIsPublished(true)
             ->filterByIsDeleted(false)
-            ->orderByDate('DESC')
+            ->orderBy('name', 'ASC')
             ->find();
 
         foreach ($collections as $collection)
@@ -195,7 +195,7 @@ class DataController extends Controller
             ->filterByCollectionStore($storeid)
             ->filterByIsPublished(true)
             ->filterByIsDeleted(false)
-            ->orderByDate('DESC')
+            ->orderBy('id','DESC')
             ->find();
 
         foreach ($collections as $collection)

@@ -1,7 +1,7 @@
 {% import 'macros.html.twig' as mc %}
 
 <form class="form-horizontal" method="post" name="companyForm"
-      action="{{ url('administration_company_save', { 'companyid' : company.Id }) }}" novalidate>
+      action="{{ url('administration_company_save', { 'companyid' : company.Id }) }}" autocomplete="off" novalidate>
     <div class="panel-body">
         <div class="well" ng-form="companyDataForm">
             {# Company information block #}
@@ -40,7 +40,7 @@
                        ng-cloak>{{ mc.translate('COMPANY.CODE') }}</label>
                 <div class="col-md-3">
                     <input class="form-control input-sm" name="Code" type="text"
-                           ng-model="companies.company().Code" validation="min_len:1|required" no-enter/>
+                           ng-model="companies.company().Code" validation="min_len:1|required" no-enter />
                 </div>
             </div>
             <div class="form-group">
@@ -64,7 +64,7 @@
                        ng-cloak>{{ mc.translate('COMPANY.WEBSITE') }}</label>
                 <div class="col-md-6">
                     <input class="form-control input-sm" name="Website" type="text"
-                           ng-model="companies.company().Website" validation="url" no-enter/>
+                           ng-model="companies.company().Website" validation="url"  no-enter/>
                 </div>
             </div>
             <div class="form-group">
@@ -85,7 +85,7 @@
                        ng-cloak>{{ mc.translate('COMPANY.VAT_NUMBER') }}</label>
                 <div class="col-md-4">
                     <input class="form-control input-sm" name="VatNumber" type="text"
-                           ng-model="companies.company().VatNumber" no-enter/>
+                           ng-model="companies.company().VatNumber"  no-enter/>
                 </div>
             </div>
             <div class="form-group">
@@ -93,7 +93,7 @@
                        ng-cloak>{{ mc.translate('COMPANY.COC_NUMBER') }}</label>
                 <div class="col-md-4">
                     <input class="form-control input-sm" name="CocNumber" type="text"
-                           ng-model="companies.company().CocNumber" no-enter/>
+                           ng-model="companies.company().CocNumber"  no-enter/>
                 </div>
             </div>
             <div class="form-group">
@@ -133,7 +133,7 @@
                             <div class="col-md-4 col-xs-8 radio-inline">
                                 <input type="radio" name="EmailPrimary" class="check-offset" value="{{ email.Id }}" ng-checked="{{ email.Primary || companies.company().Emails.length == 1 }}"/>
                                 <input class="form-control input-sm" name="emails[{{ email.Id }}][Email]"
-                                       ng-model="email.Email" no-enter/>
+                                       ng-model="email.Email"  no-enter/>
                             </div>
                             <button type="button" class="btn btn-sm btn-danger"
                                     ng-click="deleteEmail($index)"><i class="fa fa-remove"></i>
@@ -144,7 +144,7 @@
                         <div class="col-md-4 col-xs-8">
                             <input class="form-control input-sm" ng-model="companies.email().Email"
                                    name="email" placeholder="{{ 'COMPANY.EMAIL' | translate }}"
-                                   validation="email|{{!companies.emails().length ? 'required': ''}}" no-enter ng-cloak/>
+                                   validation="email|{{!companies.emails().length ? 'required': ''}}"  no-enter ng-cloak/>
                         </div>
                         <button type="button" class="btn btn-sm btn-success"
                                 ng-click="companies.addEmail()"
@@ -169,7 +169,7 @@
                             <div class="col-md-4 col-xs-8 radio-inline">
                                 <input type="radio" name="PhonePrimary" class="check-offset" value="{{ phone.Id }}" ng-checked="{{ phone.Primary || companies.company().Phones.length == 1 }}"/>
                                 <input class="form-control input-sm" name="phones[{{ phone.Id }}][PhoneNumber]"
-                                       ng-model="phone.PhoneNumber" no-enter/>
+                                       ng-model="phone.PhoneNumber"  no-enter/>
                             </div>
                             <button type="button" class="btn btn-sm btn-danger"
                                     ng-click="deletePhone($index)"><i class="fa fa-remove"></i>
@@ -181,7 +181,7 @@
                             <input class="form-control input-sm"
                                    ng-model="companies.phone().PhoneNumber" name="phone"
                                    placeholder="{{ 'COMPANY.PHONE' | translate }}"
-                                   validation="phone_international" no-enter ng-cloak/>
+                                   validation="phone_international" no-enter  ng-cloak/>
                         </div>
                         <button type="button" class="btn btn-sm btn-success"
                                 ng-click="companies.addPhone()"
@@ -210,9 +210,9 @@
                             <div class="row">
                                 <div class="col-md-3 col-xs-8">
                                     <input type="hidden" name="addresses[{{ address.Id }}][Type]" value="{{ address.Type.Id }}">
-                                    <ui-select ng-model="address.Type" search-enabled="true" theme="select2" style="width:100%;">
-                                        <ui-select-match placeholder="{{ 'SELECT' | translate }}" ng-cloak>{{ $select.selected.Name | translate }}</ui-select-match>
-                                        <ui-select-choices repeat="item in companies.lists().address_type | filterTranslate : {'Name':$select.search}" ng-cloak>{{ item.Name | translate}}</ui-select-choices>
+                                    <ui-select ng-model="address.Type" search-enabled="true" theme="select2" style="width:100%;" >
+                                        <ui-select-match placeholder="{{ 'SELECT' | translate }}"  ng-cloak>{{ $select.selected.Name | translate }}</ui-select-match>
+                                        <ui-select-choices repeat="item in companies.lists().address_type | filterTranslate : {'Name':$select.search}"  ng-cloak>{{ item.Name | translate}}</ui-select-choices>
                                     </ui-select>
                                 </div>
                                 <div class="col-md-9 col-xs-4">
@@ -235,13 +235,13 @@
                                 <div class="col-md-6 col-xs-9">
                                     <input class="form-control input-sm"
                                            name="addresses[{{ address.Id }}][StreetName]"
-                                           ng-model="address.StreetName" validation="required" no-enter/>
+                                           ng-model="address.StreetName" validation="required"  no-enter/>
                                 </div>
                                 <div class="col-md-2 col-xs-3">
                                     <input class="form-control input-sm"
                                            name="addresses[{{ address.Id }}][HouseNumber]"
                                            ng-model="address.HouseNumber"
-                                           validation="required" no-enter/>
+                                           validation="required"  no-enter/>
                                 </div>
                             </div>
                         </div>
@@ -254,7 +254,7 @@
                                 <div class="col-md-3 col-xs-6">
                                     <input class="form-control input-sm"
                                            name="addresses[{{ address.Id }}][PostalCode]"
-                                           ng-model="address.PostalCode" validation="required" no-enter/>
+                                           ng-model="address.PostalCode" validation="required"  no-enter/>
                                 </div>
                                 <div class="col-md-2 col-xs-2">
                                     <button class="btn btn-primary btn-sm" type="button" ng-click="checkAddress(address)"><i
@@ -271,7 +271,7 @@
                                 <div class="col-md-4 col-xs-10">
                                     <input class="form-control input-sm"
                                            name="addresses[{{ address.Id }}][City]" ng-model="address.City"
-                                           validation="required" no-enter/>
+                                           validation="required"  no-enter/>
                                 </div>
                             </div>
                         </div>
@@ -283,9 +283,9 @@
                             <div class="row">
                                 <div class="col-md-3 col-xs-8">
                                     <input type="hidden" name="addresses[{{ address.Id }}][Country]" value="{{ address.Country.CountryCode }}">
-                                    <ui-select name="addresses[{{ address.Id }}][Country]" ng-model="address.Country" search-enabled="true" theme="select2" style="width:100%;">
-                                        <ui-select-match placeholder="{{ 'SELECT' | translate }}" ng-cloak>{{$select.selected.Name | translate}}</ui-select-match>
-                                        <ui-select-choices repeat="item in companies.lists().countries | filterTranslate : {'Name':$select.search}" ng-cloak>{{ item.Name | translate}}</ui-select-choices>
+                                    <ui-select name="addresses[{{ address.Id }}][Country]" ng-model="address.Country" search-enabled="true" theme="select2" style="width:100%;" >
+                                        <ui-select-match placeholder="{{ 'SELECT' | translate }}"  ng-cloak>{{$select.selected.Name | translate}}</ui-select-match>
+                                        <ui-select-choices repeat="item in companies.lists().countries | filterTranslate : {'Name':$select.search}"  ng-cloak>{{ item.Name | translate}}</ui-select-choices>
                                     </ui-select>
                                 </div>
                             </div>
@@ -299,7 +299,7 @@
                                 <div class="col-md-12 col-xs-12">
                                     <input class="form-control input-sm"
                                            name="addresses[{{ address.Id }}][MapCoordinates]"
-                                           ng-model="address.MapCoordinates" no-enter/>
+                                           ng-model="address.MapCoordinates"  no-enter/>
                                 </div>
                             </div>
                         </div>

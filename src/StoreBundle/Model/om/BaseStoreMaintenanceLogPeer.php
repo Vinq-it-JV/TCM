@@ -9,6 +9,7 @@ use \PDOStatement;
 use \Propel;
 use \PropelException;
 use \PropelPDO;
+use CollectionBundle\Model\CollectionPeer;
 use StoreBundle\Model\MaintenanceTypePeer;
 use StoreBundle\Model\StoreMaintenanceLog;
 use StoreBundle\Model\StoreMaintenanceLogPeer;
@@ -32,19 +33,22 @@ abstract class BaseStoreMaintenanceLogPeer
     const TM_CLASS = 'StoreBundle\\Model\\map\\StoreMaintenanceLogTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 6;
+    const NUM_COLUMNS = 7;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 6;
+    const NUM_HYDRATE_COLUMNS = 7;
 
     /** the column name for the id field */
     const ID = 'store_maintenance_log.id';
 
     /** the column name for the type field */
     const TYPE = 'store_maintenance_log.type';
+
+    /** the column name for the collection_id field */
+    const COLLECTION_ID = 'store_maintenance_log.collection_id';
 
     /** the column name for the maintenance_store field */
     const MAINTENANCE_STORE = 'store_maintenance_log.maintenance_store';
@@ -77,12 +81,12 @@ abstract class BaseStoreMaintenanceLogPeer
      * e.g. StoreMaintenanceLogPeer::$fieldNames[StoreMaintenanceLogPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'Type', 'MaintenanceStore', 'MaintenanceBy', 'MaintenanceStartedAt', 'MaintenanceStoppedAt', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'type', 'maintenanceStore', 'maintenanceBy', 'maintenanceStartedAt', 'maintenanceStoppedAt', ),
-        BasePeer::TYPE_COLNAME => array (StoreMaintenanceLogPeer::ID, StoreMaintenanceLogPeer::TYPE, StoreMaintenanceLogPeer::MAINTENANCE_STORE, StoreMaintenanceLogPeer::MAINTENANCE_BY, StoreMaintenanceLogPeer::MAINTENANCE_STARTED_AT, StoreMaintenanceLogPeer::MAINTENANCE_STOPPED_AT, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'TYPE', 'MAINTENANCE_STORE', 'MAINTENANCE_BY', 'MAINTENANCE_STARTED_AT', 'MAINTENANCE_STOPPED_AT', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'type', 'maintenance_store', 'maintenance_by', 'maintenance_started_at', 'maintenance_stopped_at', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
+        BasePeer::TYPE_PHPNAME => array ('Id', 'Type', 'CollectionId', 'MaintenanceStore', 'MaintenanceBy', 'MaintenanceStartedAt', 'MaintenanceStoppedAt', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'type', 'collectionId', 'maintenanceStore', 'maintenanceBy', 'maintenanceStartedAt', 'maintenanceStoppedAt', ),
+        BasePeer::TYPE_COLNAME => array (StoreMaintenanceLogPeer::ID, StoreMaintenanceLogPeer::TYPE, StoreMaintenanceLogPeer::COLLECTION_ID, StoreMaintenanceLogPeer::MAINTENANCE_STORE, StoreMaintenanceLogPeer::MAINTENANCE_BY, StoreMaintenanceLogPeer::MAINTENANCE_STARTED_AT, StoreMaintenanceLogPeer::MAINTENANCE_STOPPED_AT, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'TYPE', 'COLLECTION_ID', 'MAINTENANCE_STORE', 'MAINTENANCE_BY', 'MAINTENANCE_STARTED_AT', 'MAINTENANCE_STOPPED_AT', ),
+        BasePeer::TYPE_FIELDNAME => array ('id', 'type', 'collection_id', 'maintenance_store', 'maintenance_by', 'maintenance_started_at', 'maintenance_stopped_at', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, )
     );
 
     /**
@@ -92,12 +96,12 @@ abstract class BaseStoreMaintenanceLogPeer
      * e.g. StoreMaintenanceLogPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Type' => 1, 'MaintenanceStore' => 2, 'MaintenanceBy' => 3, 'MaintenanceStartedAt' => 4, 'MaintenanceStoppedAt' => 5, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'type' => 1, 'maintenanceStore' => 2, 'maintenanceBy' => 3, 'maintenanceStartedAt' => 4, 'maintenanceStoppedAt' => 5, ),
-        BasePeer::TYPE_COLNAME => array (StoreMaintenanceLogPeer::ID => 0, StoreMaintenanceLogPeer::TYPE => 1, StoreMaintenanceLogPeer::MAINTENANCE_STORE => 2, StoreMaintenanceLogPeer::MAINTENANCE_BY => 3, StoreMaintenanceLogPeer::MAINTENANCE_STARTED_AT => 4, StoreMaintenanceLogPeer::MAINTENANCE_STOPPED_AT => 5, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'TYPE' => 1, 'MAINTENANCE_STORE' => 2, 'MAINTENANCE_BY' => 3, 'MAINTENANCE_STARTED_AT' => 4, 'MAINTENANCE_STOPPED_AT' => 5, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'type' => 1, 'maintenance_store' => 2, 'maintenance_by' => 3, 'maintenance_started_at' => 4, 'maintenance_stopped_at' => 5, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
+        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Type' => 1, 'CollectionId' => 2, 'MaintenanceStore' => 3, 'MaintenanceBy' => 4, 'MaintenanceStartedAt' => 5, 'MaintenanceStoppedAt' => 6, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'type' => 1, 'collectionId' => 2, 'maintenanceStore' => 3, 'maintenanceBy' => 4, 'maintenanceStartedAt' => 5, 'maintenanceStoppedAt' => 6, ),
+        BasePeer::TYPE_COLNAME => array (StoreMaintenanceLogPeer::ID => 0, StoreMaintenanceLogPeer::TYPE => 1, StoreMaintenanceLogPeer::COLLECTION_ID => 2, StoreMaintenanceLogPeer::MAINTENANCE_STORE => 3, StoreMaintenanceLogPeer::MAINTENANCE_BY => 4, StoreMaintenanceLogPeer::MAINTENANCE_STARTED_AT => 5, StoreMaintenanceLogPeer::MAINTENANCE_STOPPED_AT => 6, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'TYPE' => 1, 'COLLECTION_ID' => 2, 'MAINTENANCE_STORE' => 3, 'MAINTENANCE_BY' => 4, 'MAINTENANCE_STARTED_AT' => 5, 'MAINTENANCE_STOPPED_AT' => 6, ),
+        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'type' => 1, 'collection_id' => 2, 'maintenance_store' => 3, 'maintenance_by' => 4, 'maintenance_started_at' => 5, 'maintenance_stopped_at' => 6, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, )
     );
 
     /**
@@ -173,6 +177,7 @@ abstract class BaseStoreMaintenanceLogPeer
         if (null === $alias) {
             $criteria->addSelectColumn(StoreMaintenanceLogPeer::ID);
             $criteria->addSelectColumn(StoreMaintenanceLogPeer::TYPE);
+            $criteria->addSelectColumn(StoreMaintenanceLogPeer::COLLECTION_ID);
             $criteria->addSelectColumn(StoreMaintenanceLogPeer::MAINTENANCE_STORE);
             $criteria->addSelectColumn(StoreMaintenanceLogPeer::MAINTENANCE_BY);
             $criteria->addSelectColumn(StoreMaintenanceLogPeer::MAINTENANCE_STARTED_AT);
@@ -180,6 +185,7 @@ abstract class BaseStoreMaintenanceLogPeer
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.type');
+            $criteria->addSelectColumn($alias . '.collection_id');
             $criteria->addSelectColumn($alias . '.maintenance_store');
             $criteria->addSelectColumn($alias . '.maintenance_by');
             $criteria->addSelectColumn($alias . '.maintenance_started_at');
@@ -537,6 +543,57 @@ abstract class BaseStoreMaintenanceLogPeer
 
 
     /**
+     * Returns the number of rows matching criteria, joining the related Collection table
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinCollection(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(StoreMaintenanceLogPeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            StoreMaintenanceLogPeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
+
+        // Set the correct dbName
+        $criteria->setDbName(StoreMaintenanceLogPeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(StoreMaintenanceLogPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(StoreMaintenanceLogPeer::COLLECTION_ID, CollectionPeer::ID, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
+    }
+
+
+    /**
      * Returns the number of rows matching criteria, joining the related Store table
      *
      * @param      Criteria $criteria
@@ -693,6 +750,73 @@ abstract class BaseStoreMaintenanceLogPeer
                 } // if obj2 already loaded
 
                 // Add the $obj1 (StoreMaintenanceLog) to $obj2 (MaintenanceType)
+                $obj2->addStoreMaintenanceLog($obj1);
+
+            } // if joined row was not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
+
+    /**
+     * Selects a collection of StoreMaintenanceLog objects pre-filled with their Collection objects.
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of StoreMaintenanceLog objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinCollection(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(StoreMaintenanceLogPeer::DATABASE_NAME);
+        }
+
+        StoreMaintenanceLogPeer::addSelectColumns($criteria);
+        $startcol = StoreMaintenanceLogPeer::NUM_HYDRATE_COLUMNS;
+        CollectionPeer::addSelectColumns($criteria);
+
+        $criteria->addJoin(StoreMaintenanceLogPeer::COLLECTION_ID, CollectionPeer::ID, $join_behavior);
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = StoreMaintenanceLogPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = StoreMaintenanceLogPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+
+                $cls = StoreMaintenanceLogPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                StoreMaintenanceLogPeer::addInstanceToPool($obj1, $key1);
+            } // if $obj1 already loaded
+
+            $key2 = CollectionPeer::getPrimaryKeyHashFromRow($row, $startcol);
+            if ($key2 !== null) {
+                $obj2 = CollectionPeer::getInstanceFromPool($key2);
+                if (!$obj2) {
+
+                    $cls = CollectionPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol);
+                    CollectionPeer::addInstanceToPool($obj2, $key2);
+                } // if obj2 already loaded
+
+                // Add the $obj1 (StoreMaintenanceLog) to $obj2 (Collection)
                 $obj2->addStoreMaintenanceLog($obj1);
 
             } // if joined row was not null
@@ -877,6 +1001,8 @@ abstract class BaseStoreMaintenanceLogPeer
 
         $criteria->addJoin(StoreMaintenanceLogPeer::TYPE, MaintenanceTypePeer::ID, $join_behavior);
 
+        $criteria->addJoin(StoreMaintenanceLogPeer::COLLECTION_ID, CollectionPeer::ID, $join_behavior);
+
         $criteria->addJoin(StoreMaintenanceLogPeer::MAINTENANCE_STORE, StorePeer::ID, $join_behavior);
 
         $criteria->addJoin(StoreMaintenanceLogPeer::MAINTENANCE_BY, UserPeer::ID, $join_behavior);
@@ -918,13 +1044,18 @@ abstract class BaseStoreMaintenanceLogPeer
         MaintenanceTypePeer::addSelectColumns($criteria);
         $startcol3 = $startcol2 + MaintenanceTypePeer::NUM_HYDRATE_COLUMNS;
 
+        CollectionPeer::addSelectColumns($criteria);
+        $startcol4 = $startcol3 + CollectionPeer::NUM_HYDRATE_COLUMNS;
+
         StorePeer::addSelectColumns($criteria);
-        $startcol4 = $startcol3 + StorePeer::NUM_HYDRATE_COLUMNS;
+        $startcol5 = $startcol4 + StorePeer::NUM_HYDRATE_COLUMNS;
 
         UserPeer::addSelectColumns($criteria);
-        $startcol5 = $startcol4 + UserPeer::NUM_HYDRATE_COLUMNS;
+        $startcol6 = $startcol5 + UserPeer::NUM_HYDRATE_COLUMNS;
 
         $criteria->addJoin(StoreMaintenanceLogPeer::TYPE, MaintenanceTypePeer::ID, $join_behavior);
+
+        $criteria->addJoin(StoreMaintenanceLogPeer::COLLECTION_ID, CollectionPeer::ID, $join_behavior);
 
         $criteria->addJoin(StoreMaintenanceLogPeer::MAINTENANCE_STORE, StorePeer::ID, $join_behavior);
 
@@ -965,40 +1096,58 @@ abstract class BaseStoreMaintenanceLogPeer
                 $obj2->addStoreMaintenanceLog($obj1);
             } // if joined row not null
 
-            // Add objects for joined Store rows
+            // Add objects for joined Collection rows
 
-            $key3 = StorePeer::getPrimaryKeyHashFromRow($row, $startcol3);
+            $key3 = CollectionPeer::getPrimaryKeyHashFromRow($row, $startcol3);
             if ($key3 !== null) {
-                $obj3 = StorePeer::getInstanceFromPool($key3);
+                $obj3 = CollectionPeer::getInstanceFromPool($key3);
                 if (!$obj3) {
 
-                    $cls = StorePeer::getOMClass();
+                    $cls = CollectionPeer::getOMClass();
 
                     $obj3 = new $cls();
                     $obj3->hydrate($row, $startcol3);
-                    StorePeer::addInstanceToPool($obj3, $key3);
+                    CollectionPeer::addInstanceToPool($obj3, $key3);
                 } // if obj3 loaded
 
-                // Add the $obj1 (StoreMaintenanceLog) to the collection in $obj3 (Store)
+                // Add the $obj1 (StoreMaintenanceLog) to the collection in $obj3 (Collection)
                 $obj3->addStoreMaintenanceLog($obj1);
+            } // if joined row not null
+
+            // Add objects for joined Store rows
+
+            $key4 = StorePeer::getPrimaryKeyHashFromRow($row, $startcol4);
+            if ($key4 !== null) {
+                $obj4 = StorePeer::getInstanceFromPool($key4);
+                if (!$obj4) {
+
+                    $cls = StorePeer::getOMClass();
+
+                    $obj4 = new $cls();
+                    $obj4->hydrate($row, $startcol4);
+                    StorePeer::addInstanceToPool($obj4, $key4);
+                } // if obj4 loaded
+
+                // Add the $obj1 (StoreMaintenanceLog) to the collection in $obj4 (Store)
+                $obj4->addStoreMaintenanceLog($obj1);
             } // if joined row not null
 
             // Add objects for joined User rows
 
-            $key4 = UserPeer::getPrimaryKeyHashFromRow($row, $startcol4);
-            if ($key4 !== null) {
-                $obj4 = UserPeer::getInstanceFromPool($key4);
-                if (!$obj4) {
+            $key5 = UserPeer::getPrimaryKeyHashFromRow($row, $startcol5);
+            if ($key5 !== null) {
+                $obj5 = UserPeer::getInstanceFromPool($key5);
+                if (!$obj5) {
 
                     $cls = UserPeer::getOMClass();
 
-                    $obj4 = new $cls();
-                    $obj4->hydrate($row, $startcol4);
-                    UserPeer::addInstanceToPool($obj4, $key4);
-                } // if obj4 loaded
+                    $obj5 = new $cls();
+                    $obj5->hydrate($row, $startcol5);
+                    UserPeer::addInstanceToPool($obj5, $key5);
+                } // if obj5 loaded
 
-                // Add the $obj1 (StoreMaintenanceLog) to the collection in $obj4 (User)
-                $obj4->addStoreMaintenanceLog($obj1);
+                // Add the $obj1 (StoreMaintenanceLog) to the collection in $obj5 (User)
+                $obj5->addStoreMaintenanceLog($obj1);
             } // if joined row not null
 
             $results[] = $obj1;
@@ -1044,6 +1193,63 @@ abstract class BaseStoreMaintenanceLogPeer
         if ($con === null) {
             $con = Propel::getConnection(StoreMaintenanceLogPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
+
+        $criteria->addJoin(StoreMaintenanceLogPeer::COLLECTION_ID, CollectionPeer::ID, $join_behavior);
+
+        $criteria->addJoin(StoreMaintenanceLogPeer::MAINTENANCE_STORE, StorePeer::ID, $join_behavior);
+
+        $criteria->addJoin(StoreMaintenanceLogPeer::MAINTENANCE_BY, UserPeer::ID, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
+    }
+
+
+    /**
+     * Returns the number of rows matching criteria, joining the related Collection table
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinAllExceptCollection(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(StoreMaintenanceLogPeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            StoreMaintenanceLogPeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY should not affect count
+
+        // Set the correct dbName
+        $criteria->setDbName(StoreMaintenanceLogPeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(StoreMaintenanceLogPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(StoreMaintenanceLogPeer::TYPE, MaintenanceTypePeer::ID, $join_behavior);
 
         $criteria->addJoin(StoreMaintenanceLogPeer::MAINTENANCE_STORE, StorePeer::ID, $join_behavior);
 
@@ -1100,6 +1306,8 @@ abstract class BaseStoreMaintenanceLogPeer
 
         $criteria->addJoin(StoreMaintenanceLogPeer::TYPE, MaintenanceTypePeer::ID, $join_behavior);
 
+        $criteria->addJoin(StoreMaintenanceLogPeer::COLLECTION_ID, CollectionPeer::ID, $join_behavior);
+
         $criteria->addJoin(StoreMaintenanceLogPeer::MAINTENANCE_BY, UserPeer::ID, $join_behavior);
 
         $stmt = BasePeer::doCount($criteria, $con);
@@ -1153,6 +1361,8 @@ abstract class BaseStoreMaintenanceLogPeer
 
         $criteria->addJoin(StoreMaintenanceLogPeer::TYPE, MaintenanceTypePeer::ID, $join_behavior);
 
+        $criteria->addJoin(StoreMaintenanceLogPeer::COLLECTION_ID, CollectionPeer::ID, $join_behavior);
+
         $criteria->addJoin(StoreMaintenanceLogPeer::MAINTENANCE_STORE, StorePeer::ID, $join_behavior);
 
         $stmt = BasePeer::doCount($criteria, $con);
@@ -1192,11 +1402,16 @@ abstract class BaseStoreMaintenanceLogPeer
         StoreMaintenanceLogPeer::addSelectColumns($criteria);
         $startcol2 = StoreMaintenanceLogPeer::NUM_HYDRATE_COLUMNS;
 
+        CollectionPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + CollectionPeer::NUM_HYDRATE_COLUMNS;
+
         StorePeer::addSelectColumns($criteria);
-        $startcol3 = $startcol2 + StorePeer::NUM_HYDRATE_COLUMNS;
+        $startcol4 = $startcol3 + StorePeer::NUM_HYDRATE_COLUMNS;
 
         UserPeer::addSelectColumns($criteria);
-        $startcol4 = $startcol3 + UserPeer::NUM_HYDRATE_COLUMNS;
+        $startcol5 = $startcol4 + UserPeer::NUM_HYDRATE_COLUMNS;
+
+        $criteria->addJoin(StoreMaintenanceLogPeer::COLLECTION_ID, CollectionPeer::ID, $join_behavior);
 
         $criteria->addJoin(StoreMaintenanceLogPeer::MAINTENANCE_STORE, StorePeer::ID, $join_behavior);
 
@@ -1220,41 +1435,60 @@ abstract class BaseStoreMaintenanceLogPeer
                 StoreMaintenanceLogPeer::addInstanceToPool($obj1, $key1);
             } // if obj1 already loaded
 
+                // Add objects for joined Collection rows
+
+                $key2 = CollectionPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+                if ($key2 !== null) {
+                    $obj2 = CollectionPeer::getInstanceFromPool($key2);
+                    if (!$obj2) {
+
+                        $cls = CollectionPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol2);
+                    CollectionPeer::addInstanceToPool($obj2, $key2);
+                } // if $obj2 already loaded
+
+                // Add the $obj1 (StoreMaintenanceLog) to the collection in $obj2 (Collection)
+                $obj2->addStoreMaintenanceLog($obj1);
+
+            } // if joined row is not null
+
                 // Add objects for joined Store rows
 
-                $key2 = StorePeer::getPrimaryKeyHashFromRow($row, $startcol2);
-                if ($key2 !== null) {
-                    $obj2 = StorePeer::getInstanceFromPool($key2);
-                    if (!$obj2) {
+                $key3 = StorePeer::getPrimaryKeyHashFromRow($row, $startcol3);
+                if ($key3 !== null) {
+                    $obj3 = StorePeer::getInstanceFromPool($key3);
+                    if (!$obj3) {
 
                         $cls = StorePeer::getOMClass();
 
-                    $obj2 = new $cls();
-                    $obj2->hydrate($row, $startcol2);
-                    StorePeer::addInstanceToPool($obj2, $key2);
-                } // if $obj2 already loaded
+                    $obj3 = new $cls();
+                    $obj3->hydrate($row, $startcol3);
+                    StorePeer::addInstanceToPool($obj3, $key3);
+                } // if $obj3 already loaded
 
-                // Add the $obj1 (StoreMaintenanceLog) to the collection in $obj2 (Store)
-                $obj2->addStoreMaintenanceLog($obj1);
+                // Add the $obj1 (StoreMaintenanceLog) to the collection in $obj3 (Store)
+                $obj3->addStoreMaintenanceLog($obj1);
 
             } // if joined row is not null
 
                 // Add objects for joined User rows
 
-                $key3 = UserPeer::getPrimaryKeyHashFromRow($row, $startcol3);
-                if ($key3 !== null) {
-                    $obj3 = UserPeer::getInstanceFromPool($key3);
-                    if (!$obj3) {
+                $key4 = UserPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+                if ($key4 !== null) {
+                    $obj4 = UserPeer::getInstanceFromPool($key4);
+                    if (!$obj4) {
 
                         $cls = UserPeer::getOMClass();
 
-                    $obj3 = new $cls();
-                    $obj3->hydrate($row, $startcol3);
-                    UserPeer::addInstanceToPool($obj3, $key3);
-                } // if $obj3 already loaded
+                    $obj4 = new $cls();
+                    $obj4->hydrate($row, $startcol4);
+                    UserPeer::addInstanceToPool($obj4, $key4);
+                } // if $obj4 already loaded
 
-                // Add the $obj1 (StoreMaintenanceLog) to the collection in $obj3 (User)
-                $obj3->addStoreMaintenanceLog($obj1);
+                // Add the $obj1 (StoreMaintenanceLog) to the collection in $obj4 (User)
+                $obj4->addStoreMaintenanceLog($obj1);
 
             } // if joined row is not null
 
@@ -1267,7 +1501,7 @@ abstract class BaseStoreMaintenanceLogPeer
 
 
     /**
-     * Selects a collection of StoreMaintenanceLog objects pre-filled with all related objects except Store.
+     * Selects a collection of StoreMaintenanceLog objects pre-filled with all related objects except Collection.
      *
      * @param      Criteria  $criteria
      * @param      PropelPDO $con
@@ -1276,105 +1510,7 @@ abstract class BaseStoreMaintenanceLogPeer
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
-    public static function doSelectJoinAllExceptStore(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
-    {
-        $criteria = clone $criteria;
-
-        // Set the correct dbName if it has not been overridden
-        // $criteria->getDbName() will return the same object if not set to another value
-        // so == check is okay and faster
-        if ($criteria->getDbName() == Propel::getDefaultDB()) {
-            $criteria->setDbName(StoreMaintenanceLogPeer::DATABASE_NAME);
-        }
-
-        StoreMaintenanceLogPeer::addSelectColumns($criteria);
-        $startcol2 = StoreMaintenanceLogPeer::NUM_HYDRATE_COLUMNS;
-
-        MaintenanceTypePeer::addSelectColumns($criteria);
-        $startcol3 = $startcol2 + MaintenanceTypePeer::NUM_HYDRATE_COLUMNS;
-
-        UserPeer::addSelectColumns($criteria);
-        $startcol4 = $startcol3 + UserPeer::NUM_HYDRATE_COLUMNS;
-
-        $criteria->addJoin(StoreMaintenanceLogPeer::TYPE, MaintenanceTypePeer::ID, $join_behavior);
-
-        $criteria->addJoin(StoreMaintenanceLogPeer::MAINTENANCE_BY, UserPeer::ID, $join_behavior);
-
-
-        $stmt = BasePeer::doSelect($criteria, $con);
-        $results = array();
-
-        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key1 = StoreMaintenanceLogPeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj1 = StoreMaintenanceLogPeer::getInstanceFromPool($key1))) {
-                // We no longer rehydrate the object, since this can cause data loss.
-                // See http://www.propelorm.org/ticket/509
-                // $obj1->hydrate($row, 0, true); // rehydrate
-            } else {
-                $cls = StoreMaintenanceLogPeer::getOMClass();
-
-                $obj1 = new $cls();
-                $obj1->hydrate($row);
-                StoreMaintenanceLogPeer::addInstanceToPool($obj1, $key1);
-            } // if obj1 already loaded
-
-                // Add objects for joined MaintenanceType rows
-
-                $key2 = MaintenanceTypePeer::getPrimaryKeyHashFromRow($row, $startcol2);
-                if ($key2 !== null) {
-                    $obj2 = MaintenanceTypePeer::getInstanceFromPool($key2);
-                    if (!$obj2) {
-
-                        $cls = MaintenanceTypePeer::getOMClass();
-
-                    $obj2 = new $cls();
-                    $obj2->hydrate($row, $startcol2);
-                    MaintenanceTypePeer::addInstanceToPool($obj2, $key2);
-                } // if $obj2 already loaded
-
-                // Add the $obj1 (StoreMaintenanceLog) to the collection in $obj2 (MaintenanceType)
-                $obj2->addStoreMaintenanceLog($obj1);
-
-            } // if joined row is not null
-
-                // Add objects for joined User rows
-
-                $key3 = UserPeer::getPrimaryKeyHashFromRow($row, $startcol3);
-                if ($key3 !== null) {
-                    $obj3 = UserPeer::getInstanceFromPool($key3);
-                    if (!$obj3) {
-
-                        $cls = UserPeer::getOMClass();
-
-                    $obj3 = new $cls();
-                    $obj3->hydrate($row, $startcol3);
-                    UserPeer::addInstanceToPool($obj3, $key3);
-                } // if $obj3 already loaded
-
-                // Add the $obj1 (StoreMaintenanceLog) to the collection in $obj3 (User)
-                $obj3->addStoreMaintenanceLog($obj1);
-
-            } // if joined row is not null
-
-            $results[] = $obj1;
-        }
-        $stmt->closeCursor();
-
-        return $results;
-    }
-
-
-    /**
-     * Selects a collection of StoreMaintenanceLog objects pre-filled with all related objects except User.
-     *
-     * @param      Criteria  $criteria
-     * @param      PropelPDO $con
-     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return array           Array of StoreMaintenanceLog objects.
-     * @throws PropelException Any exceptions caught during processing will be
-     *		 rethrown wrapped into a PropelException.
-     */
-    public static function doSelectJoinAllExceptUser(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    public static function doSelectJoinAllExceptCollection(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         $criteria = clone $criteria;
 
@@ -1394,9 +1530,14 @@ abstract class BaseStoreMaintenanceLogPeer
         StorePeer::addSelectColumns($criteria);
         $startcol4 = $startcol3 + StorePeer::NUM_HYDRATE_COLUMNS;
 
+        UserPeer::addSelectColumns($criteria);
+        $startcol5 = $startcol4 + UserPeer::NUM_HYDRATE_COLUMNS;
+
         $criteria->addJoin(StoreMaintenanceLogPeer::TYPE, MaintenanceTypePeer::ID, $join_behavior);
 
         $criteria->addJoin(StoreMaintenanceLogPeer::MAINTENANCE_STORE, StorePeer::ID, $join_behavior);
+
+        $criteria->addJoin(StoreMaintenanceLogPeer::MAINTENANCE_BY, UserPeer::ID, $join_behavior);
 
 
         $stmt = BasePeer::doSelect($criteria, $con);
@@ -1451,6 +1592,269 @@ abstract class BaseStoreMaintenanceLogPeer
 
                 // Add the $obj1 (StoreMaintenanceLog) to the collection in $obj3 (Store)
                 $obj3->addStoreMaintenanceLog($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined User rows
+
+                $key4 = UserPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+                if ($key4 !== null) {
+                    $obj4 = UserPeer::getInstanceFromPool($key4);
+                    if (!$obj4) {
+
+                        $cls = UserPeer::getOMClass();
+
+                    $obj4 = new $cls();
+                    $obj4->hydrate($row, $startcol4);
+                    UserPeer::addInstanceToPool($obj4, $key4);
+                } // if $obj4 already loaded
+
+                // Add the $obj1 (StoreMaintenanceLog) to the collection in $obj4 (User)
+                $obj4->addStoreMaintenanceLog($obj1);
+
+            } // if joined row is not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
+
+    /**
+     * Selects a collection of StoreMaintenanceLog objects pre-filled with all related objects except Store.
+     *
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of StoreMaintenanceLog objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinAllExceptStore(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        // $criteria->getDbName() will return the same object if not set to another value
+        // so == check is okay and faster
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(StoreMaintenanceLogPeer::DATABASE_NAME);
+        }
+
+        StoreMaintenanceLogPeer::addSelectColumns($criteria);
+        $startcol2 = StoreMaintenanceLogPeer::NUM_HYDRATE_COLUMNS;
+
+        MaintenanceTypePeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + MaintenanceTypePeer::NUM_HYDRATE_COLUMNS;
+
+        CollectionPeer::addSelectColumns($criteria);
+        $startcol4 = $startcol3 + CollectionPeer::NUM_HYDRATE_COLUMNS;
+
+        UserPeer::addSelectColumns($criteria);
+        $startcol5 = $startcol4 + UserPeer::NUM_HYDRATE_COLUMNS;
+
+        $criteria->addJoin(StoreMaintenanceLogPeer::TYPE, MaintenanceTypePeer::ID, $join_behavior);
+
+        $criteria->addJoin(StoreMaintenanceLogPeer::COLLECTION_ID, CollectionPeer::ID, $join_behavior);
+
+        $criteria->addJoin(StoreMaintenanceLogPeer::MAINTENANCE_BY, UserPeer::ID, $join_behavior);
+
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = StoreMaintenanceLogPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = StoreMaintenanceLogPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+                $cls = StoreMaintenanceLogPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                StoreMaintenanceLogPeer::addInstanceToPool($obj1, $key1);
+            } // if obj1 already loaded
+
+                // Add objects for joined MaintenanceType rows
+
+                $key2 = MaintenanceTypePeer::getPrimaryKeyHashFromRow($row, $startcol2);
+                if ($key2 !== null) {
+                    $obj2 = MaintenanceTypePeer::getInstanceFromPool($key2);
+                    if (!$obj2) {
+
+                        $cls = MaintenanceTypePeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol2);
+                    MaintenanceTypePeer::addInstanceToPool($obj2, $key2);
+                } // if $obj2 already loaded
+
+                // Add the $obj1 (StoreMaintenanceLog) to the collection in $obj2 (MaintenanceType)
+                $obj2->addStoreMaintenanceLog($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Collection rows
+
+                $key3 = CollectionPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+                if ($key3 !== null) {
+                    $obj3 = CollectionPeer::getInstanceFromPool($key3);
+                    if (!$obj3) {
+
+                        $cls = CollectionPeer::getOMClass();
+
+                    $obj3 = new $cls();
+                    $obj3->hydrate($row, $startcol3);
+                    CollectionPeer::addInstanceToPool($obj3, $key3);
+                } // if $obj3 already loaded
+
+                // Add the $obj1 (StoreMaintenanceLog) to the collection in $obj3 (Collection)
+                $obj3->addStoreMaintenanceLog($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined User rows
+
+                $key4 = UserPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+                if ($key4 !== null) {
+                    $obj4 = UserPeer::getInstanceFromPool($key4);
+                    if (!$obj4) {
+
+                        $cls = UserPeer::getOMClass();
+
+                    $obj4 = new $cls();
+                    $obj4->hydrate($row, $startcol4);
+                    UserPeer::addInstanceToPool($obj4, $key4);
+                } // if $obj4 already loaded
+
+                // Add the $obj1 (StoreMaintenanceLog) to the collection in $obj4 (User)
+                $obj4->addStoreMaintenanceLog($obj1);
+
+            } // if joined row is not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
+
+    /**
+     * Selects a collection of StoreMaintenanceLog objects pre-filled with all related objects except User.
+     *
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of StoreMaintenanceLog objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinAllExceptUser(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        // $criteria->getDbName() will return the same object if not set to another value
+        // so == check is okay and faster
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(StoreMaintenanceLogPeer::DATABASE_NAME);
+        }
+
+        StoreMaintenanceLogPeer::addSelectColumns($criteria);
+        $startcol2 = StoreMaintenanceLogPeer::NUM_HYDRATE_COLUMNS;
+
+        MaintenanceTypePeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + MaintenanceTypePeer::NUM_HYDRATE_COLUMNS;
+
+        CollectionPeer::addSelectColumns($criteria);
+        $startcol4 = $startcol3 + CollectionPeer::NUM_HYDRATE_COLUMNS;
+
+        StorePeer::addSelectColumns($criteria);
+        $startcol5 = $startcol4 + StorePeer::NUM_HYDRATE_COLUMNS;
+
+        $criteria->addJoin(StoreMaintenanceLogPeer::TYPE, MaintenanceTypePeer::ID, $join_behavior);
+
+        $criteria->addJoin(StoreMaintenanceLogPeer::COLLECTION_ID, CollectionPeer::ID, $join_behavior);
+
+        $criteria->addJoin(StoreMaintenanceLogPeer::MAINTENANCE_STORE, StorePeer::ID, $join_behavior);
+
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = StoreMaintenanceLogPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = StoreMaintenanceLogPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+                $cls = StoreMaintenanceLogPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                StoreMaintenanceLogPeer::addInstanceToPool($obj1, $key1);
+            } // if obj1 already loaded
+
+                // Add objects for joined MaintenanceType rows
+
+                $key2 = MaintenanceTypePeer::getPrimaryKeyHashFromRow($row, $startcol2);
+                if ($key2 !== null) {
+                    $obj2 = MaintenanceTypePeer::getInstanceFromPool($key2);
+                    if (!$obj2) {
+
+                        $cls = MaintenanceTypePeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol2);
+                    MaintenanceTypePeer::addInstanceToPool($obj2, $key2);
+                } // if $obj2 already loaded
+
+                // Add the $obj1 (StoreMaintenanceLog) to the collection in $obj2 (MaintenanceType)
+                $obj2->addStoreMaintenanceLog($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Collection rows
+
+                $key3 = CollectionPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+                if ($key3 !== null) {
+                    $obj3 = CollectionPeer::getInstanceFromPool($key3);
+                    if (!$obj3) {
+
+                        $cls = CollectionPeer::getOMClass();
+
+                    $obj3 = new $cls();
+                    $obj3->hydrate($row, $startcol3);
+                    CollectionPeer::addInstanceToPool($obj3, $key3);
+                } // if $obj3 already loaded
+
+                // Add the $obj1 (StoreMaintenanceLog) to the collection in $obj3 (Collection)
+                $obj3->addStoreMaintenanceLog($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Store rows
+
+                $key4 = StorePeer::getPrimaryKeyHashFromRow($row, $startcol4);
+                if ($key4 !== null) {
+                    $obj4 = StorePeer::getInstanceFromPool($key4);
+                    if (!$obj4) {
+
+                        $cls = StorePeer::getOMClass();
+
+                    $obj4 = new $cls();
+                    $obj4->hydrate($row, $startcol4);
+                    StorePeer::addInstanceToPool($obj4, $key4);
+                } // if $obj4 already loaded
+
+                // Add the $obj1 (StoreMaintenanceLog) to the collection in $obj4 (Store)
+                $obj4->addStoreMaintenanceLog($obj1);
 
             } // if joined row is not null
 
