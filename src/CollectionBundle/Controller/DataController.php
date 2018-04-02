@@ -39,7 +39,7 @@ class DataController extends Controller
             ->filterByCollectionType($type)
             ->filterByCollectionStore($storeid)
             ->filterByIsDeleted(false)
-            ->orderBy('id','DESC')
+            ->orderBy('date','DESC')
             ->find();
 
         foreach ($collections as $collection)
@@ -119,7 +119,7 @@ class DataController extends Controller
             ->filterByCollectionType($type)
             ->filterByCollectionStore($storeid)
             ->filterByIsDeleted(false)
-            ->orderBy('id', 'DESC')
+            ->orderBy('date', 'DESC')
             ->find();
 
         foreach ($collections as $collection)
