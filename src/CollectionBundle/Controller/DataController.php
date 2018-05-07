@@ -2,6 +2,7 @@
 
 namespace CollectionBundle\Controller;
 
+use AppBundle\Response\JsonResult;
 use CollectionBundle\Model\Attachment;
 use CollectionBundle\Model\AttachmentQuery;
 use CollectionBundle\Model\Collection;
@@ -12,20 +13,16 @@ use StoreBundle\Model\MaintenanceType;
 use StoreBundle\Model\MaintenanceTypeQuery;
 use StoreBundle\Model\StoreMaintenanceLog;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
-use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
-
-use AppBundle\Response\JsonResult;
-use Symfony\Component\VarDumper\VarDumper;
 
 class DataController extends Controller
 {
     /**
      * Get store maintenance log
      * @param Request $request
-     * @param $storeid
+     * @param         $storeid
      */
     public function getStoreMaintenanceAction(Request $request, $storeid)
     {
@@ -39,7 +36,7 @@ class DataController extends Controller
             ->filterByCollectionType($type)
             ->filterByCollectionStore($storeid)
             ->filterByIsDeleted(false)
-            ->orderBy('date','DESC')
+            ->orderBy('date', 'DESC')
             ->find();
 
         foreach ($collections as $collection)
@@ -143,7 +140,7 @@ class DataController extends Controller
     /**
      * Save collection
      * @param Request $request
-     * @param $collectionid
+     * @param         $collectionid
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
     public function saveCollectionAction(Request $request, $collectionid)
@@ -159,128 +156,9 @@ class DataController extends Controller
                         ->make();
             }
         }
+
         return JsonResult::create()
             ->setMessage('Collection not saved!')
-            ->setErrorcode(JsonResult::DANGER)
-            ->make();
-    }
-
-    /**
-     * Delete collection
-     * @param Request $request
-     * @param $collectionid
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     */
-    public function deleteCollectionAction(Request $request, $collectionid)
-    {
-        if ($request->isMethod('DELETE')) {
-            $collection = CollectionQuery::create()->findOneById($collectionid);
-            if (!empty($collection)) {
-                $collection->setIsDeleted(true);
-                $collection->save();
-                return JsonResult::create()
-                    ->setErrorcode(JsonResult::SUCCESS)
-                    ->make();
-            }
-        }
-        return JsonResult::create()
-            ->setMessage('Collection not deleted!')
-            ->setErrorcode(JsonResult::DANGER)
-            ->make();
-    }
-
-    /**
-     * Upload collection attachment
-     * @param Request $request
-     * @param $collectionid
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     */
-    public function uploadCollectionAction(Request $request, $collectionid)
-    {
-        $helper = $this->getCollectionHelper();
-        if ($request->isMethod('POST')) {
-            $collection = CollectionQuery::create()->findOneById($collectionid);
-            if (empty($collection)) {
-                return JsonResult::create()
-                    ->setMessage('Collection not found!')
-                    ->setErrorcode(JsonResult::DANGER)
-                    ->make();
-            }
-            $files = $request->files;
-            foreach ($files as $uploadedFile)
-                $helper->saveCollectionAttachment($collection, $uploadedFile);
-        }
-        return JsonResult::create()
-            ->setErrorcode(JsonResult::SUCCESS)
-            ->make();
-    }
-
-    /**
-     * Get collection attachment (data)
-     * @param Request $request
-     * @param $attachmentid
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     */
-    public function getCollectionAttachmentAction(Request $request, $attachmentid, $rand)
-    {
-        $attachment = AttachmentQuery::create()->findOneById($attachmentid);
-        if (!empty($attachment)) {
-            $response = new BinaryFileResponse($attachment->getLinkUrl());
-            if ($attachment->getType() == Attachment::TYPE_DOCUMENT)
-                $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $attachment->getOriginalName());
-            return $response;
-        }
-        return JsonResult::create()
-            ->setErrorcode(JsonResult::WARNING)
-            ->make();
-    }
-
-    /**
-     * Delete collection attachment
-     * @param Request $request
-     * @param $attachmentid
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     */
-    public function deleteCollectionAttachmentAction(Request $request, $collectionid, $attachmentid)
-    {
-        $helper = $this->getCollectionHelper();
-        if ($request->isMethod('DELETE')) {
-            $collection = CollectionQuery::create()->findOneById($collectionid);
-            $attachment = AttachmentQuery::create()->findOneById($attachmentid);
-            if (empty($attachment)) {
-                return JsonResult::create()
-                    ->setMessage('Attachment not found!')
-                    ->setErrorcode(JsonResult::DANGER)
-                    ->make();
-            }
-            $helper->deleteCollectionAttachment($collection, $attachment);
-        }
-        return JsonResult::create()
-            ->setErrorcode(JsonResult::SUCCESS)
-            ->make();
-    }
-
-    /**
-     * Save attachment
-     * @param Request $request
-     * @param $collectionid
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     */
-    public function saveAttachmentAction(Request $request, $attachmentid)
-    {
-        if ($request->isMethod('PUT')) {
-            $postData = json_decode($request->getContent(), true);
-            if (!empty($postData)) {
-                $attachment = $this->saveAttachmentData((object)$postData);
-                if (!is_bool($attachment))
-                    return JsonResult::create()
-                        ->setContents($attachment->getAttachmentDataArray())
-                        ->setErrorcode(JsonResult::SUCCESS)
-                        ->make();
-            }
-        }
-        return JsonResult::create()
-            ->setMessage('Attachment not saved!')
             ->setErrorcode(JsonResult::DANGER)
             ->make();
     }
@@ -364,7 +242,173 @@ class DataController extends Controller
                 }
             }
         }
+
         return $collection;
+    }
+
+    /**
+     * Get class helper
+     * @return object
+     */
+    protected function getClassHelper()
+    {
+        $helper = $this->container->get('class_helper');
+
+        return $helper;
+    }
+
+    /**
+     * Delete collection
+     * @param Request $request
+     * @param         $collectionid
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function deleteCollectionAction(Request $request, $collectionid)
+    {
+        if ($request->isMethod('DELETE')) {
+            $collection = CollectionQuery::create()->findOneById($collectionid);
+            if (!empty($collection)) {
+                $collection->setIsDeleted(true);
+                $collection->save();
+
+                return JsonResult::create()
+                    ->setErrorcode(JsonResult::SUCCESS)
+                    ->make();
+            }
+        }
+
+        return JsonResult::create()
+            ->setMessage('Collection not deleted!')
+            ->setErrorcode(JsonResult::DANGER)
+            ->make();
+    }
+
+    /**
+     * Upload collection attachment
+     * @param Request $request
+     * @param         $collectionid
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function uploadCollectionAction(Request $request, $collectionid)
+    {
+        $helper = $this->getCollectionHelper();
+        if ($request->isMethod('POST')) {
+            $collection = CollectionQuery::create()->findOneById($collectionid);
+            if (empty($collection)) {
+                return JsonResult::create()
+                    ->setMessage('Collection not found!')
+                    ->setErrorcode(JsonResult::DANGER)
+                    ->make();
+            }
+            $files = $request->files;
+            foreach ($files as $uploadedFile) {
+                $helper->saveCollectionAttachment($collection, $uploadedFile);
+            }
+        }
+
+        return JsonResult::create()
+            ->setErrorcode(JsonResult::SUCCESS)
+            ->make();
+    }
+
+    /**
+     * Get class helper
+     * @return object
+     */
+    protected function getCollectionHelper()
+    {
+        $helper = $this->container->get('collection_helper');
+
+        return $helper;
+    }
+
+    /**
+     * Get collection attachment (data)
+     * @param Request $request
+     * @param         $attachmentid
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function getCollectionAttachmentAction(Request $request, $attachmentid, $rand)
+    {
+        $attachment = AttachmentQuery::create()->findOneById($attachmentid);
+        if (!empty($attachment)) {
+            $response = new BinaryFileResponse($attachment->getLinkUrl());
+            if ($attachment->getType() == Attachment::TYPE_DOCUMENT) {
+                $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+                    $attachment->getOriginalName());
+            }
+            if ($attachment->getType() == Attachment::TYPE_IMAGE) {
+                $fileInfo = pathinfo($attachment->getOriginalName());
+                switch (strtolower($fileInfo[PATHINFO_EXTENSION])) {
+                    case 'jpeg':
+                    case 'jpg':
+                        $contentType = 'image/jpeg';
+                        break;
+                    case 'png':
+                        $contentType = 'image/png';
+                        break;
+                }
+                $response->headers->set('Content-Type', $contentType);
+            }
+
+            return $response;
+        }
+
+        return JsonResult::create()
+            ->setErrorcode(JsonResult::WARNING)
+            ->make();
+    }
+
+    /**
+     * Delete collection attachment
+     * @param Request $request
+     * @param         $attachmentid
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function deleteCollectionAttachmentAction(Request $request, $collectionid, $attachmentid)
+    {
+        $helper = $this->getCollectionHelper();
+        if ($request->isMethod('DELETE')) {
+            $collection = CollectionQuery::create()->findOneById($collectionid);
+            $attachment = AttachmentQuery::create()->findOneById($attachmentid);
+            if (empty($attachment)) {
+                return JsonResult::create()
+                    ->setMessage('Attachment not found!')
+                    ->setErrorcode(JsonResult::DANGER)
+                    ->make();
+            }
+            $helper->deleteCollectionAttachment($collection, $attachment);
+        }
+
+        return JsonResult::create()
+            ->setErrorcode(JsonResult::SUCCESS)
+            ->make();
+    }
+
+    /**
+     * Save attachment
+     * @param Request $request
+     * @param         $collectionid
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function saveAttachmentAction(Request $request, $attachmentid)
+    {
+        if ($request->isMethod('PUT')) {
+            $postData = json_decode($request->getContent(), true);
+            if (!empty($postData)) {
+                $attachment = $this->saveAttachmentData((object)$postData);
+                if (!is_bool($attachment))
+                    return JsonResult::create()
+                        ->setContents($attachment->getAttachmentDataArray())
+                        ->setErrorcode(JsonResult::SUCCESS)
+                        ->make();
+            }
+        }
+
+        return JsonResult::create()
+            ->setMessage('Attachment not saved!')
+            ->setErrorcode(JsonResult::DANGER)
+            ->make();
     }
 
     /**
@@ -389,26 +433,7 @@ class DataController extends Controller
             if ($attachmentData->Rotate)
                 $helper->rotateImageAttachment($attachment);
         }
+
         return $attachment;
-    }
-
-    /**
-     * Get class helper
-     * @return object
-     */
-    protected function getCollectionHelper()
-    {
-        $helper = $this->container->get('collection_helper');
-        return $helper;
-    }
-
-    /**
-     * Get class helper
-     * @return object
-     */
-    protected function getClassHelper()
-    {
-        $helper = $this->container->get('class_helper');
-        return $helper;
     }
 }
