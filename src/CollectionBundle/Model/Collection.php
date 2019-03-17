@@ -56,7 +56,8 @@ class Collection extends BaseCollection
     {
         $user =  parent::getCreatedBy();
         if (is_numeric($user) && !empty($user)) {
-            $user = UserQuery::create()->findOneById($user)->getUserDataArray()['user'];
+            $user = UserQuery::create()
+                ->findOneById($user)->getUserDataArray()['user'];
         }
         return $user;
     }

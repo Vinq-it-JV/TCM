@@ -45,4 +45,4 @@ security:
         - {path: ^/api, role: IS_AUTHENTICATED_FULLY }
         - {path: ^/administration, roles: [ROLE_ADMIN, ROLE_SUPER_ADMIN] }
 
-    access_denied_url: /login
+    access_denied_url: /
